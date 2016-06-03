@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "0730"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E807E3EC1CF671B500AE317B"
+               BuildableName = "NozeIO"
+               BlueprintName = "NozeIO"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E80A97DF1CF9ADE10088F560"
+               BuildableName = "NozeHttpTests.xctest"
+               BlueprintName = "NozeHttpTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8B33EEF1CFB48A200091806"
+               BuildableName = "NozeFSTests.xctest"
+               BlueprintName = "NozeFSTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8B33EDE1CFB487400091806"
+               BuildableName = "NozeChildProcessTests.xctest"
+               BlueprintName = "NozeChildProcessTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "AppKitDebug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E835BFBA1B4D4CFB00288839"
+               BuildableName = "NozeIOTests.xctest"
+               BlueprintName = "NozeIOTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NozeIOBasicAsyncTests/testAsyncNumberGenerator()">
+               </Test>
+               <Test
+                  Identifier = "NozeIOBasicTests/testStringCharacterGenerator()">
+               </Test>
+               <Test
+                  Identifier = "NozeIOChildProcessTests/testBase64()">
+               </Test>
+               <Test
+                  Identifier = "NozeIOHttpClientTests">
+               </Test>
+               <Test
+                  Identifier = "NozeIOPipeTests/testPipeEtcPasswdToStdout()">
+               </Test>
+               <Test
+                  Identifier = "NozeIOStdinTests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8B33EEF1CFB48A200091806"
+               BuildableName = "NozeFSTests.xctest"
+               BlueprintName = "NozeFSTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8B33EDE1CFB487400091806"
+               BuildableName = "NozeChildProcessTests.xctest"
+               BlueprintName = "NozeChildProcessTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E80A97DF1CF9ADE10088F560"
+               BuildableName = "NozeHttpTests.xctest"
+               BlueprintName = "NozeHttpTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NozeIOTestCase">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8C90BF91CFE71B800F85436"
+               BuildableName = "MustacheTests.xctest"
+               BlueprintName = "MustacheTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E807E3EC1CF671B500AE317B"
+            BuildableName = "NozeIO"
+            BlueprintName = "NozeIO"
+            ReferencedContainer = "container:Noze.io.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "AppKitDebug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E807E3EC1CF671B500AE317B"
+            BuildableName = "NozeIO"
+            BlueprintName = "NozeIO"
+            ReferencedContainer = "container:Noze.io.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E807E3EC1CF671B500AE317B"
+            BuildableName = "NozeIO"
+            BlueprintName = "NozeIO"
+            ReferencedContainer = "container:Noze.io.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

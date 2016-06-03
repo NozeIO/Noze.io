@@ -1,0 +1,87 @@
+// Noze.io: miniirc
+
+class Channel {
+  
+  let serverID  = "noze.io"
+  let name      : String
+  var welcome   : String
+  var operators = [ String ]()
+  var sessions  = [ Session ]()
+  
+  var memberNicks : [ String ] {
+    return sessions.filter { $0.nick != nil }.map { $0.nick! }
+  }
+  
+  init(name: String, welcome: String? = nil) {
+    self.name    = name
+    self.welcome = welcome ?? "Welcome to \(name)!"
+  }
+  
+  
+  // MARK: - Sending Messages
+  
+  func sendMessage(source s: String, message: String) {
+    send(source: s, command: "PRIVMSG", name, message)
+  }
+  
+  func send(source s: String, command: String, _ args: String...) {
+    for otherUser in sessions {
+      guard otherUser.nick! != s else { continue }
+      _ = otherUser.send(source: s, command: command, args: args)
+    }
+  }
+  
+  
+  // MARK: - Joining & Leaving
+  
+  func join(session s: Session) {
+    guard !sessions.contains({ $0 === s }) else {
+      print("joined already?!: \(s)")
+      return
+    }
+    
+    sessions.append(s)
+    sendWelcome(session: s)
+    
+    send(source: s.nick!, command: "JOIN", name)
+  }
+  
+#if swift(>=3.0) // #swift3-fd
+  func part(session s: Session) {
+    if let idx = sessions.index(where: { $0 === s }) {
+      print("leaving channel \(name): \(s)")
+      sessions.remove(at: idx)
+      send(source: s.nick!, command: "PART", name)
+    }
+  }
+#else // Swift 2.2
+  func part(session s: Session) {
+    if let idx = sessions.indexOf({ $0 === s }) {
+      print("leaving channel \(name): \(s)")
+      sessions.removeAtIndex(idx)
+      send(source: s.nick!, command: "PART", name)
+    }
+  }
+#endif // Swift 2.2
+
+  
+  // MARK: - Welcome
+
+  func sendWelcome(session s: Session) {
+    let nick = s.nick ?? "<unknown>"
+    
+#if swift(>=3.0) // #swift3-fd
+    let ms = memberNicks.joined(separator: " ")
+#else
+    let ms = memberNicks.joinWithSeparator(" ")
+#endif
+    
+    s.send(source: serverID, command: 332, nick, name, welcome)
+    s.send(source: serverID, command: 353, nick, "=", name, ms)
+    s.send(source: serverID, command: 366, nick, name,"End of /NAMES list.")
+  }
+}
+
+var nameToChannel : [ String : Channel ] = [
+  "#noze": Channel(name: "#noze")
+]

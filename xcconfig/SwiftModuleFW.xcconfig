@@ -1,0 +1,17 @@
+// Config file for Noze.io modules
+
+DEFINES_MODULE = YES
+
+// well, hm
+INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
+SKIP_INSTALL = YES
+
+DYLIB_INSTALL_NAME_BASE = @rpath
+
+
+// Versioning
+VERSIONING_SYSTEM           = apple-generic
+CURRENT_PROJECT_VERSION     = 1
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION       = 1
+FRAMEWORK_VERSION           = A
