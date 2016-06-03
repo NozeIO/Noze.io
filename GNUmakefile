@@ -8,7 +8,7 @@ include $(PACKAGE_DIR)/xcconfig/config.make
 
 MODULES = \
 	http_parser 	\
-	freddy  	\
+	Freddy  	\
 	base64		\
 	mustache	\
 	xsys		\
