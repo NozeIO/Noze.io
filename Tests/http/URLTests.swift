@@ -56,7 +56,7 @@ class NozeIOURLTests: NozeIOTestCase {
   }
   
   func testQueryStringParseDecode() {
-    let fix = "a=5&c=Hello%32World"
+    let fix = "a=5&c=Hello%20World"
     
     let parsed = querystring.parse(fix)
     XCTAssertFalse(parsed.isEmpty)
@@ -67,7 +67,7 @@ class NozeIOURLTests: NozeIOTestCase {
   }
 
   func testQueryStringZFormat() {
-    let fix = "a:int=5&c:lines=Hello%10World"
+    let fix = "a:int=5&c:lines=Hello%0AWorld"
     
     let parsed = querystring.parse(fix)
     XCTAssertFalse(parsed.isEmpty)
