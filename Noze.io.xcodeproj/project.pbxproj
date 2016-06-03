@@ -445,6 +445,8 @@
 		E8EB49611CF49D3200E7787A /* HTTPParserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA64711CE5E24900531F54 /* HTTPParserState.swift */; };
 		E8EB49621CF49D3200E7787A /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA64721CE5E24900531F54 /* HTTPStatus.swift */; };
 		E8EB49631CF49D3200E7787A /* URLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA64751CE5E24900531F54 /* URLParser.swift */; };
+		E8F130121D01CE0300FCEC9B /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
+		E8F130141D01D48B00FCEC9B /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F130131D01D48B00FCEC9B /* Storage.swift */; };
 		E8F226171CF66B85002761C6 /* NSDataHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F226161CF66B85002761C6 /* NSDataHelpers.swift */; };
 		E8F25A631CF5EA8700355194 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A571CF5EA8700355194 /* JSON.swift */; };
 		E8F25A641CF5EA8700355194 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A581CF5EA8700355194 /* JSONDecodable.swift */; };
@@ -1675,6 +1677,7 @@
 		E8EA87C71CF734AF00406C27 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Sources/base64/LICENSE; sourceTree = "<group>"; };
 		E8EA87CC1CF73A7E00406C27 /* Base64Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64Tests.swift; path = Tests/base64/Base64Tests.swift; sourceTree = SOURCE_ROOT; };
 		E8EB49551CF49D0700E7787A /* libhttp_parser.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhttp_parser.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8F130131D01D48B00FCEC9B /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Storage.swift; path = "Samples/todo-mvc/Storage.swift"; sourceTree = "<group>"; };
 		E8F226161CF66B85002761C6 /* NSDataHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDataHelpers.swift; path = Tests/freddy/NSDataHelpers.swift; sourceTree = SOURCE_ROOT; };
 		E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libFreddy.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F25A561CF5EA8700355194 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CONTRIBUTING.md; path = Sources/freddy/CONTRIBUTING.md; sourceTree = "<group>"; };
@@ -1853,8 +1856,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E85EF8AB1D00F5D700BDA997 /* libFreddy.dylib in Frameworks */,
 				E886F6EA1D00B26600DE1E86 /* Foundation.framework in Frameworks */,
+				E8F130121D01CE0300FCEC9B /* libxsys.dylib in Frameworks */,
+				E85EF8AB1D00F5D700BDA997 /* libFreddy.dylib in Frameworks */,
 				E89CDF581D006421008861AF /* libprocess.dylib in Frameworks */,
 				E89CDF531D006374008861AF /* libconnect.dylib in Frameworks */,
 				E89CDF541D006374008861AF /* libconsole.dylib in Frameworks */,
@@ -2405,7 +2409,6 @@
 			isa = PBXGroup;
 			children = (
 				E87BE9411CF5104D00C20AE7 /* README.md */,
-				E89872351CFF7DBD00466E86 /* todo-mvc */,
 				E87BE8B41CF50C9000C20AE7 /* echod */,
 				E87BE8D11CF50D8700C20AE7 /* echozd */,
 				E87BE8D61CF50DB400C20AE7 /* sleep */,
@@ -2416,6 +2419,7 @@
 				E8B8BAF91CFBBEF600BA30D3 /* connect-static */,
 				E87BE8D31CF50D9700C20AE7 /* connect-git */,
 				E89CDF411D005B99008861AF /* express-simple */,
+				E89872351CFF7DBD00466E86 /* todo-mvc */,
 			);
 			name = Samples;
 			sourceTree = "<group>";
@@ -2505,6 +2509,7 @@
 			children = (
 				E89872361CFF7DD000466E86 /* main.swift */,
 				E85EF8AE1D00FC2600BDA997 /* Model.swift */,
+				E8F130131D01D48B00FCEC9B /* Storage.swift */,
 				E89872371CFF7DD000466E86 /* Swift3.swift */,
 			);
 			name = "todo-mvc";
@@ -4215,6 +4220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E85EF8AF1D00FC2600BDA997 /* Model.swift in Sources */,
+				E8F130141D01D48B00FCEC9B /* Storage.swift in Sources */,
 				E89872391CFF7DD000466E86 /* Swift3.swift in Sources */,
 				E89872381CFF7DD000466E86 /* main.swift in Sources */,
 			);
