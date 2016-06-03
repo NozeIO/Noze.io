@@ -77,7 +77,7 @@ samples :
 	@$(MAKE) -C Samples all
 
 clean :
-	rm -r .build
+	rm -rf .build
 	@$(MAKE) -C Samples clean
 
 distclean : clean
