@@ -7,6 +7,7 @@
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)
+![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=develop&style=flat)
 
 "Das Haus das Verrückte macht."
 
