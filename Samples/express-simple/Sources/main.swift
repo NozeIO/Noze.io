@@ -2,6 +2,7 @@
 // - to compile in Swift 3 invoke: swift build
 // - to run result: .build/debug/express-simple
 
+import xsys
 import process
 import http
 import connect
@@ -39,7 +40,8 @@ app.get("/form") { _, res, _ in
 app.post("/form") { req, res, _ in
   let user = req.body[string: "u"]
   print("USER IS: \(user)")
-  res.render("form", [ "user": user, "nouser": user.isEmpty ])
+  let options : [String:Any] = [ "user": user, "nouser": user.isEmpty ]
+  res.render("form", options)
 }
 
 app.get("/json") { _, res, _ in

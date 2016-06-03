@@ -16,6 +16,7 @@
   public typealias size_t  = Glibc.size_t
   public let memcpy        = Glibc.memcpy
   public let strlen        = Glibc.strlen
+  public let rand          = Glibc.rand
   
   public let kill          = Glibc.kill
   public let chdir         = Glibc.chdir
@@ -57,6 +58,7 @@
   public typealias size_t  = Darwin.size_t
   public let memcpy        = Darwin.memcpy
   public let strlen        = Darwin.strlen
+  public let rand          = Darwin.rand
   
   public let kill          = Darwin.kill
   public let chdir         = Darwin.chdir

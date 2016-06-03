@@ -4,6 +4,8 @@ debug=on
 swiftv=3
 timeswiftc=no
 
+NOZE_DID_INCLUDE_CONFIG_MAKE=yes
+
 
 # Common configurations
 
@@ -139,3 +141,25 @@ SWIFT_INTERNAL_LINK_FLAGS    += -L$(SWIFT_BUILD_DIR)
 SWIFT_BUILD_TOOL=$(SWIFT_BIN) build $(SWIFT_INTERNAL_BUILD_FLAGS)
 SWIFT_TEST_TOOL =$(SWIFT_BIN) test  $(SWIFT_INTERNAL_TEST_FLAGS)
 SWIFT_CLEAN_TOOL=$(SWIFT_BIN) build --clean
+
+
+NOZE_ALL_MODULES = \
+	http_parser 	\
+	Freddy  	\
+	base64		\
+	mustache	\
+	xsys		\
+	core		\
+	leftpad		\
+	events		\
+	streams		\
+	json		\
+	fs		\
+	dns		\
+	net		\
+	console 	\
+	http		\
+	process 	\
+	child_process	\
+	connect 	\
+	express

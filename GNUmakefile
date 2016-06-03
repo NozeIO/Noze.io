@@ -8,7 +8,7 @@ include $(PACKAGE_DIR)/xcconfig/config.make
 
 MODULES = \
 	http_parser 	\
-	freddy  	\
+	Freddy  	\
 	base64		\
 	mustache	\
 	xsys		\
@@ -77,7 +77,7 @@ samples :
 	@$(MAKE) -C Samples all
 
 clean :
-	rm -r .build
+	rm -rf .build
 	@$(MAKE) -C Samples clean
 
 distclean : clean

@@ -4,7 +4,7 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a/swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a-ubuntu14.04.tar.gz"
+          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-31-a"
           sudo: required
         - os:   Linux
           dist: trusty
@@ -12,7 +12,7 @@ matrix:
           sudo: required
         - os:   osx
           osx_image: xcode7.3
-          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-09-a
+          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-31-a
 
 before_install:
     - ./xcconfig/before-install.sh
@@ -23,5 +23,7 @@ install:
 script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
-    - make clean all samples
+    - make all
+    - make all
+    - make samples
 
