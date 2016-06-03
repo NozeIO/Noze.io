@@ -1,0 +1,26 @@
+language:  generic
+
+matrix:
+    include:
+        - os:   Linux
+          dist: trusty
+          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a/swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a-ubuntu14.04.tar.gz"
+          sudo: required
+        - os:   Linux
+          dist: trusty
+          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/swift-2.2.1-release/ubuntu1404/swift-2.2.1-RELEASE/swift-2.2.1-RELEASE-ubuntu14.04.tar.gz"
+          sudo: required
+        - os:   osx
+          osx_image: xcode7.3
+          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-09-a
+
+before_install:
+    - ./xcconfig/before-install.sh
+
+install:
+    - ./xcconfig/install.sh
+
+script:
+    - export SWIFTENV_ROOT="$HOME/.swiftenv"
+    - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
+    - make

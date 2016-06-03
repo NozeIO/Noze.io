@@ -1,0 +1,16 @@
+// Extra debug settings are always the same ..
+
+ONLY_ACTIVE_ARCH                   = YES
+
+// Debugging
+DEBUG_INFORMATION_FORMAT           = dwarf
+ENABLE_TESTABILITY                 = YES
+COPY_PHASE_STRIP                   = NO
+GCC_OPTIMIZATION_LEVEL             = 0
+ENABLE_NS_ASSERTIONS               = YES
+GCC_PREPROCESSOR_DEFINITIONS       = DEBUG=1
+MTL_ENABLE_DEBUG_INFO              = YES
+GCC_DYNAMIC_NO_PIC                 = NO
+
+// Swift
+SWIFT_OPTIMIZATION_LEVEL = -Onone

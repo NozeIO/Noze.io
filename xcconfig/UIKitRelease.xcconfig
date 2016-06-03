@@ -1,0 +1,2 @@
+#include "UIKitBase.xcconfig"
+#include "Release.xcconfig"
