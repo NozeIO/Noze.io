@@ -11,9 +11,10 @@
 #else // Swift 2.2
 
 extension String {
-  func contains(needle: String) -> Bool {
-    return self.containsString(needle)
-  }
+  func contains(needle: String) -> Bool { return self.containsString(needle) }
+  
+  func index(after  idx: Index) -> Index { return idx.successor()   }
+  func index(before idx: Index) -> Index { return idx.predecessor() }
 }
 
 extension Dictionary {

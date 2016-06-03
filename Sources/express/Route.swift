@@ -10,6 +10,7 @@ import http
 import connect
 
 private let patternMarker : UInt8 = 58 // ':'
+private let debugMatcher  = false
 
 public struct Route: MiddlewareObject {
   
@@ -17,54 +18,43 @@ public struct Route: MiddlewareObject {
     case Root
     case Text    (String)
     case Variable(String)
-    case Wilcard
+    case Wildcard
+    case Prefix  (String)
+    case Suffix  (String)
+    case Contains(String)
+    
+    func match(string s: String) -> Bool {
+      switch self {
+        case .Root:            return s == ""
+        case .Text(let v):     return s == v
+        case .Wildcard:        return true
+        case .Variable:        return true // allow anything, like .Wildcard
+        case .Prefix(let v):   return s.hasPrefix(v)
+        case .Suffix(let v):   return s.hasSuffix(v)
+        case .Contains(let v): return s.contains(v)
+      }
+    }
   }
   
-  let middlewares : [ Middleware ]
+  let middleware : [ Middleware ]
     // TBD: I think in Express.js, even the Route objects are middleware stack,
     //      and they allow you to hook up multiple objects to the same route
   
   let methods    : [ HTTPMethod ]?
   
-  let urlPrefix  : String?
   let urlPattern : [ Pattern ]?
     // FIXME: all this works a little different in Express.js. Exact matches,
     //        non-path-component matches, regex support etc.
   
-  init(urlPrefix: String?, method: HTTPMethod?, middleware: Middleware) {
+  init(pattern: String?, method: HTTPMethod?, middleware: [Middleware]) {
     // FIXME: urlPrefix should be url or sth
     
     if let m = method { self.methods = [ m ] }
     else { self.methods = nil }
     
-    self.middlewares = [ middleware ]
+    self.middleware = middleware
     
-    if let prefixOrPattern = urlPrefix {
-      if prefixOrPattern == "*" {
-        self.urlPrefix  = nil
-        self.urlPattern = nil
-      }
-      else if prefixOrPattern.utf8.index(of: patternMarker) == nil {
-        self.urlPrefix  = urlPrefix
-        self.urlPattern = nil
-      }
-      else {
-        self.urlPrefix = nil
-        self.urlPattern = parseURLPattern(url: prefixOrPattern)
-      }
-    }
-    else {
-      self.urlPrefix  = nil
-      self.urlPattern = nil
-    }
-  }
-  
-  init(middleware: Middleware) {
-    self.init(urlPrefix: nil, method: nil, middleware: middleware)
-  }
-  
-  init(urlPrefix: String, middleware: Middleware) {
-    self.init(urlPrefix: urlPrefix, method: nil, middleware: middleware)
+    self.urlPattern = pattern != nil ? parseURLPattern(url: pattern!) : nil
   }
   
   
@@ -88,20 +78,20 @@ public struct Route: MiddlewareObject {
     }
     
     // loop over route middleware
-    let middlewares = self.middlewares
-    var next : Next = { _ in } // cannot be let as it's self-referencing
+    let stack = self.middleware
+    var next  : Next = { _ in } // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
     next = { args in
       
       // grab next item from middleware array
-      let middleware = middlewares[i]
+      let middleware = stack[i]
       i += 1 // this is shared between the blocks, move position in array
       
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext'
-      middleware(req, res, (i == middlewares.count) ? endNext : next)
+      middleware(req, res, (i == stack.count) ? endNext : next)
     }
     
     // inititate the traversal
@@ -112,39 +102,60 @@ public struct Route: MiddlewareObject {
   // MARK: - Matching
   
   func matches(request req: IncomingMessage) -> Bool {
+    
+    // match methods
+    
     if let methods = self.methods {
       let reqMethod = HTTPMethod(string: req.method)!
       guard methods.contains(reqMethod) else { return false }
     }
     
-    // TODO: consider mounting!
-    let matchPrefix = req.url
+    // match URLs
     
-    if let p = urlPrefix {
-      guard matchPrefix.hasPrefix(p) else { return false }
-    }
-    
-    if let pat = urlPattern {
-      var url = URL()
-      url.path = matchPrefix
-      let matchComponents = url.escapedPathComponents!
+    if let pattern = urlPattern {
+      // TODO: consider mounting!
       
-      guard matchComponents.count >= pat.count else { return false }
-
-      for i in pat.indices {
-        let patternComponent = pat[i]
-        let matchComponent   = matchComponents[i]
+      let escapedPathComponents = split(urlPath: req.url)
+      if debugMatcher {
+        print("MATCH: \(req.url)\n  components: \(escapedPathComponents)\n" +
+              "  against: \(pattern)")
+      }
+      
+      guard escapedPathComponents.count >= pattern.count else { return false }
+      
+      var lastWasWildcard = false
+      for i in pattern.indices {
+        let patternComponent = pattern[i]
+        let matchComponent   = escapedPathComponents[i]
         
-        switch patternComponent {
-          case .Root:        guard matchComponent == "" else { return false }
-          case .Text(let s): guard matchComponent == s  else { return false }
-          case .Wilcard:     continue
-          case .Variable:    continue // take anything
+        guard patternComponent.match(string: matchComponent) else {
+          return false
         }
+        
+        if debugMatcher {
+          print("  MATCHED[\(i)]: \(patternComponent) \(matchComponent)")
+        }
+        
+        // Special case, last component is a wildcard. Like /* or /todos/*. In
+        // this case we ignore extra URL path stuff.
+        if case .Wildcard = patternComponent {
+          let isLast = i + 1 == pattern.count
+          if isLast { lastWasWildcard = true }
+        }
+      }
+      
+      if escapedPathComponents.count > pattern.count {
+        if !lastWasWildcard { return false }
       }
     }
     
     return true
+  }
+  
+  private func split(urlPath s: String) -> [ String ] {
+    var url  = URL()
+    url.path = s
+    return url.escapedPathComponents!
   }
   
   func extractPatternVariables(request rq: IncomingMessage)
@@ -168,8 +179,8 @@ public struct Route: MiddlewareObject {
       let matchComponent   = matchComponents[i]
       
       switch patternComponent {
-        case .Root, .Text, .Wilcard: continue
-        case .Variable(let s):       vars[s] = matchComponent
+        case .Variable(let s): vars[s] = matchComponent
+        default:               continue
       }
     }
     
@@ -178,7 +189,9 @@ public struct Route: MiddlewareObject {
   
 }
 
-func parseURLPattern(url s: String) -> [ Route.Pattern ] {
+func parseURLPattern(url s: String) -> [ Route.Pattern ]? {
+  if s == "*" { return nil } // match-all
+  
   var url = URL()
   url.path = s
   let comps = url.escapedPathComponents!
@@ -196,21 +209,37 @@ func parseURLPattern(url s: String) -> [ Route.Pattern ] {
     }
     
     if c == "*" {
-      pattern.append(.Wilcard)
+      pattern.append(.Wildcard)
       continue
     }
     
     if c.hasPrefix(":") {
-#if swift(>=3.0)
       let vIdx = c.index(after: c.startIndex)
-#else
-      let vIdx = c.startIndex.successor()
-#endif
       pattern.append(.Variable(c[vIdx..<c.endIndex]))
+      continue
     }
-    else {
-      pattern.append(.Text(c))
+    
+    if c.hasPrefix("*") {
+      let vIdx = c.index(after: c.startIndex)
+      if c == "**" {
+        pattern.append(.Wildcard)
+      }
+      else if c.hasSuffix("*") && c.characters.count > 1 {
+        let eIdx = c.index(before: c.endIndex)
+        pattern.append(.Contains(c[vIdx..<eIdx]))
+      }
+      else {
+        pattern.append(.Prefix(c[vIdx..<c.endIndex]))
+      }
+      continue
     }
+    if c.hasSuffix("*") {
+      let eIdx = c.index(before: c.endIndex)
+      pattern.append(.Suffix(c[c.startIndex..<eIdx]))
+      continue
+    }
+
+    pattern.append(.Text(c))
   }
   
   return pattern
