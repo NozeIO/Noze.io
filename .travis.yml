@@ -23,5 +23,7 @@ install:
 script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
-    - make clean all samples
+    - make all
+    - make all
+    - make samples
 
