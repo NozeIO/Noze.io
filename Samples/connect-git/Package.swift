@@ -4,6 +4,6 @@ let package = Package(
   name: "connect-git",
   dependencies: [
     .Package(url: "../..",
-             majorVersion: 0, minor: 1)
+             majorVersion: 0, minor: 2)
   ]
 )
