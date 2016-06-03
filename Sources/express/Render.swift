@@ -34,10 +34,11 @@ public extension ServerResponse {
       return
     }
 
-    let viewsPath  = (app.get("views")       as? String) ?? process.cwd()
-    
-    let appViewOptions = app.get("view options") ?? [:]
-    let viewOptions = options ?? appViewOptions // TODO: merge if possible
+    let viewsPath      = (app.get("views") as? String) ?? process.cwd()
+
+    let emptyOpts      : [ String : Any ] = [:]
+    let appViewOptions = app.get("view options") ?? emptyOpts
+    let viewOptions    = options ?? appViewOptions // TODO: merge if possible
     
     lookupTemplate(views: viewsPath, template: template, engine: viewEngine) {
       pathOrNot in
