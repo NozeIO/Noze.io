@@ -30,7 +30,8 @@ public extension MiddlewareObject {
     return { req, res in
       self.handle(request: req, response: res) { _ in 
         // essentially the final handler
-        console.warn("No middleware called end: \(self)")
+        console.warn("No middleware called end: " +
+                     "\(self) \(req.method) \(req.url)")
         res.writeHead(404)
         res.end()
       }
