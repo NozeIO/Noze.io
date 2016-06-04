@@ -9,7 +9,7 @@
 import http
 
 private let defaultMethods : [ HTTPMethod ] = [
-  .GET, .HEAD, .POST, .DELETE, .OPTIONS, .PUT
+  .GET, .HEAD, .POST, .DELETE, .OPTIONS, .PUT, .PATCH
 ]
 private let defaultHeaders = [ "Accept", "Content-Type" ]
 
