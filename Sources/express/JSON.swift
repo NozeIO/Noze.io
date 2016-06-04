@@ -58,7 +58,7 @@ public extension ServerResponse {
       switch c {
         case 0x22: quote = true
         case 0x5C: quote = true
-        case 0x2F: quote = true
+        // case 0x2F: quote = true // /
         case 0x08: quote = true; cc = 0x62 // b
         case 0x0C: quote = true; cc = 0x66 // f
         case 0x0A: quote = true; cc = 0x6E // n
