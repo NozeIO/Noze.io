@@ -13,12 +13,18 @@ struct Todo {
   var id        : Int
   var title     : String
   var completed : Bool
+  
+  var url : String { // this is a little weird API wise, but well ...
+    return "\(ourAPI)todos/\(id)"
+  }
+  
 }
 
 extension Todo : JSONEncodable {
   
   func toJSON() -> JSON { // TODO: default imp via Mirror
     return JSON.Dictionary([
+      "url"       : JSON(url),
       "id"        : JSON(id),
       "title"     : JSON(title),
       "completed" : JSON(completed)
