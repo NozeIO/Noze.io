@@ -25,6 +25,9 @@ public extension CollectionType where Generator.Element : Equatable {
     return split(s, maxSplit: maxSplits,
                  allowEmptySlices: !omittingEmptySubsequences)
   }
+}
+
+public extension CollectionType where Generator.Element : Equatable {
 
   public func index(after idx: Self.Index) -> Index { // v3 compat
     return idx.successor()
@@ -33,9 +36,11 @@ public extension CollectionType where Generator.Element : Equatable {
   public func index(of element: Self.Generator.Element) -> Self.Index? {
     return indexOf(element)
   }
+  
 }
   
 public extension CollectionType where Generator.Element == String {
+  // joinWithSeparator is ambiguous w/o the `where`
 
   public func joined(separator s: String) -> String {
     return joinWithSeparator(s)
