@@ -46,23 +46,18 @@ class Channel {
     send(source: s.nick!, command: "JOIN", name)
   }
   
-#if swift(>=3.0) // #swift3-fd
   func part(session s: Session) {
-    if let idx = sessions.index(where: { $0 === s }) {
+#if swift(>=3.0) // #swift3-fd
+    let idxO = sessions.index(where: { $0 === s })
+#else // Swift 2.2
+    let idxO = sessions.indexOf({ $0 === s })
+#endif
+    if let idx = idxO {
       print("leaving channel \(name): \(s)")
       sessions.remove(at: idx)
       send(source: s.nick!, command: "PART", name)
     }
   }
-#else // Swift 2.2
-  func part(session s: Session) {
-    if let idx = sessions.indexOf({ $0 === s }) {
-      print("leaving channel \(name): \(s)")
-      sessions.removeAtIndex(idx)
-      send(source: s.nick!, command: "PART", name)
-    }
-  }
-#endif // Swift 2.2
 
   
   // MARK: - Welcome
@@ -70,11 +65,7 @@ class Channel {
   func sendWelcome(session s: Session) {
     let nick = s.nick ?? "<unknown>"
     
-#if swift(>=3.0) // #swift3-fd
     let ms = memberNicks.joined(separator: " ")
-#else
-    let ms = memberNicks.joinWithSeparator(" ")
-#endif
     
     s.send(source: serverID, command: 332, nick, name, welcome)
     s.send(source: serverID, command: 353, nick, "=", name, ms)
