@@ -121,7 +121,7 @@ class Session {
             }
 #else
             if let idx = channelsJoined.indexOf({ $0 === channel }) {
-              channelsJoined.removeAtIndex(idx)
+              channelsJoined.remove(at: idx)
             }
 #endif
           }
@@ -229,11 +229,7 @@ class Session {
     channelsJoined.removeAll()
     
     if let nick = self.nick {
-#if swift(>=3.0) // #swift3-fd
       nickToSession.removeValue(forKey: nick)
-#else
-      nickToSession.removeValueForKey(nick)
-#endif
     }
     
     // TODO: socket.close()

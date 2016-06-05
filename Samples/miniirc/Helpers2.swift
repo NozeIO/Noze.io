@@ -21,6 +21,14 @@ extension CollectionType where Generator.Element : Equatable {
   }
 
 }
+  
+extension _ArrayType {
+
+  mutating func remove(at idx: Index) -> Generator.Element {
+    return removeAtIndex(idx)
+  }
+  
+}
 
 extension String {
   
