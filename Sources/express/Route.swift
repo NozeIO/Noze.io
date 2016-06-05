@@ -112,13 +112,21 @@ public struct Route: MiddlewareObject {
     
     // match URLs
     
-    if let pattern = urlPattern {
+    if var pattern = urlPattern {
       // TODO: consider mounting!
       
       let escapedPathComponents = split(urlPath: req.url)
       if debugMatcher {
         print("MATCH: \(req.url)\n  components: \(escapedPathComponents)\n" +
               "  against: \(pattern)")
+      }
+      
+      // this is to support matching "/" against the "/*" ("", "*") pattern
+      if escapedPathComponents.count + 1 == pattern.count {
+        if case .Wildcard = pattern.last! {
+          let endIdx = pattern.count - 1
+          pattern = Array<Pattern>(pattern[0..<endIdx])
+        }
       }
       
       guard escapedPathComponents.count >= pattern.count else { return false }
