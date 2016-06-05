@@ -31,7 +31,7 @@ doesn't require any extra dependencies.
 and it works with Swift 2.2 as well as the latest Swift 3 drop.
 In fact we suggest 2.2 until Swift 3 is actually released.
 
-*Is it a good idea?* You (tell us)[http://noze.io/about/].
+*Is it a good idea?* You [tell us](http://noze.io/about/).
 Not sure, but we think it might be, because:
 *a)* While Swift looks *very* much like JavaScript, it is actually a very
 high performance statically typed and AOT-compiled language,
@@ -41,7 +41,7 @@ high performance statically typed and AOT-compiled language,
 
 #### Shows us some code!
 
-here is a reasonably large collection of simple, focused:
+There is a reasonably large collection of simple, focused:
 [Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples)
 But here you go, the "standard" Node example, a HelloWorld httpd:
 
