@@ -7,7 +7,7 @@
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)
-![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=develop&style=flat)
+![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=master&style=flat)
 
 "Das Haus das Verrückte macht."
 
@@ -29,7 +29,10 @@ doesn't require any extra dependencies.
 
 **Noze.io** works in Cocoa environments as well as on Linux,
 and it works with Swift 2.2 as well as the latest Swift 3 drop.
-In fact we suggest 2.2 until Swift 3 is actually released.
+In fact we suggest 2.2 until 
+[Swift 3](https://swift.org/blog/swift-3-0-release-process/)
+is actually released.
+Head over to our [Start](http://noze.io/start/) page for installation.
 
 *Is it a good idea?* You [tell us](http://noze.io/about/).
 Not sure, but we think it might be, because:
@@ -49,7 +52,7 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
 
     http.createServer { req, res in 
         res.writeHead(200, [ "Content-Type": "text/html" ])
-        res.end("&lt;h1&gt;Hello World&lt;/h1&gt;")
+        res.end("\<h1\>Hello World\</h1\>")
       }
       .listen(1337)
 
