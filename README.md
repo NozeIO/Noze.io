@@ -32,7 +32,7 @@ and it works with Swift 2.2 as well as the latest Swift 3 drop.
 In fact we suggest 2.2 until 
 [Swift 3](https://swift.org/blog/swift-3-0-release-process/)
 is actually released.
-Head over to our [Start](http://noze.io/start/) page for installation.
+Head over to our [Start](http://noze.io/start/) page for install instructions.
 
 *Is it a good idea?* You [tell us](http://noze.io/about/).
 Not sure, but we think it might be, because:
