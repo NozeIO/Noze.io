@@ -1,77 +1,32 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Noze.io - {{tagline}}</title>
-    <link rel="stylesheet"
-    href="http://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.css" />
-    <style>
-      body { padding: 1.5em; }
-      </style>
-  </head>
-  <body>
-    {{#nouser}}
-      <div class="callout alert">
-        <h5>Missing User</h5>
-        <p>Pleaze provide a username!</p>
-      </div>
-    {{/nouser}}
-    
+{{> header}}
+
+  <form action="/form" method="POST">
     <div class="row">
-      <div class="large-12 columns">
-        <div class="panel">
-          <a href="/"><img align="right" src="images/noze-512x512.png"
-                           width="128" height="128" /></a>
-          <h2>Noze.io</h2>
-          <blockquote>{{tagline}}</blockquote>
-        </div>
+      <div class="medium-6 medium-centered columns">
+        <label>
+          User
+          <input name="u" type="text" placeholder="username"
+                 value="{{user}}" />
+        </label>
+        <p class="help-text" id="userHelpText"
+        >Your username should be cool.</p>
       </div>
     </div>
-    
-    <form action="/form" method="POST">
-      <div class="row">
-        <div class="medium-6 medium-centered columns">
-          <label>
-            User
-            <input name="u" type="text" placeholder="username"
-                   value="{{user}}" />
-          </label>
-          <p class="help-text" id="userHelpText"
-          >Your username should be cool.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="medium-6 medium-centered columns">
-          <label>
-            Password <input name="p" type="password" placeholder="password" />
-          </label>
-          <p class="help-text" id="passwordHelpText"
-            >Your password must have at least 1337 Emoji.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="medium-6 medium-centered columns">
-          <input type="submit" class="button" value="Submit" />
-        </div>
-      </div>
-    </form>
-    
-    <pre>{{debug}}</pre>
-    
-    <hr />
     <div class="row">
-      <div class="large-12 small-centered columns" style="text-align: center;">
-        <em>Code from the <a href="http://zeezide.de/">ZeeZide</a>.</em>
+      <div class="medium-6 medium-centered columns">
+        <label>
+          Password <input name="p" type="password" placeholder="password" />
+        </label>
+        <p class="help-text" id="passwordHelpText"
+          >Your password must have at least 1337 Emoji.</p>
       </div>
     </div>
-    
-    <script src="http://cdn.jsdelivr.net/jquery/2.2.4/jquery.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/what-input/2.1.0/what-input.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-      </script>
-  </body>
-</html>
+    <div class="row">
+      <div class="medium-6 medium-centered columns">
+        <input type="submit" class="button" value="Submit" />
+      </div>
+    </div>
+  </form>
+  
+  <pre>{{debug}}</pre>
+{{> footer}}

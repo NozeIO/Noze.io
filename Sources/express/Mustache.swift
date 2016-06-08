@@ -25,8 +25,35 @@ let mustacheExpress : ExpressEngine = { path, options, done in
     
     let parser = MustacheParser()
     let tree   = parser.parse(string: template)
-    let result = tree.render(object: options)
     
-    done(nil, result)
+    let ctx = ExpressMustacheContext(path: path, object: options)
+    tree.render(inContext: ctx) { result in
+      done(nil, result)
+    }
   }
+}
+
+class ExpressMustacheContext : MustacheDefaultRenderingContext {
+  
+  let viewPath : String
+  
+  init(path p: String, object root: Any?) {
+    self.viewPath = path.dirname(p)
+    super.init(root)
+  }
+  
+  override func retrievePartial(name n: String) -> MustacheNode? {
+    let ext         = ".mustache"
+    let partialPath = viewPath + "/" + (n.hasSuffix(ext) ? n : (n + ext))
+    
+    guard let template = fs.readFileSync(partialPath, "utf8") else {
+      console.error("could not load partial: \(n): \(partialPath)")
+      return nil
+    }
+    
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: template)
+    return tree
+  }
+  
 }

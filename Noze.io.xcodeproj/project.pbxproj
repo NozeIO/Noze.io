@@ -141,6 +141,8 @@
 		E87BE9911CF517EE00C20AE7 /* libevents.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275811CF49E5F004A6A34 /* libevents.dylib */; };
 		E87BE9921CF517EE00C20AE7 /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E87BE9931CF517EE00C20AE7 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
+		E885708E1D0772CE000C054B /* MustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E885708D1D0772CE000C054B /* MustacheRenderingContext.swift */; };
+		E88570901D0776B5000C054B /* HTMLEscape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E885708F1D0776B5000C054B /* HTMLEscape.swift */; };
 		E886C4881D00B91D00614AFB /* CORS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886C4871D00B91D00614AFB /* CORS.swift */; };
 		E886F6EA1D00B26600DE1E86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D4DFA21CFC67D000921230 /* Foundation.framework */; };
 		E886F6EC1D00B2ED00DE1E86 /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886F6EB1D00B2ED00DE1E86 /* misc.swift */; };
@@ -213,13 +215,13 @@
 		E8C90B9E1CFE240100F85436 /* libleftpad.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */; };
 		E8C90BA01CFE28CC00F85436 /* MethodOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90B9F1CFE28CC00F85436 /* MethodOverride.swift */; };
 		E8C90BEE1CFE704B00F85436 /* MustacheParser2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */; };
-		E8C90BEF1CFE704B00F85436 /* MustacheRenderer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BEC1CFE704B00F85436 /* MustacheRenderer2.swift */; };
+		E8C90BEF1CFE704B00F85436 /* MustacheNode2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */; };
 		E8C90BF01CFE704B00F85436 /* SimpleKVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */; };
 		E8C90BFF1CFE71B800F85436 /* libmustache.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */; };
 		E8C90C091CFE722E00F85436 /* MustacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C081CFE722E00F85436 /* MustacheTests.swift */; };
 		E8C90C0B1CFE74B400F85436 /* MustacheNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C0A1CFE74B400F85436 /* MustacheNode.swift */; };
 		E8C90C0D1CFE74E400F85436 /* MustacheParser3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C0C1CFE74E400F85436 /* MustacheParser3.swift */; };
-		E8C90C0F1CFE759E00F85436 /* MustacheRenderer3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C0E1CFE759E00F85436 /* MustacheRenderer3.swift */; };
+		E8C90C0F1CFE759E00F85436 /* MustacheNode3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C0E1CFE759E00F85436 /* MustacheNode3.swift */; };
 		E8C90C111CFE75F700F85436 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C101CFE75F700F85436 /* Helpers.swift */; };
 		E8D4DF991CFC52BA00921230 /* ChildProcessPipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4DF981CFC52BA00921230 /* ChildProcessPipes.swift */; };
 		E8D4DF9B1CFC549500921230 /* BodyParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4DF9A1CFC549500921230 /* BodyParser.swift */; };
@@ -239,6 +241,7 @@
 		E8D4DFC51CFDB60000921230 /* timespec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4DFC41CFDB60000921230 /* timespec.swift */; };
 		E8D4DFC61CFDB6FE00921230 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E8D4DFC81CFDD04F00921230 /* SocketSourceTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4DFC71CFDD04F00921230 /* SocketSourceTarget.swift */; };
+		E8DDE1AC1D07C755000D1B7A /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DDE1AB1D07C755000D1B7A /* Path.swift */; };
 		E8E2755E1CF49E1D004A6A34 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84F40B91CBBCE5000544DE5 /* Module.swift */; };
 		E8E2755F1CF49E1D004A6A34 /* dylib.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84F40C71CBBD0D000544DE5 /* dylib.swift */; };
 		E8E275601CF49E1D004A6A34 /* ioctl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84F40C81CBBD0D000544DE5 /* ioctl.swift */; };
@@ -1479,6 +1482,8 @@
 		E87BE9951CF51F5C00C20AE7 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TODO.md; path = Documentation/TODO.md; sourceTree = "<group>"; };
 		E883DE111CEE8417001ED464 /* HTTPMessageWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPMessageWrapper.swift; path = Sources/http/HTTPMessageWrapper.swift; sourceTree = SOURCE_ROOT; };
 		E883DE131CEE87B3001ED464 /* RequestOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestOptions.swift; path = Sources/http/RequestOptions.swift; sourceTree = SOURCE_ROOT; };
+		E885708D1D0772CE000C054B /* MustacheRenderingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheRenderingContext.swift; path = Sources/mustache/MustacheRenderingContext.swift; sourceTree = "<group>"; };
+		E885708F1D0776B5000C054B /* HTMLEscape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTMLEscape.swift; path = Sources/mustache/HTMLEscape.swift; sourceTree = "<group>"; };
 		E886C4871D00B91D00614AFB /* CORS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CORS.swift; path = Sources/connect/CORS.swift; sourceTree = SOURCE_ROOT; };
 		E886F6EB1D00B2ED00DE1E86 /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = misc.swift; path = "Samples/express-simple/Sources/misc.swift"; sourceTree = SOURCE_ROOT; };
 		E88CE36B1CD809C6001B0A5A /* Connect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Connect.swift; path = Sources/connect/Connect.swift; sourceTree = SOURCE_ROOT; };
@@ -1567,14 +1572,14 @@
 		E8C90B9F1CFE28CC00F85436 /* MethodOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MethodOverride.swift; path = Sources/connect/MethodOverride.swift; sourceTree = SOURCE_ROOT; };
 		E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmustache.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser2.swift; path = Sources/mustache/MustacheParser2.swift; sourceTree = "<group>"; };
-		E8C90BEC1CFE704B00F85436 /* MustacheRenderer2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheRenderer2.swift; path = Sources/mustache/MustacheRenderer2.swift; sourceTree = "<group>"; };
+		E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode2.swift; path = Sources/mustache/MustacheNode2.swift; sourceTree = "<group>"; };
 		E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVS.swift; path = Sources/mustache/SimpleKVS.swift; sourceTree = "<group>"; };
 		E8C90BF31CFE709700F85436 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/mustache/README.md; sourceTree = "<group>"; };
 		E8C90BFA1CFE71B800F85436 /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8C90C081CFE722E00F85436 /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustache/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
 		E8C90C0A1CFE74B400F85436 /* MustacheNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode.swift; path = Sources/mustache/MustacheNode.swift; sourceTree = "<group>"; };
 		E8C90C0C1CFE74E400F85436 /* MustacheParser3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser3.swift; path = Sources/mustache/MustacheParser3.swift; sourceTree = "<group>"; };
-		E8C90C0E1CFE759E00F85436 /* MustacheRenderer3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheRenderer3.swift; path = Sources/mustache/MustacheRenderer3.swift; sourceTree = "<group>"; };
+		E8C90C0E1CFE759E00F85436 /* MustacheNode3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode3.swift; path = Sources/mustache/MustacheNode3.swift; sourceTree = "<group>"; };
 		E8C90C101CFE75F700F85436 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = Sources/mustache/Helpers.swift; sourceTree = "<group>"; };
 		E8CA33741CB12BE30019DECC /* EventEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEmitter.swift; path = Sources/events/EventEmitter.swift; sourceTree = SOURCE_ROOT; };
 		E8CA33751CB12BE30019DECC /* EventListenerSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListenerSet.swift; path = Sources/events/EventListenerSet.swift; sourceTree = SOURCE_ROOT; };
@@ -1655,6 +1660,7 @@
 		E8DA64741CE5E24900531F54 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/http_parser/README.md; sourceTree = SOURCE_ROOT; };
 		E8DA64751CE5E24900531F54 /* URLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLParser.swift; path = Sources/http_parser/URLParser.swift; sourceTree = SOURCE_ROOT; };
 		E8DAB01B1CE3977B00EADE5D /* CharacterToUTF8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CharacterToUTF8.swift; path = Sources/streams/strings/CharacterToUTF8.swift; sourceTree = SOURCE_ROOT; };
+		E8DDE1AB1D07C755000D1B7A /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Path.swift; path = Sources/fs/Path.swift; sourceTree = SOURCE_ROOT; };
 		E8DE16D71CC64976001140DD /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = Sources/net/Util.swift; sourceTree = SOURCE_ROOT; };
 		E8DE16EC1CC90E81001140DD /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/leftpad/Module.swift; sourceTree = SOURCE_ROOT; };
 		E8E275561CF49E06004A6A34 /* libxsys.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libxsys.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2723,11 +2729,13 @@
 			children = (
 				E8C90BF31CFE709700F85436 /* README.md */,
 				E8C90C0A1CFE74B400F85436 /* MustacheNode.swift */,
+				E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */,
+				E8C90C0E1CFE759E00F85436 /* MustacheNode3.swift */,
+				E885708D1D0772CE000C054B /* MustacheRenderingContext.swift */,
+				E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */,
 				E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */,
 				E8C90C0C1CFE74E400F85436 /* MustacheParser3.swift */,
-				E8C90BEC1CFE704B00F85436 /* MustacheRenderer2.swift */,
-				E8C90C0E1CFE759E00F85436 /* MustacheRenderer3.swift */,
-				E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */,
+				E885708F1D0776B5000C054B /* HTMLEscape.swift */,
 				E8C90C101CFE75F700F85436 /* Helpers.swift */,
 			);
 			name = mustache;
@@ -2788,6 +2796,7 @@
 				E80E8C8B1CDF2F3800782E72 /* PosixWrappers2.swift */,
 				E86D8ABC1CF353F4007BE28A /* PosixWrappers3.swift */,
 				E80A2D4B1CDD5087005132C1 /* Temp.swift */,
+				E8DDE1AB1D07C755000D1B7A /* Path.swift */,
 				E8CA33BC1CB16BEF0019DECC /* GCDChannelBase.swift */,
 				E8C15F1A1CEDEB6000CA5517 /* FileDescriptorStream.swift */,
 				E8DA01141CE4C65A0086BED5 /* Swift3.swift */,
@@ -4283,9 +4292,11 @@
 				E8C90C0D1CFE74E400F85436 /* MustacheParser3.swift in Sources */,
 				E8C90BF01CFE704B00F85436 /* SimpleKVS.swift in Sources */,
 				E8C90C111CFE75F700F85436 /* Helpers.swift in Sources */,
-				E8C90C0F1CFE759E00F85436 /* MustacheRenderer3.swift in Sources */,
+				E88570901D0776B5000C054B /* HTMLEscape.swift in Sources */,
+				E8C90C0F1CFE759E00F85436 /* MustacheNode3.swift in Sources */,
 				E8C90C0B1CFE74B400F85436 /* MustacheNode.swift in Sources */,
-				E8C90BEF1CFE704B00F85436 /* MustacheRenderer2.swift in Sources */,
+				E8C90BEF1CFE704B00F85436 /* MustacheNode2.swift in Sources */,
+				E885708E1D0772CE000C054B /* MustacheRenderingContext.swift in Sources */,
 				E8C90BEE1CFE704B00F85436 /* MustacheParser2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4418,6 +4429,7 @@
 				E8E275DA1CF49EDA004A6A34 /* FSWatcher.swift in Sources */,
 				E8E275D71CF49EDA004A6A34 /* FileDescriptor.swift in Sources */,
 				E8E275C81CF49ECC004A6A34 /* Streams.swift in Sources */,
+				E8DDE1AC1D07C755000D1B7A /* Path.swift in Sources */,
 				E8E275D21CF49ED1004A6A34 /* FileSource.swift in Sources */,
 				E8E275C91CF49ECC004A6A34 /* Directory2.swift in Sources */,
 				E8E275D91CF49EDA004A6A34 /* UnixUtils.swift in Sources */,
@@ -7857,48 +7869,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 			};
 			name = AppKitDebug;
 		};
@@ -7906,41 +7878,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 			};
 			name = UIKitDebug;
 		};
@@ -7948,41 +7887,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = AppKitRelease;
 		};
@@ -7990,41 +7898,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = UIKitRelease;
 		};
