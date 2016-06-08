@@ -50,7 +50,7 @@ public extension MustacheRenderingContext {
 public class MustacheDefaultRenderingContext : MustacheRenderingContext {
   
   public var string : String = ""
-  var stack  = [ Any? ]()
+  public var stack  = [ Any? ]() // #linux-public
   
   public init(_ root: Any?) {
     if let a = root {
