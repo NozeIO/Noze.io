@@ -126,10 +126,10 @@ public class HTTPParser {
     self.state = startState
   }
 
-  public func reset() {
-    self.type              = .Both
+  public func reset(type t: HTTPParserType = .Both) {
+    self.type              = t
     self.flags             = HTTPParserOptions()
-    self.state             = .s_dead
+    self.state             = startState
     self.header_state      = .h_general
     self.index             = 0
     self.nread             = 0
@@ -144,17 +144,6 @@ public class HTTPParser {
     self.upgrade           = false
   
     self.data              = nil
-  
-    self.cbMessageBegin    = nil
-    self.cbURL             = nil
-    self.cbStatus          = nil
-    self.cbHeaderField     = nil
-    self.cbHeaderValue     = nil
-    self.cbHeadersComplete = nil
-    self.cbBody            = nil
-    self.cbMessageComplete = nil
-    self.cbChunkHeader     = nil
-    self.cbChunkComplete   = nil
   }
   
   // MARK: - Callbacks
@@ -188,6 +177,7 @@ public class HTTPParser {
   // FIXME: the error codes are wrong
   
   /// Run the notify callback FOR, returning ER if it fails
+  @inline(__always)
   func CALLBACK_NOTIFY_(cbe: Callback,
                         inout _ CURRENT_STATE : ParserState,
                         _ ER: size_t)
@@ -214,6 +204,7 @@ public class HTTPParser {
   }
   
   /// Run the notify callback FOR and consume the current byte
+  @inline(__always)
   func CALLBACK_NOTIFY(cb: Callback,
                        inout _ CURRENT_STATE : ParserState,
                        _ p:    UnsafePointer<CChar>,
@@ -225,6 +216,7 @@ public class HTTPParser {
   }
   
   /// Run the notify callback FOR and don't consume the current byte
+  @inline(__always)
   func CALLBACK_NOTIFY_NOADVANCE(cb: Callback,
                                  inout _ CURRENT_STATE : ParserState,
                                  _ p:    UnsafePointer<CChar>,
@@ -239,6 +231,7 @@ public class HTTPParser {
   //      directly patch the `mark`
   
   /// Run data callback FOR with LEN bytes, returning ER if it fails
+  @inline(__always)
   func CALLBACK_DATA_(cbe: Callback,
                       inout _ mark : UnsafePointer<CChar>,
                       inout _ CURRENT_STATE : ParserState,
@@ -278,6 +271,7 @@ public class HTTPParser {
   }
   
   /// Run the data callback FOR and consume the current byte
+  @inline(__always)
   func CALLBACK_DATA(cb: Callback,
                      inout _ mark : UnsafePointer<CChar>,
                      inout _ CURRENT_STATE : ParserState,
@@ -287,6 +281,7 @@ public class HTTPParser {
     return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, p - mark, p - data + 1)
   }
   /// Run the data callback FOR and consume the current byte
+  @inline(__always)
   func CALLBACK_DATA_NOADVANCE(cb: Callback,
                      inout _ mark : UnsafePointer<CChar>,
                      inout _ CURRENT_STATE : ParserState,
@@ -355,6 +350,7 @@ public class HTTPParser {
       default: break
     }
     
+    @inline(__always)
     func MARK(cbe: Callback /*, p : UnsafePointer<CChar> = p */) {
       // Note: argument crashes swiftc 2.2
       // #define MARK(FOR) if (!FOR##_mark)  FOR##_mark = p;
@@ -372,12 +368,14 @@ public class HTTPParser {
     }
     
     /// transfer `CURRENT_STATE` to `state` ivar and return the given value
+    @inline(__always)
     func RETURN(V: size_t) -> size_t {
       if debugOn { print("RETURN old \(self.state) new \(CURRENT_STATE)") }
       self.state = CURRENT_STATE
       return V
     }
     
+    @inline(__always)
     func UPDATE_STATE(state: ParserState) {
       if debugOn { print("  UPDATE_STATE \(CURRENT_STATE) => \(state)") }
       CURRENT_STATE = state
@@ -403,6 +401,7 @@ public class HTTPParser {
     
     // REEXECUTE macro:
     //   if let len = gotoReexecute() { return len } // error?
+    @inline(__always)
     func step(ch: CChar) -> StepResult {
       /* reexecute: label */
 
@@ -1725,6 +1724,7 @@ public class HTTPParser {
   
   // MARK: - Implementation
   
+  @inline(__always)
   func STRICT_CHECK(condition: Bool) -> Bool {
     // the original has a 'goto error'
     if HTTP_PARSER_STRICT {
@@ -1792,6 +1792,7 @@ public class HTTPParser {
    * than any reasonable request or response so this should never affect
    * day-to-day operation.
    */
+  @inline(__always)
   func COUNT_HEADER_SIZE(V: Int) -> Bool {
     self.nread += V
     if self.nread > HTTP_MAX_HEADER_SIZE {

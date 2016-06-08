@@ -6,6 +6,12 @@
 //  Copyright © 2016 Always Right Institute. All rights reserved.
 //
 
+#if os(Linux)
+  import func Glibc.memcpy
+#else
+  import func Darwin.memcpy
+#endif
+
 // Not in Swift: let c : CChar = 'A'
 
 // TODO: move into Literals struct
@@ -97,6 +103,26 @@ let c7 : CChar = 55
 let c8 : CChar = 56
 let c9 : CChar = 57 // 9
 
+// TBD: Perf: is storing the pointers in a global expensive? (dispatch_once?),
+///     should the resolved pointer be put into the parser structure?
+
+// There is a tiny speed gain by converting the Swift arrays into a C array aka
+// UnsafePointer. Subscripting still works with that.
+func copyArrayToBuffer<T>(array a: [ T ]) -> UnsafePointer<T> {
+  let size = a.count * sizeof(T)
+
+  #if swift(>=3.0) // #swift3-ptr
+    let res  = UnsafeMutablePointer<CChar>(allocatingCapacity: size)
+  #else
+    let res  = UnsafeMutablePointer<CChar>.alloc(size)
+  #endif
+  
+  _ = a.withUnsafeBufferPointer { p in
+    memcpy(UnsafeMutablePointer<Void>(res),
+           UnsafePointer<Void>(p.baseAddress), size)
+  }
+  return UnsafePointer(res)
+}
 
 /* Tokens as defined by rfc 2616. Also lowercases them.
  *        token       = 1*<any CHAR except CTLs or separators>
@@ -107,7 +133,7 @@ let c9 : CChar = 57 // 9
  */
 // Note: Swift has no neat Char=>Code conversion
 // This lowercases the regular chars, and returns 0 for invalid chars.
-private let tokens : [ CChar ] = [
+private let tokensArray : [ CChar ] = [
 /*   0 nul    1 soh    2 stx    3 etx    4 eot    5 enq    6 ack    7 bel  */
         0,       0,       0,       0,       0,       0,       0,       0,
 /*   8 bs     9 ht    10 nl    11 vt    12 np    13 cr    14 so    15 si   */
@@ -140,9 +166,10 @@ private let tokens : [ CChar ] = [
        cp,      cq,      cr,      cs,      ct,      cu,      cv,     cw,
 /* 120  x   121  y   122  z   123  {   124  |   125  }   126  ~   127 del */
        cx,      cy,      cz,       0,  cVDASH,      0,  cTILDE,       0 ]
+let tokens : UnsafePointer<CChar> = copyArrayToBuffer(array: tokensArray)
 
 // used in HTTPParser[3]
-let unhex : [ Int8 ] = [
+private let unhexArray : [ Int8 ] = [
   -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
   ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
   ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
@@ -152,6 +179,7 @@ let unhex : [ Int8 ] = [
   ,-1,10,11,12,13,14,15,-1,-1,-1,-1,-1,-1,-1,-1,-1
   ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 ]
+let unhex : UnsafePointer<Int8> = copyArrayToBuffer(array: unhexArray)
 
 // w/o explicit casts, this takes forever in type inference
 // Note: precalculating the values doesn't give any speedup
@@ -164,7 +192,7 @@ private let b16  = UInt8(16)
 private let b32  = UInt8(32)
 private let b64  = UInt8(64)
 private let b128 = UInt8(128)
-private let normal_url_char : [ UInt8 ] /* [32] */ = [
+private let normal_url_charArray : [ UInt8 ] /* [32] */ = [
   /*   0 nul    1 soh    2 stx    3 etx    4 eot    5 enq    6 ack    7 bel  */
   b0    |   b0    |   b0    |   b0    |   b0    |   b0    |   b0    |   b0,
   /*   8 bs     9 ht */
@@ -202,6 +230,8 @@ private let normal_url_char : [ UInt8 ] /* [32] */ = [
   /* 120  x   121  y   122  z   123  {   124  |   125  }   126  ~   127 del */
   b1    |   b2    |   b4    |   b8    |   b16   |   b32   |   b64   |   b0
 ]
+let normal_url_char : UnsafePointer<UInt8> =
+                        copyArrayToBuffer(array: normal_url_charArray)
 
 /* Macros for character classes; depends on strict-mode  */
 
@@ -210,22 +240,27 @@ let LF : CChar = 10
 
 #if swift(>=3.0) // #swift3-1st-arg
 
+@inline(__always)
 func LOWER   (_ c: CChar) -> CChar { return CChar(UInt8(c) | UInt8(0x20)) }
 func IS_ALPHA(_ c: CChar) -> Bool  { return LOWER(c) >= ca && LOWER(c) <= cz }
 func IS_NUM  (_ c: CChar) -> Bool  { return c >= c0 && c <= c9 }
 
+@inline(__always)
 func IS_ALPHANUM(_ c: CChar) -> Bool { return IS_ALPHA(c) || IS_NUM(c) }
 
+@inline(__always)
 func IS_HEX(_ c: CChar) -> Bool {
   return (IS_NUM(c) || (LOWER(c) >= ca && LOWER(c) <= cf))
 }
 
+@inline(__always)
 func IS_MARK(_ c: CChar) -> Bool {
   return ((c) == cDASH || (c) ==  95 /* '_' */ || (c) == 46 /* '.' */
        || (c) == 33 /* '!'  */ || (c) == 126 /* '~' */ || (c) == 42 /* '*' */
        || (c) == 92 /* '\'' */ || (c) ==  40 /* '(' */ || (c) == 41 /* ')' */)
 }
 
+@inline(__always)
 func IS_USERINFO_CHAR(_ c: CChar) -> Bool {
   return (IS_ALPHANUM(c) || IS_MARK(c)
        || (c) == 37 /* '%' */ || (c) == 59 /* ';' */ || (c) == 58 /* ':' */
@@ -233,10 +268,12 @@ func IS_USERINFO_CHAR(_ c: CChar) -> Bool {
        || (c) == 36 /* '$' */ || (c) == 44 /* ',' */)
 }
 
+@inline(__always)
 func STRICT_TOKEN(_ c: CChar) -> CChar {
   return tokens[Int(c)]
 }
 
+@inline(__always)
 func TOKEN(_ c: CChar) -> CChar {
   if HTTP_PARSER_STRICT {
     return tokens[Int(c)]
@@ -246,6 +283,7 @@ func TOKEN(_ c: CChar) -> CChar {
   }
 }
 
+@inline(__always)
 func IS_URL_CHAR(_ c: CChar) -> Bool {
   // TODO: I don't get that normal_url_char map yet.
   return c != CR && c != LF && c > 32
@@ -279,28 +317,35 @@ func IS_HOST_CHAR(_ c: CChar) -> Bool {
 
 #else // Swift 2.2
 
+@inline(__always)
 func LOWER(c: CChar) -> CChar { return c | 0x20 } // TODO: hm: UInt8 bitcast?
 
+@inline(__always)
 func IS_ALPHA(c: CChar) -> Bool {
   return (LOWER(c) >= 97 /* 'a' */ && LOWER(c) <= 122 /* 'z' */)
 }
 
+@inline(__always)
 func IS_NUM(c: CChar) -> Bool {
   return ((c) >= 48 /* '0' */ && (c) <= 57 /* '9' */)
 }
 
+@inline(__always)
 func IS_ALPHANUM(c: CChar) -> Bool { return IS_ALPHA(c) || IS_NUM(c) }
 
+@inline(__always)
 func IS_HEX(c: CChar) -> Bool {
   return (IS_NUM(c) || (LOWER(c) >= 97 /*'a'*/ && LOWER(c) <= 102 /*'f'*/))
 }
 
+@inline(__always)
 func IS_MARK(c: CChar) -> Bool {
   return ((c) == 45 /* '-'  */ || (c) ==  95 /* '_' */ || (c) == 46 /* '.' */
        || (c) == 33 /* '!'  */ || (c) == 126 /* '~' */ || (c) == 42 /* '*' */
        || (c) == 92 /* '\'' */ || (c) ==  40 /* '(' */ || (c) == 41 /* ')' */)
 }
 
+@inline(__always)
 func IS_USERINFO_CHAR(c: CChar) -> Bool {
   return (IS_ALPHANUM(c) || IS_MARK(c)
        || (c) == 37 /* '%' */ || (c) == 59 /* ';' */ || (c) == 58 /* ':' */
@@ -308,10 +353,12 @@ func IS_USERINFO_CHAR(c: CChar) -> Bool {
        || (c) == 36 /* '$' */ || (c) == 44 /* ',' */)
 }
 
+@inline(__always)
 func STRICT_TOKEN(c: CChar) -> CChar {
   return tokens[Int(c)]
 }
 
+@inline(__always)
 func TOKEN(c: CChar) -> CChar {
   if HTTP_PARSER_STRICT {
     return tokens[Int(c)]
@@ -321,6 +368,7 @@ func TOKEN(c: CChar) -> CChar {
   }
 }
 
+@inline(__always)
 func IS_URL_CHAR(c: CChar) -> Bool {
   // TODO: I don't get that normal_url_char map yet.
   return c != CR && c != LF && c > 32
@@ -342,6 +390,7 @@ func IS_URL_CHAR(c: CChar) -> Bool {
   */
 }
 
+@inline(__always)
 func IS_HOST_CHAR(c: CChar) -> Bool {
   if HTTP_PARSER_STRICT {
     return (IS_ALPHANUM(c) || (c) == 46 /* '.' */ || (c) == 45 /* '-' */)
