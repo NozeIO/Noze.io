@@ -103,4 +103,13 @@ class NozeIOChildProcessTests: NozeIOTestCase {
     XCTAssertEqual(result, "SGVsbG8gV29ybGQ=\n")
   }
 
+  func testArrayToWC() {
+    enableRunLoop()
+    
+    "Hello\n  World\n" | spawn("wc", "-l") | utf8 | concat { result in
+      self.exitIfDone()
+    }
+    
+    waitForExit()
+  }
 }

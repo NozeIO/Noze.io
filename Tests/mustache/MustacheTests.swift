@@ -25,19 +25,46 @@ class MustacheTests: XCTestCase {
     "Has NO addresses" +
     "{{/addresses}}" +
   ""
+  let fixTaxTemplate2 = // same but no {{& x} inverted sections
+    "Hello {{name}}\n" +
+    "You have just won {{{value}}} dollars!\n" +
+    "{{#in_ca}}\n" +
+    "Well, {{{taxed_value}}} dollars, after taxes." +
+    "{{/in_ca}}\n" +
+    "{{#addresses}}" +
+    "  Has address in: {{city}}" +
+    "{{/addresses}}" +
+    "{{^addresses}}" +
+    "Has NO addresses" +
+    "{{/addresses}}" +
+  ""
+  
+  let baseTemplate =
+    "<h2>Names</h2>\n" +
+    "{{#names}}" +
+    "  {{>     user}}\n" +
+    "{{/names}}" +
+  ""
+  let userTemplate = "<strong>{{name}}</strong>"
   
   let fixDictChris : [ String : Any ] = [
-    "name":        "Chris",
-    "value":       10000,
-    "taxed_value": Int(10000 - (10000 * 0.4)),
-    "in_ca":       true,
-    "addresses": [
-      [ "city": "Cupertino" ]
+    "name"        : "Ch<r>is",
+    "value"       : 10000,
+    "taxed_value" : Int(10000 - (10000 * 0.4)),
+    "in_ca"       : true,
+    "addresses"   : [
+      [ "city"    : "Cupertino" ]
     ]
   ]
   
+  let fixUsers = [
+    [ "name": "Duck",  "firstname": "Donald"   ],
+    [ "name": "Duck",  "firstname": "Dagobert" ],
+    [ "name": "Mouse", "firstname": "Mickey"   ]
+  ]
+  
   let fixChrisResult =
-    "Hello Chris\n" +
+    "Hello Ch&lt;r&gt;is\n" +
     "You have just won 10000 dollars!\n" +
     "\n" +
     "Well, 6000 dollars, after taxes." +
@@ -46,13 +73,37 @@ class MustacheTests: XCTestCase {
     "  Has address in: Cupertino" +
     "" +
   ""
+  
+  let fixLambdaTemplate1 =
+    "{{#wrapped}}{{name}} is awesome.{{/wrapped}}"
+  
+  let fixLambda1 : [ String : Any ] = [
+    "name"    : "Willy",
+    "wrapped" : { ( text: String, render: ( String ) -> String ) -> String in
+      return "<b>" + render(text) + "</b>"
+    }
+  ]
+  let fixSimpleLambda1 : [ String : Any ] = [
+    "name"    : "Willy",
+    "wrapped" : { ( text: String ) -> String in return "<b>" + text + "</b>" }
+  ]
+  
+  let fixLambda1Result       = "<b>Willy is awesome.</b>"
+  let fixSimpleLambda1Result = "<b>{{name}} is awesome.</b>"
+  let fixPartialResult1 =
+    "<h2>Names</h2>\n" +
+    "  <strong>Duck</strong>\n" +
+    "  <strong>Duck</strong>\n" +
+    "  <strong>Mouse</strong>\n"
+  
+  // MARK: - Tests
 
   func testDictKVC() throws {
     let v = KeyValueCoding.value(forKey: "name", inObject: fixDictChris)
     XCTAssertNotNil(v)
     if v != nil {
       XCTAssertTrue(v! is String)
-      XCTAssertEqual(v as? String, "Chris")
+      XCTAssertEqual(v as? String, "Ch<r>is")
     }
   }
   
@@ -73,6 +124,74 @@ class MustacheTests: XCTestCase {
     XCTAssertFalse(result.isEmpty)
     XCTAssertEqual(result, fixChrisResult)
   }
+  
+  func testTreeRendering() throws {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: fixTaxTemplate2)
+    let result = tree.asMustacheString
+    
+    XCTAssertEqual(result, fixTaxTemplate2)
+  }
+  
+  func testLambda() throws {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: fixLambdaTemplate1)
+    let result = tree.render(object: fixLambda1)
+    
+    XCTAssertFalse(result.isEmpty)
+    XCTAssertEqual(result, fixLambda1Result)
+  }
+  
+  func testSimpleLambda() throws {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: fixLambdaTemplate1)
+    let result = tree.render(object: fixSimpleLambda1)
+    
+    XCTAssertFalse(result.isEmpty)
+    XCTAssertEqual(result, fixSimpleLambda1Result)
+  }
+  
+  func testPartialParsing() throws {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: baseTemplate)
+    
+    XCTAssertNotNil(tree)
+    // print("tree: \(tree)")
+    // print("tree: \(tree.asMustacheString)")
+  }
+  
+  
+  // MARK: - Test Partials
+  
+  class TestCtx : MustacheDefaultRenderingContext {
+    
+    var nameToTemplate = [ String : String ]()
+    
+    override func retrievePartial(name n: String) -> MustacheNode? {
+      guard let template = nameToTemplate[n] else { return nil }
+      
+      let parser = MustacheParser()
+      let tree   = parser.parse(string: template)
+      return tree
+    }
+    
+  }
+  
+  func testPartial() throws {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: baseTemplate)
+
+    let ctx = TestCtx(["names": fixUsers])
+    ctx.nameToTemplate["base"] = baseTemplate
+    ctx.nameToTemplate["user"] = userTemplate
+    tree.render(inContext: ctx)
+    let result = ctx.string
+    
+    //print("result: \(result)")
+    XCTAssertNotNil(result)
+    XCTAssertEqual(result, fixPartialResult1)
+  }
+  
   
 #if os(Linux)
   static var allTests = {

@@ -1,0 +1,31 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noze.io - {{tagline}}</title>
+    <link rel="stylesheet"
+          href="http://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.css" />
+    <style>
+      body { padding: 1.5em; }
+    </style>
+  </head>
+  <body>
+    {{#nouser}}
+      <div class="callout alert">
+        <h5>Missing User</h5>
+        <p>Pleaze provide a username!</p>
+      </div>
+    {{/nouser}}
+    
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <a href="/"><img align="right" src="images/noze-512x512.png"
+                           width="128" height="128" /></a>
+          <h2>Noze.io</h2>
+          <blockquote>{{tagline}}</blockquote>
+        </div>
+      </div>
+    </div>

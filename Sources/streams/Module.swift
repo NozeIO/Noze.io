@@ -53,6 +53,9 @@ public func onNewWritable(cb: ( WritableStreamType ) -> Void) -> NozeStreams {
 
 // We use properties to avoid the need to use () when piping through it. Is this
 // decent? Note sure, I guess conceptually no :-)
+// TBD: A disadvantage is that we cannot use type overloading, i.e.
+//        func utf8() -> TransformStream<String,    UInt8>
+//        func utf8() -> TransformStream<Character, UInt8>
 
 /// Consume bytes and produces String lines separated by newline (10)
 public var readlines : TransformStream<UInt8, String> {

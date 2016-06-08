@@ -1,47 +1,11 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Noze.io - {{tagline}}</title>
-    <link rel="stylesheet"
-          href="http://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.css" />
-    <style>
-      body { padding: 1.5em; }
-    </style>
-  </head>
-  <body>
-    <div class="row">
-      <div class="large-12 columns">
-        <div class="panel">
-          <img align="right" src="images/noze-512x512.png" width="128" height="128" />
-          <h2>Noze.io</h2>
-          <blockquote>{{tagline}}</blockquote>
-        </div>
-      </div>
-    </div>
+{{> header}}
+
+  <div class="menu-centered">
+    <ul class="menu">
+      <li><a href="/form">Form</a></li>
+      <li><a href="http://noze.io">Noze.io</a></li>
+      <li><a href="http://swifter-lang.org">Swifter</a></li>
+    </ul>
+  </div>
     
-    <div class="menu-centered">
-      <ul class="menu">
-        <li><a href="/form">Form</a></li>
-        <li><a href="http://noze.io">Noze.io</a></li>
-        <li><a href="http://swifter-lang.org">Swifter</a></li>
-      </ul>
-    </div>
-    
-    <hr />
-    <div class="row">
-      <div class="large-12 small-centered columns" style="text-align: center;">
-        <em>Code from the <a href="http://zeezide.de/">ZeeZide</a>.</em>
-      </div>
-    </div>
-    
-    <script src="http://cdn.jsdelivr.net/jquery/2.2.4/jquery.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/what-input/2.1.0/what-input.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-    </script>
-  </body>
-</html>
+{{> footer}}

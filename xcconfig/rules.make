@@ -21,11 +21,15 @@ ifeq ($(PACKAGE),)
 PACKAGE=$(notdir $(shell pwd))
 endif
 
+# automagically lookup Swift files
+ifeq ($($(PACKAGE)_SWIFT_FILES),)
+$(PACKAGE)_SWIFT_FILES = \
+  $(filter-out Package.swift,$(wildcard *.swift) $(wildcard */*.swift))
+endif
+
 # check whether main.swift is available, and set TYPE to `tool` or `library`
 ifeq ($($(PACKAGE)_TYPE),)
-ifneq ($(wildcard $(PACKAGE_DIR)/main.swift),)
-$(PACKAGE)_TYPE = tool
-else ifneq ($(wildcard $(PACKAGE_DIR)/Sources/main.swift),)
+ifneq (,$(findstring main.swift,$($(PACKAGE)_SWIFT_FILES)))
 $(PACKAGE)_TYPE = tool
 else
 $(PACKAGE)_TYPE = library

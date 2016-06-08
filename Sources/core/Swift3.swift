@@ -27,11 +27,14 @@ public extension CollectionType where Generator.Element : Equatable {
   }
 }
 
-public extension CollectionType where Generator.Element : Equatable {
+public extension CollectionType {
 
   public func index(after idx: Self.Index) -> Index { // v3 compat
     return idx.successor()
   }
+}
+  
+public extension CollectionType where Generator.Element : Equatable {
 
   public func index(of element: Self.Generator.Element) -> Self.Index? {
     return indexOf(element)
