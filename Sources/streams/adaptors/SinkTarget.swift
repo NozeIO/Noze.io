@@ -65,7 +65,7 @@ private func getDefaultWorkerQueue() -> dispatch_queue_t {
   return dispatch_queue_create("io.noze.target.sink.async", nil)
 }
 
-public struct ASyncSinkTarget<S: SinkType> : GWritableTargetType {
+public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   // TODO: almost a dupe of ASyncGeneratorSource, any way to somehow DRY? :-)
   
   public static var defaultHighWaterMark : Int { return 1 }
@@ -93,9 +93,9 @@ public struct ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   /// The number of generation attempts can be limited using the
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
-  public mutating func writev(queue Q : dispatch_queue_t,
-                              chunks  : [ [ S.Element ] ],
-                              yield   : ( ErrorType?, Int ) -> Void)
+  public func writev(queue Q : dispatch_queue_t,
+                     chunks  : [ [ S.Element ] ],
+                     yield   : ( ErrorType?, Int ) -> Void)
   {
     // Note: we do capture self for the sink ...
     let maxCount = self.maxCountPerDispatch
@@ -111,9 +111,7 @@ public struct ASyncSinkTarget<S: SinkType> : GWritableTargetType {
     }
   }
   
-  private mutating func _writev(chunks : [ [ S.Element ] ], _ maxCount : Int)
-                        -> Int
-  {
+  private func _writev(chunks : [ [ S.Element ] ], _ maxCount : Int) -> Int {
     var count = 0
 
     for bucket in chunks {

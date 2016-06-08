@@ -97,7 +97,7 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
 ///       Readable might dispatch a set of reads and the source has no internal
 ///       synchronization yet.
 /// TODO: support pause()?
-public struct AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
+public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   public static var defaultHighWaterMark : Int { return 5 } // TODO
   var source              : G
@@ -106,14 +106,14 @@ public struct AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
-  init(_ source: G, workerQueue: dispatch_queue_t = getDefaultWorkerQueue(),
-       maxCountPerDispatch: Int = 16)
+  public init(_ source: G, workerQueue: dispatch_queue_t = getDefaultWorkerQueue(),
+              maxCountPerDispatch: Int = 16)
   {
     self.source              = source
     self.workerQueue         = workerQueue
     self.maxCountPerDispatch = maxCountPerDispatch
   }
-  init<S: Sequence where S.Iterator == G>
+  public convenience init<S: Sequence where S.Iterator == G>
     (_ source: S, workerQueue: dispatch_queue_t = getDefaultWorkerQueue())
   {
     self.init(source.makeIterator(), workerQueue: workerQueue)
@@ -131,13 +131,13 @@ public struct AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
 
-  public mutating func next(queue Q : dispatch_queue_t, count: Int,
-                            yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
+  public func next(queue Q : dispatch_queue_t, count: Int,
+                   yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch
     
-    dispatch_async(workerQueue) {
+    dispatch_async(workerQueue) { [] in
       guard let first = self.source.next() else {
         dispatch_async(Q) { yield(nil, nil) } // EOF
         return
