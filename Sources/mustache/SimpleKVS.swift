@@ -56,7 +56,7 @@ public struct KeyValueCoding {
     }
     return defaultValue(forKey: k, inObject: o)
   }
-    
+  
   public static func defaultValue(forKey k: String, inObject o: Any?) -> Any? {
     // Presumably this is really inefficient, but well :-)
     guard let object = o else { return nil }
@@ -79,83 +79,7 @@ public struct KeyValueCoding {
     
     // support dictionary
     if isDict {
-      for ( idx, value ) in mirror.children {
-        
-        // FIXME: replace those dupes
-        // FIXME: There should be some way to reflect on just the key and then
-        //        continue using a regular Mirror on the Any value, but this
-        //        doesn't work: case (key, _)
-        // In consequence this is limited to the hardcoded set of (key,value)
-        // pairs.
-        
-        if let t = value as? ( String, Any ) {
-          guard t.0 == k else { continue }
-          let value = t.1
-          
-          let valueMirror = Mirror(reflecting: value)
-#if swift(>=3.0) // #swift3-fd
-          if valueMirror.displayStyle != .optional { return value }
-#else
-          if valueMirror.displayStyle != .Optional { return value }
-#endif
-          
-          guard valueMirror.children.count > 0 else { return nil }
-          
-          let (_, some) = valueMirror.children.first!
-          
-          return some
-        }
-        else if let t = value as? ( String, String ) {
-          guard t.0 == k else { continue }
-          let value = t.1
-          
-          let valueMirror = Mirror(reflecting: value)
-#if swift(>=3.0) // #swift3-fd
-          if valueMirror.displayStyle != .optional { return value }
-#else
-          if valueMirror.displayStyle != .Optional { return value }
-#endif
-          
-          guard valueMirror.children.count > 0 else { return nil }
-          
-          let (_, some) = valueMirror.children.first!
-          
-          return some
-        }
-        else if let t = value as? ( NSObject, AnyObject ) {
-#if os(Linux)
-#if swift(>=3.0) // #swift3-1st-arg
-          // cast from 'NSObject' to unrelated type 'String' always fails
-          guard !lx30hack else { return nil }
-#else
-          guard !lx22hack else { return nil }
-#endif
-#else
-          guard let okey = (t.0 as? String) else { return nil } // TODO: once
-          guard okey == k                   else { continue }
-#endif
-          let value = t.1
-          
-          let valueMirror = Mirror(reflecting: value)
-#if swift(>=3.0) // #swift3-fd
-          if valueMirror.displayStyle != .optional { return value }
-#else
-          if valueMirror.displayStyle != .Optional { return value }
-#endif
-          
-          guard valueMirror.children.count > 0 else { return nil }
-          
-          let (_, some) = valueMirror.children.first!
-          
-          return some
-        }
-        else {
-          print("KVC: unexpected dict pair: " +
-                "\(idx) \(value) \(value.dynamicType)")
-          return nil
-        }
-      }
-      return nil
+      return defaultValue(forKey: k, inDictionary: object, mirror: mirror)
     }
     
     // regular object, scan
@@ -180,3 +104,54 @@ public struct KeyValueCoding {
   }
   
 }
+
+public extension KeyValueCoding {
+  
+  public static func defaultValue(forKey k: String, inDictionary o: Any,
+                                  mirror: Mirror) -> Any?
+  {
+    for ( _, pair ) in mirror.children {
+      let pairMirror = Mirror(reflecting: pair)
+        // mirror on the (Key,Value) tuple of the Dictionary
+        //   children[0] = ( Optional(".0"), String )
+        //   children[1] = ( Optional(".1"), Any )
+      
+      // extract key
+      let keyIdx        = pairMirror.children.startIndex
+      let ( _, anyKey ) = pairMirror.children[keyIdx]
+      let key           = (anyKey as? String) ?? "\(anyKey)"
+      guard key == k else { continue } // break if key is not matching
+      
+      // extract value
+      let valueIdx      = pairMirror.children.index(after: keyIdx)
+      let ( _, value )  = pairMirror.children[valueIdx]
+      
+      // print("  \(key) = \(value)")
+      
+      let valueMirror = Mirror(reflecting: value)
+#if swift(>=3.0) // #swift3-fd
+      if valueMirror.displayStyle != .optional { return value }
+#else
+      if valueMirror.displayStyle != .Optional { return value }
+#endif
+      
+      guard valueMirror.children.count > 0 else { return nil }
+      
+      let (_, some) = valueMirror.children.first!
+        
+      return some
+    }
+    return nil
+  }
+  
+}
+
+#if swift(>=3.0) // #swift3-fd
+#else
+public extension CollectionType {
+  
+  public func index(after idx: Self.Index) -> Index { // v3 compat
+    return idx.successor()
+  }
+}
+#endif
