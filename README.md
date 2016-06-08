@@ -3,6 +3,7 @@
        align="right" />
 </h2>
 
+![Swift2n3](https://img.shields.io/badge/Swift-2.2%2C%203.0-blue.svg)
 ![Mac OS X](https://img.shields.io/badge/os-Mac%20OS%20X-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
