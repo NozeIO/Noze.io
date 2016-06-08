@@ -4,7 +4,7 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-31-a
+          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-06-06-a
           sudo: required
         - os:   Linux
           dist: trusty
@@ -12,7 +12,7 @@ matrix:
           sudo: required
         - os:   osx
           osx_image: xcode7.3
-          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-05-31-a
+          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-06-06-a
 
 before_install:
     - ./xcconfig/before-install.sh
