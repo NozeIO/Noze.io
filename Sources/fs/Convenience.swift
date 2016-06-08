@@ -27,11 +27,7 @@ public func readFile(path: String, _ encoding: String, cb: StringCB) {
   //       inconvenient, which is something we do not appreciated.
   //       (otherwise there is ambiguity between readFile ByteBucket and String.
   // TODO: support open-flags (r+, a, etc)
-#if swift(>=3.0) // #swift3-fd
   let enc = encoding.lowercased()
-#else
-  let enc = encoding.lowercaseString
-#endif
   guard enc == "utf8" else {
     cb(nil, EncodingError.UnsupportedEncoding(encoding))
     return
@@ -71,6 +67,94 @@ public func writeFile(path: String, _ string: String, cb: ErrorCB) {
 }
 
 
+// MARK: - Synchronous Versions (do not use ..)
+
+#if os(Linux)
+  import func Glibc.fopen
+  import func Glibc.fclose
+  import func Glibc.fread
+  import func Glibc.memcpy
+#else
+  import func Darwin.fopen
+  import func Darwin.fclose
+  import func Darwin.fread
+  import func Darwin.memcpy
+#endif
+
+public func readFileSync(path: String) -> [ UInt8 ]? {
+  #if swift(>=3.0) // #swift3-ptr
+    guard let fh = fopen(path, "rb") else { return nil }
+  #else
+    let fh = fopen(path, "rb")
+    if fh == nil { return nil }
+  #endif
+  defer { fclose(fh) }
+  
+  let bufsize = 4096
+  #if swift(>=3.0) // #swift3-ptr
+    let buffer  = UnsafeMutablePointer<UInt8>(allocatingCapacity: bufsize)
+    defer { buffer.deallocateCapacity(bufsize) }
+  #else
+    let buffer  = UnsafeMutablePointer<UInt8>.alloc(bufsize)
+    defer { buffer.dealloc(bufsize) }
+  #endif
+  
+  var result = [ UInt8 ]()
+  
+  repeat {
+    let rc = fread(buffer, 1, bufsize, fh)
+    
+    if rc > 0 {
+      // Isn't there a better way? Define an own SequenceType which has a ptr
+      // and a length? And then do a appendContentsOf:
+      #if swift(>=3.0) // #swift3-fd
+        var subbuf = Array<UInt8>(repeating: 0, count: rc)
+      #else
+        var subbuf = Array<UInt8>(count: rc, repeatedValue: 0)
+      #endif
+      _ = subbuf.withUnsafeMutableBufferPointer { bp in
+        memcpy(bp.baseAddress, buffer, rc)
+      }
+      result.append(contentsOf: subbuf)
+    }
+    
+    if rc < bufsize { // EOF or error
+      break
+    }
+  }
+  while true
+  
+  return result
+}
+
+public func readFileSync(path: String, _ encoding: String) -> String? {
+  // Note: The encoding does not default to utf-8 because otherwise we need to
+  //       explicitly type the closure on the caller site - which happens to be
+  //       inconvenient, which is something we do not appreciated.
+  //       (otherwise there is ambiguity between readFile ByteBucket and String.
+  // TODO: support open-flags (r+, a, etc)
+  let enc = encoding.lowercased()
+  guard enc == "utf8" else { return nil }
+
+  guard var bytes = readFileSync(path) else { return nil }
+  
+  bytes.append(0)
+  #if swift(>=3.0) // #swift3-fd #swift3-cstr
+    return bytes.withUnsafeBufferPointer { bp in
+      let cs = UnsafePointer<CChar>(bp.baseAddress)
+      return String(cString: cs!)
+    }
+  #else
+    return bytes.withUnsafeBufferPointer { bp in
+      let cs = UnsafePointer<CChar>(bp.baseAddress)
+      return String.fromCString(cs)
+    }
+  #endif
+}
+
+
+// MARK: - Swift 3
+
 #if swift(>=3.0) // #swift3-1st-kwarg
 public func readFile(_ path: String, cb: DataCB) {
   readFile(path: path, cb: cb)
@@ -83,5 +167,12 @@ public func writeFile(_ path: String, _ data: [ UInt8 ], cb: ErrorCB) {
 }
 public func writeFile(_ path: String, _ string: String, cb: ErrorCB) {
   writeFile(path: path, string, cb: cb)
+}
+
+public func readFileSync(_ path: String) -> [ UInt8 ]? {
+  return readFileSync(path: path)
+}
+public func readFileSync(_ path: String, _ encoding: String) -> String? {
+  return readFileSync(path: path, encoding)
 }
 #endif

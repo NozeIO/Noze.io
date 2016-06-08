@@ -11,5 +11,15 @@
 // this does not seem to carry over to other modules
 public typealias ErrorType   = ErrorProtocol
 public typealias BooleanType = Boolean
+  
+#else
+  
+extension String {
+  
+  func lowercased() -> String {
+    return lowercaseString
+  }
+  
+}
 
 #endif
