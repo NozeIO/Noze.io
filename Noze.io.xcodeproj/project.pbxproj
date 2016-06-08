@@ -216,7 +216,7 @@
 		E8C90BA01CFE28CC00F85436 /* MethodOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90B9F1CFE28CC00F85436 /* MethodOverride.swift */; };
 		E8C90BEE1CFE704B00F85436 /* MustacheParser2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */; };
 		E8C90BEF1CFE704B00F85436 /* MustacheNode2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */; };
-		E8C90BF01CFE704B00F85436 /* SimpleKVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */; };
+		E8C90BF01CFE704B00F85436 /* SimpleKVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90BED1CFE704B00F85436 /* SimpleKVC.swift */; };
 		E8C90BFF1CFE71B800F85436 /* libmustache.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */; };
 		E8C90C091CFE722E00F85436 /* MustacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C081CFE722E00F85436 /* MustacheTests.swift */; };
 		E8C90C0B1CFE74B400F85436 /* MustacheNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C90C0A1CFE74B400F85436 /* MustacheNode.swift */; };
@@ -1573,7 +1573,7 @@
 		E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmustache.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser2.swift; path = Sources/mustache/MustacheParser2.swift; sourceTree = "<group>"; };
 		E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode2.swift; path = Sources/mustache/MustacheNode2.swift; sourceTree = "<group>"; };
-		E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVS.swift; path = Sources/mustache/SimpleKVS.swift; sourceTree = "<group>"; };
+		E8C90BED1CFE704B00F85436 /* SimpleKVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVC.swift; path = Sources/mustache/SimpleKVC.swift; sourceTree = "<group>"; };
 		E8C90BF31CFE709700F85436 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/mustache/README.md; sourceTree = "<group>"; };
 		E8C90BFA1CFE71B800F85436 /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8C90C081CFE722E00F85436 /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustache/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
@@ -2732,7 +2732,7 @@
 				E8C90BEC1CFE704B00F85436 /* MustacheNode2.swift */,
 				E8C90C0E1CFE759E00F85436 /* MustacheNode3.swift */,
 				E885708D1D0772CE000C054B /* MustacheRenderingContext.swift */,
-				E8C90BED1CFE704B00F85436 /* SimpleKVS.swift */,
+				E8C90BED1CFE704B00F85436 /* SimpleKVC.swift */,
 				E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */,
 				E8C90C0C1CFE74E400F85436 /* MustacheParser3.swift */,
 				E885708F1D0776B5000C054B /* HTMLEscape.swift */,
@@ -4290,7 +4290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8C90C0D1CFE74E400F85436 /* MustacheParser3.swift in Sources */,
-				E8C90BF01CFE704B00F85436 /* SimpleKVS.swift in Sources */,
+				E8C90BF01CFE704B00F85436 /* SimpleKVC.swift in Sources */,
 				E8C90C111CFE75F700F85436 /* Helpers.swift in Sources */,
 				E88570901D0776B5000C054B /* HTMLEscape.swift in Sources */,
 				E8C90C0F1CFE759E00F85436 /* MustacheNode3.swift in Sources */,
