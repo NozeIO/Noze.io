@@ -104,7 +104,8 @@ let package = Package(
 	     .Target(name: "events"),
 	     .Target(name: "streams"),
 	     .Target(name: "http"),
-	     .Target(name: "connect")
+	     .Target(name: "connect"),
+             .Target(name: "mustache")
 	   ])
   ],
   dependencies: []
