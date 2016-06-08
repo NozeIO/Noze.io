@@ -18,7 +18,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
   # Swift version to use
 
-  SWIFT3_SNAPSHOT=swift-3.0-preview-1-SNAPSHOT-2016-05-31-a
+  SWIFT3_SNAPSHOT=DEVELOPMENT-SNAPSHOT-2016-05-31-a
   SWIFT2_SNAPSHOT=swift-2.2.1-SNAPSHOT-2016-04-23-a
   ifeq ($(swiftv),3)
     SWIFT_SNAPSHOT=$(SWIFT3_SNAPSHOT)
@@ -53,7 +53,7 @@ else
   OS=$(shell lsb_release -si | tr A-Z a-z)
   VER=$(shell lsb_release -sr)
 
-  #SWIFT_SNAPSHOT=swift-3.0-preview-1-SNAPSHOT-2016-05-31-a-$(OS)$(VER)
+  #SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a-$(OS)$(VER)
   SWIFT_SNAPSHOT=
 
   ifneq ($(SWIFT_SNAPSHOT),)

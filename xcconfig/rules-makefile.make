@@ -12,12 +12,6 @@
 #$(warning "Swift Package Manager not available, building via make.")
 
 
-# automagically lookup Swift files
-ifeq ($($(PACKAGE)_SWIFT_FILES),)
-$(PACKAGE)_SWIFT_FILES = \
-  $(filter-out Package.swift,$(wildcard *.swift) $(wildcard */*.swift))
-endif
-
 # link against all Noze modules, if the user didn't explicitly specify modules
 ifeq ($($(PACKAGE)_SWIFT_MODULES),)
 ifneq ($(NOZE_DIR),)
