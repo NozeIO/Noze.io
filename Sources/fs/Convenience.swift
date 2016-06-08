@@ -109,12 +109,15 @@ public func readFileSync(path: String) -> [ UInt8 ]? {
       // and a length? And then do a appendContentsOf:
       #if swift(>=3.0) // #swift3-fd
         var subbuf = Array<UInt8>(repeating: 0, count: rc)
+        _ = subbuf.withUnsafeMutableBufferPointer { bp in
+          memcpy(bp.baseAddress!, buffer, rc)
+        }
       #else
         var subbuf = Array<UInt8>(count: rc, repeatedValue: 0)
+        _ = subbuf.withUnsafeMutableBufferPointer { bp in
+          memcpy(bp.baseAddress, buffer, rc)
+        }
       #endif
-      _ = subbuf.withUnsafeMutableBufferPointer { bp in
-        memcpy(bp.baseAddress, buffer, rc)
-      }
       result.append(contentsOf: subbuf)
     }
     

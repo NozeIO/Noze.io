@@ -113,14 +113,18 @@ func copyArrayToBuffer<T>(array a: [ T ]) -> UnsafePointer<T> {
 
   #if swift(>=3.0) // #swift3-ptr
     let res  = UnsafeMutablePointer<CChar>(allocatingCapacity: size)
+    _ = a.withUnsafeBufferPointer { p in
+      memcpy(UnsafeMutablePointer<Void>(res),
+             UnsafePointer<Void>(p.baseAddress)!, size)
+    }
   #else
     let res  = UnsafeMutablePointer<CChar>.alloc(size)
+    _ = a.withUnsafeBufferPointer { p in
+      memcpy(UnsafeMutablePointer<Void>(res),
+             UnsafePointer<Void>(p.baseAddress), size)
+    }
   #endif
   
-  _ = a.withUnsafeBufferPointer { p in
-    memcpy(UnsafeMutablePointer<Void>(res),
-           UnsafePointer<Void>(p.baseAddress), size)
-  }
   return UnsafePointer(res)
 }
 
