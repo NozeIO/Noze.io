@@ -19,6 +19,7 @@ public class MustacheParser {
     case SectionStart(String)
     case InvertedSectionStart(String)
     case SectionEnd(String)
+    case Partial(String)
   }
   
   var start   : UnsafePointer<CChar>? = nil
@@ -29,6 +30,7 @@ public class MustacheParser {
   var isStart : CChar =  94 // ^
   var sEnd    : CChar =  47 // /
   var ueStart : CChar =  38 // &
+  var pStart  : CChar =  62 // >
   
   public var openCharacter : Character {
     set {
@@ -94,6 +96,7 @@ public class MustacheParser {
       case .Text        (let s): return .Text(s)
       case .Tag         (let s): return .Tag(s)
       case .UnescapedTag(let s): return .UnescapedTag(s)
+      case .Partial     (let s): return .Partial(s)
       
       case .SectionStart(let s):
         guard let children = parseNodes(section: s) else { return .Empty }
@@ -153,12 +156,22 @@ public class MustacheParser {
           case sStart: // #
             let s = String.fromCString(marker + 1, length: len - 1)!
             return .SectionStart(s)
+  
           case isStart: // ^
             let s = String.fromCString(marker + 1, length: len - 1)!
             return .InvertedSectionStart(s)
+  
           case sEnd: // /
             let s = String.fromCString(marker + 1, length: len - 1)!
             return .SectionEnd(s)
+            
+          case pStart: // >
+            var n = marker + 1 // skip >
+            while n.pointee == 32 { n += 1 } // skip spaces
+            let len = p! - n - 2
+            let s = String.fromCString(n, length: len)!
+            return .Partial(s)
+
           case ueStart /* & */:
             if (marker + 1).pointee == 32 {
               let s = String.fromCString(marker + 2, length: len - 2)!
