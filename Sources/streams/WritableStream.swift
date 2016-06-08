@@ -7,6 +7,7 @@
 //
 
 import Dispatch
+import core
 import events
 
 public class WritableStream<WriteType>
@@ -45,6 +46,7 @@ public class WritableStream<WriteType>
   var calledEnd     = false
   var isWriting     = false
   var corkCount     = 0
+  
   
   public var isCorked : Bool { return corkCount > 0 }
   
@@ -103,6 +105,11 @@ public class WritableStream<WriteType>
     log.enter(); defer { log.leave() }
     
     guard chunks.count > 0 && chunks[0].count > 0 else { return true }
+
+    if !didRetainQ { // TBD: right place to do this? too late? too early? wrong?
+      core.module.retain()
+      didRetainQ = true
+    }
 
     assert(!calledEnd)
     assert(!didSendClose)
@@ -264,6 +271,11 @@ public class WritableStream<WriteType>
     log.debug("draining, notifying listeners: #\(drainListeners.count)")
     assert(buffer.availableBufferSpace > 0)
     drainListeners.emit()
+
+    if didRetainQ {
+      core.module.release()
+      didRetainQ = false
+    }
   }
   
   
@@ -314,6 +326,11 @@ public class WritableStream<WriteType>
       log.enter(function: "\(#function):tick"); defer { log.leave() }
       self.finishListeners.emit()
       self.finishListeners.removeAllListeners()
+      
+      if self.didRetainQ {
+        core.module.release()
+        self.didRetainQ = false
+      }
     }
   }
   
