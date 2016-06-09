@@ -10,8 +10,7 @@ import xsys
 import core
 import streams
 import net
-import enum  http_parser.HTTPError
-import class http_parser.HTTPParser
+import enum http_parser.HTTPError
 
 class HTTPConnection {
   // TODO: this should do proper backpressure management

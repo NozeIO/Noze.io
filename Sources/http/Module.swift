@@ -137,10 +137,8 @@ public func get(s : String, onResponse cb : (( IncomingMessage ) -> Void)?)
 // MARK: - Reexport some Parser things
 
 import enum http_parser.HTTPError
-import enum http_parser.HTTPStatus
 import enum http_parser.HTTPMethod
 public typealias HTTPError  = http_parser.HTTPError
-public typealias HTTPStatus = http_parser.HTTPStatus
 public typealias HTTPMethod = http_parser.HTTPMethod
 
 

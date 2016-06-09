@@ -32,7 +32,7 @@
   import Darwin
 #endif
 
-public enum HTTPMethod : Int {
+public enum HTTPMethod : Int8 {
   case DELETE = 0
   
   case GET

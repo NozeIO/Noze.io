@@ -10,7 +10,6 @@ import core
 import streams
 import events
 import net
-import enum http_parser.HTTPStatus
 
 /// Created by an http.Server. This represents the write end of a client socket.
 ///

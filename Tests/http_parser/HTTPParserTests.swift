@@ -13,45 +13,47 @@ class HTTPParserTests: XCTestCase {
   
   func testSimpleGETParsing() throws {
     
-    let parser = HTTPParser()
+    var parser   = http_parser()
+    var settings = http_parser_settings()
     
-    parser.onHeaderField { parser, buffer, size in
+    settings.onHeaderField { parser, buffer, size in
       print("Header: \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onHeaderValue { parser, buffer, size in
+    settings.onHeaderValue { parser, buffer, size in
       print(" Value: \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onURL { parser, buffer, size in
+    settings.onURL { parser, buffer, size in
       print("URL:    \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onHeadersComplete { parser in
+    settings.onHeadersComplete { parser in
       print("headers complete!")
       XCTAssertEqual(parser.nread, 68)
       //XCTAssertEqual(parser.content_length, 0)
       XCTAssertEqual(parser.http_major,     1)
       XCTAssertEqual(parser.http_minor,     1)
-      XCTAssertNil  (parser.statusCode)
+      XCTAssertEqual(parser.status_code,    0)
       XCTAssertEqual(parser.method, HTTPMethod.GET)
       XCTAssertEqual(parser.error,  HTTPError.OK)
       return 0
     }
     
     var didCallComplete = false
-    parser.onMessageComplete { parser in
+    settings.onMessageComplete { parser in
       print("message complete!")
       didCallComplete = true
       return 0
     }
     
-    parser.onBody { _, _, _ in
+    settings.onBody { _, _, _ in
       XCTAssertFalse(true) // Called body, not expected
       return 42
     }
     
-    let ( cslen, plen ) = parser.parse(string: fixGetRequest)
+    let ( cslen, plen ) = parser.parse(settings: settings,
+                                       string: fixGetRequest)
     XCTAssertEqual(cslen, plen)
     
     XCTAssertTrue(didCallComplete)
@@ -59,46 +61,48 @@ class HTTPParserTests: XCTestCase {
   
   func testSimplePOSTParsing() {
     
-    let parser = HTTPParser()
+    var parser   = http_parser()
+    var settings = http_parser_settings()
     
-    parser.onHeaderField { parser, buffer, size in
+    settings.onHeaderField { parser, buffer, size in
       print("Header: \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onHeaderValue { parser, buffer, size in
+    settings.onHeaderValue { parser, buffer, size in
       print(" Value: \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onURL { parser, buffer, size in
+    settings.onURL { parser, buffer, size in
       print("URL:    \(debugBucketAsString(buffer, size))")
       return 0
     }
-    parser.onHeadersComplete { parser in
+    settings.onHeadersComplete { parser in
       print("headers complete!")
       XCTAssertEqual(parser.nread, 76)
       XCTAssertEqual(parser.content_length, 49)
       XCTAssertEqual(parser.http_major,     1)
       XCTAssertEqual(parser.http_minor,     1)
-      XCTAssertNil  (parser.statusCode)
+      XCTAssertEqual(parser.status_code,    0)
       XCTAssertEqual(parser.method, HTTPMethod.POST)
       XCTAssertEqual(parser.error,  HTTPError.OK)
       return 0
     }
     
     var didCallComplete = false
-    parser.onMessageComplete { parser in
+    settings.onMessageComplete { parser in
       print("message complete!")
       didCallComplete = true
       return 0
     }
     
-    parser.onBody { parser, buffer, size in
+    settings.onBody { parser, buffer, size in
       print("BODY:   \(debugBucketAsString(buffer, size))")
       return 0
     }
     
     // clen is 49 + hlen = 76 = 125
-    let ( cslen, plen ) = parser.parse(string: fixPostRequest)
+    let ( cslen, plen ) = parser.parse(settings: settings,
+                                       string: fixPostRequest)
     XCTAssertEqual(cslen, plen)
     
     XCTAssertTrue(didCallComplete)
@@ -143,18 +147,20 @@ func makeRequest(method m: String, _ url: String,
   return s
 }
 
-extension HTTPParser {
+extension http_parser {
   
-  func parse(string s: String) -> ( len: Int, parsed: Int ) {
+  mutating func parse(settings set: http_parser_settings, string s: String)
+                -> ( len: Int, parsed: Int )
+  {
     var cslen = 0, plen = 0
 
     s.withCString { cs in
       cslen = Int(strlen(cs))
-      plen = self.execute(cs, size_t(cslen))
+      plen = self.execute(set, cs, size_t(cslen))
     }
     
     // EOF
-    let plen2 = self.execute(nil, 0)
+    let plen2 = self.execute(set, nil, 0)
     XCTAssertEqual(plen2, 0)
     
     return ( cslen, plen )

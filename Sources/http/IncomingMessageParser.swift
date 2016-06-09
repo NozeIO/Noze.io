@@ -11,8 +11,9 @@ import core
 import console
 import streams
 import net
-import enum  http_parser.HTTPError
-import class http_parser.HTTPParser
+import enum   http_parser.HTTPError
+import struct http_parser.http_parser_settings
+import struct http_parser.http_parser
 
 private let heavyDebug   = false
 private let debugTraffic = false
@@ -21,7 +22,8 @@ private let debugTraffic = false
 class IncomingMessageParser {
   // TBD: should this be a Transform stream? (too much overhead?)
   
-  var parser    : HTTPParser! = nil // this is per-socket
+  var parser    = http_parser() // this is per-socket
+  var callbacks : http_parser_settings? = nil
   
   enum LastCallback { case None, Field, Value, URL }
   var lastCB    = LastCallback.None
@@ -73,7 +75,7 @@ class IncomingMessageParser {
   
   func write(bucket b: [ UInt8 ]) {
     /* push to parser (and setup parser if not yet done) */
-    if parser == nil { _setupParser() }
+    if callbacks == nil { _setupParser() }
     
     if heavyDebug {
       if  debugTraffic { print("write: #\(b.count) \(b)") }
@@ -82,23 +84,23 @@ class IncomingMessageParser {
     
     let rc : xsys.size_t = b.withUnsafeBufferPointer { ptr in
       let cp = UnsafePointer<CChar>(ptr.baseAddress)
-      return parser.execute(cp, b.count)
+      return self.parser.execute(callbacks!, cp, b.count)
     }
     
     /* exit if parser failed */
     guard rc == b.count else {
       if heavyDebug { print("  FAIL rc: \(rc) vs \(b.count)") }
-      parserFailed(error: parser!.error)
+      parserFailed(error: self.parser.error)
       return
     }
   }
   func end() {
     /* push to parser (and setup parser if not yet done) */
-    if parser == nil { _setupParser() }
+    if callbacks == nil { _setupParser() }
     
     // print("END")
-    assert(parser != nil)
-    _ = parser?.execute(nil, 0) // Note: this can still generate events!!!
+    _ = self.parser.execute(callbacks!, nil, 0)
+          // Note: this can still generate events!!!
   }
   
   
@@ -116,8 +118,7 @@ class IncomingMessageParser {
   
   final func _setupParser() {
     // Oh well, all those inline callbacks are an'bad stylz
-    let p = HTTPParser(type: .Both)
-    parser = p
+    var p = http_parser_settings()
     
     p.onMessageBegin { [unowned self] p in
       self.lastCB = .None
@@ -132,7 +133,7 @@ class IncomingMessageParser {
     }
     
     p.onHeadersComplete { [unowned self] p in
-      return self.onHeadersComplete()
+      return self.onHeadersComplete(parser: p)
     }
     
     p.onStatus { p, buf, len in
@@ -159,6 +160,8 @@ class IncomingMessageParser {
       self.push(data: Array(buffer))
       return 0
     }
+    
+    callbacks = p
   }
   
   final func addHeaderLine(name ln: String, value: String) {
@@ -170,7 +173,8 @@ class IncomingMessageParser {
   
   // MARK: - Parsing Callbacks
   
-  final func onHeadersComplete() -> Int {
+  final func onHeadersComplete(parser p: http_parser) -> Int {
+    let parser = p
     // process open ends
     var dummy : CChar = 0
     _ = processDataCB(newState: .None, p: &dummy, len: 0) // finish up
@@ -178,10 +182,11 @@ class IncomingMessageParser {
     // fill request
     
     let status = Int(parser.status_code ?? 0)
-    let method = parser.method?.method ?? ""
+    let method = status == 0 ? parser.method.method : ""
+    if heavyDebug { print("METHOD: \(method)") }
     let httpVersion : String
-    if let major = parser.http_major, minor = parser.http_minor {
-      httpVersion = "\(major).\(minor)"
+    if parser.hasVersion {
+      httpVersion = "\(parser.http_major).\(parser.http_minor)"
     }
     else {
       httpVersion = "HTTP/1.0"

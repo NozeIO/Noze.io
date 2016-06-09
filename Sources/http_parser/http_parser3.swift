@@ -34,138 +34,7 @@
   import Darwin
 #endif
 
-let HTTP_PARSER_STRICT   = false
-let HTTP_MAX_HEADER_SIZE = (80 * 1024)
-
-let debugOn = false
-
-// HTTP_METHOD_MAP - is HTTPMethod enum
-// HTTP_ERRNO_MAP  - is HTTPError  enum
-
-public enum HTTPParserType {
-  case Request
-  case Response
-  case Both
-}
-
-public typealias http_data_cb = ( HTTPParser, UnsafePointer<CChar>, size_t) -> Int
-public typealias http_cb      = ( HTTPParser ) -> Int
-
-public class HTTPParser {
-  // TBD: this could be a struct, except maybe for the callbacks - those would
-  //      need to take an inout parameter?
-
-  // MARK: - http_parser
-  
-  var type                  : HTTPParserType
-  var flags                 = HTTPParserOptions()
-  var state                 : ParserState       = .s_dead
-  var header_state          : ParserHeaderState = .h_general
-  var index                 : Int   = 0
-    // this is UInt8, but Int can be used as an idx
-  
-  public var nread          : Int   = 0
-  public var content_length : Int   = 0
-  
-  // READ-ONLY
-  public var http_major     : Int16?      = nil
-  public var http_minor     : Int16?      = nil
-  public var status_code    : Int16?      = nil // responses only
-  public var method         : HTTPMethod! = nil // requests only
-  public var error          : HTTPError   = .OK // use an optional for OK?
-
-  public var statusCode : HTTPStatus? {
-    guard let v = status_code else { return nil }
-    return HTTPStatus(Int(v))
-  }
-  
-  public var upgrade        = false
-  
-  public var data : Any?    = nil // user data
-  
-  
-  // MARK: - http_parser_settings (this is global in here, per execute in orig)
-  
-  var cbMessageBegin    : http_cb?      = nil
-  var cbURL             : http_data_cb? = nil
-  var cbStatus          : http_data_cb? = nil
-  var cbHeaderField     : http_data_cb? = nil
-  var cbHeaderValue     : http_data_cb? = nil
-  var cbHeadersComplete : http_cb?      = nil
-  var cbBody            : http_data_cb? = nil
-  var cbMessageComplete : http_cb?      = nil
-  
-  /* When on_chunk_header is called, the current chunk length is stored
-   * in parser->content_length.
-   */
-  var cbChunkHeader     : http_cb? = nil
-  var cbChunkComplete   : http_cb? = nil
-
-  public func onMessageBegin   (cb: http_cb)      { cbMessageBegin    = cb }
-  public func onURL            (cb: http_data_cb) { cbURL             = cb }
-  public func onStatus         (cb: http_data_cb) { cbStatus          = cb }
-  public func onHeaderField    (cb: http_data_cb) { cbHeaderField     = cb }
-  public func onHeaderValue    (cb: http_data_cb) { cbHeaderValue     = cb }
-  public func onHeadersComplete(cb: http_cb)      { cbHeadersComplete = cb }
-  public func onBody           (cb: http_data_cb) { cbBody            = cb }
-  public func onMessageComplete(cb: http_cb)      { cbMessageComplete = cb }
-  public func onChunkHeader    (cb: http_cb)      { cbChunkHeader     = cb }
-  public func onChunkComplete  (cb: http_cb)      { cbChunkComplete   = cb }
-
-  
-  // MARK: - Init
-  
-  public init(type: HTTPParserType = .Both) { // http_parser_init
-    self.type = type
-    
-    // start_state
-    self.state = startState
-  }
-
-  public func reset(type t: HTTPParserType = .Both) {
-    self.type              = t
-    self.flags             = HTTPParserOptions()
-    self.state             = startState
-    self.header_state      = .h_general
-    self.index             = 0
-    self.nread             = 0
-    self.content_length    = 0
-  
-    self.http_major        = nil
-    self.http_minor        = nil
-    self.status_code       = nil
-    self.method            = nil
-    self.error             = .OK
-  
-    self.upgrade           = false
-  
-    self.data              = nil
-  }
-  
-  // MARK: - Callbacks
-  
-  enum Callback {
-    case MessageBegin, MessageComplete
-    case URL, Status
-    case HeaderField, HeaderValue, HeadersComplete
-    case Body
-    case ChunkHeader, ChunkComplete
-    
-    var callbackError : HTTPError {
-      switch self {
-        case .MessageBegin:    return .CB_message_begin
-        case .MessageComplete: return .CB_message_complete
-        case .URL:             return .CB_url
-        case .Status:          return .CB_status
-        case .HeaderField:     return .CB_header_field
-        case .HeaderValue:     return .CB_header_value
-        case .HeadersComplete: return .CB_headers_complete
-        case .Body:            return .CB_body
-        case .ChunkHeader:     return .CB_chunk_header
-        case .ChunkComplete:   return .CB_chunk_complete
-      }
-    }
-  }
+public extension http_parser {
   
   // Note:  The C macros directly invoke `return`. The Swift functions return
   //        an optional - if it is nil, flow should continue, otherwise the
@@ -174,18 +43,19 @@ public class HTTPParser {
   
   /// Run the notify callback FOR, returning ER if it fails
   @inline(__always)
-  func CALLBACK_NOTIFY_(_ cbe           : Callback,
-                        _ CURRENT_STATE : inout ParserState,
-                        _ ER            : size_t)
+  internal mutating func CALLBACK_NOTIFY_(_ cbe           : Callback,
+                                 _ CURRENT_STATE : inout ParserState,
+                                 _ settings : http_parser_settings,
+                                 _ ER            : size_t)
        -> size_t?
   {
     let cb : http_cb!
     switch cbe {
-      case .MessageBegin:    cb = self.cbMessageBegin
-      case .HeadersComplete: cb = self.cbHeadersComplete
-      case .MessageComplete: cb = self.cbMessageComplete
-      case .ChunkHeader:     cb = self.cbChunkHeader
-      case .ChunkComplete:   cb = self.cbChunkComplete
+      case .MessageBegin:    cb = settings.cbMessageBegin
+      case .HeadersComplete: cb = settings.cbHeadersComplete
+      case .MessageComplete: cb = settings.cbMessageComplete
+      case .ChunkHeader:     cb = settings.cbChunkHeader
+      case .ChunkComplete:   cb = settings.cbChunkComplete
       default: assert(false, "incorrect CB");  cb = nil
     }
     
@@ -201,10 +71,11 @@ public class HTTPParser {
   
   /// Run the notify callback FOR and consume the current byte
   @inline(__always)
-  func CALLBACK_NOTIFY(_ cb            : Callback,
-                       _ CURRENT_STATE : inout ParserState,
-                       _ p:    UnsafePointer<CChar>?,
-                       _ data: UnsafePointer<CChar>?)
+  internal mutating func CALLBACK_NOTIFY(_ cb            : Callback,
+                                _ CURRENT_STATE : inout ParserState,
+                                _ settings : http_parser_settings,
+                                _ p:    UnsafePointer<CChar>?,
+                                _ data: UnsafePointer<CChar>?)
     -> size_t?
   {
     let len : Int
@@ -214,15 +85,16 @@ public class HTTPParser {
     else {
       len = 0
     }
-    return CALLBACK_NOTIFY_(cb, &CURRENT_STATE, len)
+    return CALLBACK_NOTIFY_(cb, &CURRENT_STATE, settings, len)
   }
   
   /// Run the notify callback FOR and don't consume the current byte
   @inline(__always)
-  func CALLBACK_NOTIFY_NOADVANCE(_ cb            : Callback,
-                                 _ CURRENT_STATE : inout ParserState,
-                                 _ p:    UnsafePointer<CChar>?,
-                                 _ data: UnsafePointer<CChar>?)
+  internal mutating func CALLBACK_NOTIFY_NOADVANCE(_ cb            : Callback,
+                                          _ CURRENT_STATE : inout ParserState,
+                                          _ settings : http_parser_settings,
+                                          _ p:    UnsafePointer<CChar>?,
+                                          _ data: UnsafePointer<CChar>?)
     -> size_t?
   {
     let len : Int
@@ -232,7 +104,7 @@ public class HTTPParser {
     else {
       len = 0
     }
-    return CALLBACK_NOTIFY_(cb, &CURRENT_STATE, len)
+    return CALLBACK_NOTIFY_(cb, &CURRENT_STATE, settings, len)
   }
   
   // TBD: maybe the CALLBACK_DATA funcs should be nested, so that they can
@@ -240,10 +112,11 @@ public class HTTPParser {
   
   /// Run data callback FOR with LEN bytes, returning ER if it fails
   @inline(__always)
-  func CALLBACK_DATA_(_ cbe           : Callback,
-                      _ mark          : inout UnsafePointer<CChar>?,
-                      _ CURRENT_STATE : inout ParserState,
-                      _ len: size_t, _ ER: size_t)
+  internal mutating func CALLBACK_DATA_(_ cbe           : Callback,
+                               _ mark          : inout UnsafePointer<CChar>?,
+                               _ CURRENT_STATE : inout ParserState,
+                               _ settings : http_parser_settings,
+                               _ len: size_t, _ ER: size_t)
        -> size_t?
   {
     assert(error == .OK)
@@ -251,11 +124,11 @@ public class HTTPParser {
     if mark != nil {
       let cb : http_data_cb!
       switch cbe {
-        case .URL:         cb = self.cbURL
-        case .Status:      cb = self.cbStatus
-        case .HeaderField: cb = self.cbHeaderField
-        case .HeaderValue: cb = self.cbHeaderValue
-        case .Body:        cb = self.cbBody
+        case .URL:         cb = settings.cbURL
+        case .Status:      cb = settings.cbStatus
+        case .HeaderField: cb = settings.cbHeaderField
+        case .HeaderValue: cb = settings.cbHeaderValue
+        case .Body:        cb = settings.cbBody
         default: assert(false, "incorrect CB"); cb = nil
       }
       
@@ -280,33 +153,35 @@ public class HTTPParser {
   
   /// Run the data callback FOR and consume the current byte
   @inline(__always)
-  func CALLBACK_DATA(_ cb            : Callback,
-                     _ mark          : inout UnsafePointer<CChar>?,
-                     _ CURRENT_STATE : inout ParserState,
-                     _ p:    UnsafePointer<CChar>?,
-                     _ data: UnsafePointer<CChar>?) -> size_t?
+  internal mutating func CALLBACK_DATA(_ cb            : Callback,
+                              _ mark          : inout UnsafePointer<CChar>?,
+                              _ CURRENT_STATE : inout ParserState,
+                              _ settings : http_parser_settings,
+                              _ p:    UnsafePointer<CChar>?,
+                              _ data: UnsafePointer<CChar>?) -> size_t?
   {
     let len : size_t, er : size_t
     if let p = p, mark = mark { len = p - mark }
     else { len = 0 }
     if let p = p, data = data { er = p - data + 1 }
     else { er = 0 }
-    return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, len, er)
+    return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, settings, len, er)
   }
   /// Run the data callback FOR and consume the current byte
   @inline(__always)
-  func CALLBACK_DATA_NOADVANCE(_ cb: Callback,
-                               _ mark : inout UnsafePointer<CChar>?,
-                               _ CURRENT_STATE : inout ParserState,
-                               _ p:    UnsafePointer<CChar>?,
-                               _ data: UnsafePointer<CChar>?) -> size_t?
+  internal mutating func CALLBACK_DATA_NOADVANCE(_ cb: Callback,
+                                        _ mark : inout UnsafePointer<CChar>?,
+                                        _ CURRENT_STATE : inout ParserState,
+                                        _ settings : http_parser_settings,
+                                        _ p:    UnsafePointer<CChar>?,
+                                        _ data: UnsafePointer<CChar>?) -> size_t?
   {
     let len : size_t, er : size_t
     if let p = p, mark = mark { len = p - mark }
     else { len = 0 }
     if let p = p, data = data { er = p - data }
     else { er = 0 }
-    return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, len, er)
+    return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, settings, len, er)
   }
   
   
@@ -314,7 +189,10 @@ public class HTTPParser {
   
   /// Executes the parser. Returns number of parsed bytes. Sets
   /// `error` on error.
-  public func execute(_ data: UnsafePointer<CChar>?, _ len: size_t) -> size_t {
+  public mutating func execute(_ settings : http_parser_settings,
+                               _ data: UnsafePointer<CChar>?, _ len: size_t)
+                       -> size_t
+  {
     /* We're in an error state. Don't bother doing anything. */
     guard error == .OK else { return 0 }
     
@@ -330,7 +208,7 @@ public class HTTPParser {
            * we got paused.
            */
           let len = CALLBACK_NOTIFY_NOADVANCE(.MessageComplete, &CURRENT_STATE,
-                                              p, data)
+                                              settings, p, data)
           if let len = len { return len } // error
           return 0
           
@@ -461,7 +339,8 @@ public class HTTPParser {
           if ch == 72 /* 'H' */ {
             UPDATE_STATE(.s_res_or_resp_H);
             
-            let len = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, p, data)
+            let len = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, settings,
+                                      p, data)
             if let len = len { return .CallbackDone(len) }
           }
           else {
@@ -495,7 +374,8 @@ public class HTTPParser {
             default: return .Error(.INVALID_CONSTANT)
           }
           
-          let len = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, p, data)
+          let len = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, settings,
+                                    p, data)
           if let len = len { return .CallbackDone(len) }
         
         case .s_res_H:
@@ -530,9 +410,8 @@ public class HTTPParser {
           
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
           
-          assert(self.http_major != nil)
-          self.http_major! *= Int16(10)
-          self.http_major! += Int16(ch - c0)
+          self.http_major *= Int16(10)
+          self.http_major += Int16(ch - c0)
           
           guard self.http_major < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -552,9 +431,8 @@ public class HTTPParser {
           
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
           
-          assert(self.http_minor != nil)
-          self.http_minor! *= Int16(10)
-          self.http_minor! += Int16(ch - c0)
+          self.http_minor *= Int16(10)
+          self.http_minor += Int16(ch - c0)
           
           guard self.http_minor < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -578,9 +456,8 @@ public class HTTPParser {
             break
           }
 
-          assert(self.status_code != nil)
-          self.status_code! *= Int16(10)
-          self.status_code! += Int16(ch - c0)
+          self.status_code *= Int16(10)
+          self.status_code += Int16(ch - c0)
           
           guard status_code < 1000 else { return .Error(.INVALID_STATUS) }
 
@@ -596,7 +473,7 @@ public class HTTPParser {
             UPDATE_STATE(.s_res_line_almost_done)
             //CALLBACK_DATA(status)
             let rc = CALLBACK_DATA(.Status, &status_mark, &CURRENT_STATE,
-                                   p, data)
+                                   settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             break
           }
@@ -604,7 +481,7 @@ public class HTTPParser {
           if ch == LF {
             UPDATE_STATE(.s_header_field_start)
             let rc = CALLBACK_DATA(.Status, &status_mark, &CURRENT_STATE,
-                                   p, data)
+                                   settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             break
           }
@@ -621,7 +498,7 @@ public class HTTPParser {
           
           guard IS_ALPHA(ch) else { return .Error(.INVALID_METHOD) }
           
-          self.method = nil
+          self.method = .GET
           self.index  = 1;
           switch ch {
             case cA: self.method = .ACL
@@ -649,7 +526,8 @@ public class HTTPParser {
           UPDATE_STATE(.s_req_method);
           
           // CALLBACK_NOTIFY(message_begin);
-          let rc = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, p, data)
+          let rc = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, settings,
+                                   p, data)
           if let rc = rc { return .CallbackDone(rc) }
           
           if debugOn { print("  METHOD: \(self.method)") }
@@ -784,7 +662,8 @@ public class HTTPParser {
           case cSPACE:
             UPDATE_STATE(.s_req_http_start)
             //CALLBACK_DATA(url);
-            let rc = CALLBACK_DATA(.URL, &url_mark, &CURRENT_STATE, p, data)
+            let rc = CALLBACK_DATA(.URL, &url_mark, &CURRENT_STATE, settings,
+                                   p, data)
             if let rc = rc { return .CallbackDone(rc) }
           
           case CR, LF:
@@ -794,7 +673,8 @@ public class HTTPParser {
                          ? .s_req_line_almost_done
                          : .s_header_field_start)
             // CALLBACK_DATA(url)
-            let rc = CALLBACK_DATA(.URL, &url_mark, &CURRENT_STATE, p, data)
+            let rc = CALLBACK_DATA(.URL, &url_mark, &CURRENT_STATE, settings,
+                                   p, data)
             if let rc = rc { return .CallbackDone(rc) }
 
           default:
@@ -840,9 +720,8 @@ public class HTTPParser {
           }
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
           
-          assert(self.http_major != nil)
-          self.http_major! *= 10;
-          self.http_major! += Int16(ch - c0);
+          self.http_major *= 10;
+          self.http_major += Int16(ch - c0);
           
           guard self.http_major < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -861,9 +740,8 @@ public class HTTPParser {
           
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
 
-          assert(self.http_minor != nil)
-          self.http_minor! *= 10
-          self.http_minor! += ch - c0
+          self.http_minor *= 10
+          self.http_minor += ch - c0
 
           guard self.http_minor < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -1013,7 +891,7 @@ public class HTTPParser {
             
             // CALLBACK_DATA(header_field);
             let rc = CALLBACK_DATA(.HeaderField, &header_field_mark,
-                                   &CURRENT_STATE, p, data)
+                                   &CURRENT_STATE, settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             break
           }
@@ -1091,7 +969,7 @@ public class HTTPParser {
               self.header_state = h_state;
               // CALLBACK_DATA(header_value);
               let rc = CALLBACK_DATA(.HeaderValue, &header_value_mark,
-                                     &CURRENT_STATE, p, data)
+                                     &CURRENT_STATE, settings, p, data)
               if let rc = rc { return .CallbackDone(rc) }
               break // breaks while-loop
             }
@@ -1105,7 +983,8 @@ public class HTTPParser {
               // CALLBACK_DATA_NOADVANCE(header_value);
               let rc = CALLBACK_DATA_NOADVANCE(.HeaderValue,
                                                &header_value_mark,
-                                               &CURRENT_STATE, p, data)
+                                               &CURRENT_STATE, settings,
+                                               p, data)
               if let rc = rc { return .CallbackDone(rc) }
               
               return .Reexecute
@@ -1315,7 +1194,7 @@ public class HTTPParser {
             
             let rc = CALLBACK_DATA_NOADVANCE(.HeaderValue,
                                              &header_value_mark,
-                                             &CURRENT_STATE, p, data)
+                                             &CURRENT_STATE, settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             
             return .Reexecute
@@ -1328,7 +1207,7 @@ public class HTTPParser {
             /* End of a chunked request */
             UPDATE_STATE(.s_message_done);
             let rc = CALLBACK_NOTIFY_NOADVANCE(.ChunkComplete, &CURRENT_STATE,
-                                               p, data)
+                                               settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             
             return .Reexecute
@@ -1340,7 +1219,7 @@ public class HTTPParser {
           self.upgrade =
             ((self.flags.contains(.F_UPGRADE)
               && self.flags.contains(.F_CONNECTION_UPGRADE))
-              || (self.method != nil && self.method! == .CONNECT))
+              || (self.method == .CONNECT))
           
           /* Here we call the headers_complete callback. This is somewhat
            * different than other callbacks because if the user returns 1, we
@@ -1351,7 +1230,7 @@ public class HTTPParser {
            * We'd like to use CALLBACK_NOTIFY_NOADVANCE() here but we cannot, so
            * we have to simulate it by handling a change in errno below.
            */
-          if let cb = self.cbHeadersComplete {
+          if let cb = settings.cbHeadersComplete {
             switch cb(self) {
               case 0:
                 break;
@@ -1386,7 +1265,7 @@ public class HTTPParser {
             UPDATE_STATE(NEW_MESSAGE);
             // CALLBACK_NOTIFY(message_complete);
             let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
-                                      p, data)
+                                     settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
             return .Return((p! - data!) + 1)
           }
@@ -1395,7 +1274,7 @@ public class HTTPParser {
             UPDATE_STATE(NEW_MESSAGE);
             // CALLBACK_NOTIFY(message_complete);
             let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
-                                     p, data)
+                                     settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
           } else if self.flags.contains(.F_CHUNKED) {
             /* chunked encoding - ignore Content-Length header */
@@ -1406,7 +1285,7 @@ public class HTTPParser {
               UPDATE_STATE(NEW_MESSAGE);
               // CALLBACK_NOTIFY(message_complete);
               let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
-                                        p, data)
+                                       settings, p, data)
               if let rc = rc { return .CallbackDone(rc) }
             } else if self.content_length != Int.max /* ULLONG_MAX */ {
               /* Content-Length header given and non-zero */
@@ -1417,7 +1296,7 @@ public class HTTPParser {
                 UPDATE_STATE(NEW_MESSAGE);
                 // CALLBACK_NOTIFY(message_complete);
                 let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
-                                          p, data)
+                                         settings, p, data)
                 if let rc = rc { return .CallbackDone(rc) }
               } else {
                 /* Read body until EOF */
@@ -1456,7 +1335,7 @@ public class HTTPParser {
              * important for applications, but let's keep it for now.
              */
             let rc = CALLBACK_DATA_(.Body, &body_mark, &CURRENT_STATE,
-                                    p! - body_mark! + 1, p! - data!)
+                                    settings, p! - body_mark! + 1, p! - data!)
             if let rc = rc { return .CallbackDone(rc) }
             
             return .Reexecute
@@ -1473,7 +1352,7 @@ public class HTTPParser {
           
           // CALLBACK_NOTIFY(message_complete);
           let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
-                                    p, data)
+                                   settings, p, data)
           if let rc = rc { return .CallbackDone(rc) }
           
           if self.upgrade {
@@ -1541,7 +1420,8 @@ public class HTTPParser {
           }
           
           // CALLBACK_NOTIFY(chunk_header);
-          let rc = CALLBACK_NOTIFY(.ChunkHeader, &CURRENT_STATE, p, data)
+          let rc = CALLBACK_NOTIFY(.ChunkHeader, &CURRENT_STATE, settings,
+                                   p, data)
           if let rc = rc { return .CallbackDone(rc) }
 
         case .s_chunk_data:
@@ -1569,7 +1449,7 @@ public class HTTPParser {
           UPDATE_STATE(.s_chunk_data_done);
           
           // CALLBACK_DATA(body);
-          let rc = CALLBACK_DATA_(.Body, &body_mark, &CURRENT_STATE,
+          let rc = CALLBACK_DATA_(.Body, &body_mark, &CURRENT_STATE, settings,
                                   p! - body_mark! + 1, p! - data!)
           if let rc = rc { return .CallbackDone(rc) }
 
@@ -1580,7 +1460,8 @@ public class HTTPParser {
           UPDATE_STATE(.s_chunk_size_start);
           
           // CALLBACK_NOTIFY(chunk_complete);
-          let rc = CALLBACK_NOTIFY(.ChunkComplete, &CURRENT_STATE, p, data)
+          let rc = CALLBACK_NOTIFY(.ChunkComplete, &CURRENT_STATE, settings,
+                                   p, data)
           if let rc = rc { return .CallbackDone(rc) }
 
         /* guaranteed by compiler ;-)
@@ -1688,57 +1569,31 @@ public class HTTPParser {
              (status_mark       != nil ? 1 : 0)) <= 1);
     */
      var rc = CALLBACK_DATA_NOADVANCE(.HeaderField, &header_field_mark,
-                                      &CURRENT_STATE, p, data)
+                                      &CURRENT_STATE, settings, p, data)
      if let rc1 = rc { return rc1 } // error
     
      rc = CALLBACK_DATA_NOADVANCE(.HeaderValue, &header_value_mark,
-                                  &CURRENT_STATE, p, data)
+                                  &CURRENT_STATE, settings, p, data)
      if let rc2 = rc { return rc2 } // error
     
-     rc = CALLBACK_DATA_NOADVANCE(.URL, &url_mark, &CURRENT_STATE, p, data)
+     rc = CALLBACK_DATA_NOADVANCE(.URL, &url_mark, &CURRENT_STATE, settings,
+                                  p, data)
      if let rc3 = rc { return rc3 } // error
     
-     rc = CALLBACK_DATA_NOADVANCE(.Body, &body_mark, &CURRENT_STATE, p, data)
+     rc = CALLBACK_DATA_NOADVANCE(.Body, &body_mark, &CURRENT_STATE, settings,
+                                  p, data)
      if let rc4 = rc { return rc4 } // error
     
      rc = CALLBACK_DATA_NOADVANCE(.Status, &status_mark, &CURRENT_STATE,
-                                  p, data)
+                                  settings, p, data)
      if let rc5 = rc { return rc5 } // error
  
      // regular return
      return RETURN(len)
   }
  
-  public func pause() {
-    /* Users should only be pausing/unpausing a parser that is not in an error
-     * state. In non-debug builds, there's not much that we can do about this
-     * other than ignore it.
-     */
-    if error == .OK || error == .PAUSED {
-      error = .PAUSED
-    } else {
-      assert(false, "Attempting to pause parser in error state")
-    }
-  }
-  public func resume() {
-    if error == .OK || error == .PAUSED {
-      error = .OK
-    } else {
-      assert(false, "Attempting to pause parser in error state")
-    }
-  }
-  
-  
-  var isBodyFinal : Bool {
-    // TODO
-    return false
-  }
-  
-  
-  // MARK: - Implementation
-  
   @inline(__always)
-  func STRICT_CHECK(_ condition: Bool) -> Bool {
+  internal mutating func STRICT_CHECK(_ condition: Bool) -> Bool {
     // the original has a 'goto error'
     if HTTP_PARSER_STRICT {
       if condition {
@@ -1752,47 +1607,6 @@ public class HTTPParser {
     }
   }
   
-  var startState : ParserState {
-    switch type {
-      case .Request:  return .s_start_req
-      case .Response: return .s_start_res
-      case .Both:     return .s_start_req_or_res
-    }
-  }
-  
-  var shouldKeepAlive : Bool = false // TODO: http_should_keep_alive
-  
-  var NEW_MESSAGE : ParserState {
-    if HTTP_PARSER_STRICT {
-      return shouldKeepAlive ? startState : .s_dead
-    }
-    else {
-      return startState
-    }
-  }
-  
-  var messageNeedsEOF : Bool { // http_message_needs_eof()
-    /* Does the parser need to see an EOF to find the end of the message? */
-    if type == .Request {
-      return false
-    }
-    
-    /* See RFC 2616 section 4.4 */
-    if status_code! / 100 == 1 || /* 1xx e.g. Continue */
-       status_code! == 204 ||     /* No Content */
-       status_code! == 304 ||     /* Not Modified */
-       flags.contains(.F_SKIPBODY) {     /* response to a HEAD request */
-      return false
-    }
-    
-    if (flags.contains(.F_CHUNKED)
-        || content_length != Int.max /* ULLONG_MAX */)
-    {
-      return false
-    }
-    
-    return true
-  }
 
   /* Don't allow the total size of the HTTP headers (including the status
    * line) to exceed HTTP_MAX_HEADER_SIZE.  This check is here to protect
@@ -1806,7 +1620,7 @@ public class HTTPParser {
    * day-to-day operation.
    */
   @inline(__always)
-  func COUNT_HEADER_SIZE(_ V: Int) -> Bool {
+  internal mutating func COUNT_HEADER_SIZE(_ V: Int) -> Bool {
     self.nread += V
     if self.nread > HTTP_MAX_HEADER_SIZE {
       error = .HEADER_OVERFLOW
@@ -1822,30 +1636,9 @@ func debugChar(_ ch: CChar) -> String {
     case LF:   p = "NL"
     case CR:   p = "CR"
     case cTAB: p = "TAB"
-    default:
-      p = "'\(UnicodeScalar(Int(ch)))'"
+    default:   p = "'\(UnicodeScalar(Int(ch)))'"
   }
   return "\(ch) \(p)"
 }
-
-
-// HH: this is crap
-private let PROXY_CONNECTION   = "proxy-connection".makeCString()
-private let CONNECTION         = "connection".makeCString()
-private let CONTENT_LENGTH     = "content-length".makeCString()
-private let TRANSFER_ENCODING  = "transfer-encoding".makeCString()
-private let UPGRADE            = "upgrade".makeCString()
-private let CHUNKED            = "chunked".makeCString()
-private let KEEP_ALIVE         = "keep-alive".makeCString()
-private let CLOSE              = "close".makeCString()
-
-private let lPROXY_CONNECTION  = 16
-private let lCONNECTION        = 10
-private let lCONTENT_LENGTH    = 14
-private let lTRANSFER_ENCODING = 17 // strlen(TRANSFER_ENCODING)
-private let lUPGRADE           =  7 // strlen(UPGRADE)
-private let lCHUNKED           =  7 // strlen(CHUNKED)
-private let lKEEP_ALIVE        = 10 // strlen(KEEP_ALIVE)
-private let lCLOSE             =  5 // strlen(CLOSE)
 
 #endif // Swift 3
