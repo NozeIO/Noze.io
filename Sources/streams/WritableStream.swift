@@ -187,7 +187,10 @@ public class WritableStream<WriteType>
     // TODO: I don't like any of this, we should combine buffers to perform
     //       efficient bulk writes and such
     
-    let ( brigade, cb ) = buffer.dequeue()!
+    guard let ( brigade, cb ) = buffer.dequeue() else {
+      return
+    }
+    
     let brigadeCount = brigade.reduce(0 /* start value */) { $0 + $1.count }
     
     // trigger a primary write in the target
