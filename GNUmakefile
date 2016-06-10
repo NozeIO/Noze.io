@@ -16,8 +16,8 @@ MODULES = \
 	leftpad		\
 	events		\
 	streams		\
-	json		\
 	fs		\
+	json		\
 	dns		\
 	net		\
 	console 	\
@@ -62,8 +62,8 @@ all :
 	@$(MAKE) -C Sources/leftpad          all
 	@$(MAKE) -C Sources/events           all
 	@$(MAKE) -C Sources/streams          all
-	@$(MAKE) -C Sources/json             all
 	@$(MAKE) -C Sources/fs               all
+	@$(MAKE) -C Sources/json             all
 	@$(MAKE) -C Sources/dns              all
 	@$(MAKE) -C Sources/net              all
 	@$(MAKE) -C Sources/process          all
