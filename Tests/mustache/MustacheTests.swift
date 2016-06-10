@@ -10,6 +10,33 @@ import XCTest
 
 @testable import mustache
 
+public class PersonClass {
+  
+  var firstname : String
+  var lastname  : String
+  
+  var name : String { return "\(firstname) \(lastname)" }
+    // unsupported by reflection
+  
+  init(_ firstname: String, _ lastname: String) {
+    self.firstname = firstname
+    self.lastname  = lastname
+  }
+}
+
+public struct PersonStruct {
+  
+  var firstname : String
+  var lastname  : String
+  var name : String { return "\(firstname) \(lastname)" }
+    // unsupported by reflection
+  
+  init(_ firstname: String, _ lastname: String) {
+    self.firstname = firstname
+    self.lastname = lastname
+  }
+}
+
 class MustacheTests: XCTestCase {
   
   let fixTaxTemplate =
@@ -45,7 +72,7 @@ class MustacheTests: XCTestCase {
     "  {{>     user}}\n" +
     "{{/names}}" +
   ""
-  let userTemplate = "<strong>{{name}}</strong>"
+  let userTemplate = "<strong>{{lastname}}</strong>"
   
   let fixDictChris : [ String : Any ] = [
     "name"        : "Ch<r>is",
@@ -58,9 +85,19 @@ class MustacheTests: XCTestCase {
   ]
   
   let fixUsers = [
-    [ "name": "Duck",  "firstname": "Donald"   ],
-    [ "name": "Duck",  "firstname": "Dagobert" ],
-    [ "name": "Mouse", "firstname": "Mickey"   ]
+    [ "lastname": "Duck",  "firstname": "Donald"   ],
+    [ "lastname": "Duck",  "firstname": "Dagobert" ],
+    [ "lastname": "Mouse", "firstname": "Mickey"   ]
+  ]
+  let fixUsersClass = [
+    PersonClass("Donald",   "Duck"),
+    PersonClass("Dagobert", "Duck"),
+    PersonClass("Mickey",   "Mouse")
+  ]
+  let fixUsersStruct = [
+    PersonStruct("Donald",   "Duck"),
+    PersonStruct("Dagobert", "Duck"),
+    PersonStruct("Mickey",   "Mouse")
   ]
   
   let fixChrisResult =
@@ -73,6 +110,10 @@ class MustacheTests: XCTestCase {
     "  Has address in: Cupertino" +
     "" +
   ""
+  
+  let fixFullNameKVCTemplate1 =
+        "{{#persons}}{{firstname}} {{lastname}}\n{{/persons}}"
+  let fixFullNameKVCResults1 = "Donald Duck\nDagobert Duck\nMickey Mouse\n"
   
   let fixLambdaTemplate1 =
     "{{#wrapped}}{{name}} is awesome.{{/wrapped}}"
@@ -131,6 +172,22 @@ class MustacheTests: XCTestCase {
     let result = tree.asMustacheString
     
     XCTAssertEqual(result, fixTaxTemplate2)
+  }
+  
+  func testClassKVCRendering() {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: fixFullNameKVCTemplate1)
+    let result = tree.render(object: ["persons": fixUsersClass])
+    
+    XCTAssertEqual(result, fixFullNameKVCResults1)
+  }
+  
+  func testStructKVCRendering() {
+    let parser = MustacheParser()
+    let tree   = parser.parse(string: fixFullNameKVCTemplate1)
+    let result = tree.render(object: ["persons": fixUsersClass])
+    
+    XCTAssertEqual(result, fixFullNameKVCResults1)
   }
   
   func testLambda() throws {

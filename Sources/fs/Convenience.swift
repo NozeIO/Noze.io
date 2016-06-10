@@ -14,10 +14,10 @@ import streams
 public func readFile(path: String, cb: DataCB) {
   // TODO: support open-flags (r+, a, etc)
   let s = createReadStream(path) | concat { bucket in
-    cb(bucket, nil)
+    cb(nil, bucket)
   }
   // TODO: directly attaching onError crashes swiftc (2016-05-06)
-  _ = s.onError { error in cb(nil, error) }
+  _ = s.onError { error in cb(error, nil) }
 }
 
 /// Asynchronously reads the entire contents of a file into a string.
@@ -29,16 +29,16 @@ public func readFile(path: String, _ encoding: String, cb: StringCB) {
   // TODO: support open-flags (r+, a, etc)
   let enc = encoding.lowercased()
   guard enc == "utf8" else {
-    cb(nil, EncodingError.UnsupportedEncoding(encoding))
+    cb(EncodingError.UnsupportedEncoding(encoding), nil)
     return
   }
   
   let s = createReadStream(path) | utf8 | concat { characters in
     let string = String(characters)
-    cb(string, nil)
+    cb(nil, string)
   }
   // TODO: directly attaching onError crashes swiftc (2016-05-06)
-  _ = s.onError { error in cb(nil, error) }
+  _ = s.onError { error in cb(error, nil) }
 }
 
 

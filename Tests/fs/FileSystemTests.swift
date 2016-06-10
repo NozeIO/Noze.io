@@ -185,10 +185,10 @@ class NozeIOFileSystemTests: NozeIOTestCase {
   
   func testReadFileBytes() {
     inRunloop { done in
-      fs.readFile("/etc/passwd") { data, error in
+      fs.readFile("/etc/passwd") { err, data in
         //print("bytes: \(data)")
         XCTAssertNotNil(data)
-        XCTAssertNil(error)
+        XCTAssertNil(err)
         XCTAssert(data!.count > 1000) // on both, OSX&Ubuntu
         done()
       }
@@ -197,10 +197,10 @@ class NozeIOFileSystemTests: NozeIOTestCase {
   
   func testReadFileString() {
     inRunloop { done in
-      fs.readFile("/etc/passwd", "utf8") { s, error in
+      fs.readFile("/etc/passwd", "utf8") { err, s in
         //print("string: \(s)")
         XCTAssertNotNil(s)
-        XCTAssertNil(error)
+        XCTAssertNil(err)
         XCTAssert(s!.contains("root:"))
         XCTAssert(s!.contains("nobody:"))
         done()

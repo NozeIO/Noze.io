@@ -31,7 +31,7 @@ public struct HTTPParserOptions : OptionSetType {
   static let F_SKIPBODY              = HTTPParserOptions(rawValue: 1 << 6)
 }
 
-enum ParserState : Int {
+enum ParserState : Int8 {
   case s_dead = 1 /* important that this is > 0 */
   
   case s_start_req_or_res
