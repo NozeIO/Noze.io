@@ -13,10 +13,11 @@ import XCTest
 
 class NozeJSONTests: NozeIOTestCase {
   
-  func testSimpleDictStringParse() {
-    let fixture = "{ \"name\": \"John Doe\", \"age\": 42 }"
-    
-    let obj : JSON! = JSON.parse(fixture)
+  let fixJson1 = "{ \"name\": \"John Doe\", \"age\": 42 }"
+  let fixObj1  = [ "name": "John Doe", "age": 42 ]
+  
+  func testSimpleDictStringParse() throws {
+    let obj : JSON! = JSON.parse(fixJson1)
     XCTAssertNotNil(obj)
     
     XCTAssertNotNil(obj["name"])
@@ -28,5 +29,17 @@ class NozeJSONTests: NozeIOTestCase {
     XCTAssertEqual(name, "John Doe")
     XCTAssertEqual(age,  42)
   }
-  
+
+  func testStringifyNull() {
+    let s = JSON.stringify(nil)
+    XCTAssertEqual(s, "null")
+  }
+ 
+  func testStringifyDict() {
+    let s = JSON.stringify(fixObj1)
+    
+    let obj : JSON! = JSON.parse(s) // reparse
+    XCTAssertNotNil(obj)
+    XCTAssertEqual(obj, fixObj1.toJSON())
+  }
 }

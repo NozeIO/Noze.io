@@ -74,6 +74,12 @@
 		E80A97F51CF9C2220088F560 /* libbase64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8EA87BF1CF733F900406C27 /* libbase64.dylib */; };
 		E84C6CCD1D09866100B1945D /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C6CCC1D09866100B1945D /* HTTPStatus.swift */; };
 		E84C9CEE1D0981840080B55B /* http_parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C9CED1D0981840080B55B /* http_parser.swift */; };
+		E85206BA1D0AC63E00F3F696 /* JSONWritableStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85206B91D0AC63E00F3F696 /* JSONWritableStream.swift */; };
+		E85206BB1D0AC78700F3F696 /* libjson.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275E01CF49EF1004A6A34 /* libjson.dylib */; };
+		E85206BC1D0AC7AF00F3F696 /* libjson.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275E01CF49EF1004A6A34 /* libjson.dylib */; };
+		E85206BE1D0ACDA400F3F696 /* Stringify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85206BD1D0ACDA400F3F696 /* Stringify.swift */; };
+		E852D3721D0AC00600E9D3DA /* JsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E852D3711D0AC00600E9D3DA /* JsonFile.swift */; };
+		E852D3731D0AC0A900E9D3DA /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
 		E85EF89D1CFF9CA300BDA997 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF89C1CFF9CA300BDA997 /* Route.swift */; };
 		E85EF89E1CFFA76200BDA997 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E85EF89F1CFFA77000BDA997 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D4DFA21CFC67D000921230 /* Foundation.framework */; };
@@ -1437,6 +1443,9 @@
 		E84F41031CBBF13200544DE5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/dns/README.md; sourceTree = SOURCE_ROOT; };
 		E84F41071CBD002700544DE5 /* SocketAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SocketAddress.swift; path = Sources/xsys/SocketAddress.swift; sourceTree = SOURCE_ROOT; };
 		E84F41091CBD003800544DE5 /* sockaddr_any.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = sockaddr_any.swift; path = Sources/xsys/sockaddr_any.swift; sourceTree = SOURCE_ROOT; };
+		E85206B91D0AC63E00F3F696 /* JSONWritableStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONWritableStream.swift; path = Sources/json/JSONWritableStream.swift; sourceTree = SOURCE_ROOT; };
+		E85206BD1D0ACDA400F3F696 /* Stringify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stringify.swift; path = Sources/json/Stringify.swift; sourceTree = SOURCE_ROOT; };
+		E852D3711D0AC00600E9D3DA /* JsonFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JsonFile.swift; path = Sources/json/JsonFile.swift; sourceTree = SOURCE_ROOT; };
 		E85EF89C1CFF9CA300BDA997 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Route.swift; path = Sources/express/Route.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A01CFFA97B00BDA997 /* Render.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Render.swift; path = Sources/express/Render.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerResponse.swift; path = Sources/express/ServerResponse.swift; sourceTree = SOURCE_ROOT; };
@@ -1851,6 +1860,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E85EF8AD1D00FACF00BDA997 /* Foundation.framework in Frameworks */,
+				E85206BC1D0AC7AF00F3F696 /* libjson.dylib in Frameworks */,
 				E85EF8AC1D00FAC800BDA997 /* libFreddy.dylib in Frameworks */,
 				E89CDF391D00556C008861AF /* libexpress.dylib in Frameworks */,
 				E898723C1CFF7E3300466E86 /* libconnect.dylib in Frameworks */,
@@ -2003,6 +2013,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E852D3731D0AC0A900E9D3DA /* libfs.dylib in Frameworks */,
 				E8F25A6E1CF5EBD300355194 /* libFreddy.dylib in Frameworks */,
 				E8E2768A1CF4A045004A6A34 /* libcore.dylib in Frameworks */,
 				E8E2768B1CF4A045004A6A34 /* libstreams.dylib in Frameworks */,
@@ -2117,6 +2128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E85206BB1D0AC78700F3F696 /* libjson.dylib in Frameworks */,
 				E85EF89F1CFFA77000BDA997 /* Foundation.framework in Frameworks */,
 				E85EF8AA1D00F41D00BDA997 /* libFreddy.dylib in Frameworks */,
 				E89CDF601D0073E3008861AF /* libstreams.dylib in Frameworks */,
@@ -2245,6 +2257,9 @@
 			children = (
 				E80A2CF61CDCA599005132C1 /* README.md */,
 				E80A2CF51CDCA599005132C1 /* Module.swift */,
+				E852D3711D0AC00600E9D3DA /* JsonFile.swift */,
+				E85206B91D0AC63E00F3F696 /* JSONWritableStream.swift */,
+				E85206BD1D0ACDA400F3F696 /* Stringify.swift */,
 			);
 			path = json;
 			sourceTree = "<group>";
@@ -4450,6 +4465,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8E275E61CF49EFD004A6A34 /* Module.swift in Sources */,
+				E85206BE1D0ACDA400F3F696 /* Stringify.swift in Sources */,
+				E852D3721D0AC00600E9D3DA /* JsonFile.swift in Sources */,
+				E85206BA1D0AC63E00F3F696 /* JSONWritableStream.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
