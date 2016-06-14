@@ -30,7 +30,8 @@ let package = Package(
            dependencies: [
 	     .Target(name: "core"),
 	     .Target(name: "streams"),
-	     .Target(name: "Freddy")
+	     .Target(name: "Freddy"),
+             .Target(name: "fs")
 	   ]),
     Target(name: "fs",
            dependencies: [

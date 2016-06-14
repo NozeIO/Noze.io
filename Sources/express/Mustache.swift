@@ -11,7 +11,7 @@ import console
 import mustache
 
 let mustacheExpress : ExpressEngine = { path, options, done in
-  fs.readFile(path, "utf8") { str, err in
+  fs.readFile(path, "utf8") { err, str in
     guard err == nil else {
       done(err!)
       return

@@ -30,8 +30,8 @@ public let module = NozeFS()
 
 // MARK: - Common type aliases
 
-public typealias DataCB   = ( [ UInt8 ]?, ErrorType? ) -> Void
-public typealias StringCB = ( String?,    ErrorType? ) -> Void
+public typealias DataCB   = ( ErrorType?, [ UInt8 ]? ) -> Void
+public typealias StringCB = ( ErrorType?, String?    ) -> Void
 public typealias ErrorCB  = ( ErrorType?             ) -> Void
 
 
