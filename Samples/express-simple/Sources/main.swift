@@ -52,7 +52,7 @@ app.get("/json") { _, res, _ in
 }
 
 app.get("/") { _, res, _ in
-  let tagline = rand() % Int32(taglines.count)
+  let tagline = arc4random_uniform(UInt32(taglines.count))
   res.render("index", [ "tagline": taglines[Int(tagline)] ])
 }
 
