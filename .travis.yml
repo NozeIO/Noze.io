@@ -4,11 +4,11 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  SWIFT_SNAPSHOT_NAME=DEVELOPMENT-SNAPSHOT-2016-06-06-a
+          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/swift-3.0-preview-1/ubuntu1404/swift-3.0-preview-1/swift-3.0-preview-1-ubuntu14.04.tar.gz"
           sudo: required
         - os:   Linux
           dist: trusty
-          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/swift-2.2.1-release/ubuntu1404/swift-2.2.1-RELEASE/swift-2.2.1-RELEASE-ubuntu14.04.tar.gz"
+          env:  "SWIFT_SNAPSHOT_NAME=2.2.1"
           sudo: required
         - os:   osx
           osx_image: xcode7.3
@@ -24,6 +24,6 @@ script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
     - make all
-    - make all
     - make samples
+    - (cd /home/travis/build/NozeIO/Noze.io/Samples/miniirc/Packages/Noze.io; git tag)
 

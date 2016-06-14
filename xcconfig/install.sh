@@ -3,7 +3,9 @@
 # URLS
 
 TT_SWIFTENV_URL="https://github.com/kylef/swiftenv.git"
-TT_GCD_URL="https://github.com/apple/swift-corelibs-libdispatch.git"
+#TT_GCD_URL="https://github.com/apple/swift-corelibs-libdispatch.git"
+TT_GCD_URL="https://github.com/helje5/swift-corelibs-libdispatch.git"
+  # official libdispatch doesn't build anymore, use snapshot
 
 #TT_GCD_SWIFT3_BRANCH=experimental/foundation
 #TT_GCD_SWIFT22_1404_HASH=65330e06d9bbf75a4c6ddc349548536746845059
