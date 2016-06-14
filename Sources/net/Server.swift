@@ -138,6 +138,15 @@ public class Server : ErrorEmitter, LameLogObjectType {
       self.Q
     )
 #else // os(Darwin)
+#if swift(>=2.3)
+    // TBD: this is not quite right, we really want to check the API
+    let listenSource = dispatch_source_create(
+      DISPATCH_SOURCE_TYPE_READ,
+      UInt(fd!.fd), // is this going to bite us?
+      0,
+      self.Q
+    )
+#else
     guard let listenSource = dispatch_source_create(
       DISPATCH_SOURCE_TYPE_READ,
       UInt(fd!.fd), // is this going to bite us?
@@ -148,6 +157,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
       // TBD: hm
       xsys.abort()
     }
+#endif
 #endif // os(Darwin)
     self.listenSource = listenSource
     if !self.didRetainQ { core.module.retain() }
@@ -164,7 +174,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
     dispatch_source_set_event_handler(listenSource!) {
       self._onListenEvent(address: boundAddress)
     }
-    dispatch_resume(unsafeBitCast(listenSource, to: dispatch_object_t.self))
+    dispatch_resume(unsafeBitCast(listenSource!, to: dispatch_object_t.self))
 #else
     dispatch_source_set_event_handler(listenSource) {
       self._onListenEvent(address: boundAddress)
@@ -172,10 +182,17 @@ public class Server : ErrorEmitter, LameLogObjectType {
     dispatch_resume(unsafeBitCast(listenSource, dispatch_object_t.self))
 #endif
 #else /* os(Darwin) */
+#if swift(>=3.0)
+    dispatch_source_set_event_handler(listenSource!) {
+      self._onListenEvent(address: boundAddress)
+    }
+    dispatch_resume(listenSource!)
+#else
     dispatch_source_set_event_handler(listenSource) {
       self._onListenEvent(address: boundAddress)
     }
     dispatch_resume(listenSource)
+#endif
 #endif /* os(Darwin) */
     
     
