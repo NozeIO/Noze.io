@@ -8,7 +8,7 @@ matrix:
           sudo: required
         - os:   Linux
           dist: trusty
-          env:  "SWIFT_SNAPSHOT_NAME=https://swift.org/builds/swift-2.2.1-release/ubuntu1404/swift-2.2.1-RELEASE/swift-2.2.1-RELEASE-ubuntu14.04.tar.gz"
+          env:  "SWIFT_SNAPSHOT_NAME=2.2.1"
           sudo: required
         - os:   osx
           osx_image: xcode7.3
