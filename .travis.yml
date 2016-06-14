@@ -24,6 +24,6 @@ script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
     - make all
-    - git tag
     - make samples
+    - (cd /home/travis/build/NozeIO/Noze.io/Samples/miniirc/Packages/Noze.io; git tag)
 
