@@ -24,6 +24,6 @@ script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
     - make all
-    - make all
+    - git tag
     - make samples
 
