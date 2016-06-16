@@ -12,14 +12,24 @@ public typealias FinishCB = () -> Void
 public typealias PipeCB   = ( ReadableStreamType ) -> Void
 
 
-/// Primarily a marker interface which can be used as a *type* (which
-/// GWritableStream cannot (generic)).
+/// A marker interface which can be used as a *type* (which
+/// `GWritableStream` cannot as it is a generic type).
 ///
 /// It isn't that useful since the primary method - writev() - is a generic ...
 ///
 public protocol WritableStreamType : class, StreamType {
-
+  
+  /// Used by the client of the stream to tell the stream that no further data
+  /// will be written.
+  ///
+  /// Note: There is also a convenience function `end([ WriteType ]...)` which
+  ///       can be used to combine a write with the end.
+  ///
+  /// Careful: Calling `end()` doesn't close the stream immediately! The stream
+  /// may still have data in-flight. It will write that data, and only then
+  /// close the stream.
   func end()
+  
   func closeWriteStream()
   
 #if swift(>=3.0) // #swift3-discardable-result
