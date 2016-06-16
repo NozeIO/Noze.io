@@ -18,8 +18,8 @@ let commaSepBrigade : [ [ UInt8 ] ] = [ [ UInt8(44), UInt8(32) ] ]
 public let HTTPDateFormat = "%a, %d %b %Y %H:%M:%S GMT" // TBD: %Z emits UTC
 
 // Generate an HTTP date header value
-func generateDateHeader(timestamp: time_t = xsys.time(nil)) -> String {
-  return timestamp.componentsInUTC.format(HTTPDateFormat)
+func generateDateHeader(timestamp ts: time_t = xsys.time(nil)) -> String {
+  return ts.componentsInUTC.format(HTTPDateFormat)
 }
 
 func writeHeaders<T: GWritableStreamType where T.WriteType == UInt8>

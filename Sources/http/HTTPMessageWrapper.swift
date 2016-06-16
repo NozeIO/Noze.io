@@ -50,7 +50,7 @@ public class HTTPMessageWrapper : WritableByteStreamWrapper {
   }
   
   public func writeContinue() {
-    // could be converted to a static brigade
+    // could/should be converted to a static brigade
     _ = self.write("HTTP/1.1 100 Continue\r\n\r\n")
   }
   

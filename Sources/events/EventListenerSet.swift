@@ -107,10 +107,11 @@ public class EventListenerSet<T> {
           }
         }
         else {
-          listeners[i].isEmitting += 1
+          listenersCopy[i].isEmitting += 1
           entry.cb(v)
-          listeners[i].isEmitting -= 1
+          listenersCopy[i].isEmitting -= 1
         }
+        
         if entry.once {
 #if swift(>=3.0) // #swift3-1st-kwarg
           if let idx = listeners.index(where: { $0 === entry }) {
