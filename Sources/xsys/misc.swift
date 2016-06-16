@@ -16,12 +16,19 @@
   public typealias size_t  = Glibc.size_t
   public let memcpy        = Glibc.memcpy
   public let strlen        = Glibc.strlen
+  public let strchr        = Glibc.strchr
 
   // Looks like todays Linux Swift doesn't have arc4random either.
   // Emulate it (badly).
+#if swift(>=3.0) // #swift3-1st-kwarg
+  public func arc4random_uniform(_ v : UInt32) -> UInt32 { // sigh
+    return UInt32(rand() % Int32(v))
+  }
+#else
   public func arc4random_uniform(v : UInt32) -> UInt32 { // sigh
     return UInt32(rand() % Int32(v))
   }
+#endif
   
   public let kill          = Glibc.kill
   public let chdir         = Glibc.chdir
@@ -63,6 +70,7 @@
   public typealias size_t  = Darwin.size_t
   public let memcpy        = Darwin.memcpy
   public let strlen        = Darwin.strlen
+  public let strchr        = Darwin.strchr
   public let arc4random_uniform = Darwin.arc4random_uniform
   
   public let kill          = Darwin.kill
