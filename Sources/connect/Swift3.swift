@@ -33,4 +33,12 @@ extension String {
   }
 }
 
+extension Dictionary {
+  
+  mutating func removeValue(forKey k: Key) -> Value? {
+    return removeValueForKey(k)
+  }
+  
+}
+
 #endif // Swift 2.2
