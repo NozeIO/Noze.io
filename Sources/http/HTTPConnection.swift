@@ -136,16 +136,17 @@ class HTTPConnection {
   final func doRead() {
     log.enter(); defer { log.leave() }
     
+    /* push to parser (and setup parser if not yet done) */
+    if self.parser == nil { _setupParser() }
+    
     /* read everything available on the Socket */
     guard let bucket = self.stream?.read(count: nil) else {
-      assert(false, "could not read() despite 'readable' event?!")
-        // right? otherwise it wouldn't be readable ...
+      // EOF (or a hard close)
+      parser.end()
       return
     }
     assert(bucket.count > 0)
     
-    /* push to parser (and setup parser if not yet done) */
-    if self.parser == nil { _setupParser() }
     parser.write(bucket: bucket)
   }
   
