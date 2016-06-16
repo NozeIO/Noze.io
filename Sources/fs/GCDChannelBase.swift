@@ -47,7 +47,16 @@ public class GCDChannelBase: CustomStringConvertible {
   //       a channel from a path.
   public var fd  : FileDescriptor
   
+#if os(Linux) // yeah, that is a little weird.
+#if swift(>=3.0) // #swift3-fd
   public var channel : dispatch_io_t! = nil
+#else
+  public var channel : dispatch_io_t = nil
+#endif
+#else
+  public var channel : dispatch_io_t! = nil
+#endif
+  
   let shouldClose = true
 
   
