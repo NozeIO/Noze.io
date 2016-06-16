@@ -32,18 +32,40 @@
 
 // MARK: - Time Helpers
 
+/// Unix timestamp. `time_t` has the Y2038 issue and its granularity is limited
+/// to seconds.
+/// Unix timestamps are counted in seconds starting Jan 1st 1970 00:00:00, UTC.
 public extension time_t {
   
+  /// Returns the current time.
+  public static var now : time_t { return xsys.time(nil) }
+  
+  /// Initialize the `time_t` value from Unix `tm` value (date components).
+  /// Assumes the values are given in *local time*.
+  /// Remember that the `time_t` itself is in UTC.
   public init(_ tm: xsys.struct_tm) {
     self = tm.localTime
   }
+  /// Initialize the `time_t` value from Unix `tm` value (date components).
+  /// Assumes the values are given in *UTC time*.
+  /// Remember that the `time_t` itself is in UTC.
+  public init(utc tm: xsys.struct_tm) {
+    self = tm.utcTime
+  }
   
+  /// Converts the `time_t` timestamp into date components (`tz` struct) living
+  /// in the UTC timezone.
+  /// Remember that the `time_t` itself is in UTC.
   public var componentsInUTC : xsys.struct_tm {
     var t  = self
     var tm = xsys.struct_tm()
     _ = xsys.gmtime_r(&t, &tm)
     return tm
   }
+  
+  /// Converts the `time_t` timestamp into date components (`tz` struct) living
+  /// in the local timezone of the Unix environment.
+  /// Remember that the `time_t` itself is in UTC.
   public var componentsInLocalTime : xsys.struct_tm {
     var t  = self
     var tm = xsys.struct_tm()
@@ -54,15 +76,32 @@ public extension time_t {
   /// Example `strftime` format:
   ///   "%a, %d %b %Y %H:%M:%S GMT"
   ///
+  /// This function converts the timestamp into UTC time components to format
+  /// the value.
+  ///
+  /// Example call:
+  ///
+  ///     xsys.time(nil).format(%a, %d %b %Y %H:%M:%S %Z")
+  ///
   public func format(sf: String) -> String {
     return self.componentsInUTC.format(sf)
   }
 }
 
+/// The Unix `tm` struct is essentially NSDateComponents PLUS some timezone
+/// information (isDST, offset, tz abbrev name).
 public extension xsys.struct_tm {
   
+  /// Create a Unix date components structure from a timestamp. This variant
+  /// creates components in the local timezone.
   public init(_ tm: time_t) {
     self = tm.componentsInLocalTime
+  }
+  
+  /// Create a Unix date components structure from a timestamp. This variant
+  /// creates components in the UTC timezone.
+  public init(utc tm: time_t) {
+    self = tm.componentsInUTC
   }
   
   public var utcTime : time_t {
