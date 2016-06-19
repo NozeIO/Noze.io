@@ -36,4 +36,8 @@ class VolatileStoreCollection<T> {
   func update(id key: Int, value v: T) {
     objects[key] = v // value type!
   }
+  
+  func deleteAll() {
+    objects.removeAll()
+  }
 }

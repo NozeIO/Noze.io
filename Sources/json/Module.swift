@@ -23,6 +23,8 @@ public typealias JSON = Freddy.JSON
 public extension JSON {
   
   public static func parse(string: Swift.String) -> JSON? {
+    guard !string.isEmpty else { return nil }
+    
     do {
       let codePoints = string.nulTerminatedUTF8
       let obj : JSON = try codePoints.withUnsafeBufferPointer { np in
@@ -41,6 +43,10 @@ public extension JSON {
   }
   
   public static func parse(utf8: [ UInt8 ]) -> JSON? {
+    // this is a little weird, but yes, some people send GET requests with a
+    // content-type: application/json ...
+    guard !utf8.isEmpty else { return nil }
+    
     do {
       let obj : JSON = try utf8.withUnsafeBufferPointer { p in
         var parser = JSONParser(buffer: p, owner: utf8)

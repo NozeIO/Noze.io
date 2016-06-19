@@ -113,7 +113,14 @@ public class TransformStream<WriteType, ReadType>
     log.enter(); defer { log.leave() }
     _flush() { error, data in
       if !self.hitEOF { // _flush may have called this already
+        if let data = data {
+          self.push(bucket: data)
+        }
         self.push(bucket: nil /* EOF */)
+      }
+      else {
+        assert(data == nil || data!.isEmpty,
+               "Attempt to push data to a stream which hit EOF")
       }
     }
     super.closeWriteStream()

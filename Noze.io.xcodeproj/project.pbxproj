@@ -74,6 +74,7 @@
 		E80A97F51CF9C2220088F560 /* libbase64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8EA87BF1CF733F900406C27 /* libbase64.dylib */; };
 		E8186B441D12140C0014391E /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E8186B461D12159E0014391E /* CookieParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8186B451D12159E0014391E /* CookieParser.swift */; };
+		E83D29BA1D1361B500147633 /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
 		E84C6CCD1D09866100B1945D /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C6CCC1D09866100B1945D /* HTTPStatus.swift */; };
 		E84C9CEE1D0981840080B55B /* http_parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84C9CED1D0981840080B55B /* http_parser.swift */; };
 		E85206BA1D0AC63E00F3F696 /* JSONWritableStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85206B91D0AC63E00F3F696 /* JSONWritableStream.swift */; };
@@ -1905,6 +1906,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E85EF8AD1D00FACF00BDA997 /* Foundation.framework in Frameworks */,
+				E83D29BA1D1361B500147633 /* libcore.dylib in Frameworks */,
 				E85206BC1D0AC7AF00F3F696 /* libjson.dylib in Frameworks */,
 				E85EF8AC1D00FAC800BDA997 /* libFreddy.dylib in Frameworks */,
 				E89CDF391D00556C008861AF /* libexpress.dylib in Frameworks */,
