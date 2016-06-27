@@ -59,7 +59,9 @@ public class Writable<WriteType> : WritableStream<WriteType> {
   
   // MARK: - Writable Overrides
   
-  override func _primaryWriteV(buckets c: Brigade, done: ( ErrorType?, Int ) -> Void) {
+  override func _primaryWriteV(buckets c: Brigade,
+                               done: ( ErrorType?, Int ) -> Void)
+  {
     log.enter(); defer { log.leave() }
     
     switch cb {

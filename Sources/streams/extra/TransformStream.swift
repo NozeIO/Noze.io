@@ -44,7 +44,9 @@ public class TransformStream<WriteType, ReadType>
   
   
   // MARK: - Writable (the INPUT!)
-  override public func writev(buckets c: [ [WriteType] ], done: DoneCB?) -> Bool {
+  override public func writev(buckets c: [ [WriteType] ], done: DoneCB?)
+                  -> Bool
+  {
     // Returning `false` makes a behaving writer stop writing and install an
     // `onDrain` handler.
     let wroteAll = super.writev(buckets: c, done: done)

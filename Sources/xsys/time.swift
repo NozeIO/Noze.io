@@ -81,7 +81,7 @@ public extension time_t {
   ///
   /// Example call:
   ///
-  ///     xsys.time(nil).format(%a, %d %b %Y %H:%M:%S %Z")
+  ///     xsys.time(nil).format("%a, %d %b %Y %H:%M:%S %Z")
   ///
   public func format(sf: String) -> String {
     return self.componentsInUTC.format(sf)

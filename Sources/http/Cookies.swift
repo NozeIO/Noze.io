@@ -300,5 +300,9 @@ public extension Cookies {
     set(name: name, value, path: path, httpOnly: httpOnly, domain: domain,
         comment: comment, expires: expires, maxAge: maxAge)
   }
+
+  public func reset(_ name: String) {
+    reset(name: name)
+  }
 }
 #endif
