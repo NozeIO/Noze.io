@@ -6,6 +6,8 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+// FIXME: we now have .littleEndian, .bigEndian
+
 #if swift(>=3.0)
 public func ntohs(_ value: CUnsignedShort) -> CUnsignedShort {
   // hm, htons is not a func in OSX and the macro is not mapped
