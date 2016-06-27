@@ -9,8 +9,15 @@
 import Dispatch
 import core
 
-/// Consumes bytes and produces Strings from that.
+/// Consumes UTF-8 bytes termined with a NL (10) and produces Strings from
+/// that.
+///
+/// The stream can be accessed as:
+///
+///     streams.readlines
+///
 public class UTF8ToLines: TransformStream<UInt8, String> {
+  // TODO: rewrite using UTF8 codec
   
   public var removeCR  : Bool
   public let splitChar : UInt8 = 10 // NL
@@ -27,7 +34,6 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
                enableLogger: enableLogger)
   }
   
-  // TODO
   // MARK: - Transform
   
   var pendingData = Array<UInt8>() // super lame implementation
