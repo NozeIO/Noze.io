@@ -8,6 +8,7 @@ import http
 import connect
 import express
 import console
+import cows
 
 let __dirname = process.cwd() // our modules have no __dirname
 print("DIR: \(__dirname)")
@@ -42,7 +43,8 @@ let taglines = [
   "Ours is longer!",
   "Less than Perfect.",
   "Das Haus das Verrückte macht.",
-  "Rechargeables included"
+  "Rechargeables included",
+  "Sensible Server Side Swift aS a Successful Software Service Solution"
 ]
 
 
@@ -79,14 +81,23 @@ app.get("/cookies") { req, res, _ in
 }
 
 
+// MARK: - Cows
+
+app.get("/cows") { req, res, _ in
+  let cow = cows.vaca()
+  res.send("<html><body><pre>\(cow)</pre></body></html>")
+}
+
+
 // MARK: - Main page
 
 app.get("/") { req, res, _ in
   let tagline = arc4random_uniform(UInt32(taglines.count))
   
   let values : [ String : Any ] = [
-    "tagline"   : taglines[Int(tagline)],
-    "viewCount" : req.session["viewCount"]
+    "tagline"     : taglines[Int(tagline)],
+    "viewCount"   : req.session["viewCount"],
+    "cowOfTheDay" : cows.vaca()
   ]
   res.render("index", values)
 }

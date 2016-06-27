@@ -28,6 +28,7 @@
 				E807E4071CF671C500AE317B /* PBXTargetDependency */,
 				E807E4091CF671C500AE317B /* PBXTargetDependency */,
 				E807E40B1CF671C500AE317B /* PBXTargetDependency */,
+				E80A7A981D217F3800DF81D2 /* PBXTargetDependency */,
 				E807E40D1CF671C500AE317B /* PBXTargetDependency */,
 				E807E40F1CF671C500AE317B /* PBXTargetDependency */,
 				E807E4111CF671C500AE317B /* PBXTargetDependency */,
@@ -62,6 +63,12 @@
 
 /* Begin PBXBuildFile section */
 		E807E4141CF676C200AE317B /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
+		E80A7A9B1D217F5A00DF81D2 /* libcows.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E80A7A911D217EC400DF81D2 /* libcows.dylib */; };
+		E80A7AA21D217F9400DF81D2 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80A7A9F1D217F8100DF81D2 /* Module.swift */; };
+		E80A7AA31D217F9400DF81D2 /* cows.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80A7A9C1D217F8100DF81D2 /* cows.swift */; };
+		E80A7AA41D217F9400DF81D2 /* UniqueRandomArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80A7AA11D217F8100DF81D2 /* UniqueRandomArray.swift */; };
+		E80A7AA91D217FBE00DF81D2 /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
+		E80A7AAA1D217FBE00DF81D2 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E80A97E51CF9ADE10088F560 /* libhttp.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276341CF49F7D004A6A34 /* libhttp.dylib */; };
 		E80A97ED1CF9AE0A0088F560 /* HttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F351CF3382600CA5517 /* HttpClientTests.swift */; };
 		E80A97EE1CF9AE130088F560 /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F361CF3382600CA5517 /* URLTests.swift */; };
@@ -630,6 +637,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = E8F25A4E1CF5EA2300355194;
 			remoteInfo = Freddy;
+		};
+		E80A7A971D217F3800DF81D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E80A7A901D217EC400DF81D2;
+			remoteInfo = cows;
+		};
+		E80A7A991D217F5400DF81D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E80A7A901D217EC400DF81D2;
+			remoteInfo = cows;
+		};
+		E80A7AA51D217FB800DF81D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275551CF49E06004A6A34;
+			remoteInfo = xsys;
+		};
+		E80A7AA71D217FB800DF81D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E2756C1CF49E3A004A6A34;
+			remoteInfo = core;
 		};
 		E80A97E61CF9ADE10088F560 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1435,6 +1470,13 @@
 		E80A2D451CDCB27F005132C1 /* CIDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CIDictionary.swift; path = Sources/core/CIDictionary.swift; sourceTree = SOURCE_ROOT; };
 		E80A2D461CDCB27F005132C1 /* RawByteBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RawByteBuffer.swift; path = Sources/core/RawByteBuffer.swift; sourceTree = SOURCE_ROOT; };
 		E80A2D4B1CDD5087005132C1 /* Temp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Temp.swift; path = Sources/fs/Temp.swift; sourceTree = SOURCE_ROOT; };
+		E80A7A911D217EC400DF81D2 /* libcows.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libcows.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E80A7A9C1D217F8100DF81D2 /* cows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = cows.swift; path = Sources/cows/cows.swift; sourceTree = "<group>"; };
+		E80A7A9D1D217F8100DF81D2 /* cows.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = cows.txt; path = Sources/cows/cows.txt; sourceTree = "<group>"; };
+		E80A7A9E1D217F8100DF81D2 /* LICENSE-MIT */ = {isa = PBXFileReference; lastKnownFileType = text; name = "LICENSE-MIT"; path = "Sources/cows/LICENSE-MIT"; sourceTree = "<group>"; };
+		E80A7A9F1D217F8100DF81D2 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/cows/Module.swift; sourceTree = "<group>"; };
+		E80A7AA01D217F8100DF81D2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/cows/README.md; sourceTree = "<group>"; };
+		E80A7AA11D217F8100DF81D2 /* UniqueRandomArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UniqueRandomArray.swift; path = Sources/cows/UniqueRandomArray.swift; sourceTree = "<group>"; };
 		E80A97E01CF9ADE10088F560 /* NozeHttpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NozeHttpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E80E8C851CDF2BFF00782E72 /* AsyncWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncWrapper.swift; path = Sources/fs/AsyncWrapper.swift; sourceTree = SOURCE_ROOT; };
 		E80E8C871CDF2E5B00782E72 /* Streams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Streams.swift; path = Sources/fs/Streams.swift; sourceTree = SOURCE_ROOT; };
@@ -1763,6 +1805,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E80A7A8E1D217EC400DF81D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E80A7AA91D217FBE00DF81D2 /* libcore.dylib in Frameworks */,
+				E80A7AAA1D217FBE00DF81D2 /* libxsys.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E80A97DD1CF9ADE10088F560 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1931,6 +1982,7 @@
 				E89CDF551D006374008861AF /* libhttp.dylib in Frameworks */,
 				E89CDF561D006374008861AF /* libnet.dylib in Frameworks */,
 				E89CDF491D005BA6008861AF /* libexpress.dylib in Frameworks */,
+				E80A7A9B1D217F5A00DF81D2 /* libcows.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2290,6 +2342,7 @@
 				E8CA33D41CB16DB50019DECC /* process */,
 				E8CA33581CB12A960019DECC /* http */,
 				E8DE16DF1CC90DBB001140DD /* leftpad */,
+				E80A7A8C1D217EAC00DF81D2 /* cows */,
 				E8BE772D1CD79D7C00BE1EF4 /* connect */,
 				E8BE77401CD79D8800BE1EF4 /* express */,
 				E8DA64581CE5E09800531F54 /* http_parser */,
@@ -2310,6 +2363,19 @@
 				E85206BD1D0ACDA400F3F696 /* Stringify.swift */,
 			);
 			path = json;
+			sourceTree = "<group>";
+		};
+		E80A7A8C1D217EAC00DF81D2 /* cows */ = {
+			isa = PBXGroup;
+			children = (
+				E80A7AA01D217F8100DF81D2 /* README.md */,
+				E80A7A9E1D217F8100DF81D2 /* LICENSE-MIT */,
+				E80A7A9F1D217F8100DF81D2 /* Module.swift */,
+				E80A7A9C1D217F8100DF81D2 /* cows.swift */,
+				E80A7AA11D217F8100DF81D2 /* UniqueRandomArray.swift */,
+				E80A7A9D1D217F8100DF81D2 /* cows.txt */,
+			);
+			name = cows;
 			sourceTree = "<group>";
 		};
 		E80A97F61CF9C6340088F560 /* Server */ = {
@@ -2396,6 +2462,7 @@
 				E898722C1CFF7DB200466E86 /* todo-mvc */,
 				E89CDF401D005B99008861AF /* express-simple */,
 				E874EC9E1D119C2B00FA0606 /* httpd-cookies */,
+				E80A7A911D217EC400DF81D2 /* libcows.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3121,6 +3188,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		E80A7A8F1D217EC400DF81D2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8C90BE21CFE6FFE00F85436 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3257,6 +3331,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		E80A7A901D217EC400DF81D2 /* cows */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E80A7A921D217EC400DF81D2 /* Build configuration list for PBXNativeTarget "cows" */;
+			buildPhases = (
+				E80A7A8D1D217EC400DF81D2 /* Sources */,
+				E80A7A8E1D217EC400DF81D2 /* Frameworks */,
+				E80A7A8F1D217EC400DF81D2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E80A7AA61D217FB800DF81D2 /* PBXTargetDependency */,
+				E80A7AA81D217FB800DF81D2 /* PBXTargetDependency */,
+			);
+			name = cows;
+			productName = cows;
+			productReference = E80A7A911D217EC400DF81D2 /* libcows.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
 		E80A97DF1CF9ADE10088F560 /* NozeHttpTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E80A97EC1CF9ADE10088F560 /* Build configuration list for PBXNativeTarget "NozeHttpTests" */;
@@ -3487,6 +3580,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E80A7A9A1D217F5400DF81D2 /* PBXTargetDependency */,
 				E89CDF4B1D005BAE008861AF /* PBXTargetDependency */,
 			);
 			name = "express-simple";
@@ -3998,6 +4092,9 @@
 					E807E3EC1CF671B500AE317B = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
+					E80A7A901D217EC400DF81D2 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					E80A97DF1CF9ADE10088F560 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -4178,6 +4275,7 @@
 				E8E276231CF49F67004A6A34 /* process */,
 				E8E276331CF49F7D004A6A34 /* http */,
 				E8E2764B1CF49F91004A6A34 /* leftpad */,
+				E80A7A901D217EC400DF81D2 /* cows */,
 				E8C90BE31CFE6FFE00F85436 /* mustache */,
 				E8E276561CF49FA4004A6A34 /* connect */,
 				E8E276631CF49FB9004A6A34 /* express */,
@@ -4260,6 +4358,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E80A7A8D1D217EC400DF81D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E80A7AA21D217F9400DF81D2 /* Module.swift in Sources */,
+				E80A7AA41D217F9400DF81D2 /* UniqueRandomArray.swift in Sources */,
+				E80A7AA31D217F9400DF81D2 /* cows.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E80A97DC1CF9ADE10088F560 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4866,6 +4974,26 @@
 			target = E8F25A4E1CF5EA2300355194 /* Freddy */;
 			targetProxy = E807E4121CF671C500AE317B /* PBXContainerItemProxy */;
 		};
+		E80A7A981D217F3800DF81D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E80A7A901D217EC400DF81D2 /* cows */;
+			targetProxy = E80A7A971D217F3800DF81D2 /* PBXContainerItemProxy */;
+		};
+		E80A7A9A1D217F5400DF81D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E80A7A901D217EC400DF81D2 /* cows */;
+			targetProxy = E80A7A991D217F5400DF81D2 /* PBXContainerItemProxy */;
+		};
+		E80A7AA61D217FB800DF81D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275551CF49E06004A6A34 /* xsys */;
+			targetProxy = E80A7AA51D217FB800DF81D2 /* PBXContainerItemProxy */;
+		};
+		E80A7AA81D217FB800DF81D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E2756C1CF49E3A004A6A34 /* core */;
+			targetProxy = E80A7AA71D217FB800DF81D2 /* PBXContainerItemProxy */;
+		};
 		E80A97E71CF9ADE10088F560 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E8E276331CF49F7D004A6A34 /* http */;
@@ -5373,6 +5501,42 @@
 		E807E3F01CF671B500AE317B /* UIKitRelease */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitRelease;
+		};
+		E80A7A931D217EC400DF81D2 /* AppKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitDebug;
+		};
+		E80A7A941D217EC400DF81D2 /* UIKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitDebug;
+		};
+		E80A7A951D217EC400DF81D2 /* AppKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitRelease;
+		};
+		E80A7A961D217EC400DF81D2 /* UIKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = UIKitRelease;
@@ -7915,6 +8079,16 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AppKitDebug;
+		};
+		E80A7A921D217EC400DF81D2 /* Build configuration list for PBXNativeTarget "cows" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E80A7A931D217EC400DF81D2 /* AppKitDebug */,
+				E80A7A941D217EC400DF81D2 /* UIKitDebug */,
+				E80A7A951D217EC400DF81D2 /* AppKitRelease */,
+				E80A7A961D217EC400DF81D2 /* UIKitRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		E80A97EC1CF9ADE10088F560 /* Build configuration list for PBXNativeTarget "NozeHttpTests" */ = {
 			isa = XCConfigurationList;

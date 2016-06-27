@@ -17,6 +17,11 @@ let package = Package(
            dependencies: [
 	     .Target(name: "core")
 	   ]),
+    Target(name: "cows",
+           dependencies: [
+             .Target(name: "xsys"),
+             .Target(name: "core")
+           ]),
     Target(name: "events",
            dependencies: [
 	     .Target(name: "core")
