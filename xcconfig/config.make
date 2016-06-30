@@ -40,6 +40,10 @@ ifeq ($(UNAME_S),Darwin)
   endif
   ifeq ($(SWIFT_SNAPSHOT),)
     SWIFT_TOOLCHAIN=$(SWIFT_TOOLCHAIN_BASEDIR)/swift-latest.xctoolchain/usr/bin
+    ifeq ("$(wildcard $(SWIFT_TOOLCHAIN))","")
+      SWIFT_TOOLCHAIN=$(shell dirname $(shell xcrun --toolchain swift-latest -f swiftc))
+    endif
+
   endif
 
   # platform settings
