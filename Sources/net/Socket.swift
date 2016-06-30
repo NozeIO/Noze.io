@@ -31,13 +31,8 @@ enum SocketConnectionState {
   case Connected
 }
 
-#if swift(>=3.0) // #swift3-gcd
-let connectQueue = dispatch_queue_create("io.noze.net.connect",
-                                         DISPATCH_QUEUE_CONCURRENT)!
-#else
 let connectQueue = dispatch_queue_create("io.noze.net.connect",
                                          DISPATCH_QUEUE_CONCURRENT)
-#endif
 
 /// TODO: doc
 public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
@@ -102,6 +97,11 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     }
     
     connectionState = .Connecting
+    
+    if !didRetainQ {
+      core.module.retain()
+      didRetainQ = true
+    }
     
     dns.lookup(host) { address, error in
       self.lookupListeners.emit(address, error)

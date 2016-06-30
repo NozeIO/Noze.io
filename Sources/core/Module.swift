@@ -15,11 +15,7 @@ public let module = NozeCore()
 
 /// All of Noze depends on running on a serialized queue. This usually is the 
 /// main queue, but it can be set to any arbitrary serialized queue.
-#if swift(>=3.0) // #swift3-gcd
-public var Q = dispatch_get_main_queue()! // can't fail, right?
-#else
 public var Q = dispatch_get_main_queue()
-#endif
 
 
 /// Enqueue the given closure for later dispatch in the Q.
