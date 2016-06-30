@@ -44,7 +44,7 @@ public class FileSource: GCDChannelBase, GReadableSourceType {
   }
   
   let mode      : mode_t = 0
-  let openFlags = O_RDONLY
+  let openFlags = xsys.O_RDONLY
   
   public override func createChannelIfMissing(Q q: dispatch_queue_t)
                        -> ErrorType?

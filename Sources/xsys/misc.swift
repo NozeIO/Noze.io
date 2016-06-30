@@ -57,6 +57,8 @@
   public let STDOUT_FILENO = Glibc.STDOUT_FILENO
   public let STDERR_FILENO = Glibc.STDERR_FILENO
   // public let NOFILE        = Glibc.NOFILE // missing on Linux
+  public typealias mode_t  = Glibc.mode_t
+  public let O_RDONLY      = Glibc.O_RDONLY
   
   // rlimit
   public typealias rlimit  = Glibc.rlimit
@@ -100,6 +102,8 @@
   public let STDOUT_FILENO = Darwin.STDOUT_FILENO
   public let STDERR_FILENO = Darwin.STDERR_FILENO
   public let NOFILE        = Darwin.NOFILE
+  public typealias mode_t  = Darwin.mode_t
+  public let O_RDONLY      = Darwin.O_RDONLY
 
   // rlimit
   public typealias rlimit  = Darwin.rlimit
