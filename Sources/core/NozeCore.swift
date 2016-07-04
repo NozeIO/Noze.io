@@ -13,6 +13,7 @@ import xsys
 import func Glibc.atexit
 import func Glibc.signal
 import var  Glibc.SIG_IGN
+import var  Glibc.SIGPIPE
 #else
 import func Darwin.atexit
 #endif

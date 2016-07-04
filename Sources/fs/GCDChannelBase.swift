@@ -346,17 +346,8 @@ public class GCDChannelBase: CustomStringConvertible {
       guard !chunk.isEmpty else { continue }
       
       // TODO: copies data, could we just capture the chunks?
-#if swift(>=3.0) // #swift3-gcd
-      let lChunkData = dispatch_data_create(chunk, chunk.count, Q,
-                                            DISPATCH_DATA_DESTRUCTOR_DEFAULT)
-      guard let chunkData = lChunkData else {
-        yield(POSIXError.ENOMEM, 0)
-        return
-      }
-#else
       let chunkData = dispatch_data_create(chunk, chunk.count, Q,
                                            DISPATCH_DATA_DESTRUCTOR_DEFAULT)
-#endif
       if let head = data {
         data = dispatch_data_create_concat(head, chunkData)
       }

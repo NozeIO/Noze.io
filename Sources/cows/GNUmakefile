@@ -3,6 +3,6 @@
 PACKAGE_DIR=../..
 PACKAGE=$(notdir $(shell pwd))
 
-$(PACKAGE)_SWIFT_MODULES = core
+$(PACKAGE)_SWIFT_MODULES = xsys core
 
 include $(PACKAGE_DIR)/xcconfig/rules.make

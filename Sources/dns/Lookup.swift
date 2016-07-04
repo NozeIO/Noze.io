@@ -16,14 +16,8 @@ import core
   public typealias LookupCB = ( sockaddr_any?, ErrorType? ) -> Void
 #endif
 
-#if swift(>=3.0) // #swift3-gcd
-// Note: we assume that can't fail
-let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
-                                        DISPATCH_QUEUE_CONCURRENT)!
-#else
 let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
                                         DISPATCH_QUEUE_CONCURRENT)
-#endif
 
 /// Perform a DNS lookup using the system facilities.
 ///
@@ -71,11 +65,11 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
       result = nil // TODO: proper error
     }
     else if info.ai_family == xsys.AF_INET {
-      let aiptr = UnsafePointer<sockaddr_in>(info.ai_addr) // cast
+      let aiptr = UnsafePointer<xsys_sockaddr_in>(info.ai_addr) // cast
       result = sockaddr_any.AF_INET(aiptr!.pointee)
     }
     else if info.ai_family == xsys.AF_INET6 {
-      let aiptr = UnsafePointer<sockaddr_in6>(info.ai_addr) // cast
+      let aiptr = UnsafePointer<xsys_sockaddr_in6>(info.ai_addr) // cast
       result = sockaddr_any.AF_INET6(aiptr!.pointee)
     }
     else {
