@@ -51,20 +51,20 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
     import http
 
     http.createServer { req, res in 
-        res.writeHead(200, [ "Content-Type": "text/html" ])
-        res.end("\<h1\>Hello World\</h1\>")
-      }
-      .listen(1337)
+      res.writeHead(200, [ "Content-Type": "text/html" ])
+      res.end("\<h1\>Hello World\</h1\>")
+    }
+    .listen(1337)
 
 An echo daemon, just piping the in-end of a socket into its own-out end:
 
     import net
 
     net.createServer { sock in
-        sock.write("Welcome to Noze.io!\r\n")
-        sock | sock
-      }
-      .listen(1337)
+      sock.write("Welcome to Noze.io!\r\n")
+      sock | sock
+    }
+    .listen(1337)
 
 More complex stuff including a Todo-MVC backend can be found in the
 [Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples).
