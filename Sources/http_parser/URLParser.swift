@@ -28,7 +28,7 @@
 
 // enum http_parser_url_fields
 // This is not a bitset in http_parser.h
-public struct HTTPParserURLFields : OptionSetType {
+public struct HTTPParserURLFields : OptionSet {
   
   public let rawValue : Int
   
