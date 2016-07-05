@@ -13,7 +13,7 @@ fi
 for i in `ls`; do
   if test -d "$i"; then
     cd $i
-    time swift build ${BFLAGS} # no parallel &
+    swift build ${BFLAGS} # no parallel &
     cd ..
   fi
 done
