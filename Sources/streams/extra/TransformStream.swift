@@ -35,7 +35,7 @@ public class TransformStream<WriteType, ReadType>
   
   override public init(readHWM      : Int? = nil,
                        writeHWM     : Int? = nil,
-                       queue        : dispatch_queue_t = core.Q,
+                       queue        : DispatchQueueType = core.Q,
                        enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,

@@ -8,6 +8,7 @@
 
 import Dispatch
 import xsys
+import core
 import streams
 #if os(Linux)
   import Glibc
@@ -35,7 +36,7 @@ public class FileTarget: GCDChannelBase, GWritableTargetType {
     get {
       if super.fd.isValid { return super.fd }
       guard channel != nil else { return nil }
-      super.fd = FileDescriptor(dispatch_io_get_descriptor(channel))
+      super.fd = FileDescriptor(channel.fileDescriptor)
       return super.fd
     }
   }
@@ -47,20 +48,20 @@ public class FileTarget: GCDChannelBase, GWritableTargetType {
     super.init(nil) // all stored class properties must be init'ed? why?
   }
   
-  public override func createChannelIfMissing(Q q: dispatch_queue_t) -> ErrorType? {
+  public override func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorType? {
     guard channel == nil else { return nil } // ignore double-call
     
     if fd.isValid { // we already have a file-descriptor, but no channel
-      channel = dispatch_io_create(DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
+      channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
     }
     else {
-      channel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, path,
+      channel = dispatch_io_create_with_path(xsys_DISPATCH_IO_STREAM, path,
                                              flags, mode, q, cleanupChannel)
     }
     
     // Essentially GCD channels already implement a buffer very similar to
     // Node.JS. But we do it on our own. Hence make GCD report input ASAP.
-    dispatch_io_set_low_water(channel, 1)
+    channel.setLimit(lowWater: 1)
     return channel != nil ? nil : POSIXError(rawValue: xsys.errno)
   }
   

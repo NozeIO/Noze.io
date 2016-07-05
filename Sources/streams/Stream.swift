@@ -35,13 +35,13 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   //   - so that we can do sendfile(from, to) where applicable
   
   public let log : Logger
-  public let Q   : dispatch_queue_t // TBD: drop this, always use core.Q
+  public let Q   : DispatchQueueType // TBD: drop this, always use core.Q
   public var didRetainQ : Bool = false
   
   
   // MARK: - Init
   
-  public init(queue: dispatch_queue_t = core.Q, enableLogger: Bool = false) {
+  public init(queue: DispatchQueueType = core.Q, enableLogger: Bool = false) {
     self.Q   = queue
     self.log = Logger(enabled: enableLogger)
     

@@ -51,20 +51,20 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
     import http
 
     http.createServer { req, res in 
-        res.writeHead(200, [ "Content-Type": "text/html" ])
-        res.end("\<h1\>Hello World\</h1\>")
-      }
-      .listen(1337)
+      res.writeHead(200, [ "Content-Type": "text/html" ])
+      res.end("\<h1\>Hello World\</h1\>")
+    }
+    .listen(1337)
 
 An echo daemon, just piping the in-end of a socket into its own-out end:
 
     import net
 
     net.createServer { sock in
-        sock.write("Welcome to Noze.io!\r\n")
-        sock | sock
-      }
-      .listen(1337)
+      sock.write("Welcome to Noze.io!\r\n")
+      sock | sock
+    }
+    .listen(1337)
 
 More complex stuff including a Todo-MVC backend can be found in the
 [Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples).
@@ -81,6 +81,15 @@ an email to tell us why this is crap (or not?).
 - [info@noze.io](mailto:info@noze.io)
 
 ### Status
+
+- Supported Swift Versions:
+  - MacOS
+    - Swift 2.2.1 via Xcode 7.3.1 or makefiles
+    - Swift 2.3   via Xcode 8b or makefiles
+    - Swift 3pr1  via Xcode 8b with Objective-GCD or Swift Package Manager
+  - Linux
+    - Swift 2.2.1 via makefiles and 2.2.1 GCD snapshot
+    - Swift 3pr1 without Objective-GCD via makefiles or Swift Package Manager
 
 - We chose the traditional Swift approach:
   Make something barely usable, though demoable,

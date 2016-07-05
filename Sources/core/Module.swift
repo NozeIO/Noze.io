@@ -35,7 +35,7 @@ public func setTimeout(milliseconds: Int, _ cb: () -> Void) {
   // TODO: in JS this also allows for a set of arguments to be passed to the
   //       callback (but who uses this facility?)
   let nsecs = Int64(milliseconds) * Int64(NSEC_PER_MSEC)
-  let s     = dispatch_time(DISPATCH_TIME_NOW, nsecs)
+  let s     = xsys_dispatch_time(DISPATCH_TIME_NOW, nsecs)
   
   module.retain() // TBD: expensive? Do in here?
   dispatch_after(s, Q) {

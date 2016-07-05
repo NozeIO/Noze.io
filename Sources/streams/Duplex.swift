@@ -25,7 +25,7 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
   
   public init(source        : TSource,
               target        : TTarget,
-              queue         : dispatch_queue_t = core.Q,
+              queue         : DispatchQueueType = core.Q,
               enableLogger  : Bool = false)
   {
     self.source = source

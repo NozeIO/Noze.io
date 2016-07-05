@@ -7,30 +7,9 @@
 //
 
 #if swift(>=3.0) // #swift3-fd
-
-// this does not seem to carry over to other modules
+// This does not seem to carry over to other modules (deprecation warning is per
+// module)
+// => use the reverse!
 public typealias ErrorType    = ErrorProtocol
 public typealias SequenceType = Sequence
-  
-#else // Swift 2.2
-
-import xsys
-
-extension _ArrayType {
-  
-  public mutating func append
-    <S: SequenceType where S.Generator.Element == Self.Generator.Element>
-    (contentsOf newElements: S)
-  {
-    appendContentsOf(newElements)
-  }
-}
-
-extension String {
-  
-  func contains(other: String) -> Bool {
-    return containsString(other)
-  }
-}
-
 #endif

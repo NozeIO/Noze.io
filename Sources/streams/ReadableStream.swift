@@ -59,7 +59,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // MARK: - Init
   
   public init(highWaterMark : Int?,
-              queue         : dispatch_queue_t = core.Q,
+              queue         : DispatchQueueType = core.Q,
               enableLogger  : Bool = false)
   {
     self.highWaterMark = highWaterMark ?? 1
@@ -503,7 +503,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   // MARK: - Readable is a ReadableSource itself
   
-  public func next(queue q : dispatch_queue_t, count: Int,
+  public func next(queue q : DispatchQueueType, count: Int,
                    yield   : ( ErrorType?, [ ReadType ]? ) -> Void)
   {
     // dispatching yield on queue, though it should be the same (main) queue?

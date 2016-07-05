@@ -23,12 +23,12 @@ public class Server : ErrorEmitter, LameLogObjectType {
   //      Another option would be to separate out that part as a generic.
   
   public let log          : Logger
-  public var backlog      : Int?               = nil
+  public var backlog      : Int?                = nil
   public var isListening  : Bool { return backlog != nil }
-  public var fd           : FileDescriptor?    = nil // fd can be invalid too
-  public var address      : sockaddr_any?      = nil
-  public var listenSource : dispatch_source_t? = nil
-  public let Q            : dispatch_queue_t
+  public var fd           : FileDescriptor?     = nil // fd can be invalid too
+  public var address      : sockaddr_any?       = nil
+  public var listenSource : DispatchSourceType? = nil
+  public let Q            : DispatchQueueType
   public var didRetainQ   : Bool = false // #linux-public
   
   public let allowHalfOpen  : Bool
@@ -36,7 +36,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public init(allowHalfOpen  : Bool = false,
               pauseOnConnect : Bool = false,
-              queue          : dispatch_queue_t = core.Q,
+              queue          : DispatchQueueType = core.Q,
               enableLogger   : Bool = false)
   {
     self.Q   = queue
@@ -138,6 +138,10 @@ public class Server : ErrorEmitter, LameLogObjectType {
       self.Q
     )
 #else // os(Darwin)
+#if swift(>=3.0)
+    let listenSource = DispatchSource.read(fileDescriptor: fd!.fd,
+                                           queue: self.Q)
+#else
 #if swift(>=2.3)
     // TBD: this is not quite right, we really want to check the API
     let listenSource = dispatch_source_create(
@@ -157,6 +161,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
       // TBD: hm
       xsys.abort()
     }
+#endif
 #endif
 #endif // os(Darwin)
     self.listenSource = listenSource
@@ -180,10 +185,10 @@ public class Server : ErrorEmitter, LameLogObjectType {
 #endif
 #else /* os(Darwin) */
 #if swift(>=3.0)
-    dispatch_source_set_event_handler(listenSource!) {
+    listenSource.setEventHandler {
       self._onListenEvent(address: boundAddress)
     }
-    dispatch_resume(listenSource!)
+    listenSource.resume()
 #else
     dispatch_source_set_event_handler(listenSource) {
       self._onListenEvent(address: boundAddress)
@@ -319,7 +324,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func _primaryClose() { // #linux-public
     if listenSource != nil {
-      dispatch_source_cancel(listenSource!)
+      listenSource!.cancel()
       listenSource = nil
     }
     

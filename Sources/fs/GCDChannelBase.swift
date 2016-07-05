@@ -10,8 +10,6 @@ import Dispatch
 import xsys
 import core
 
-private let DISPATCH_DATA_DESTRUCTOR_DEFAULT : dispatch_block_t! = nil
-
 private let logTraffic = false
 private let debugClose = false
 
@@ -54,7 +52,7 @@ public class GCDChannelBase: CustomStringConvertible {
   public var channel : dispatch_io_t = nil
 #endif
 #else
-  public var channel : dispatch_io_t! = nil
+  public var channel : DispatchIOType! = nil
 #endif
   
   let shouldClose = true
@@ -85,7 +83,7 @@ public class GCDChannelBase: CustomStringConvertible {
     assert(writesPending == 0)
     if isShuttingDown {
       if channel != nil {
-        dispatch_io_close(channel, DISPATCH_IO_STOP)
+        channel.close(flags: .stop)
         channel = nil
       }
     }
@@ -99,7 +97,7 @@ public class GCDChannelBase: CustomStringConvertible {
       // FIXME: we probably don't want to DISPATCH_IO_STOP if writes are pending
       if writesPending == 0 {
         // stop pending reads.
-        dispatch_io_close(channel, DISPATCH_IO_STOP) // TBD: DISPATCH_IO_STOP
+        channel.close(flags: .stop)
         channel = nil
       }
     }
@@ -128,16 +126,18 @@ public class GCDChannelBase: CustomStringConvertible {
      */
   }
   
-  public func createChannelIfMissing(Q q: dispatch_queue_t) -> ErrorType? {
+  public func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorType? {
     guard fd.isValid     else { return POSIXError.EINVAL }
     guard channel == nil else { return nil }
     
-    channel = dispatch_io_create(DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
+    channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
     guard channel != nil else { return POSIXError(rawValue: xsys.errno) }
     
     // Essentially GCD channels already implement a buffer very similar to
     // Node.JS. But we do it on our own. Hence make GCD report input ASAP.
-    dispatch_io_set_low_water(channel, 1)
+    // TBD: it may also be a matter of the amount of kernel calls. Needs
+    //      profiling
+    channel.setLimit(lowWater: 1)
 
     return nil
   }
@@ -186,7 +186,7 @@ public class GCDChannelBase: CustomStringConvertible {
   
   public var readsPending = 0
 
-  public func next(queue Q : dispatch_queue_t, count: Int,
+  public func next(queue Q : DispatchQueueType, count: Int,
                    yield   : ( ErrorType?, [ SourceElement ]? )-> Void)
   {
     let log = self.log
@@ -221,7 +221,7 @@ public class GCDChannelBase: CustomStringConvertible {
               "(NIO: \(fd.isNonBlocking)) ...")
     
     readsPending += 1 // should that only ever be 1?
-    dispatch_io_read(channel, 0, howMuchToRead, Q) {
+    channel.read(offset: 0, length: howMuchToRead, queue: Q) {
       done, pdata, error in
 
       self.readsPending -= 1
@@ -236,21 +236,18 @@ public class GCDChannelBase: CustomStringConvertible {
 #if swift(>=3.0) // #swift3-fd
         let data = pdata!
 #else
-        let data = pdata
+        let data = pdata!
 #endif
 	let hitEOF : Bool
 	if error == 0 && done {
-	  // not strideof in this case, right?
-	  var mdata1 = data, mdata2 = dispatch_data_empty
-	  // TBD: just cast to a pointer?
-	  hitEOF = memcmp(&mdata1, &mdata2, sizeof(dispatch_data_t)) == 0
+	  hitEOF = data.isEmpty
 	}
 	else {
 	  hitEOF = false
 	}
 #else // OSX
         let data = pdata!
-	let hitEOF = data === dispatch_data_empty && error == 0 && done
+	let hitEOF = data.isEmpty && error == 0 && done
 #endif // OSX
 
         if hitEOF {
@@ -261,30 +258,28 @@ public class GCDChannelBase: CustomStringConvertible {
         }
         
         log.debug("walk data ...")
-        let ok = dispatch_data_apply(data) {
-          subdata, offset, ptr, len in
+        
+        data.enumerateBytes { bptr, offset, _ in
+          let len = bptr.count
           
           log.enter(function: "GCDChannelTarget::\(#function)");
           defer { log.leave() }
           
-          // hack. ugly copying
+          // FIXME: HACK. ugly copying
 #if swift(>=3.0) // #swift3-fd
           var array = ByteBucket(repeating: 0, count: len)
 #if os(Linux)
-          _ = memcpy(&array, ptr!, len)
+          _ = memcpy(&array, bptr.baseAddress!, len)
 #else
-          _ = memcpy(&array, ptr, len)
+          _ = memcpy(&array, bptr.baseAddress, len)
 #endif
 #else
           var array = ByteBucket(count: len, repeatedValue: 0)
-          memcpy(&array, ptr, len)
+          memcpy(&array, bptr.baseAddress, len)
 #endif
           
           yield(nil, array)
-          
-          return true // continue block
         }
-        assert(ok)
       }
       
       if error != 0 {
@@ -316,7 +311,7 @@ public class GCDChannelBase: CustomStringConvertible {
   
   public var writesPending = 0
 
-  public func writev(queue Q : dispatch_queue_t,
+  public func writev(queue Q : DispatchQueueType,
                      chunks  : [ ByteBucket ],
                      yield   : ( ErrorType?, Int ) -> Void)
   {
@@ -341,7 +336,7 @@ public class GCDChannelBase: CustomStringConvertible {
     
     /* convert brigade into dispatch_data */
     
-    var data : dispatch_data_t? = nil
+    var data : DispatchDataType? = nil
     for chunk in chunks {
       guard !chunk.isEmpty else { continue }
       
@@ -362,7 +357,7 @@ public class GCDChannelBase: CustomStringConvertible {
       return
     }
     
-    let count = dispatch_data_get_size(data!)
+    let count = data?.count ?? 0
     log.debug("asked to write #\(count) bytes ...")
     
     
@@ -370,8 +365,8 @@ public class GCDChannelBase: CustomStringConvertible {
     
     writesPending += 1
       // There can be more than one, but I guess that is inefficient.
-    
-    dispatch_io_write(channel, 0, data!, Q) {
+
+    channel.write(offset: 0, data: data!, queue: Q) {
       done, pendingData, error in
 
       self.writesPending -= 1
@@ -381,20 +376,8 @@ public class GCDChannelBase: CustomStringConvertible {
 
       // TBD: EOF on socket shutdown? (done=YES,error=0,data=zero-data)
 
-#if os(Linux)
-      let pendingSize : size_t
-      if pendingData != nil {
-#if swift(>=3.0) // #swift3-gcd
-        pendingSize = dispatch_data_get_size(pendingData!)
-#else
-        pendingSize = dispatch_data_get_size(pendingData)
-#endif
-      }
-      else { pendingSize = 0 }
-#else
-      let pendingSize =
-            pendingData != nil ? dispatch_data_get_size(pendingData!) : 0
-#endif
+      let pendingSize : size_t = pendingData?.count ?? 0
+      
       log.debug("pending: #\(pendingSize) bytes ..")
       
       if error != 0 {
