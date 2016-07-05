@@ -9,16 +9,7 @@
 // MARK: - dispatch convenience
 
 import Dispatch
-
-extension dispatch_source_t {
-  
-  func onEvent(cb: (dispatch_source_t, CUnsignedLong) -> Void) {
-    dispatch_source_set_event_handler(self) {
-      let data = dispatch_source_get_data(self)
-      cb(self, data)
-    }
-  }
-}
+import core
 
 #if os(Linux)
 #else
