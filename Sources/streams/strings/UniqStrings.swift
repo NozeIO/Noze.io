@@ -35,7 +35,7 @@ public class UniqStrings: TransformStream<String, String> {
   
   override init(readHWM      : Int? = 1,
                 writeHWM     : Int? = 1,
-                queue        : dispatch_queue_t = core.Q,
+                queue        : DispatchQueueType = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,

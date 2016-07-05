@@ -72,7 +72,7 @@ public class SourceStream<G : GReadableSourceType>
   
   init(source        : G,
        highWaterMark : Int? = nil,
-       queue         : dispatch_queue_t = core.Q,
+       queue         : DispatchQueueType = core.Q,
        enableLogger  : Bool = false)
   {
     self.source = source

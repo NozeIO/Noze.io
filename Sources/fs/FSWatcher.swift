@@ -24,9 +24,9 @@ public class FSWatcher: ErrorEmitter {
   //      disadvantage: user has to read() instead of getting stuff pushed.
   
   let path       : String
-  let Q          : dispatch_queue_t
+  let Q          : DispatchQueueType
   var fd         : CInt?
-  var src        : dispatch_source_t? = nil
+  var src        : DispatchSourceType? = nil
   var didRetainQ : Bool = false
   
   public init(_ filename : String,
@@ -42,16 +42,17 @@ public class FSWatcher: ErrorEmitter {
     super.init()
     
     if let fd = fd {
+      // TBD: is the `else if` right? Or could it contain multiple? Probably!
+#if !swift(>=3.0) || !(os(OSX) || os(iOS) || os(watchOS) || os(tvOS)) // #swift3-new-gcd
       let flags =
         (DISPATCH_VNODE_WRITE | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_DELETE)
-      
       src = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
                                    UInt(fd),
                                    flags, Q)
-      dispatch_source_set_event_handler(src!) {
+      src!.setEventHandler {
         // TODO
         // MultiCrap dispatches `cb` on main queue
-        let changes = dispatch_source_get_data(self.src!);
+        let changes = self.src!.data
         if (changes & DISPATCH_VNODE_DELETE != 0) {
           self.changeListeners.emit( ( .Delete, nil ) )
         }
@@ -64,9 +65,31 @@ public class FSWatcher: ErrorEmitter {
         else {
           assert(false, "unexpected change event: \(changes)")
         }
-      }
-      
-      dispatch_source_set_cancel_handler(src!) { [unowned self] in
+      }      
+#else
+      let flags : DispatchSource.FileSystemEvent = [ .write, .rename, .delete ]
+      src = DispatchSource.fileSystemObject(fileDescriptor: fd,
+                                            eventMask: flags, queue: Q)
+      src!.setEventHandler {
+        // TODO
+        // MultiCrap dispatches `cb` on main queue
+        let changes = (self.src! as! DispatchSourceFileSystemObject).data
+        if changes.contains(.delete) {
+          self.changeListeners.emit( ( .Delete, nil ) )
+        }
+        else if changes.contains(.rename) {
+          self.changeListeners.emit( ( .Rename, nil ) )
+        }
+        else if changes.contains(.write) {
+          self.changeListeners.emit( ( .Write, nil ) )
+        }
+        else {
+          assert(false, "unexpected change event: \(changes)")
+        }
+      }      
+#endif
+
+      src!.setCancelHandler { [unowned self] in
         if let fd = self.fd {
           _ = xsys.close(fd)
           self.fd = nil
@@ -81,16 +104,8 @@ public class FSWatcher: ErrorEmitter {
       if let cb = listener {
         self.changeListeners.add(handler: cb)
       }
-      
-#if os(Linux)
-#if swift(>=3.0) // #swift3-fd
-      dispatch_resume(unsafeBitCast(src, to: dispatch_object_t.self))
-#else
-      dispatch_resume(unsafeBitCast(src, dispatch_object_t.self))
-#endif
-#else
-      dispatch_resume(src!)
-#endif
+
+      src!.resume()
     }
     else {
       let error = POSIXError(rawValue: xsys.errno)!
@@ -103,7 +118,7 @@ public class FSWatcher: ErrorEmitter {
   
   public func close() {
     if let src = src {
-      dispatch_source_cancel(src)
+      src.cancel()
       self.src = nil
     }
     

@@ -49,7 +49,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   }
   
   public init(_ fd         : FileDescriptor   = nil,
-              queue        : dispatch_queue_t = core.Q,
+              queue        : DispatchQueueType = core.Q,
               enableLogger : Bool             = false)
   {
     io = SocketSourceTarget(fd)

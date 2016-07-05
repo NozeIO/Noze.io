@@ -9,7 +9,7 @@
 import Dispatch
 import core
 
-extension dispatch_queue_t {
+extension DispatchQueueType {
   // Move to core? Not sure about that.
   
   /// Evaluate the given function with the given argument on the queue. Once

@@ -30,7 +30,7 @@ public class Writable<WriteType> : WritableStream<WriteType> {
   // MARK: - Init
   
   override public init(highWaterMark : Int? = 1,
-                       queue         : dispatch_queue_t = core.Q,
+                       queue         : DispatchQueueType = core.Q,
                        enableLogger  : Bool = false)
   {
     super.init(highWaterMark: highWaterMark, queue: queue,
