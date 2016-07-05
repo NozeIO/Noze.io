@@ -14,16 +14,7 @@ public class NozeFS : NozeModule {
   
   // A queue which is used by all FS functions to do async operations (not
   // covered by GCD)
-#if os(Linux)
-#if swift(>=3.0) // #swift3-gcd
-  lazy var Q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)!
-#else
-  lazy var Q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-#endif
-#else
-  lazy var Q = dispatch_get_global_queue(
-                       QOS_CLASS_DEFAULT, UInt(DISPATCH_QUEUE_PRIORITY_DEFAULT))
-#endif
+  lazy var Q = xsys_get_default_global_queue()
 }
 public let module = NozeFS()
 

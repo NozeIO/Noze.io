@@ -13,6 +13,7 @@ import xsys
 import func Glibc.atexit
 import func Glibc.signal
 import var  Glibc.SIG_IGN
+import var  Glibc.SIGPIPE
 #else
 import func Darwin.atexit
 #endif
@@ -58,7 +59,7 @@ public class NozeCore : NozeModule {
     // invoke a little later, in case some new work comes in
     // TBD: does this actually make any sense?
     let nsecs = exitDelayInMS * Int64(NSEC_PER_MSEC)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsecs), Q) {
+    dispatch_after(xsys_dispatch_time(DISPATCH_TIME_NOW, nsecs), Q) {
       if self.workCount == 0 { // work still zero, terminate
         self.exit()
       }

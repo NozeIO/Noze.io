@@ -118,7 +118,7 @@ public func spawn(command: String, _ args: [ String ],
         // TBD: do we need to close the old fd?
         let openMode : Int32
         switch fd {
-          case xsys.STDIN_FILENO:  openMode = O_RDONLY
+          case xsys.STDIN_FILENO:  openMode = xsys.O_RDONLY
           case xsys.STDOUT_FILENO: openMode = O_WRONLY
           case xsys.STDERR_FILENO: openMode = O_WRONLY
           default: openMode = O_RDWR // we don't know, right?

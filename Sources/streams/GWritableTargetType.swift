@@ -7,6 +7,7 @@
 //
 
 import Dispatch
+import core
 
 /// A writable endpoint. Like a file or socket, or a SinkType.
 ///
@@ -24,7 +25,7 @@ public protocol GWritableTargetType {
   /// The yield returns an error and/or the number of elements
   /// written (NOT the number of buckets!).
   /// The queue is the queue in which the yield must be run.
-  mutating func writev(queue q : dispatch_queue_t,
+  mutating func writev(queue q : DispatchQueueType,
                        chunks  : [ [ Self.TargetElement ] ],
                        yield   : ( ErrorType?, Int ) -> Void)
 

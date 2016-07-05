@@ -22,26 +22,10 @@ extension CollectionType where Generator.Element : Equatable {
 
 }
   
-extension _ArrayType {
-
-  mutating func remove(at idx: Index) -> Generator.Element {
-    return removeAtIndex(idx)
-  }
-  
-}
-
 extension String {
   
   func split(c: Character) -> [ String ] {
     return self.characters.split(c).map { String($0) }
-  }
-  
-}
-
-extension Dictionary {
-  
-  mutating func removeValue(forKey k: Key) -> Value? {
-    return removeValueForKey(k)
   }
   
 }

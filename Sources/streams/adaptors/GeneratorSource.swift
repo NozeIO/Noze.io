@@ -59,7 +59,7 @@ public struct SyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
-  public mutating func next(queue _: dispatch_queue_t, count: Int,
+  public mutating func next(queue _: DispatchQueueType, count: Int,
                             yield : ( ErrorType?, [ G.Element ]? ) -> Void)
   {
     _next(count) { bucket in yield(nil, bucket) }
@@ -117,12 +117,12 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   
   public static var defaultHighWaterMark : Int { return 5 } // TODO
   var source              : G
-  let workerQueue         : dispatch_queue_t
+  let workerQueue         : DispatchQueueType
   let maxCountPerDispatch : Int
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
-  init(_ source: G, workerQueue: dispatch_queue_t = defaultWorkerQueue,
+  init(_ source: G, workerQueue: DispatchQueueType = defaultWorkerQueue,
        maxCountPerDispatch: Int = 16)
   {
     self.source              = source
@@ -130,7 +130,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
     self.maxCountPerDispatch = maxCountPerDispatch
   }
   init<S: SequenceType where S.Generator == G>
-    (_ source: S, workerQueue: dispatch_queue_t = defaultWorkerQueue)
+    (_ source: S, workerQueue: DispatchQueueType = defaultWorkerQueue)
   {
     self.init(source.generate(), workerQueue: workerQueue)
   }
@@ -146,7 +146,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   /// The number of generation attempts can be limited using the 
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
-  public mutating func next(queue Q : dispatch_queue_t, count: Int,
+  public mutating func next(queue Q : DispatchQueueType, count: Int,
                             yield   : ( ErrorType?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...

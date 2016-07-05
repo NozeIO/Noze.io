@@ -8,6 +8,7 @@
 
 import XCTest
 import Dispatch
+import core
 @testable import streams
 
 class NumberPrinter : streams.SinkType, GWritableTargetType {
@@ -24,7 +25,7 @@ class NumberPrinter : streams.SinkType, GWritableTargetType {
   
   static var defaultHighWaterMark : Int { return 2 }
   
-  func writev(queue q : dispatch_queue_t,
+  func writev(queue q : DispatchQueueType,
               chunks  : [ [ Int ] ],
               yield   : ( ErrorType?, Int ) -> Void)
   {

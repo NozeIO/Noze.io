@@ -57,7 +57,7 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
-  public mutating func next(queue _: dispatch_queue_t, count: Int,
+  public mutating func next(queue _: DispatchQueueType, count: Int,
                             yield : ( ErrorProtocol?, [ G.Element ]? ) -> Void)
   {
     guard let first = source.next() else {
@@ -101,12 +101,12 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   public static var defaultHighWaterMark : Int { return 5 } // TODO
   var source              : G
-  let workerQueue         : dispatch_queue_t
+  let workerQueue         : DispatchQueueType
   let maxCountPerDispatch : Int
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
-  public init(_ source: G, workerQueue: dispatch_queue_t = getDefaultWorkerQueue(),
+  public init(_ source: G, workerQueue: DispatchQueueType = getDefaultWorkerQueue(),
               maxCountPerDispatch: Int = 16)
   {
     self.source              = source
@@ -114,7 +114,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
     self.maxCountPerDispatch = maxCountPerDispatch
   }
   public convenience init<S: Sequence where S.Iterator == G>
-    (_ source: S, workerQueue: dispatch_queue_t = getDefaultWorkerQueue())
+    (_ source: S, workerQueue: DispatchQueueType = getDefaultWorkerQueue())
   {
     self.init(source.makeIterator(), workerQueue: workerQueue)
   }
@@ -131,7 +131,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
 
-  public func next(queue Q : dispatch_queue_t, count: Int,
+  public func next(queue Q : DispatchQueueType, count: Int,
                    yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
@@ -172,13 +172,17 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   }
 }
 
-private func getDefaultWorkerQueue() -> dispatch_queue_t {
+private func getDefaultWorkerQueue() -> DispatchQueueType {
   /* Nope: Use a serial queue, w/o internal synchronization we would generate
            yields out of order.
   return dispatch_get_global_queue(QOS_CLASS_DEFAULT,
                                    UInt(DISPATCH_QUEUE_PRIORITY_DEFAULT))
   */
+#if !swift(>=3.0) || !(os(OSX) || os(iOS) || os(watchOS) || os(tvOS))
   return dispatch_queue_create("io.noze.source.iterator.async", nil)
+#else
+  return DispatchQueue(label: "io.noze.source.iterator.async")
+#endif
 }
 
 #endif // Swift 3.x+
