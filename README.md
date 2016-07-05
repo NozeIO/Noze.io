@@ -82,6 +82,15 @@ an email to tell us why this is crap (or not?).
 
 ### Status
 
+- Supported Swift Versions:
+  - MacOS
+    - Swift 2.2.1 via Xcode 7.3.1 or makefiles
+    - Swift 2.3   via Xcode 8b or makefiles
+    - Swift 3pr1  via Xcode 8b with Objective-GCD or Swift Package Manager
+  - Linux
+    - Swift 2.2.1 via makefiles and 2.2.1 GCD snapshot
+    - Swift 3pr1 without Objective-GCD via makefiles or Swift Package Manager
+
 - We chose the traditional Swift approach:
   Make something barely usable, though demoable,
   and release it with a 2.0 version tag.
