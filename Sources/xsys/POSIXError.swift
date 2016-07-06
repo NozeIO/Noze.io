@@ -60,7 +60,7 @@
 #if swift(>=3.0)
   extension POSIXError : ErrorProtocol {}
 #else
-  extension POSIXError : ErrorProtocol {}
+  extension POSIXError : ErrorType {}
 #endif
 
   public var errno : Int32 { return Glibc.errno }
