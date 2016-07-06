@@ -130,7 +130,7 @@ private class SequencePipeState<TI: SequenceType, TO: GWritableStreamType
   
   // MARK: - Error handling and such
   
-  final func onTargetError(error: ErrorType) {
+  final func onTargetError(error: ErrorProtocol) {
     print("C: ERROR: \(error)")  // TODO
     xsys.exit(42)
     // TODO: self.exitIfDone()

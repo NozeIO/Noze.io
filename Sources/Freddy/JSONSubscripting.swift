@@ -83,7 +83,7 @@ extension Int: JSONPathType {
 
 private extension JSON {
 
-    enum SubscriptError: ErrorType {
+    enum SubscriptError: ErrorProtocol {
         case SubscriptIntoNull(JSONPathType)
     }
 

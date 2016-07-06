@@ -126,7 +126,7 @@ public class GCDChannelBase: CustomStringConvertible {
      */
   }
   
-  public func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorType? {
+  public func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorProtocol? {
     guard fd.isValid     else { return POSIXError.EINVAL }
     guard channel == nil else { return nil }
     
@@ -161,7 +161,7 @@ public class GCDChannelBase: CustomStringConvertible {
   
   // MARK: - Errors
   
-  public var pendingErrors = [ ErrorType ]() // #linux-public
+  public var pendingErrors = [ ErrorProtocol ]() // #linux-public
   
   public func handleError(error e: Int32) {
     // The sources/targets do not maintain a references to their associated
@@ -187,7 +187,7 @@ public class GCDChannelBase: CustomStringConvertible {
   public var readsPending = 0
 
   public func next(queue Q : DispatchQueueType, count: Int,
-                   yield   : ( ErrorType?, [ SourceElement ]? )-> Void)
+                   yield   : ( ErrorProtocol?, [ SourceElement ]? )-> Void)
   {
     let log = self.log
     log.enter(function: "GCDChannelSource::\(#function)");
@@ -313,7 +313,7 @@ public class GCDChannelBase: CustomStringConvertible {
 
   public func writev(queue Q : DispatchQueueType,
                      chunks  : [ ByteBucket ],
-                     yield   : ( ErrorType?, Int ) -> Void)
+                     yield   : ( ErrorProtocol?, Int ) -> Void)
   {
     let log = self.log
     log.enter(function: "GCDChannelTarget::\(#function)");

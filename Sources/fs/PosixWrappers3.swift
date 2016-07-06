@@ -31,12 +31,12 @@ public func access(_ path: String, _ mode: Int = F_OK, cb: ErrorCB) {
 }
 
 public func stat(_ path: String,
-                 cb: ( ErrorType?, xsys.stat_struct? ) -> Void)
+                 cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void)
   {
   module.Q.evalAsync(statSync, path, cb)
 }
 public func lstat(_ path: String,
-                  cb: ( ErrorType?, xsys.stat_struct? ) -> Void)
+                  cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void)
 {
   module.Q.evalAsync(lstatSync, path, cb)
 }

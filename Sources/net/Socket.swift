@@ -251,7 +251,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
 
   // MARK: - Event Handlers
   
-  var lookupListeners  = EventListenerSet<(sockaddr_any?, ErrorType?)>(
+  var lookupListeners  = EventListenerSet<(sockaddr_any?, ErrorProtocol?)>(
                            queueLength: 1, coalesce: true)
   var connectListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)

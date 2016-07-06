@@ -81,7 +81,7 @@ extension Int: JSONPathType {
 
 private extension JSON {
 
-    enum SubscriptError: ErrorType {
+    enum SubscriptError: ErrorProtocol {
         case SubscriptIntoNull(JSONPathType)
     }
 
@@ -222,7 +222,7 @@ extension JSON {
     /// An `OptionSetType` used to represent the different options available for subscripting `JSON` with `null` values or missing keys.
     /// * `.NullBecomesNil` - Treat `null` values as `nil`.
     /// * `.MissingKeyBecomesNil` - Treat missing keys as `nil`.
-    public struct SubscriptingOptions: OptionSetType {
+    public struct SubscriptingOptions: OptionSet {
         public let rawValue: Swift.Int
         public init(rawValue: Swift.Int) {
             self.rawValue = rawValue

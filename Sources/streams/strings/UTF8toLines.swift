@@ -38,7 +38,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
   
   var pendingData = Array<UInt8>() // super lame implementation
 
-  public override func _flush(done cb: ( ErrorType?, [ String ]? ) -> Void) {
+  public override func _flush(done cb: ( ErrorProtocol?, [ String ]? ) -> Void) {
     // copy, sigh
     if !pendingData.isEmpty {
       let s = makeLine(bytebuf: pendingData)
@@ -57,7 +57,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
   }
   
   public override func _transform(bucket b : [ UInt8 ],
-                                  done     : ( ErrorType?, [ String ]? )
+                                  done     : ( ErrorProtocol?, [ String ]? )
                        -> Void)
   {
     let bucket = b

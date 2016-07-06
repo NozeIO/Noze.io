@@ -13,6 +13,7 @@ import Darwin
 #endif
 
 import xsys
+import core
 
 
 /// This essentially wraps the Integer representing a file descriptor in a
@@ -40,7 +41,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
   // MARK: - Operations
   
   public static func open(path: String, flags: CInt)
-                     -> ( ErrorType?, FileDescriptor? )
+                     -> ( ErrorProtocol?, FileDescriptor? )
   {
     let fd = xsys.open(path, flags)
     guard fd >= 0 else {
@@ -54,7 +55,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
     _ = xsys.close(fd)
   }
   
-  public func read(count: Int) -> ( ErrorType?, [ UInt8 ]? ) {
+  public func read(count: Int) -> ( ErrorProtocol?, [ UInt8 ]? ) {
     // TODO: inefficient init. Also: reuse buffers.
 #if swift(>=3.0) // #swift3-fd
     var buf = [ UInt8 ](repeating: 0, count: count)
@@ -77,7 +78,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
   }
   
   public func write<T>(buffer: [ T ], count: Int = -1)
-                -> ( ErrorType?, Int )
+                -> ( ErrorProtocol?, Int )
   {
     guard buffer.count > 0 else { return ( nil, 0 ) }
     
@@ -265,7 +266,7 @@ extension FileDescriptor: CustomStringConvertible {
 
 // MARK: - Boolean
 
-extension FileDescriptor: BooleanType { // TBD: Swift doesn't want us to do this
+extension FileDescriptor: Boolean { // TBD: Swift doesn't want us to do this
   
   public var boolValue : Bool {
     return isValid

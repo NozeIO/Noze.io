@@ -37,7 +37,7 @@ extension String { // add stuff missing in String w/o Foundation
 
 func linesToRecords(chunk : [String]?,
                     push  : ( [GitLogEntry]? ) -> Void,
-                    end   : ( ErrorType?, [GitLogEntry]? ) -> Void)
+                    end   : ( ErrorProtocol?, [GitLogEntry]? ) -> Void)
 {
   guard let lines = chunk else { end(nil,nil); return }
         
@@ -61,7 +61,7 @@ func linesToRecords(chunk : [String]?,
 
 func recordsToHTML(chunk : [ GitLogEntry ]?,
                    push  : ( [UInt8]? ) -> Void,
-                   end   : ( ErrorType?, [UInt8]? ) -> Void)
+                   end   : ( ErrorProtocol?, [UInt8]? ) -> Void)
 {
   guard let records = chunk else { end(nil,nil); return }
   for r in records {

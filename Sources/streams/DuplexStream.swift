@@ -60,7 +60,7 @@ public class DuplexStream<ReadType, WriteType>
   }
   
   func _primaryWriteV(buckets chunks : [ [ WriteType ] ],
-                      done   : ( ErrorType?, Int ) -> Void)
+                      done   : ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
@@ -286,7 +286,7 @@ private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
   }
   
   override func _primaryWriteV(buckets c : [ [ TO ] ],
-                               done      : ( ErrorType?, Int ) -> Void)
+                               done      : ( ErrorProtocol?, Int ) -> Void)
   {
     parent._primaryWriteV(buckets: c, done: done)
   }

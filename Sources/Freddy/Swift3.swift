@@ -7,11 +7,10 @@
 //
 
 #if swift(>=3.0) // #swift3-fd
-  
-public typealias ErrorType      = ErrorProtocol
-public typealias BooleanType    = Boolean
-public typealias CollectionType = Collection
-public typealias SequenceType   = Sequence
-public typealias OptionSetType  = OptionSet
-
+#else
+public typealias ErrorProtocol = ErrorType
+public typealias Boolean       = BooleanType
+public typealias Collection    = CollectionType
+public typealias Sequence      = SequenceType
+public typealias OptionSet     = OptionSetType
 #endif

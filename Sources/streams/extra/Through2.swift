@@ -15,7 +15,7 @@
 public func through2<TWriteItem, TReadItem>
               (_ transform: ( bucket: [ TWriteItem ],
                               push:   ( [ TReadItem ]? ) -> Void,
-                              done:   ( ErrorType?, [ TReadItem ]? ) -> Void )
+                              done:   ( ErrorProtocol?, [ TReadItem ]? ) -> Void )
                                  -> Void )
             -> Transform<TWriteItem, TReadItem>
 {
@@ -28,7 +28,7 @@ public func through2<TWriteItem, TReadItem>
 /// Note: The closure MUST call done eventually.
 public func through2<T>(_ transform: ( bucket: [ T ],
                                        push:   ( [ T ]? ) -> Void,
-                                       done:   ( ErrorType?, [ T ]? ) -> Void )
+                                       done:   ( ErrorProtocol?, [ T ]? ) -> Void )
                                        -> Void )
               -> Transform<T, T>
 {

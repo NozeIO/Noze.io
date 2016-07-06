@@ -7,18 +7,12 @@
 //
 
 #if swift(>=3.0) // #swift3-fd
-
-// This does not seem to carry over to other modules (deprecation warning is per
-// module)
-// => use the reverse!
-public typealias ErrorType    = ErrorProtocol
-public typealias SequenceType = Sequence
-
 #else // Swift 2.2
 
 public typealias ErrorProtocol = ErrorType
 public typealias Sequence      = SequenceType
 public typealias OptionSet     = OptionSetType
+public typealias Boolean       = BooleanType
 
 // MARK: - Swift 3 compatibility extensions
 
@@ -94,6 +88,7 @@ public extension String {
   public func contains(other: String) -> Bool { return containsString(other) }
   
   public func lowercased() -> String { return lowercaseString }
+  public func uppercased() -> String { return uppercaseString }
   
   public func substring(to index: Index) -> String {
     return substringToIndex(index)

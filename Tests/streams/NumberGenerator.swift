@@ -48,7 +48,7 @@ class AsyncNumberGenerator : NumberGenerator, GReadableSourceType {
   }
   
   func next(queue _: DispatchQueueType, count: Int = 1,
-            yield: ( ErrorType?, [Int]? )-> Void)
+            yield: ( ErrorProtocol?, [Int]? )-> Void)
   {
     let log = self.log
     log.enter(function: "AsyncNumGen::\(#function)")

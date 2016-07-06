@@ -17,7 +17,7 @@ public class Transform<WriteType, ReadType>
   
   public typealias TransformCB = ( bucket: [ WriteType ],
                                    push: ( [ ReadType ]? ) -> Void,
-                                   done: ( ErrorType?, [ ReadType ]? ) -> Void
+                                   done: ( ErrorProtocol?, [ ReadType ]? ) -> Void
                                  ) -> Void
   
   var transform : TransformCB!
@@ -38,13 +38,13 @@ public class Transform<WriteType, ReadType>
   // MARK: - TransformStream overrides
   
   override public func _transform(bucket b : [ WriteType ],
-                                  done     : ( ErrorType?, [ ReadType ]? )
+                                  done     : ( ErrorProtocol?, [ ReadType ]? )
                        -> Void)
   {
     transform(bucket: b, push: { self.push(bucket: $0) }, done: done)
   }
   
-  override public func _flush(done cb: ( ErrorType?, [ ReadType ]? ) -> Void) {
+  override public func _flush(done cb: ( ErrorProtocol?, [ ReadType ]? ) -> Void) {
     // TBD: support a flush callback?
     self.transform = nil // break cycles
     cb(nil, nil)

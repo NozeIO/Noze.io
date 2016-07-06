@@ -21,9 +21,9 @@ public let module = NozeFS()
 
 // MARK: - Common type aliases
 
-public typealias DataCB   = ( ErrorType?, [ UInt8 ]? ) -> Void
-public typealias StringCB = ( ErrorType?, String?    ) -> Void
-public typealias ErrorCB  = ( ErrorType?             ) -> Void
+public typealias DataCB   = ( ErrorProtocol?, [ UInt8 ]? ) -> Void
+public typealias StringCB = ( ErrorProtocol?, String?    ) -> Void
+public typealias ErrorCB  = ( ErrorProtocol?             ) -> Void
 
 
 // MARK: - Watch Files or Directories. Get notified on changes.

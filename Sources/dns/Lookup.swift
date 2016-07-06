@@ -13,7 +13,7 @@ import core
 #if swift(>=3.0)
   public typealias LookupCB = ( sockaddr_any?, ErrorProtocol? ) -> Void
 #else
-  public typealias LookupCB = ( sockaddr_any?, ErrorType? ) -> Void
+  public typealias LookupCB = ( sockaddr_any?, ErrorProtocol? ) -> Void
 #endif
 
 let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",

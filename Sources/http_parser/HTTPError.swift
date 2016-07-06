@@ -29,10 +29,11 @@
 // HTTP_ERRNO_MAP in original, enum has HPE_ prefix
 
 #if swift(>=3.0) // #swift3-fd
-public typealias ErrorType = ErrorProtocol
+#else
+public typealias ErrorProtocol = ErrorType
 #endif
 
-public enum HTTPError : ErrorType {
+public enum HTTPError : ErrorProtocol {
   case OK
   
   /* Callback-related errors */

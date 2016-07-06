@@ -138,7 +138,7 @@ public class WritableByteStreamWrapper
   public func onceError(handler cb: ErrorCB) -> Self {
     _ = stream?.onceError(handler: cb); return self
   }
-  public func emit(error e: ErrorType) { stream?.emit(error: e) }
+  public func emit(error e: ErrorProtocol) { stream?.emit(error: e) }
   
   
   

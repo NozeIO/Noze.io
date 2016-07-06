@@ -73,7 +73,7 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
   }
 
   public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done      : ( ErrorType?, Int ) -> Void)
+                                      done      : ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     target.writev(queue: Q, chunks: c, yield: done)

@@ -22,7 +22,7 @@ public enum BodyParserBody {
   
   case NotParsed
   case NoBody // IsPerfect
-  case Error(ErrorType)
+  case Error(ErrorProtocol)
   
   case URLEncoded(Dictionary<String, Any>)
   
@@ -101,7 +101,7 @@ public struct bodyParser {
 }
 
 
-public enum BodyParserError : ErrorType {
+public enum BodyParserError : ErrorProtocol {
   
   case ExtraStoreInconsistency
   

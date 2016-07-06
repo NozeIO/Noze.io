@@ -37,7 +37,7 @@ public class Writable<WriteType> : WritableStream<WriteType> {
                enableLogger: enableLogger)
   }
   
-  public convenience init(cb: ([ WriteType ], ( ErrorType? ) -> Void) -> Void) {
+  public convenience init(cb: ([ WriteType ], ( ErrorProtocol? ) -> Void) -> Void) {
     self.init()
     self._write(cb: cb)
   }
@@ -52,7 +52,7 @@ public class Writable<WriteType> : WritableStream<WriteType> {
     cb = .JustChunk(lcb)
   }
   */
-  func _write(cb lcb: ([ WriteType ], ( ErrorType? ) -> Void) -> Void) {
+  func _write(cb lcb: ([ WriteType ], ( ErrorProtocol? ) -> Void) -> Void) {
     cb = .ChunkAndError(lcb)
   }
   
@@ -60,7 +60,7 @@ public class Writable<WriteType> : WritableStream<WriteType> {
   // MARK: - Writable Overrides
   
   override func _primaryWriteV(buckets c: Brigade,
-                               done: ( ErrorType?, Int ) -> Void)
+                               done: ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     
@@ -84,7 +84,7 @@ public class Writable<WriteType> : WritableStream<WriteType> {
 enum WritableWriteCB<WriteType> {
   case None
   case JustChunk    (([ WriteType ], ( )          -> Void) -> Void)
-  case ChunkAndError(([ WriteType ], (ErrorType?) -> Void) -> Void)
+  case ChunkAndError(([ WriteType ], (ErrorProtocol?) -> Void) -> Void)
 }
 
 // lame, but gets the job done for now

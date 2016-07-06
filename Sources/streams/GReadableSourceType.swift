@@ -29,7 +29,7 @@ public protocol GReadableSourceType {
   /// control of the Readable).
   mutating func next(queue q : DispatchQueueType,
                      count   : Int,
-                     yield   : ( ErrorType?, [ Self.SourceElement ]? ) -> Void)
+                     yield   : ( ErrorProtocol?, [ Self.SourceElement ]? ) -> Void)
   
   /// Called by a Readable if it doesn't want to be fed additional data. Most
   /// commonly because its internal buffer is full.
@@ -56,5 +56,5 @@ public extension GReadableSourceType {
 }
 
 // Note: cannot use a nice typealias in next():
-//         typealias SourceYield = ( ErrorType?, [ Self.Element ]? ) -> Void
+//         typealias SourceYield = ( ErrorProtocol?, [ Self.Element ]? ) -> Void
 //       this invalidates protocol conformance

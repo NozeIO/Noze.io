@@ -60,7 +60,7 @@
 #if swift(>=3.0)
   extension POSIXError : ErrorProtocol {}
 #else
-  extension POSIXError : ErrorType {}
+  extension POSIXError : ErrorProtocol {}
 #endif
 
   public var errno : Int32 { return Glibc.errno }
@@ -73,5 +73,5 @@
   public var errno : Int32 { return Darwin.errno }
 
   // this doesn't seem to work though
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif

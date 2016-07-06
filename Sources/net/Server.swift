@@ -279,7 +279,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
     }
   }
   
-  public func handleAccept(error e: ErrorType) { // #linux-public
+  public func handleAccept(error e: ErrorProtocol) { // #linux-public
     // TBD: is this a close condition? Probably, or not? :-) Let's say no
     //      for now and assume the socket is still good and can potentially
     //      accept() successfully in the future (once that RoR process
@@ -435,7 +435,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - ErrorEmitter
   
-  public func catched(error e: ErrorType) { // #linux-public
+  public func catched(error e: ErrorProtocol) { // #linux-public
     log.enter(); defer { log.leave() }
     self.errorListeners.emit(e)
   }

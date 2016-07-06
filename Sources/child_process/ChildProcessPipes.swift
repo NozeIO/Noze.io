@@ -52,7 +52,7 @@ public func |<ReadStream: GReadableStreamType
 /// This is essentially a transform stream where the transformation is done by
 /// the child process.
 ///
-public func |<TI: SequenceType where TI.Iterator.Element == UInt8>
+public func |<TI: Sequence where TI.Iterator.Element == UInt8>
             (left: TI, right: ChildProcess) -> SourceStream<PipeSource>
 {
   // funky stuff :-)

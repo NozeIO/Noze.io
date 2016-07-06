@@ -6,7 +6,9 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-public enum EncodingError : ErrorType {
+import core
+
+public enum EncodingError : ErrorProtocol {
 
   case Generic
   case CouldNotDecodeCString

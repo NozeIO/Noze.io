@@ -48,7 +48,7 @@ public class FileTarget: GCDChannelBase, GWritableTargetType {
     super.init(nil) // all stored class properties must be init'ed? why?
   }
   
-  public override func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorType? {
+  public override func createChannelIfMissing(Q q: DispatchQueueType) -> ErrorProtocol? {
     guard channel == nil else { return nil } // ignore double-call
     
     if fd.isValid { // we already have a file-descriptor, but no channel

@@ -68,7 +68,7 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   
   // MARK: - ErrorEmitter
   
-  public func catched(error e: ErrorType) {
+  public func catched(error e: ErrorProtocol) {
     log.enter(); defer { log.leave() }
     // TODO: throw if there are no listeners!!!
     if self.errorListeners.isEmpty {
