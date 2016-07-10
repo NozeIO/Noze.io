@@ -1,6 +1,6 @@
 //
 //  LinuxString.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 05/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
