@@ -1,6 +1,6 @@
 //
 //  Module.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/3/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -23,7 +23,7 @@ public func nextTick(handler cb: () -> Void) {
   // Node says that tick() is special in that it runs before IO events. Is the
   // same true for GCD?
   module.retain() // TBD: expensive? Do in here?
-  dispatch_async(Q) {
+  Q.async {
     cb()
     module.release()
   }

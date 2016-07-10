@@ -1,6 +1,6 @@
 //
 //  TempFS.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/7/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -79,10 +79,10 @@ public class TempModule : NozeModule {
   {
     // TODO: Node does dir = os.tmpDir(), "myapp"
     core.module.retain()
-    dispatch_async(fs.module.Q) {
+    fs.module.Q.async {
       let template = dir + "/" + prefix + pattern
       let ( err, info ) = self.openSync(template, suffix: suffix)
-      dispatch_async(core.Q) {
+      core.Q.async {
         cb(err, info)
         core.module.release()
       }

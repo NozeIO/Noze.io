@@ -1,6 +1,6 @@
 //
 //  AsyncWrapper.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/8/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -24,11 +24,11 @@ extension DispatchQueueType {
   func evalAsync<ArgT, RT>(f: (ArgT) -> RT, _ arg: ArgT, _ cb: ( RT ) -> Void) {
     core.module.retain()
     
-    dispatch_async(module.Q) {
+    module.Q.async {
       
       let result = f(arg)
       
-      dispatch_async(core.Q) {
+      core.Q.async {
         cb(result)
         core.module.release()
       }
@@ -40,7 +40,7 @@ extension DispatchQueueType {
   {
     core.module.retain()
     
-    dispatch_async(module.Q) {
+    module.Q.async {
       let returnError : ErrorProtocol?
       
       do {
@@ -51,7 +51,7 @@ extension DispatchQueueType {
         returnError = error
       }
       
-      dispatch_async(core.Q) {
+      core.Q.async {
         cb(returnError)
         core.module.release()
       }
@@ -64,7 +64,7 @@ extension DispatchQueueType {
   {
     core.module.retain()
     
-    dispatch_async(module.Q) {
+    module.Q.async {
       let returnError : ErrorProtocol?
       let result      : RT?
       
@@ -77,7 +77,7 @@ extension DispatchQueueType {
         result      = nil
       }
       
-      dispatch_async(core.Q) {
+      core.Q.async {
         cb(returnError, result)
         core.module.release()
       }

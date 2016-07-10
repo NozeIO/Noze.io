@@ -154,9 +154,9 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
     
     core.module.retain()
     
-    dispatch_async(workerQueue) {
+    workerQueue.async {
       guard let first = self.source.next() else {
-        dispatch_async(Q) {
+        Q.async {
           yield(nil, nil) // EOF
           core.module.release()
         }
@@ -167,7 +167,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
       
       if actualCount == 1 {
         let bucket = [ first ]
-        dispatch_async(Q) {
+        Q.async {
           yield(nil, bucket)
           core.module.release()
         }
@@ -189,7 +189,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
         
         buffer.append(item)
       }
-      dispatch_async(Q) {
+      Q.async {
         yield(nil, buffer)
         if hitEOF { yield(nil, nil) } // EOF
         core.module.release()

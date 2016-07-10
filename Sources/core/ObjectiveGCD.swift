@@ -63,10 +63,6 @@ public func xsys_dispatch_time(_ base : DispatchTime, _ offset : Int64)
   return base + DispatchTimeInterval.nanoseconds(Int(offset))
 }
 
-public func dispatch_async(_ q: DispatchQueueType, _ block: () -> ()) {
-  q.async(execute: block)
-}
-
 public var DISPATCH_TIME_NOW : DispatchTimeType { return DispatchTime.now() }
 
 public let DISPATCH_QUEUE_CONCURRENT = DispatchQueueAttributes.concurrent

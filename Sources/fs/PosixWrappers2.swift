@@ -1,6 +1,6 @@
 //
 //  PosixWrappers.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/8/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -31,10 +31,14 @@ public func access(path: String, _ mode: Int = F_OK, cb: ErrorCB) {
   module.Q.evalAsync(accessSync, (path, mode), cb)
 }
 
-public func stat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void) {
+public func stat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) 
+            -> Void) 
+{
   module.Q.evalAsync(statSync, path, cb)
 }
-public func lstat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void) {
+public func lstat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) 
+            -> Void) 
+{
   module.Q.evalAsync(lstatSync, path, cb)
 }
 
@@ -45,7 +49,7 @@ public func lstat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Voi
 // (async) GCD call, instead of using the convenience async functions.
 //
 // Example:
-//   dispatch_async(module.Q) {
+//   module.Q.async {
 //     statSync(...)
 //     accessSync(...)
 //     readdirSync(..)
