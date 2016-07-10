@@ -1,6 +1,6 @@
 //
 //  Socket.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/10/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -103,8 +103,8 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
       didRetainQ = true
     }
     
-    dns.lookup(host) { address, error in
-      self.lookupListeners.emit(address, error)
+    dns.lookup(host) { error, address in
+      self.lookupListeners.emit(error, address)
       
       if let error = error {
         self.connectionState = .Disconnected
@@ -224,7 +224,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     
     // connect, async in a connect Q (TODO: possible via GCD?)
     
-    dispatch_async(connectQueue) {
+    connectQueue.async {
       let perrno = self._primaryConnect(address: address)
       
       // check if connect failed
@@ -251,7 +251,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
 
   // MARK: - Event Handlers
   
-  var lookupListeners  = EventListenerSet<(sockaddr_any?, ErrorProtocol?)>(
+  var lookupListeners  = EventListenerSet<(ErrorProtocol?, sockaddr_any?)>(
                            queueLength: 1, coalesce: true)
   var connectListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)

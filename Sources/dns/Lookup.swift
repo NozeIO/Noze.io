@@ -1,6 +1,6 @@
 //
 //  Lookup.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -10,11 +10,7 @@ import Dispatch
 import xsys
 import core
 
-#if swift(>=3.0)
-  public typealias LookupCB = ( sockaddr_any?, ErrorProtocol? ) -> Void
-#else
-  public typealias LookupCB = ( sockaddr_any?, ErrorProtocol? ) -> Void
-#endif
+public typealias LookupCB = ( ErrorProtocol?, sockaddr_any? ) -> Void
 
 let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
                                         DISPATCH_QUEUE_CONCURRENT)
@@ -31,7 +27,7 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
 {
   core.module.retain()
   
-  dispatch_async(lookupQueue) {
+  lookupQueue.async {
     defer { core.module.release() }
     
     var hints = addrinfo()
@@ -43,7 +39,7 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
     let rc = getaddrinfo(domain, nil, &hints, &ptr)
     guard rc == 0 else {
       nextTick {
-        cb(nil, POSIXError(rawValue: rc))
+        cb(POSIXError(rawValue: rc), nil)
       }
       return
     }
@@ -96,7 +92,7 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
 #endif /* Swift 2.2 */
         
     nextTick {
-      cb(result, nil)
+      cb(nil, result)
     }
   }
 }
