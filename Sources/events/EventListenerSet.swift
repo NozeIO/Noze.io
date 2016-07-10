@@ -6,6 +6,8 @@
 //  Copyright © 2015 ZeeZide GmbH. All rights reserved.
 //
 
+import core
+
 // TBD: support weak listeners (Note: weak var's on closures are unsupported?)
 
 /// An array of event handlers `T` with some extra metadata.
@@ -50,11 +52,7 @@ public class EventListenerSet<T> {
     // added.
     while !queue.isEmpty && !listeners.isEmpty {
       // TODO: fixme, use a proper FIFO
-#if swift(>=3.0) // #swift3-fd
       let value = queue.remove(at: 0)
-#else
-      let value = queue.removeAtIndex(0)
-#endif
       emit(value)
     }
   }
@@ -122,7 +120,7 @@ public class EventListenerSet<T> {
           }
 #else
           if let idx = listeners.indexOf({ $0 === entry }) {
-            listeners.removeAtIndex(idx)
+            listeners.remove(at: idx)
           }
           else {
             print("WARN: listener race, already removed once-entry.")
@@ -161,7 +159,7 @@ public class EventListenerSet<T> {
     for i in 0..<listeners.count {
       let entry = listeners[i]
       if entry.cb === listener {
-        listeners.removeAtIndex(i)
+        listeners.remove(at: i)
         if first { break }
       }
     }

@@ -69,11 +69,7 @@ var line2msg : Transform<String, Message> {
           commandString = allButLast.first
           arguments = []
           let from = allButLast.index(after: allButLast.startIndex)
-#if swift(>=3.0) // #swift3-fd
           arguments!.append(contentsOf: allButLast[from..<allButLast.endIndex])
-#else
-          arguments!.appendContentsOf(allButLast[from..<allButLast.endIndex])
-#endif
           if let s = lastArg {
             arguments!.append(s)
           }

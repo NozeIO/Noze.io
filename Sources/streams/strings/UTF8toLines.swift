@@ -1,6 +1,6 @@
 //
 //  UTF8toLines.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/1/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -106,11 +106,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
     
     if lastStart < bucket.endIndex {
       // add remaining data
-#if swift(>=3.0) // #swift3-fd
       pendingData.append(contentsOf: bucket[lastStart..<bucket.endIndex])
-#else
-      pendingData.appendContentsOf(bucket[lastStart..<bucket.endIndex])
-#endif
     }
     
     if !lines.isEmpty { push(bucket: lines) }
@@ -126,11 +122,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
       let count = t0.count
       if t0[count - 1] == 13 {
         if count == 1 { return "" }
-#if swift(>=3.0) // #swift3-fd
         t0.remove(at: count - 1)
-#else
-        t0.removeAtIndex(count - 1)
-#endif
       }
     }
     

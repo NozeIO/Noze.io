@@ -1,6 +1,6 @@
 //
 //  ChildProcess.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 27/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -122,11 +122,7 @@ public class ChildProcess : ErrorEmitter {
     let myIdx = activeChildProcesses.indexOf { $0 === self }
 #endif
     if let idx = myIdx {
-#if swift(>=3.0) // #swift3-fd
       activeChildProcesses.remove(at: idx)
-#else
-      activeChildProcesses.removeAtIndex(idx)
-#endif
     }
     else {
       assert(false, "child process missing")

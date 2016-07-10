@@ -7,6 +7,7 @@
 //
 
 import xsys
+import core
 
 #if swift(>=3.0) // #swift3-1st-kwarg
 func uniqueRandomArray<T>(_ array: [ T ]) -> () -> T {
@@ -36,10 +37,6 @@ class UniqueRandomArray<T> {
     }
     
     let idx = Int(xsys.arc4random_uniform(UInt32(remainingItems.count)))
-#if swift(>=3.0) // #swift3-fd
     return remainingItems.remove(at: idx)
-#else
-    return remainingItems.removeAtIndex(idx)
-#endif
   }
 }

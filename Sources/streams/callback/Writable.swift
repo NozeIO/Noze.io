@@ -91,11 +91,7 @@ enum WritableWriteCB<WriteType> {
 private func flatten<T>(brigadge b : [ [ T ] ]) -> [ T ] {
   var bucket = [ T ]()
   for chunk in b {
-#if swift(>=3.0) // #swift3-1st-arg #swift3-fd
     bucket.append(contentsOf: chunk)
-#else
-    bucket.appendContentsOf(chunk)
-#endif
   }
   return bucket
 }

@@ -6,6 +6,8 @@
 //  Copyright © 2015 ZeeZide GmbH. All rights reserved.
 //
 
+import core
+
 /// ArrayBuffer<T> - an array of arrays managing elements of type T
 ///
 /// This is because we often get arrays of bytes in APIs (aka buckets), and it
@@ -71,11 +73,7 @@ public struct ArrayBuffer<T> {
       let pending = count - joinBucket.count
       
       // TODO: replace with a linked list of buffers
-#if swift(>=3.0)
       let bucket  = brigade.remove(at: 0)
-#else
-      let bucket  = brigade.removeAtIndex(0)
-#endif
       
       if pending >= bucket.count { // consume full bucket
         totalCount -= bucket.count
