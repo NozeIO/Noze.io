@@ -63,7 +63,7 @@ public class HTTPMessageWrapper : WritableByteStreamWrapper {
     headers[ci: name] = value
   }
   public func removeHeader(name: String) {
-    _ = headers.removeValueForKey(ci: name)
+    _ = headers.removeValue(forCIKey: name)
   }
   public func getHeader(name: String) -> Any? {
     return headers[ci: name]
