@@ -1,6 +1,6 @@
 //
 //  GWritableStreamType.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 31/03/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.

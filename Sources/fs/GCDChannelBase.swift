@@ -1,6 +1,6 @@
 //
 //  GCDChannelBase.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 28/07/15.
 //  Copyright © 2015 ZeeZide GmbH. All rights reserved.
@@ -224,8 +224,6 @@ public class GCDChannelBase: CustomStringConvertible {
     channel.read(offset: 0, length: howMuchToRead, queue: Q) {
       done, pdata, error in
 
-      self.readsPending -= 1
-      
       log.enter(function: "GCDChannelSource::\(#function)");
       defer { log.leave() }
       
@@ -281,7 +279,8 @@ public class GCDChannelBase: CustomStringConvertible {
           yield(nil, array)
         }
       }
-      
+
+      var releaseRead = false
       if error != 0 {
         if self.channel == nil  && error == POSIXError.ECANCELED.rawValue {
           // this error is due to the source being shut down. For example, if
@@ -291,17 +290,24 @@ public class GCDChannelBase: CustomStringConvertible {
           log.debug("EOF on shutodwn.")
           self.hitEOF = true
           yield(nil, nil) // send EOF
+          releaseRead = true
         }
         else {
           // TODO: emit proper error when POSIXError does not construct
           log.log("ERROR: \(self) \(error)")
           yield(POSIXError(rawValue: error)!, nil)
+          releaseRead = true
         }
       }
       
       if done {
         // this is not necessarily EOF, just this chunk has been fully
         // processed. No more CBs coming (for this dispatch_io_read)
+        releaseRead = true
+      }
+      
+      if releaseRead {
+        self.readsPending -= 1
       }
     }
   }
@@ -369,8 +375,6 @@ public class GCDChannelBase: CustomStringConvertible {
     channel.write(offset: 0, data: data!, queue: Q) {
       done, pendingData, error in
 
-      self.writesPending -= 1
-      
       log.enter(function: "GCDChannelTarget::\(#function)");
       defer { log.leave() }
 
@@ -385,10 +389,12 @@ public class GCDChannelBase: CustomStringConvertible {
         // TODO: properly count the bytes which got written successfully
         log.debug("error: \(error)")
         yield(POSIXError(rawValue: error)!, count - pendingSize)
+        self.writesPending -= 1
       }
       else if done {
         log.debug("done writing \(count) bytes.")
         yield(nil, count)
+        self.writesPending -= 1
       }
       
       if self.writesPending == 0 {

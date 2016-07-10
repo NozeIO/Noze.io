@@ -1,6 +1,6 @@
 //
 //  CharacterToUTF8.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.

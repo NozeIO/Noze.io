@@ -1,6 +1,6 @@
 //
 //  StreamPromise.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/4/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
