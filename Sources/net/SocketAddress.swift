@@ -112,7 +112,7 @@ extension in_addr: CustomStringConvertible {
 extension sockaddr_in: SocketAddress {
   
   public static var domain = xsys.AF_INET // if you make this a let, swiftc segfaults
-  public static var size   = __uint8_t(strideof(sockaddr_in))
+  public static var size   = __uint8_t(strideof(sockaddr_in.self))
     // how to refer to self?
   
   public init() {
@@ -252,7 +252,7 @@ extension sockaddr_in: CustomStringConvertible {
 extension sockaddr_in6: SocketAddress {
   
   public static var domain = xsys.AF_INET6
-  public static var size   = __uint8_t(strideof(sockaddr_in6))
+  public static var size   = __uint8_t(strideof(sockaddr_in6.self))
   
   public init() {
 #if os(Linux) // no sin_len on Linux
@@ -289,7 +289,7 @@ extension sockaddr_un: SocketAddress {
   //      technically dynamic (embedded string)
   
   public static var domain = AF_UNIX
-  public static var size   = __uint8_t(strideof(sockaddr_un)) // CAREFUL
+  public static var size   = __uint8_t(strideof(sockaddr_un.self)) // CAREFUL
   
   public init() {
 #if os(Linux) // no sin_len on Linux

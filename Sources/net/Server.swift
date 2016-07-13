@@ -306,7 +306,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func _makeNonExclusive(fd lfd: FileDescriptor) -> Int32 { // #linux-public
     var buf    = Int32(1)
-    let buflen = socklen_t(strideof(Int32))
+    let buflen = socklen_t(strideof(Int32.self))
     let rc     = xsys.setsockopt(lfd.fd, xsys.SOL_SOCKET, xsys.SO_REUSEADDR,
                                  &buf, buflen)
     return rc

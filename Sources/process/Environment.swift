@@ -19,7 +19,7 @@ import class Foundation.ProcessInfo
   // extern char **environ; doesn't seem to be exposed
 
 public var environ : [ String : String ] {
-  return ProcessInfo.processInfo().environment
+  return ProcessInfo.processInfo.environment
 }
 #else
 import class Foundation.NSProcessInfo
