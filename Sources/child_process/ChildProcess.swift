@@ -11,6 +11,7 @@ import core
 import events
 import streams
 #if os(Linux)
+  import let Glibc.ECHILD
 #else
   // importing this from xsys doesn't seem to work
   import Foundation // this is for POSIXError : ErrorProtocol
