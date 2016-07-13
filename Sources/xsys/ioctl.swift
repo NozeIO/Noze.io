@@ -27,8 +27,8 @@
   // hh: not sure this is producing the right value
   public let FIONREAD : CUnsignedLong =
     ( IOC_OUT
-      | ((CUnsignedLong(sizeof(Int32)) & CUnsignedLong(IOCPARM_MASK)) << 16)
-      | (102 /* 'f' */ << 8) | 127)
+    | ((CUnsignedLong(sizeof(Int32.self)) & CUnsignedLong(IOCPARM_MASK)) << 16)
+    | (102 /* 'f' */ << 8) | 127)
 
   public let F_SETFD    = Darwin.F_SETFD
   public let FD_CLOEXEC = Darwin.FD_CLOEXEC

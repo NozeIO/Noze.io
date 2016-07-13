@@ -331,7 +331,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     
     var buf = value
     let rc  = xsys.setsockopt(io.fd.fd, xsys.SOL_SOCKET, o,
-                              &buf, socklen_t(strideof(Int32)))
+                              &buf, socklen_t(strideof(Int32.self)))
     
     if rc != 0 { // ps: Great Error Handling
       print("Could not set option \(o) on socket \(self)")
@@ -345,7 +345,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     guard io.fd.isValid else { return nil }
     
     var buf    = Int32(0)
-    var buflen = socklen_t(strideof(Int32))
+    var buflen = socklen_t(strideof(Int32.self))
     
     let rc = getsockopt(io.fd.fd, xsys.SOL_SOCKET, o, &buf, &buflen)
     guard rc == 0 else { // ps: Great Error Handling
