@@ -257,7 +257,7 @@ public class GCDChannelBase: CustomStringConvertible {
         
         log.debug("walk data ...")
         
-        data.enumerateBytes { bptr, offset, _ in
+        data.enumerateBytes { bptr, _, _ in
           let len = bptr.count
           
           log.enter(function: "GCDChannelTarget::\(#function)");
