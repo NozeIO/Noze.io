@@ -4,7 +4,7 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  SWIFT_SNAPSHOT_NAME=swift-3.0-preview-1
+          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0-preview-2/ubuntu1404/swift-3.0-PREVIEW-2/swift-3.0-PREVIEW-2-ubuntu14.04.tar.gz"
           sudo: required
         - os:   Linux
           dist: trusty
