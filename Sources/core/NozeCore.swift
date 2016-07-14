@@ -23,6 +23,7 @@ public class NozeCore : NozeModule {
   init() {
     // We never really want SIGPIPE's
     signal(SIGPIPE, SIG_IGN)
+    //signal(SIGCHLD, SIG_IGN)
   }
   
   // MARK: - Track Work
