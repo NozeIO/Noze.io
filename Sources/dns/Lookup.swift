@@ -22,8 +22,9 @@ let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
 ///
 /// Family is AF_INET4 / AF_INET6
 ///
-public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
-                   cb: LookupCB)
+public func lookup(domain : String,
+                   family : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
+                   cb     : LookupCB)
 {
   core.module.retain()
   
@@ -31,7 +32,7 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
     defer { core.module.release() }
     
     var hints = addrinfo()
-    hints.ai_family = family
+    hints.ai_family = Int32(family)
     
     var ptr = UnsafeMutablePointer<addrinfo>(nil)
     defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
@@ -98,8 +99,9 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
 }
 
 #if swift(>=3.0) // #swift3-1st-arg
-public func lookup(_ domain: String, family: Int32 = xsys.PF_UNSPEC,
-                   cb: LookupCB)
+public func lookup(_ domain : String,
+                   family   : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
+                   cb       : LookupCB)
 {
   lookup(domain: domain, family: family, cb: cb)
 }
