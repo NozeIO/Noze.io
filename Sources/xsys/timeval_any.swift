@@ -75,12 +75,20 @@ extension timeval : timeval_any {
 
   public init(_ ts: timespec) {
     tv_sec  = ts.seconds
+#if os(Linux)
+    tv_usec = ts.tv_nsec / 1000
+#else
     tv_usec = Int32(ts.tv_nsec / 1000)
+#endif
   }
   
   public init(seconds: Int, milliseconds: Int = 0) {
     tv_sec  = seconds + (milliseconds / 1000)
+#if os(Linux)
+    tv_usec = (milliseconds % 1000) * 1000
+#else
     tv_usec = Int32(milliseconds % 1000) * 1000
+#endif
   }
   
   public var seconds : Int {
