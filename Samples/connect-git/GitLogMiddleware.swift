@@ -73,7 +73,7 @@ func recordsToHTML(chunk : [ GitLogEntry ]?,
 }
 
 /// This is the actual middleware function
-func gitLog(req: IncomingMessage, res: ServerResponse, next: (String...)->Void){
+func gitLog(req: IncomingMessage, res: ServerResponse, next: (Any...) -> Void) {
   res.write("<h3>git log</h3>")
   res.write("<table border='1'>")
   res.write("<tr><th>Date</th><th>Author</th><th>Commit</th></tr>")
