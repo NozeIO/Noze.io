@@ -10,6 +10,7 @@
 import Glibc
 
 public typealias timespec = Glibc.timespec
+public typealias timeval  = Glibc.timeval
 
 public extension timespec {
   
@@ -25,6 +26,7 @@ public extension timespec {
 import Darwin
 
 public typealias timespec = Darwin.timespec
+public typealias timeval  = Darwin.timeval
 
 public extension timespec {
   
@@ -44,20 +46,9 @@ public extension timespec {
     return timespec(mts)
   }
 }
+  
 #endif // Darwin
 
-public extension timespec {
-  
-  public var seconds : Int {
-    // TBD: rounding on tv_nsec?
-    return tv_sec
-  }
-  
-  public var milliseconds : Int {
-    return (tv_sec * 1000) + (tv_nsec / 1000000)
-  }
-  
-}
 
 public func -(left: timespec, right: timespec) -> timespec {
   var result = timespec()
@@ -74,6 +65,21 @@ public func -(left: timespec, right: timespec) -> timespec {
   return result
 }
 
+public func -(left: timeval, right: timeval) -> timeval {
+  var result = timeval()
+  
+  if (left.tv_usec - right.tv_usec) < 0 {
+    result.tv_sec  = left.tv_sec - right.tv_sec - 1
+    result.tv_usec = 1000000 + left.tv_usec - right.tv_usec
+  }
+  else {
+    result.tv_sec  = left.tv_sec  - right.tv_sec
+    result.tv_usec = left.tv_usec - right.tv_usec
+  }
+  
+  return result
+}
+
 extension timespec: CustomStringConvertible {
   public var description : String {
     switch ( tv_sec, tv_nsec ) {
@@ -81,6 +87,17 @@ extension timespec: CustomStringConvertible {
       case ( _, 0 ): return "timespec(\(tv_sec)s)"
       case ( 0, _ ): return "timespec(\(tv_nsec)ns)"
       default:       return "timespec(\(tv_sec)s, \(tv_nsec)ns)"
+    }
+  }
+}
+
+extension timeval: CustomStringConvertible {
+  public var description : String {
+    switch ( tv_sec, tv_usec ) {
+      case ( 0, 0 ): return "timeval()"
+      case ( _, 0 ): return "timeval(\(tv_sec)s)"
+      case ( 0, _ ): return "timeval(\(tv_usec)micro)"
+      default:       return "timeval(\(tv_sec)s, \(tv_usec)micro)"
     }
   }
 }
