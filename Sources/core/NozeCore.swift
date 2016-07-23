@@ -18,6 +18,8 @@ import var  Glibc.SIGPIPE
 import func Darwin.atexit
 #endif
 
+private let debugRetain = false
+
 public class NozeCore : NozeModule {
   
   init() {
@@ -34,12 +36,22 @@ public class NozeCore : NozeModule {
   let exitDelayInMS     : Int64 = 100
   var didRegisterAtExit = false
   
+  public var retainDebugMap : [ String : Int ] = [:]
+  
   /// make sure the process stays alive, balance with release
   // Note: # is for debugging, maybe only in debug mode?
   public final func retain(filename: String? = #file, line: Int? = #line,
                            function: String? = #function)
   {
     workCount += 1
+    
+    if debugRetain {
+      let hash = "\(filename)"
+      let old = retainDebugMap[hash] ?? 0
+      retainDebugMap[hash] = old + 1
+      
+      print("RETAIN [\(workCount)/\(old + 1)]: \(hash)")
+    }
 
     if !didRegisterAtExit {
       _registerAtExit()
@@ -50,8 +62,25 @@ public class NozeCore : NozeModule {
   public final func release(filename: String? = #file, line: Int? = #line,
                             function: String? = #function)
   {
+    if debugRetain {
+      let hash = "\(filename)"
+      let old = retainDebugMap[hash] ?? 0
+      assert(old > 0)
+      if old == 1 {
+        retainDebugMap.removeValue(forKey: hash)
+      }
+      else {
+        retainDebugMap[hash] = old - 1
+      }
+      
+      print("RELEASE[\(workCount)/\(old)]: \(hash)")
+    }
+    
     workCount -= 1
     if workCount == 0 {
+      if debugRetain {
+        print("TERMINATE[\(workCount): \(filename):\(line) \(function)")
+      }
       maybeTerminate()
     }
   }
