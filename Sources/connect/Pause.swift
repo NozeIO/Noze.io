@@ -32,6 +32,6 @@ public func pause(timeout: Int, _ error: ErrorProtocol? = nil) -> Middleware {
 
 #if swift(>=3.0) // #swift3-1st-arg
 public func pause(_ timeout: Int, _ error: ErrorProtocol? = nil) -> Middleware {
-  return pause(timeout: timeout, error: error)
+  return pause(timeout: timeout, error)
 }
 #endif
