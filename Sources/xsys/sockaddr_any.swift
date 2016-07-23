@@ -31,9 +31,9 @@ public enum sockaddr_any {
   public var len: __uint8_t {
 #if os(Linux)
     switch self {
-      case .AF_INET:  return __uint8_t(strideof(sockaddr_in))
-      case .AF_INET6: return __uint8_t(strideof(sockaddr_in6))
-      case .AF_LOCAL: return __uint8_t(strideof(sockaddr_un)) // TODO: wrong
+      case .AF_INET:  return __uint8_t(strideof(sockaddr_in.self))
+      case .AF_INET6: return __uint8_t(strideof(sockaddr_in6.self))
+      case .AF_LOCAL: return __uint8_t(strideof(sockaddr_un.self)) // TODO:wrong
     }
 #else
     switch self {

@@ -23,6 +23,23 @@ import dns
 public typealias ConnectCB = ( Socket ) -> Void
 public typealias TimeoutCB = ( Socket ) -> Void
 
+public enum SocketError : ErrorProtocol {
+  case Generic(POSIXError)
+  case ConnectionRefused(sockaddr_any)
+  
+  public init(_ errno: Int32, _ address: sockaddr_any) {
+    if errno == ECONNREFUSED {
+      self = .ConnectionRefused(address)
+    }
+    else {
+      self = .Generic(POSIXError(rawValue: errno)!)
+    }
+  }
+  public init(_ errno: Int32) {
+    self = .Generic(POSIXError(rawValue: errno)!)
+  }
+}
+
 private let heavyDebug = false
 
 enum SocketConnectionState {
@@ -84,12 +101,14 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
               -> Self
   {
     return connect(port: o.port, host: o.hostname ?? "localhost",
+                   family: o.family,
                    onConnect: onConnect)
   }
   
   public func connect(port lPort : Int,
-                      host       : String     = "localhost",
-                      onConnect  : ConnectCB? = nil) -> Self
+                      host       : String      = "localhost",
+                      family     : sa_family_t = sa_family_t(xsys.AF_INET),
+                      onConnect  : ConnectCB?  = nil) -> Self
   {
     // TODO: Node has a few more options, but lets keep it simple for now ;-)
     guard connectionState == .Disconnected else {
@@ -103,7 +122,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
       didRetainQ = true
     }
     
-    dns.lookup(host) { error, address in
+    dns.lookup(host, family: family) { error, address in
       self.lookupListeners.emit(error, address)
       
       if let error = error {
@@ -217,7 +236,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
       let rc = _setupSocket(domain: AT.domain)
       guard rc == 0 else {
         self.connectionState = .Disconnected
-        self.errorListeners.emit(POSIXError(rawValue: xsys.errno)!)
+        self.errorListeners.emit(SocketError(xsys.errno))
         return
       }
     }
@@ -235,7 +254,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
           self.connectionState = .Disconnected
           
           self.log.debug("Could not connect \(self) to \(address)") // TODO: log
-          self.errorListeners.emit(POSIXError(rawValue: perrno)!)
+          self.errorListeners.emit(SocketError(perrno, sockaddr_any(address)!))
         }
         return
       }
@@ -331,7 +350,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     
     var buf = value
     let rc  = xsys.setsockopt(io.fd.fd, xsys.SOL_SOCKET, o,
-                              &buf, socklen_t(strideof(Int32)))
+                              &buf, socklen_t(strideof(Int32.self)))
     
     if rc != 0 { // ps: Great Error Handling
       print("Could not set option \(o) on socket \(self)")
@@ -345,7 +364,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     guard io.fd.isValid else { return nil }
     
     var buf    = Int32(0)
-    var buflen = socklen_t(strideof(Int32))
+    var buflen = socklen_t(strideof(Int32.self))
     
     let rc = getsockopt(io.fd.fd, xsys.SOL_SOCKET, o, &buf, &buflen)
     guard rc == 0 else { // ps: Great Error Handling

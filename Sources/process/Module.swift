@@ -19,8 +19,8 @@ import core
 @_exported import events
 
 public class NozeProcess : NozeModule {
-  lazy var warningListeners =
-    EventListenerSet<Warning>(queueLength: 0)
+  lazy var warningListeners : EventListenerSet<Warning> =
+                                EventListenerSet(queueLength: 0)
 }
 public let module = NozeProcess()
 

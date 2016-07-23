@@ -30,7 +30,12 @@ public extension JSON {
     jsonString.appendJSON(object: self)
     return jsonString
   }
-
+  
+#if swift(>=3.0) // #swift3-1st-kwarg
+  public static func stringify(_ object: Any?) -> Swift.String {
+    return JSON.stringify(object: object)
+  }
+#endif
 }
 
 public extension String {

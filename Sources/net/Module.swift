@@ -8,6 +8,7 @@
 
 @_exported import core
 @_exported import streams
+import xsys
 
 public class NozeNet : NozeModule {
 }
@@ -39,8 +40,11 @@ public func connect(port: Int, _ host: String = "localhost",
 }
 
 public class ConnectOptions {
-  public var hostname : String?    = "localhost"
-  public var port     : Int        = 80
+  public var hostname : String?     = "localhost"
+  public var port     : Int         = 80
+
+  /// Version of IP stack (IPv4) 
+  public var family   : sa_family_t = sa_family_t(xsys.AF_INET)
   
   public init() {}
 }

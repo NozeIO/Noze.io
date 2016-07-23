@@ -33,39 +33,29 @@ public protocol ConsoleType {
   
 #if swift(>=3.0) // #swift3-type #swift3-1st-arg
   func primaryLog(_ logLevel: LogLevel, _ msgfunc : @noescape () -> String,
-                  _ values : [ CustomStringConvertible ] )
+                  _ values : [ Any ] )
 #else
   func primaryLog(logLevel: LogLevel, @noescape _ msgfunc : () -> String,
-                  _ values : [ CustomStringConvertible ] )
+                  _ values : [ Any ] )
 #endif
 }
 
 public extension ConsoleType { // Actual logging funcs
   
 #if swift(>=3.0) // #swift3-type
-  public func error(_ msg: @autoclosure () -> String,
-                    _ values : CustomStringConvertible...)
-  {
+  public func error(_ msg: @autoclosure () -> String, _ values : Any...) {
     primaryLog(.Error, msg, values)
   }
-  public func warn(_ msg: @autoclosure () -> String,
-                   _ values : CustomStringConvertible...)
-  {
+  public func warn(_ msg: @autoclosure () -> String, _ values : Any...) {
     primaryLog(.Warn, msg, values)
   }
-  public func log(_ msg: @autoclosure () -> String,
-                  _ values : CustomStringConvertible...)
-  {
+  public func log(_ msg: @autoclosure () -> String, _ values : Any...) {
     primaryLog(.Log, msg, values)
   }
-  public func info(_ msg: @autoclosure () -> String,
-                   _ values : CustomStringConvertible...)
-  {
+  public func info(_ msg: @autoclosure () -> String, _ values : Any...) {
     primaryLog(.Info, msg, values)
   }
-  public func trace(_ msg: @autoclosure () -> String,
-                    _ values : CustomStringConvertible...)
-  {
+  public func trace(_ msg: @autoclosure () -> String, _ values : Any...) {
     primaryLog(.Trace, msg, values)
   }
   
@@ -74,29 +64,19 @@ public extension ConsoleType { // Actual logging funcs
     log("\(obj)")
   }
 #else // Swift 2.2
-  public func error(@autoclosure msg: () -> String,
-                    _ values : CustomStringConvertible...)
-  {
+  public func error(@autoclosure msg: () -> String, _ values : Any...) {
     primaryLog(.Error, msg, values)
   }
-  public func warn(@autoclosure msg: () -> String,
-                   _ values : CustomStringConvertible...)
-  {
+  public func warn(@autoclosure msg: () -> String, _ values : Any...) {
     primaryLog(.Warn, msg, values)
   }
-  public func log(@autoclosure msg: () -> String,
-                  _ values : CustomStringConvertible...)
-  {
+  public func log(@autoclosure msg: () -> String, _ values : Any...) {
     primaryLog(.Log, msg, values)
   }
-  public func info(@autoclosure msg: () -> String,
-                   _ values : CustomStringConvertible...)
-  {
+  public func info(@autoclosure msg: () -> String, _ values : Any...) {
     primaryLog(.Info, msg, values)
   }
-  public func trace(@autoclosure msg: () -> String,
-                    _ values : CustomStringConvertible...)
-  {
+  public func trace(@autoclosure msg: () -> String, _ values : Any...) {
     primaryLog(.Trace, msg, values)
   }
   
@@ -104,7 +84,7 @@ public extension ConsoleType { // Actual logging funcs
     // TODO: implement more
     log("\(obj)")
   }
-#endif
+#endif // Swift 2.2
 }
 
 public class ConsoleBase : ConsoleType {
@@ -119,23 +99,32 @@ public class ConsoleBase : ConsoleType {
 #if swift(>=3.0) // #swift3-type
   public func primaryLog(_ logLevel: LogLevel,
                          _ msgfunc : @noescape () -> String,
-                         _ values : [ CustomStringConvertible ] )
+                         _ values : [ Any ] )
   {
   }
 #else
   public func primaryLog(logLevel: LogLevel, @noescape _ msgfunc : () -> String,
-                         _ values : [ CustomStringConvertible ] )
+                         _ values : [ Any ] )
   {
   }
 #endif
 }
 
 func writeValues<T: GWritableStreamType where T.WriteType == UInt8>
-  (to t: T, _ values : [ CustomStringConvertible ])
+  (to t: T, _ values : [ Any ])
 {
   for v in values {
     _ = t.writev(buckets: spaceBrigade, done: nil)
-    _ = t.write(v.description)
+    
+    if let v = v as? CustomStringConvertible {
+      _ = t.write(v.description)
+    }
+    else if let v = v as? String {
+      _ = t.write(v)
+    }
+    else {
+      _ = t.write("\(v)")
+    }
   }
 }
 
@@ -163,7 +152,7 @@ public class Console<OutStreamType: GWritableStreamType
 #if swift(>=3.0) // #swift3-type
   public override func primaryLog(_ logLevel : LogLevel,
                                   _ msgfunc  : @noescape () -> String,
-                                  _ values   : [ CustomStringConvertible ] )
+                                  _ values   : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.
@@ -180,7 +169,7 @@ public class Console<OutStreamType: GWritableStreamType
 #else
   public override func primaryLog(logLevel : LogLevel,
                                   @noescape _ msgfunc : () -> String,
-                                  _ values : [ CustomStringConvertible ] )
+                                  _ values : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.
@@ -222,7 +211,7 @@ public class Console2<OutStreamType: GWritableStreamType,
 #if swift(>=3.0) // #swift3-type #swift3-1st-arg
   public override func primaryLog(_ logLevel : LogLevel,
                                   _ msgfunc  : @noescape () -> String,
-                                  _ values   : [ CustomStringConvertible ] )
+                                  _ values   : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.
@@ -248,7 +237,7 @@ public class Console2<OutStreamType: GWritableStreamType,
 #else // Swift 2.2
   public override func primaryLog(logLevel : LogLevel,
                                   @noescape _ msgfunc : () -> String,
-                                  _ values : [ CustomStringConvertible ] )
+                                  _ values : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.

@@ -11,6 +11,7 @@ import core
 import events
 import streams
 #if os(Linux)
+  import let Glibc.ECHILD
 #else
   // importing this from xsys doesn't seem to work
   import Foundation // this is for POSIXError : ErrorProtocol
@@ -84,14 +85,18 @@ public class ChildProcess : ErrorEmitter {
     // schedule on a different queue, just in case?
     // there is also WNOHANG
     let rc = xsys.waitpid(pid, &status, 0)
-    assert(rc == pid, "got a different pid from waitpid?")
     
     if rc == -1 {
-      // TBD
+      // TODO
       let error = POSIXError(rawValue: xsys.errno)
-      print("waidpid error: \(error)")
+      print("ERROR: waitpid error: \(error)")
+      
+      if error?.rawValue == ECHILD {
+        print("  child gone already?")
+      }
     }
     else {
+      assert(rc == pid, "got a different pid from waitpid?")
       if xsys.WIFEXITED(status) {
         processDidFinish(code: Int(WEXITSTATUS(status)))
       }
