@@ -63,10 +63,6 @@ public func xsys_dispatch_time(_ base : DispatchTime, _ offset : Int64)
   return base + DispatchTimeInterval.nanoseconds(Int(offset))
 }
 
-public func dispatch_async(_ q: DispatchQueueType, _ block: () -> ()) {
-  q.async(execute: block)
-}
-
 public var DISPATCH_TIME_NOW : DispatchTimeType { return DispatchTime.now() }
 
 public let DISPATCH_QUEUE_CONCURRENT = DispatchQueueAttributes.concurrent
@@ -272,7 +268,7 @@ extension DispatchDataType {
     // not strideof in this case, right?
     var mdata1 = self, mdata2 = dispatch_data_empty
     // TBD: just cast to a pointer?
-    return memcmp(&mdata1, &mdata2, sizeof(dispatch_data_t)) == 0
+    return memcmp(&mdata1, &mdata2, sizeof(dispatch_data_t.self)) == 0
 #else // MacOS
     return self === dispatch_data_empty || self.count == 0
 #endif
@@ -443,7 +439,7 @@ extension DispatchDataType {
     // not strideof in this case, right?
     var mdata1 = data, mdata2 = dispatch_data_empty
     // TBD: just cast to a pointer?
-    return memcmp(&mdata1, &mdata2, sizeof(dispatch_data_t)) == 0
+    return memcmp(&mdata1, &mdata2, sizeof(dispatch_data_t.self)) == 0
 #else // MacOS
     return self === dispatch_data_empty || self.count == 0
 #endif

@@ -1,6 +1,6 @@
 //
 //  Server.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/27/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -12,7 +12,7 @@ import events
 import class net.Server
 import class net.Socket
 
-public typealias ClientErrorEventCB = (( ErrorType, Socket )) -> Void
+public typealias ClientErrorEventCB = (( ErrorProtocol, Socket )) -> Void
 public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
 
 public class Server: net.Server {
@@ -53,17 +53,13 @@ public class Server: net.Server {
     
 #if swift(>=3.0) // #swift3-fd
     let idx = httpConnections.index(where: { $0 === con }) // not Equatable
+#else
+    let idx = httpConnections.indexOf { $0 === con } // not Equatable
+#endif
     assert(idx != nil)
     if let idx = idx {
       httpConnections.remove(at: idx)
     }
-#else
-    let idx = httpConnections.indexOf { $0 === con } // not Equatable
-    assert(idx != nil)
-    if let idx = idx {
-      httpConnections.removeAtIndex(idx)
-    }
-#endif
   }
 
   func _connection(c con: HTTPConnection, parsedMessage req: IncomingMessage) {
@@ -76,7 +72,7 @@ public class Server: net.Server {
   // Inherited: close, connection, listening
 
   public var continueListeners    = EventListenerSet<Void>()
-  public var clientErrorListeners = EventListenerSet<( ErrorType, Socket )>()
+  public var clientErrorListeners = EventListenerSet<( ErrorProtocol, Socket )>()
   public var requestListeners     =
                EventListenerSet<( IncomingMessage, ServerResponse )>()
   

@@ -1,6 +1,6 @@
 //
 //  Duplex.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -73,7 +73,7 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
   }
 
   public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done      : ( ErrorType?, Int ) -> Void)
+                                      done      : ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     target.writev(queue: Q, chunks: c, yield: done)

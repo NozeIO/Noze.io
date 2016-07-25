@@ -1,6 +1,6 @@
 //
 //  NullWritableStream
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 28/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -23,7 +23,7 @@ public class NullWritableStream<WriteType>
   // MARK: - extension points for subclass
 
   override func _primaryWriteV(buckets c : Brigade,
-                               done      : ( ErrorType?, Int ) -> Void)
+                               done      : ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")

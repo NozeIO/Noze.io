@@ -26,6 +26,7 @@ MODULES = \
 	child_process	\
 	connect 	\
 	express		\
+        redis           \
 	cows
 
 ifeq ($(HAVE_SPM),yes)
@@ -73,6 +74,7 @@ all :
 	@$(MAKE) -C Sources/child_process    all
 	@$(MAKE) -C Sources/connect          all
 	@$(MAKE) -C Sources/express          all
+	@$(MAKE) -C Sources/redis            all
 	@$(MAKE) -C Sources/cows             all
 
 samples :

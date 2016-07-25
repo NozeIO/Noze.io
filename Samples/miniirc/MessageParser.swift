@@ -1,10 +1,7 @@
 // Noze.io: miniirc
 
+import core
 import streams
-
-#if swift(>=3.0) // #swift3-fd
-typealias ErrorType = ErrorProtocol
-#endif
 
 // MARK: - Message Parser (a through stream)
 
@@ -18,7 +15,7 @@ typealias ErrorType = ErrorProtocol
 
 var line2msg : Transform<String, Message> {
   return through2 {
-    ( lines : [ String ], _, done: ( ErrorType?, [Message]? ) -> Void ) in
+    ( lines : [ String ], _, done: ( ErrorProtocol?, [Message]? ) -> Void ) in
     
     /// split the line into the source, command and argument parts
     func splitIRCLine(line l: String) -> ( String?, String?, [ String ]?) {
@@ -72,11 +69,7 @@ var line2msg : Transform<String, Message> {
           commandString = allButLast.first
           arguments = []
           let from = allButLast.index(after: allButLast.startIndex)
-#if swift(>=3.0) // #swift3-fd
           arguments!.append(contentsOf: allButLast[from..<allButLast.endIndex])
-#else
-          arguments!.appendContentsOf(allButLast[from..<allButLast.endIndex])
-#endif
           if let s = lastArg {
             arguments!.append(s)
           }

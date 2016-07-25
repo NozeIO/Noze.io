@@ -50,7 +50,7 @@ public class TargetStream<T : GWritableTargetType>
   // MARK: - extension points for subclass
   
   override func _primaryWriteV(buckets c : Brigade,
-                               done      : ( ErrorType?, Int ) -> Void)
+                               done      : ( ErrorProtocol?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     target.writev(queue: Q, chunks: c, yield: done)

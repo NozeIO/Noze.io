@@ -1,6 +1,6 @@
 //
 //  Promise.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/3/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -12,7 +12,7 @@ public class Promise<T> : LiarType {
   var state         : PromiseState<T>
   var stateListeners = Array<Handler>()
   
-  public typealias Resolver = ( ( T ) -> Void, ( ErrorType ) -> Void ) -> Void
+  public typealias Resolver = ( ( T ) -> Void, ( ErrorProtocol ) -> Void ) -> Void
   typealias Handler = ( PromiseState<T> ) -> Void
 
   public init() {
@@ -38,7 +38,7 @@ public class Promise<T> : LiarType {
   public init(value: T) {
     state = .Fulfilled(value)
   }
-  public init(error: ErrorType) {
+  public init(error: ErrorProtocol) {
     state = .Rejected(error)
   }
   
@@ -170,7 +170,7 @@ public class Promise<T> : LiarType {
   }
 #endif
   
-  public func error(run cb: ( ErrorType ) -> Void) {
+  public func error(run cb: ( ErrorProtocol ) -> Void) {
     // `catch` is used already in Swift
     switch state {
       case .Fulfilled:
@@ -196,7 +196,7 @@ public class Promise<T> : LiarType {
 enum PromiseState<T> {
   case Initial
   case Fulfilled(T)
-  case Rejected(ErrorType)
+  case Rejected(ErrorProtocol)
 }
 
 
@@ -210,7 +210,7 @@ public protocol LiarType {
   
   func then<U>(run cb: ( T ) -> Promise<U>) -> Promise<U>
   func then<U>(run cb: ( T ) -> U)          -> Promise<U>
-  func error  (run cb: ( ErrorType ) -> Void)
+  func error  (run cb: ( ErrorProtocol ) -> Void)
   
 }
 
@@ -223,7 +223,7 @@ public extension LiarType { // default liars
   public func then<U>(cb: () -> Promise<U>) -> Promise<U> {
     return promise.then(cb)
   }
-  public func error(cb: (ErrorType) -> Void) {
+  public func error(cb: (ErrorProtocol) -> Void) {
     promise.error(cb)
   }
   

@@ -1,6 +1,6 @@
 //
 //  FileSystem.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/27/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -11,7 +11,7 @@
 #else
   import Darwin
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif
 
 import xsys

@@ -1,6 +1,6 @@
 //
 //  StreamPromise.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/4/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -29,7 +29,7 @@ public extension GReadableStreamType {
   public func then<U>(cb: () -> Promise<U>) -> Promise<U> {
     return promise.then(run: cb)
   }
-  public func error(cb: (ErrorType) -> Void) {
+  public func error(cb: (ErrorProtocol) -> Void) {
     promise.error(run: cb)
   }
   
@@ -56,7 +56,7 @@ public extension GWritableStreamType {
   public func then<U>(cb: () -> Promise<U>) -> Promise<U> {
     return promise.then(run: cb)
   }
-  public func error(cb: (ErrorType) -> Void) {
+  public func error(cb: (ErrorProtocol) -> Void) {
     promise.error(run: cb)
   }
   

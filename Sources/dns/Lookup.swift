@@ -1,6 +1,6 @@
 //
 //  Lookup.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -10,11 +10,7 @@ import Dispatch
 import xsys
 import core
 
-#if swift(>=3.0)
-  public typealias LookupCB = ( sockaddr_any?, ErrorProtocol? ) -> Void
-#else
-  public typealias LookupCB = ( sockaddr_any?, ErrorType? ) -> Void
-#endif
+public typealias LookupCB = ( ErrorProtocol?, sockaddr_any? ) -> Void
 
 let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
                                         DISPATCH_QUEUE_CONCURRENT)
@@ -26,16 +22,17 @@ let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
 ///
 /// Family is AF_INET4 / AF_INET6
 ///
-public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
-                   cb: LookupCB)
+public func lookup(domain : String,
+                   family : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
+                   cb     : LookupCB)
 {
   core.module.retain()
   
-  dispatch_async(lookupQueue) {
+  lookupQueue.async {
     defer { core.module.release() }
     
     var hints = addrinfo()
-    hints.ai_family = family
+    hints.ai_family = Int32(family)
     
     var ptr = UnsafeMutablePointer<addrinfo>(nil)
     defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
@@ -43,7 +40,7 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
     let rc = getaddrinfo(domain, nil, &hints, &ptr)
     guard rc == 0 else {
       nextTick {
-        cb(nil, POSIXError(rawValue: rc))
+        cb(POSIXError(rawValue: rc), nil)
       }
       return
     }
@@ -96,14 +93,15 @@ public func lookup(domain: String, family: Int32 = xsys.PF_UNSPEC,
 #endif /* Swift 2.2 */
         
     nextTick {
-      cb(result, nil)
+      cb(nil, result)
     }
   }
 }
 
 #if swift(>=3.0) // #swift3-1st-arg
-public func lookup(_ domain: String, family: Int32 = xsys.PF_UNSPEC,
-                   cb: LookupCB)
+public func lookup(_ domain : String,
+                   family   : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
+                   cb       : LookupCB)
 {
   lookup(domain: domain, family: family, cb: cb)
 }

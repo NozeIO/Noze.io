@@ -1,6 +1,6 @@
 //
 //  UniqStrings.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 02/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -46,7 +46,7 @@ public class UniqStrings: TransformStream<String, String> {
   var seenStrings = Set<String>()
   
   public override func _transform(bucket b : [ String ],
-                                  done     : ( ErrorType?, [String]? ) -> Void)
+                                  done     : ( ErrorProtocol?, [String]? ) -> Void)
   {
     guard !b.isEmpty else {
       done(nil, nil)

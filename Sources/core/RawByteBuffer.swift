@@ -1,6 +1,6 @@
 //
 //  RawByteBuffer.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 6/20/14.
 //  Copyright © 2014 ZeeZide GmbH. All rights reserved.

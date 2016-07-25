@@ -60,14 +60,14 @@ public struct SyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
   public mutating func next(queue _: DispatchQueueType, count: Int,
-                            yield : ( ErrorType?, [ G.Element ]? ) -> Void)
+                            yield : ( ErrorProtocol?, [ G.Element ]? ) -> Void)
   {
     _next(count) { bucket in yield(nil, bucket) }
   }
   
   public mutating func _next(count: Int, yield : ( [ G.Element ]? ) -> Void) {
     // Difference to the main entry point: this `_next` has no Q and no
-    //                                     ErrorType.
+    //                                     ErrorProtocol.
     
     guard !isDone else { yield(nil); return }
     guard let first = source.next() else {
@@ -147,16 +147,16 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
   public mutating func next(queue Q : DispatchQueueType, count: Int,
-                            yield   : ( ErrorType?, [ G.Element ]? )-> Void)
+                            yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch
     
     core.module.retain()
     
-    dispatch_async(workerQueue) {
+    workerQueue.async {
       guard let first = self.source.next() else {
-        dispatch_async(Q) {
+        Q.async {
           yield(nil, nil) // EOF
           core.module.release()
         }
@@ -167,7 +167,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
       
       if actualCount == 1 {
         let bucket = [ first ]
-        dispatch_async(Q) {
+        Q.async {
           yield(nil, bucket)
           core.module.release()
         }
@@ -189,7 +189,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
         
         buffer.append(item)
       }
-      dispatch_async(Q) {
+      Q.async {
         yield(nil, buffer)
         if hitEOF { yield(nil, nil) } // EOF
         core.module.release()

@@ -1,6 +1,6 @@
 //
 //  TempFS.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/7/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -38,7 +38,7 @@ public class TempModule : NozeModule {
   
   /// Wrap mkstemp/mkstemps. Synchronous.
   func openSync(template: String, suffix: String)
-       -> ( ErrorType?, ( fd: FileDescriptor, path: String )? )
+       -> ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
   {
     // mkstemp modifies the incoming buffer to contain the resulting name
 #if swift(>=3.0) // #swift3-cstr
@@ -74,15 +74,15 @@ public class TempModule : NozeModule {
                    suffix:  String = "",
                    dir:     String = "/tmp", // TODO: use os.tmpDir()
                    pattern: String = "XXXXXXXX",
-                   cb: ( ErrorType?, ( fd: FileDescriptor, path: String )? )
+                   cb: ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
               -> Void)
   {
     // TODO: Node does dir = os.tmpDir(), "myapp"
     core.module.retain()
-    dispatch_async(fs.module.Q) {
+    fs.module.Q.async {
       let template = dir + "/" + prefix + pattern
       let ( err, info ) = self.openSync(template, suffix: suffix)
-      dispatch_async(core.Q) {
+      core.Q.async {
         cb(err, info)
         core.module.release()
       }
@@ -119,7 +119,7 @@ public class TempModule : NozeModule {
 
 #if swift(>=3.0) // #swift3-1st-arg
   func openSync(_ template: String, suffix: String)
-       -> ( ErrorType?, ( fd: FileDescriptor, path: String )? )
+       -> ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
   {
     return openSync(template: template, suffix: suffix)
   }
@@ -127,7 +127,7 @@ public class TempModule : NozeModule {
                    suffix:   String = "",
                    dir:      String = "/tmp", // TODO: use os.tmpDir()
                    pattern:  String = "XXXXXXXX",
-                   cb: ( ErrorType?, ( fd: FileDescriptor, path: String )? )
+                   cb: ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
               -> Void)
   {
     open(prefix: prefix, suffix: suffix, dir: dir, pattern: pattern, cb: cb)

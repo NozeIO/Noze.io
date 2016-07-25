@@ -1,6 +1,6 @@
 //
 //  ChildProcess.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 27/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -11,9 +11,10 @@ import core
 import events
 import streams
 #if os(Linux)
+  import let Glibc.ECHILD
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif
 
 public typealias ExitCB = ( Int?, Int? ) -> Void
@@ -84,14 +85,18 @@ public class ChildProcess : ErrorEmitter {
     // schedule on a different queue, just in case?
     // there is also WNOHANG
     let rc = xsys.waitpid(pid, &status, 0)
-    assert(rc == pid, "got a different pid from waitpid?")
     
     if rc == -1 {
-      // TBD
+      // TODO
       let error = POSIXError(rawValue: xsys.errno)
-      print("waidpid error: \(error)")
+      print("ERROR: waitpid error: \(error)")
+      
+      if error?.rawValue == ECHILD {
+        print("  child gone already?")
+      }
     }
     else {
+      assert(rc == pid, "got a different pid from waitpid?")
       if xsys.WIFEXITED(status) {
         processDidFinish(code: Int(WEXITSTATUS(status)))
       }
@@ -122,11 +127,7 @@ public class ChildProcess : ErrorEmitter {
     let myIdx = activeChildProcesses.indexOf { $0 === self }
 #endif
     if let idx = myIdx {
-#if swift(>=3.0) // #swift3-fd
       activeChildProcesses.remove(at: idx)
-#else
-      activeChildProcesses.removeAtIndex(idx)
-#endif
     }
     else {
       assert(false, "child process missing")

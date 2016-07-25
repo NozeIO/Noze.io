@@ -137,9 +137,9 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch
     
-    dispatch_async(workerQueue) { [] in
+    workerQueue.async { [] in
       guard let first = self.source.next() else {
-        dispatch_async(Q) { yield(nil, nil) } // EOF
+        Q.async { yield(nil, nil) } // EOF
         return
       }
       
@@ -147,7 +147,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
       
       if actualCount == 1 {
         let bucket = [ first ]
-        dispatch_async(Q) { yield(nil, bucket) }
+        Q.async { yield(nil, bucket) }
         return
       }
       
@@ -164,7 +164,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
         
         buffer.append(item)
       }
-      dispatch_async(Q) {
+      Q.async {
         yield(nil, buffer)
         if hitEOF { yield(nil, nil) } // EOF
       }

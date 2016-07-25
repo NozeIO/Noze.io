@@ -1,6 +1,6 @@
 //
 //  Module.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/10/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -8,6 +8,7 @@
 
 @_exported import core
 @_exported import streams
+import xsys
 
 public class NozeNet : NozeModule {
 }
@@ -39,8 +40,11 @@ public func connect(port: Int, _ host: String = "localhost",
 }
 
 public class ConnectOptions {
-  public var hostname : String?    = "localhost"
-  public var port     : Int        = 80
+  public var hostname : String?     = "localhost"
+  public var port     : Int         = 80
+
+  /// Version of IP stack (IPv4) 
+  public var family   : sa_family_t = sa_family_t(xsys.AF_INET)
   
   public init() {}
 }
@@ -112,7 +116,7 @@ public func createServer(allowHalfOpen ho: Bool = false,
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif
 
 #if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result

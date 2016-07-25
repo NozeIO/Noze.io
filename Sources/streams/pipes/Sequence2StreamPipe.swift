@@ -1,6 +1,6 @@
 //
 //  Sequence2StreamPipe.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/1/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -130,7 +130,7 @@ private class SequencePipeState<TI: SequenceType, TO: GWritableStreamType
   
   // MARK: - Error handling and such
   
-  final func onTargetError(error: ErrorType) {
+  final func onTargetError(error: ErrorProtocol) {
     print("C: ERROR: \(error)")  // TODO
     xsys.exit(42)
     // TODO: self.exitIfDone()

@@ -1,6 +1,6 @@
 //
 //  POSIXError.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -73,5 +73,5 @@
   public var errno : Int32 { return Darwin.errno }
 
   // this doesn't seem to work though
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif

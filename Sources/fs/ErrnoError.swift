@@ -41,7 +41,9 @@ extension POSIXError : CustomStringConvertible {
   
 }
 
-public extension ErrorType {
+import core
+
+public extension ErrorProtocol {
   
   var isWouldBlockError : Bool {
     guard let posixError = self as? POSIXError else {

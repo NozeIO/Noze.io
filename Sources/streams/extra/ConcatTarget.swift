@@ -1,6 +1,6 @@
 //
 //  ConcatStream.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 22/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -28,7 +28,7 @@ public class ConcatTarget<ReadType> : GWritableTargetType {
   
   public func writev(queue q : DispatchQueueType,
                      chunks  : [ [ TargetElement ] ],
-                     yield   : ( ErrorType?, Int ) -> Void)
+                     yield   : ( ErrorProtocol?, Int ) -> Void)
   {
     var count = 0
     for chunk in chunks {

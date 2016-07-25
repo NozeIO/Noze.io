@@ -1,6 +1,6 @@
 //
 //  Server.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/17/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -279,7 +279,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
     }
   }
   
-  public func handleAccept(error e: ErrorType) { // #linux-public
+  public func handleAccept(error e: ErrorProtocol) { // #linux-public
     // TBD: is this a close condition? Probably, or not? :-) Let's say no
     //      for now and assume the socket is still good and can potentially
     //      accept() successfully in the future (once that RoR process
@@ -306,7 +306,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func _makeNonExclusive(fd lfd: FileDescriptor) -> Int32 { // #linux-public
     var buf    = Int32(1)
-    let buflen = socklen_t(strideof(Int32))
+    let buflen = socklen_t(strideof(Int32.self))
     let rc     = xsys.setsockopt(lfd.fd, xsys.SOL_SOCKET, xsys.SO_REUSEADDR,
                                  &buf, buflen)
     return rc
@@ -435,7 +435,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - ErrorEmitter
   
-  public func catched(error e: ErrorType) { // #linux-public
+  public func catched(error e: ErrorProtocol) { // #linux-public
     log.enter(); defer { log.leave() }
     self.errorListeners.emit(e)
   }

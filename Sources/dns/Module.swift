@@ -1,6 +1,6 @@
 //
 //  Module.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -17,5 +17,5 @@ public let module = NozeDNS()
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif

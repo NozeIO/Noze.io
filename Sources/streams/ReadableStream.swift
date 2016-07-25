@@ -504,12 +504,12 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // MARK: - Readable is a ReadableSource itself
   
   public func next(queue q : DispatchQueueType, count: Int,
-                   yield   : ( ErrorType?, [ ReadType ]? ) -> Void)
+                   yield   : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
   {
     // dispatching yield on queue, though it should be the same (main) queue?
     
     guard !hitEOF else {
-      dispatch_async(q) { yield(nil, nil) }
+      q.async { yield(nil, nil) }
       return
     }
     
@@ -518,17 +518,17 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     // only one happens, the other one will stay (retain cycle?)
     // well, at least a dead object? Unless we clear all handlers on EOF?
     _ = onceError { error in
-      dispatch_async(q) { yield(error, nil) }
+      q.async { yield(error, nil) }
     }
     
     _ = onceReadable { [weak self] in
       guard let stream = self else { return }
       
       if let bucket = stream.read(count: count) {
-        dispatch_async(q) { yield(nil, bucket) }
+        q.async { yield(nil, bucket) }
       }
       else {
-        dispatch_async(q) { yield(nil, nil) } // EOF
+        q.async { yield(nil, nil) } // EOF
       }
     }
   }

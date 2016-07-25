@@ -16,7 +16,7 @@ class NozeIODNSTests: NozeIOTestCase {
   func testLookup() throws {
     enableRunLoop()
     
-    dns.lookup("zeezide.de") { address, error in
+    dns.lookup("zeezide.de") { error, address in
       guard let addr = address else {
         print("DNS ERROR: \(error)")
         XCTAssertTrue(false)

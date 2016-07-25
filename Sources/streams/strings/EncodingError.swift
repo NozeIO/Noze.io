@@ -1,12 +1,14 @@
 //
 //  EncodingError.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 01/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-public enum EncodingError : ErrorType {
+import core
+
+public enum EncodingError : ErrorProtocol {
 
   case Generic
   case CouldNotDecodeCString

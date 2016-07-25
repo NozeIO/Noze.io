@@ -182,7 +182,7 @@ public extension IncomingMessage {
 
 // MARK: - Session Store
 
-public enum SessionStoreError : ErrorType {
+public enum SessionStoreError : ErrorProtocol {
   case SessionNotFound
   case NotImplemented
 }
@@ -193,31 +193,31 @@ public protocol SessionStore {
   // I don't particularily like the naming, but lets keep it close.
   
   /// Retrieve the session for the given ID
-  func get(sessionID sid: String, _ cb: ( ErrorType?, Session? ) -> Void)
+  func get(sessionID sid: String, _ cb: ( ErrorProtocol?, Session? ) -> Void)
   
   /// Store the session for the given ID
   func set(sessionID sid: String, session: Session,
-           _ cb: ( ErrorType? ) -> Void)
+           _ cb: ( ErrorProtocol? ) -> Void)
   
   /// Touch the session for the given ID
   func touch(sessionID sid: String, session: Session,
-             _ cb: ( ErrorType? ) -> Void)
+             _ cb: ( ErrorProtocol? ) -> Void)
   
   /// Destroy the session with the given session ID
   func destroy(sessionID sid: String, _ cb: ( String ) -> Void)
   
   /// Clear all sessions in the store
-  func clear(cb: ( ErrorType? ) -> Void )
+  func clear(cb: ( ErrorProtocol? ) -> Void )
   
   /// Return the number of sessions in the store
-  func length(cb: ( ErrorType?, Int) -> Void)
+  func length(cb: ( ErrorProtocol?, Int) -> Void)
   
   /// Return all sessions in the store, optional
-  func all(cb: ( ErrorType?, [ Session ] ) -> Void)
+  func all(cb: ( ErrorProtocol?, [ Session ] ) -> Void)
 }
 
 public extension SessionStore {
-  func all(cb: ( ErrorType?, [ Session ] ) -> Void) {
+  func all(cb: ( ErrorProtocol?, [ Session ] ) -> Void) {
     cb(SessionStoreError.NotImplemented, [])
   }
 }
@@ -226,7 +226,7 @@ public class InMemorySessionStore : SessionStore {
   
   var store : [ String : Session ] = [:]
   
-  public func get(sessionID sid: String, _ cb: ( ErrorType?, Session? ) -> Void ) {
+  public func get(sessionID sid: String, _ cb: ( ErrorProtocol?, Session? ) -> Void ) {
     guard let session = store[sid] else {
       cb(SessionStoreError.SessionNotFound, nil)
       return
@@ -235,14 +235,14 @@ public class InMemorySessionStore : SessionStore {
   }
   
   public func set(sessionID sid: String, session: Session,
-                  _ cb: ( ErrorType? ) -> Void )
+                  _ cb: ( ErrorProtocol? ) -> Void )
   {
     store[sid] = session
     cb(nil)
   }
   
   public func touch(sessionID sid: String, session: Session,
-                    _ cb: ( ErrorType? ) -> Void )
+                    _ cb: ( ErrorProtocol? ) -> Void )
   {
     cb(nil)
   }
@@ -252,16 +252,16 @@ public class InMemorySessionStore : SessionStore {
     cb(sid)
   }
   
-  public func clear(cb: ( ErrorType? ) -> Void ) {
+  public func clear(cb: ( ErrorProtocol? ) -> Void ) {
     store.removeAll()
     cb(nil)
   }
   
-  public func length(cb: ( ErrorType?, Int) -> Void) {
+  public func length(cb: ( ErrorProtocol?, Int) -> Void) {
     cb(nil, store.count)
   }
   
-  public func all(cb: ( ErrorType?, [ Session ] ) -> Void) {
+  public func all(cb: ( ErrorProtocol?, [ Session ] ) -> Void) {
     let values = Array(store.values)
     cb(nil, values)
   }

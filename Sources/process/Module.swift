@@ -11,7 +11,7 @@
 #else
   import Darwin
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif
 
 import xsys
@@ -19,8 +19,8 @@ import core
 @_exported import events
 
 public class NozeProcess : NozeModule {
-  lazy var warningListeners =
-    EventListenerSet<Warning>(queueLength: 0)
+  lazy var warningListeners : EventListenerSet<Warning> =
+                                EventListenerSet(queueLength: 0)
 }
 public let module = NozeProcess()
 

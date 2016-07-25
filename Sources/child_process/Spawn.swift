@@ -1,6 +1,6 @@
 //
 //  Spawn.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/1/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -16,7 +16,7 @@ import process
   import Glibc
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorType
+  import Foundation // this is for POSIXError : ErrorProtocol
 #endif
 
 /// Same like the other spawn, but uses varargs `args`

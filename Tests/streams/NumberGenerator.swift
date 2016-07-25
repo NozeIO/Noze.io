@@ -11,7 +11,12 @@ import Dispatch
 @testable import core
 @testable import streams
 
-class NumberGenerator : GeneratorType {
+#if swift(>=3.0) // #swift3-fd
+#else
+typealias IteratorProtocol = GeneratorType
+#endif
+
+class NumberGenerator : IteratorProtocol {
   // this is just a basic number generator ... It is used in the
   // AsyncNumberGenerator below
   
@@ -36,6 +41,7 @@ class NumberGenerator : GeneratorType {
     return current
   }
 }
+  
 
 class AsyncNumberGenerator : NumberGenerator, GReadableSourceType {
   
@@ -48,7 +54,7 @@ class AsyncNumberGenerator : NumberGenerator, GReadableSourceType {
   }
   
   func next(queue _: DispatchQueueType, count: Int = 1,
-            yield: ( ErrorType?, [Int]? )-> Void)
+            yield: ( ErrorProtocol?, [Int]? )-> Void)
   {
     let log = self.log
     log.enter(function: "AsyncNumGen::\(#function)")

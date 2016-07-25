@@ -13,7 +13,7 @@ extension JSON: ArrayLiteralConvertible {
 #if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each element of the `collection` into a
     /// new `Array`.
-    public init<Collection: CollectionType where Collection.Iterator.Element == JSON>(_ collection: Collection) {
+    public init<C: Collection where C.Iterator.Element == JSON>(_ collection: C) {
         self = .Array(Swift.Array(collection))
     }
 #else
@@ -38,7 +38,7 @@ extension JSON: DictionaryLiteralConvertible {
 #if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each key/value pair of the `pairs` into
     /// a new `Dictionary`.
-    public init<Dictionary: SequenceType where Dictionary.Iterator.Element == (Swift.String, JSON)>(_ pairs: Dictionary) {
+    public init<Dictionary: Sequence where Dictionary.Iterator.Element == (Swift.String, JSON)>(_ pairs: Dictionary) {
         let minCap = 16 // was: pairs.underestimateCount, which is not accessible
         var dictionary = Swift.Dictionary<Swift.String, JSON>(minimumCapacity: minCap)
         for (key, value) in pairs {

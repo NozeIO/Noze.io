@@ -1,6 +1,6 @@
 //
 //  Module.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/3/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -11,10 +11,10 @@ import events
 
 public class NozeStreams : NozeModule, EventEmitterType {
   
-  lazy var newReadableListeners =
-    EventListenerSet<ReadableStreamType>(queueLength: 0)
-  lazy var newWritableListeners =
-    EventListenerSet<WritableStreamType>(queueLength: 0)
+  lazy var newReadableListeners : EventListenerSet<ReadableStreamType> =
+                                    EventListenerSet(queueLength: 0)
+  lazy var newWritableListeners : EventListenerSet<WritableStreamType>=
+                                    EventListenerSet(queueLength: 0)
   
   public func onNewReadable(cb: ( ReadableStreamType ) -> Void) -> Self {
     newReadableListeners.add(handler: cb)

@@ -1,6 +1,6 @@
 //
 //  Util.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 19/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.

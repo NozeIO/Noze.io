@@ -1,6 +1,6 @@
 //
 //  Convenience.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/8/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -106,7 +106,7 @@ public func readFileSync(path: String) -> [ UInt8 ]? {
     
     if rc > 0 {
       // Isn't there a better way? Define an own SequenceType which has a ptr
-      // and a length? And then do a appendContentsOf:
+      // and a length? And then do a append(contentsOf:)
       #if swift(>=3.0) // #swift3-fd
         var subbuf = Array<UInt8>(repeating: 0, count: rc)
         _ = subbuf.withUnsafeMutableBufferPointer { bp in

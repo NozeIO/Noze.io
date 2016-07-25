@@ -1,6 +1,6 @@
 //
 //  DuplexStream.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/10/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -56,17 +56,17 @@ public class DuplexStream<ReadType, WriteType>
   func _primaryRead(count howMuchToRead: Int) {
     fatalError("Subclass must override _primaryRead()")
   }
-  func _primaryPause() {
+  public func _primaryPause() { // #linux-public
   }
   
-  func _primaryWriteV(buckets chunks : [ [ WriteType ] ],
-                      done   : ( ErrorType?, Int ) -> Void)
-  {
+  public func _primaryWriteV(buckets chunks : [ [ WriteType ] ],
+                             done   : ( ErrorProtocol?, Int ) -> Void)
+  { // #linux-public
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
   }
   
-  var _primaryCanEnd : Bool { return true }
+  public var _primaryCanEnd : Bool { return true } // #linux-public
   
   
   // MARK: - Closing
@@ -286,7 +286,7 @@ private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
   }
   
   override func _primaryWriteV(buckets c : [ [ TO ] ],
-                               done      : ( ErrorType?, Int ) -> Void)
+                               done      : ( ErrorProtocol?, Int ) -> Void)
   {
     parent._primaryWriteV(buckets: c, done: done)
   }

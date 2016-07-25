@@ -1,6 +1,6 @@
 //
 //  TransformStream.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 22/04/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -79,13 +79,13 @@ public class TransformStream<WriteType, ReadType>
     return wroteAll
   }
   
-  var drainCount  = 0
+  public var drainCount  = 0 // #linux-public
   let enableDrain = true
   let doCork      = false
   
-  override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                               done   : ( ErrorType?, Int ) -> Void)
-  {
+  public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
+                                      done   : ( ErrorProtocol?, Int ) -> Void)
+  { // #linux-public
     // called by WritableStream.writeNextBlock() (which in turn is triggered by
     // DuplexStream.writev().
     //
@@ -131,7 +131,7 @@ public class TransformStream<WriteType, ReadType>
   
   // MARK: - Readable (the OUTPUT!)
 
-  override func _primaryRead(count howMuchToRead: Int) {
+  public override func _primaryRead(count howMuchToRead: Int) { // #linux-public
     log.enter(); defer { log.leave() }
     
     //fatalError("should not be called in transform streams")
@@ -166,7 +166,7 @@ public class TransformStream<WriteType, ReadType>
   // MARK: - Transform
   
   public func _transform(bucket b : [ WriteType ],
-                         done     : ( ErrorType?, [ ReadType ]? ) -> Void)
+                         done     : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
   {
     fatalError("Subclass must override transform()")
     
@@ -174,7 +174,7 @@ public class TransformStream<WriteType, ReadType>
     // bucket as written. Also does a 'push' if there is push data.
     // done(nil, nil)
   }
-  public func _flush(done cb: ( ErrorType?, [ ReadType ]? ) -> Void) {
+  public func _flush(done cb: ( ErrorProtocol?, [ ReadType ]? ) -> Void) {
     cb(nil, nil)
   }
 }
@@ -185,8 +185,8 @@ public protocol GTransformStreamType : class {
   associatedtype ReadType
   
   func _transform(bucket b : [ WriteType ],
-                  done     : ( ErrorType?, [ ReadType ]? ) -> Void)
-  func _flush    (done cb  : ( ErrorType?, [ ReadType ]? ) -> Void)
+                  done     : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+  func _flush    (done cb  : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
   
 }
 
@@ -194,6 +194,6 @@ public protocol GTransformStreamType : class {
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-import enum Foundation.POSIXError // this is for POSIXError : ErrorType
+import enum Foundation.POSIXError // this is for POSIXError : ErrorProtocol
 #endif
 

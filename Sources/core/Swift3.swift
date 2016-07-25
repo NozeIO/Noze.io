@@ -1,26 +1,27 @@
 //
 //  Swift3.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/9/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
 #if swift(>=3.0) // #swift3-fd
-
-// This does not seem to carry over to other modules (deprecation warning is per
-// module)
-// => use the reverse!
-public typealias ErrorType    = ErrorProtocol
-public typealias SequenceType = Sequence
-
 #else // Swift 2.2
 
 public typealias ErrorProtocol = ErrorType
 public typealias Sequence      = SequenceType
+public typealias Collection    = CollectionType
 public typealias OptionSet     = OptionSetType
+public typealias Boolean       = BooleanType
 
 // MARK: - Swift 3 compatibility extensions
+  
+public func stride<T : Strideable>(from s: T, to: T, by: T.Stride)
+            -> StrideTo<T>
+{
+  return s.stride(to: to, by: by)
+}
 
 public extension CollectionType where Generator.Element : Equatable {
   
@@ -94,6 +95,7 @@ public extension String {
   public func contains(other: String) -> Bool { return containsString(other) }
   
   public func lowercased() -> String { return lowercaseString }
+  public func uppercased() -> String { return uppercaseString }
   
   public func substring(to index: Index) -> String {
     return substringToIndex(index)

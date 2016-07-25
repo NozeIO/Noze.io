@@ -62,13 +62,13 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   
   final func nextTick(handler cb: () -> Void) {
     log.debug("Tick CB ..")
-    //dispatch_async(Q, cb) // hm, really allow them to have an own queue?
+    // Q.async(cb) // hm, really allow them to have an own queue?
     core.nextTick(handler: cb)
   }
   
   // MARK: - ErrorEmitter
   
-  public func catched(error e: ErrorType) {
+  public func catched(error e: ErrorProtocol) {
     log.enter(); defer { log.leave() }
     // TODO: throw if there are no listeners!!!
     if self.errorListeners.isEmpty {

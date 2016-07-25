@@ -1,6 +1,6 @@
 //
 //  ByteBucket.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 4/10/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  Sequence2StreamPipe.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/1/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -16,7 +16,7 @@ import core
 ///
 ///   [ 'a', 'a', 'a' ] | zip | encrypt | fs
 ///
-public func |<TI: SequenceType, TO: GWritableStreamType
+public func |<TI: Sequence, TO: GWritableStreamType
               where TI.Iterator.Element == TO.WriteType>
             (left: TI, right: TO) -> TO
 {
@@ -36,7 +36,7 @@ public func |<TI: SequenceType, TO: GWritableStreamType
 ///
 ///       But this one is a little more efficient.
 ///
-public extension SequenceType {
+public extension Sequence {
   // TODO: We could support an async mode for blocking Sequences similar to
   //       the GeneratorSource.
   
@@ -59,7 +59,7 @@ public extension SequenceType {
   }
 }
 
-private class SequencePipeState<TI: SequenceType, TO: GWritableStreamType
+private class SequencePipeState<TI: Sequence, TO: GWritableStreamType
                                 where TI.Iterator.Element == TO.WriteType>
 {
   // TBD: should TI be bound to just a generator?
@@ -130,7 +130,7 @@ private class SequencePipeState<TI: SequenceType, TO: GWritableStreamType
   
   // MARK: - Error handling and such
   
-  final func onTargetError(error: ErrorType) {
+  final func onTargetError(error: ErrorProtocol) {
     print("C: ERROR: \(error)")  // TODO
     xsys.exit(42)
     // TODO: self.exitIfDone()

@@ -1,6 +1,6 @@
 //
 //  StringToUTF8.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Hess on 11/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -25,7 +25,7 @@ public class StringToUTF8: TransformStream<String, UInt8> {
   // MARK: - Transform
   
   public override func _transform(bucket b : [ String ],
-                                  done     : ( ErrorType?, [ UInt8 ]? ) -> Void)
+                                  done     : ( ErrorProtocol?, [ UInt8 ]? ) -> Void)
   {
     guard !b.isEmpty else { done(nil, []); return }
 

@@ -4,6 +4,6 @@ let package = Package(
   name: "todo-mvc",
   dependencies: [
     .Package(url: "../..",
-             majorVersion: 0, minor: 2)
+             majorVersion: 0, minor: 3)
   ]
 )

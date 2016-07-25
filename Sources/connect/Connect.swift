@@ -1,6 +1,6 @@
 //
 //  Connect.swift
-//  NozeIO
+//  Noze.io
 //
 //  Created by Helge Heß on 5/3/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
@@ -10,7 +10,7 @@ import net
 import http
 
 /// TODO: document, what are the varargs in Next?
-public typealias Next       = (String...) -> Void
+public typealias Next       = (Any...) -> Void
 
 /// Supposed to call Next() when it is done.
 public typealias Middleware = (IncomingMessage, ServerResponse, Next) -> Void
