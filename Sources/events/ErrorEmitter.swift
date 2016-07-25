@@ -15,9 +15,13 @@ public typealias ErrorCB = ( ErrorProtocol ) -> Void
 
 public protocol ErrorEmitterType : EventEmitterType {
 
+#if swift(>=3.0) // #swift3-discardable-result
+  @discardableResult func onError  (handler cb: ErrorCB) -> Self
+  @discardableResult func onceError(handler cb: ErrorCB) -> Self
+#else
   func onError  (handler cb: ErrorCB) -> Self
   func onceError(handler cb: ErrorCB) -> Self
-  
+#endif  
 }
 
 public protocol ErrorEmitTarget {
