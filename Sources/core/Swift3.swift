@@ -11,10 +11,17 @@
 
 public typealias ErrorProtocol = ErrorType
 public typealias Sequence      = SequenceType
+public typealias Collection    = CollectionType
 public typealias OptionSet     = OptionSetType
 public typealias Boolean       = BooleanType
 
 // MARK: - Swift 3 compatibility extensions
+  
+public func stride<T : Strideable>(from s: T, to: T, by: T.Stride)
+            -> StrideTo<T>
+{
+  return s.stride(to: to, by: by)
+}
 
 public extension CollectionType where Generator.Element : Equatable {
   
