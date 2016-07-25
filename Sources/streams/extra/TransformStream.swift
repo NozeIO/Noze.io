@@ -79,13 +79,13 @@ public class TransformStream<WriteType, ReadType>
     return wroteAll
   }
   
-  var drainCount  = 0
+  public var drainCount  = 0 // #linux-public
   let enableDrain = true
   let doCork      = false
   
-  override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                               done   : ( ErrorProtocol?, Int ) -> Void)
-  {
+  public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
+                                      done   : ( ErrorProtocol?, Int ) -> Void)
+  { // #linux-public
     // called by WritableStream.writeNextBlock() (which in turn is triggered by
     // DuplexStream.writev().
     //
@@ -131,7 +131,7 @@ public class TransformStream<WriteType, ReadType>
   
   // MARK: - Readable (the OUTPUT!)
 
-  override func _primaryRead(count howMuchToRead: Int) {
+  public override func _primaryRead(count howMuchToRead: Int) { // #linux-public
     log.enter(); defer { log.leave() }
     
     //fatalError("should not be called in transform streams")
