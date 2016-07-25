@@ -58,9 +58,6 @@ public extension RedisCommandTarget {
     let cmd = RedisCommand(command: values, callback: cb)
     enqueue(command: cmd)
   }
-  public func del(keys: String..., _ cb: RedisReplyCB? = nil) {
-    del(keys: keys, cb)
-  }
 }
 
 
@@ -237,4 +234,15 @@ public extension RedisCommandTarget {
   }
 }
 
-#endif
+#else // Swift 2.2
+
+public extension RedisCommandTarget {
+
+  public func del(keys: String..., _ cb: RedisReplyCB? = nil) {
+    // Note: This has been moved here because the Swift3c crashes otherwise.
+    //       Presumably due to the overload with the non-varargs version.
+    del(keys: keys, cb)
+  }
+}
+
+#endif // Swift 2.2
