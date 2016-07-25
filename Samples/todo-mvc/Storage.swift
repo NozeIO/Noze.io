@@ -6,11 +6,17 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+/// A collection store which just stores everything in memory. Data added will
+/// be gone when the process is stopped.
+///
+/// Note: The operations in here are all synchronous for simplicity. This is not 
+///       how a regular store would usually work.
+///       Check out todo-mvc-redis for a store with async operations.
+///
 class VolatileStoreCollection<T> {
 
   var sequence = 1337
 
-  // String key to make /:id/ easier, but we don't currently see this.
   var objects = [ Int : T ]()
 
   init() {

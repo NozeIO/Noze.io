@@ -145,6 +145,16 @@
                ReferencedContainer = "container:Noze.io.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E85EB6E31D43C2080012FE11"
+               BuildableName = "XSysTests.xctest"
+               BlueprintName = "XSysTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

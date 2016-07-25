@@ -168,5 +168,7 @@ NOZE_ALL_MODULES = \
 	child_process	\
 	connect 	\
 	express		\
-	cows
+	cows		\
+	redis
+
 
