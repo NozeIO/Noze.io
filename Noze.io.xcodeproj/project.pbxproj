@@ -30,6 +30,8 @@
 				E807E40B1CF671C500AE317B /* PBXTargetDependency */,
 				E807E40D1CF671C500AE317B /* PBXTargetDependency */,
 				E807E40F1CF671C500AE317B /* PBXTargetDependency */,
+				E85EB6C71D4384100012FE11 /* PBXTargetDependency */,
+				E85EB6C51D4384100012FE11 /* PBXTargetDependency */,
 				E807E4111CF671C500AE317B /* PBXTargetDependency */,
 				E807E4131CF671C500AE317B /* PBXTargetDependency */,
 			);
@@ -50,10 +52,12 @@
 				E8B8BB261CFBCCBA00BA30D3 /* PBXTargetDependency */,
 				E8B8BB281CFBCCBA00BA30D3 /* PBXTargetDependency */,
 				E8B8BB2A1CFBCCBA00BA30D3 /* PBXTargetDependency */,
+				E8E8FF161D441059002663CD /* PBXTargetDependency */,
 				E8B8BB2C1CFBCCBA00BA30D3 /* PBXTargetDependency */,
 				E8B8BB2E1CFBCCBA00BA30D3 /* PBXTargetDependency */,
 				E89CDF4D1D005BDA008861AF /* PBXTargetDependency */,
 				E898050C1CFF8AC600FDAB9C /* PBXTargetDependency */,
+				E8E8FF121D44104C002663CD /* PBXTargetDependency */,
 			);
 			name = Samples;
 			productName = Samples;
@@ -85,6 +89,26 @@
 		E85206BE1D0ACDA400F3F696 /* Stringify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85206BD1D0ACDA400F3F696 /* Stringify.swift */; };
 		E852D3721D0AC00600E9D3DA /* JsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E852D3711D0AC00600E9D3DA /* JsonFile.swift */; };
 		E852D3731D0AC0A900E9D3DA /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
+		E858ED4E1D44FF330045FC4E /* CallbackHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E858ED4D1D44FF330045FC4E /* CallbackHelpers.swift */; };
+		E85EB6BA1D4383640012FE11 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B01D4383640012FE11 /* Module.swift */; };
+		E85EB6BC1D4383640012FE11 /* RedisClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B21D4383640012FE11 /* RedisClient.swift */; };
+		E85EB6BD1D4383640012FE11 /* RedisCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B31D4383640012FE11 /* RedisCoding.swift */; };
+		E85EB6BE1D4383640012FE11 /* RedisCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B41D4383640012FE11 /* RedisCommands.swift */; };
+		E85EB6BF1D4383640012FE11 /* RedisConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B51D4383640012FE11 /* RedisConnection.swift */; };
+		E85EB6C01D4383640012FE11 /* RedisParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B61D4383640012FE11 /* RedisParser.swift */; };
+		E85EB6C11D4383640012FE11 /* RedisRetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B71D4383640012FE11 /* RedisRetry.swift */; };
+		E85EB6C21D4383640012FE11 /* RedisValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B81D4383640012FE11 /* RedisValue.swift */; };
+		E85EB6C31D4383640012FE11 /* RedisWritableStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6B91D4383640012FE11 /* RedisWritableStream.swift */; };
+		E85EB6D71D4384C70012FE11 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6D61D4384C70012FE11 /* Extensions.swift */; };
+		E85EB6D81D43856F0012FE11 /* libconsole.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275EC1CF49F0C004A6A34 /* libconsole.dylib */; };
+		E85EB6D91D43856F0012FE11 /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
+		E85EB6DA1D43856F0012FE11 /* libevents.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275811CF49E5F004A6A34 /* libevents.dylib */; };
+		E85EB6DB1D43856F0012FE11 /* libnet.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276131CF49F52004A6A34 /* libnet.dylib */; };
+		E85EB6DC1D43856F0012FE11 /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
+		E85EB6DD1D43856F0012FE11 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
+		E85EB6DF1D43C1790012FE11 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6DE1D43C1790012FE11 /* UUID.swift */; };
+		E85EB6E91D43C2090012FE11 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
+		E85EB6F31D43C2BC0012FE11 /* XSysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */; };
 		E85EF89D1CFF9CA300BDA997 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF89C1CFF9CA300BDA997 /* Route.swift */; };
 		E85EF89E1CFFA76200BDA997 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E85EF89F1CFFA77000BDA997 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D4DFA21CFC67D000921230 /* Foundation.framework */; };
@@ -232,6 +256,9 @@
 		E8C15F591CF3382600CA5517 /* NumberPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F441CF3382600CA5517 /* NumberPrinter.swift */; };
 		E8C15F5B1CF3382600CA5517 /* StringDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F461CF3382600CA5517 /* StringDecoderTests.swift */; };
 		E8C15F5C1CF3382600CA5517 /* TransformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F471CF3382600CA5517 /* TransformTests.swift */; };
+		E8C8D25E1D45694D0025EDF7 /* RedisStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D25D1D45694D0025EDF7 /* RedisStorage.swift */; };
+		E8C8D2601D4569660025EDF7 /* InMemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D25F1D4569660025EDF7 /* InMemoryStorage.swift */; };
+		E8C8D2621D456F450025EDF7 /* RedisPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D2611D456F450025EDF7 /* RedisPrint.swift */; };
 		E8C90B9C1CFE23E400F85436 /* libleftpad.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */; };
 		E8C90B9D1CFE23FD00F85436 /* libleftpad.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */; };
 		E8C90B9E1CFE240100F85436 /* libleftpad.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */; };
@@ -452,6 +479,20 @@
 		E8E277481CF4A6AF004A6A34 /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
 		E8E277491CF4A6AF004A6A34 /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E8E2774A1CF4A6AF004A6A34 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
+		E8E8FF0E1D441037002663CD /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E8FF0B1D441037002663CD /* main.swift */; };
+		E8E8FF0F1D441037002663CD /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E8FF0C1D441037002663CD /* Model.swift */; };
+		E8E8FF101D441037002663CD /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E8FF0D1D441037002663CD /* Storage.swift */; };
+		E8E8FF1B1D44108E002663CD /* libconnect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276571CF49FA4004A6A34 /* libconnect.dylib */; };
+		E8E8FF1C1D44108E002663CD /* libconsole.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275EC1CF49F0C004A6A34 /* libconsole.dylib */; };
+		E8E8FF1D1D44108E002663CD /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
+		E8E8FF1E1D44108E002663CD /* libexpress.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276641CF49FB9004A6A34 /* libexpress.dylib */; };
+		E8E8FF1F1D44108E002663CD /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
+		E8E8FF201D44108E002663CD /* libhttp.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276341CF49F7D004A6A34 /* libhttp.dylib */; };
+		E8E8FF211D44108E002663CD /* libjson.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275E01CF49EF1004A6A34 /* libjson.dylib */; };
+		E8E8FF221D44108E002663CD /* libnet.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276131CF49F52004A6A34 /* libnet.dylib */; };
+		E8E8FF231D44108E002663CD /* libredis.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E85EB6A81D43817B0012FE11 /* libredis.dylib */; };
+		E8E8FF241D44108E002663CD /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
+		E8E8FF251D44108E002663CD /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E8EA87C91CF734AF00406C27 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EA87C61CF734AF00406C27 /* Base64.swift */; };
 		E8EA87CD1CF73A7E00406C27 /* Base64Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EA87CC1CF73A7E00406C27 /* Base64Tests.swift */; };
 		E8EA87CE1CF73A8A00406C27 /* libbase64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8EA87BF1CF733F900406C27 /* libbase64.dylib */; };
@@ -646,6 +687,69 @@
 			proxyType = 1;
 			remoteGlobalIDString = E8E276331CF49F7D004A6A34;
 			remoteInfo = http;
+		};
+		E85EB6C41D4384100012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8EED0F01D206738007BE73B;
+			remoteInfo = cows;
+		};
+		E85EB6C61D4384100012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E85EB6A71D43817B0012FE11;
+			remoteInfo = redis;
+		};
+		E85EB6C81D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275551CF49E06004A6A34;
+			remoteInfo = xsys;
+		};
+		E85EB6CA1D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E2756C1CF49E3A004A6A34;
+			remoteInfo = core;
+		};
+		E85EB6CC1D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275801CF49E5F004A6A34;
+			remoteInfo = events;
+		};
+		E85EB6CE1D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E2758E1CF49E74004A6A34;
+			remoteInfo = streams;
+		};
+		E85EB6D01D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275EB1CF49F0C004A6A34;
+			remoteInfo = console;
+		};
+		E85EB6D21D43843B0012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E276121CF49F52004A6A34;
+			remoteInfo = net;
+		};
+		E85EB6EA1D43C2090012FE11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275551CF49E06004A6A34;
+			remoteInfo = xsys;
 		};
 		E874ECAA1D119C8700FA0606 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1298,6 +1402,34 @@
 			remoteGlobalIDString = E8E2756C1CF49E3A004A6A34;
 			remoteInfo = core;
 		};
+		E8E8FF111D44104C002663CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E8FF001D440FE4002663CD;
+			remoteInfo = "todo-mvc-redis";
+		};
+		E8E8FF151D441059002663CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E874EC9D1D119C2B00FA0606;
+			remoteInfo = "httpd-cookies";
+		};
+		E8E8FF171D44106E002663CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E276561CF49FA4004A6A34;
+			remoteInfo = connect;
+		};
+		E8E8FF191D44106E002663CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E85EB6A71D43817B0012FE11;
+			remoteInfo = redis;
+		};
 		E8EA87CF1CF73AB600406C27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
@@ -1486,6 +1618,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		E8E8FEFF1D440FE4002663CD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		E8EED1051D207246007BE73B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1557,6 +1698,22 @@
 		E85206B91D0AC63E00F3F696 /* JSONWritableStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONWritableStream.swift; path = Sources/json/JSONWritableStream.swift; sourceTree = SOURCE_ROOT; };
 		E85206BD1D0ACDA400F3F696 /* Stringify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stringify.swift; path = Sources/json/Stringify.swift; sourceTree = SOURCE_ROOT; };
 		E852D3711D0AC00600E9D3DA /* JsonFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JsonFile.swift; path = Sources/json/JsonFile.swift; sourceTree = SOURCE_ROOT; };
+		E858ED4D1D44FF330045FC4E /* CallbackHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallbackHelpers.swift; sourceTree = "<group>"; };
+		E85EB6A81D43817B0012FE11 /* libredis.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libredis.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E85EB6B01D4383640012FE11 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
+		E85EB6B11D4383640012FE11 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E85EB6B21D4383640012FE11 /* RedisClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisClient.swift; sourceTree = "<group>"; };
+		E85EB6B31D4383640012FE11 /* RedisCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisCoding.swift; sourceTree = "<group>"; };
+		E85EB6B41D4383640012FE11 /* RedisCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisCommands.swift; sourceTree = "<group>"; };
+		E85EB6B51D4383640012FE11 /* RedisConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisConnection.swift; sourceTree = "<group>"; };
+		E85EB6B61D4383640012FE11 /* RedisParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisParser.swift; sourceTree = "<group>"; };
+		E85EB6B71D4383640012FE11 /* RedisRetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisRetry.swift; sourceTree = "<group>"; };
+		E85EB6B81D4383640012FE11 /* RedisValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisValue.swift; sourceTree = "<group>"; };
+		E85EB6B91D4383640012FE11 /* RedisWritableStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisWritableStream.swift; sourceTree = "<group>"; };
+		E85EB6D61D4384C70012FE11 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E85EB6DE1D43C1790012FE11 /* UUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UUID.swift; path = Sources/xsys/UUID.swift; sourceTree = SOURCE_ROOT; };
+		E85EB6E41D43C2080012FE11 /* XSysTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XSysTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XSysTests.swift; path = Tests/xsys/XSysTests.swift; sourceTree = SOURCE_ROOT; };
 		E85EF89C1CFF9CA300BDA997 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Route.swift; path = Sources/express/Route.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A01CFFA97B00BDA997 /* Render.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Render.swift; path = Sources/express/Render.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerResponse.swift; path = Sources/express/ServerResponse.swift; sourceTree = SOURCE_ROOT; };
@@ -1695,6 +1852,9 @@
 		E8C15F441CF3382600CA5517 /* NumberPrinter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPrinter.swift; sourceTree = "<group>"; };
 		E8C15F461CF3382600CA5517 /* StringDecoderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringDecoderTests.swift; sourceTree = "<group>"; };
 		E8C15F471CF3382600CA5517 /* TransformTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformTests.swift; sourceTree = "<group>"; };
+		E8C8D25D1D45694D0025EDF7 /* RedisStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RedisStorage.swift; path = "Samples/todo-mvc-redis/RedisStorage.swift"; sourceTree = "<group>"; };
+		E8C8D25F1D4569660025EDF7 /* InMemoryStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InMemoryStorage.swift; path = "Samples/todo-mvc-redis/InMemoryStorage.swift"; sourceTree = "<group>"; };
+		E8C8D2611D456F450025EDF7 /* RedisPrint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedisPrint.swift; sourceTree = "<group>"; };
 		E8C90B9F1CFE28CC00F85436 /* MethodOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MethodOverride.swift; path = Sources/connect/MethodOverride.swift; sourceTree = SOURCE_ROOT; };
 		E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmustache.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8C90BEB1CFE704B00F85436 /* MustacheParser2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser2.swift; path = Sources/mustache/MustacheParser2.swift; sourceTree = "<group>"; };
@@ -1797,6 +1957,10 @@
 		E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libleftpad.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E276571CF49FA4004A6A34 /* libconnect.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libconnect.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E276641CF49FB9004A6A34 /* libexpress.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libexpress.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8E8FF011D440FE4002663CD /* todo-mvc-redis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "todo-mvc-redis"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8E8FF0B1D441037002663CD /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = "Samples/todo-mvc-redis/main.swift"; sourceTree = "<group>"; };
+		E8E8FF0C1D441037002663CD /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = "Samples/todo-mvc-redis/Model.swift"; sourceTree = "<group>"; };
+		E8E8FF0D1D441037002663CD /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Storage.swift; path = "Samples/todo-mvc-redis/Storage.swift"; sourceTree = "<group>"; };
 		E8EA87BF1CF733F900406C27 /* libbase64.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libbase64.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8EA87C61CF734AF00406C27 /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64.swift; path = Sources/base64/Base64.swift; sourceTree = "<group>"; };
 		E8EA87C71CF734AF00406C27 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Sources/base64/LICENSE; sourceTree = "<group>"; };
@@ -1883,6 +2047,27 @@
 				E8E277481CF4A6AF004A6A34 /* libprocess.dylib in Frameworks */,
 				E8E277491CF4A6AF004A6A34 /* libstreams.dylib in Frameworks */,
 				E8E2774A1CF4A6AF004A6A34 /* libxsys.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85EB6A51D43817B0012FE11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E85EB6D81D43856F0012FE11 /* libconsole.dylib in Frameworks */,
+				E85EB6D91D43856F0012FE11 /* libcore.dylib in Frameworks */,
+				E85EB6DA1D43856F0012FE11 /* libevents.dylib in Frameworks */,
+				E85EB6DB1D43856F0012FE11 /* libnet.dylib in Frameworks */,
+				E85EB6DC1D43856F0012FE11 /* libstreams.dylib in Frameworks */,
+				E85EB6DD1D43856F0012FE11 /* libxsys.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85EB6E11D43C2080012FE11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E85EB6E91D43C2090012FE11 /* libxsys.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2280,6 +2465,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E8E8FEFE1D440FE4002663CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8E8FF1B1D44108E002663CD /* libconnect.dylib in Frameworks */,
+				E8E8FF1C1D44108E002663CD /* libconsole.dylib in Frameworks */,
+				E8E8FF1D1D44108E002663CD /* libcore.dylib in Frameworks */,
+				E8E8FF1E1D44108E002663CD /* libexpress.dylib in Frameworks */,
+				E8E8FF1F1D44108E002663CD /* libFreddy.dylib in Frameworks */,
+				E8E8FF201D44108E002663CD /* libhttp.dylib in Frameworks */,
+				E8E8FF211D44108E002663CD /* libjson.dylib in Frameworks */,
+				E8E8FF221D44108E002663CD /* libnet.dylib in Frameworks */,
+				E8E8FF231D44108E002663CD /* libredis.dylib in Frameworks */,
+				E8E8FF241D44108E002663CD /* libstreams.dylib in Frameworks */,
+				E8E8FF251D44108E002663CD /* libxsys.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8EA87BC1CF733F900406C27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2401,6 +2604,7 @@
 				E8DE16DF1CC90DBB001140DD /* leftpad */,
 				E8BE772D1CD79D7C00BE1EF4 /* connect */,
 				E8BE77401CD79D8800BE1EF4 /* express */,
+				E85EB6AF1D4383640012FE11 /* redis */,
 				E8DA64581CE5E09800531F54 /* http_parser */,
 				E8EA87C51CF7340500406C27 /* base64 */,
 				E8F25A551CF5EA2D00355194 /* freddy */,
@@ -2508,6 +2712,9 @@
 				E874EC9E1D119C2B00FA0606 /* httpd-cookies */,
 				E8EED0F11D206738007BE73B /* libcows.dylib */,
 				E8EED1071D207246007BE73B /* cows2code */,
+				E85EB6A81D43817B0012FE11 /* libredis.dylib */,
+				E85EB6E41D43C2080012FE11 /* XSysTests.xctest */,
+				E8E8FF011D440FE4002663CD /* todo-mvc-redis */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2517,6 +2724,7 @@
 			children = (
 				E87BE9941CF51CBC00C20AE7 /* README.md */,
 				E86BC6F91CF3AEEE00A397BE /* NozeIOTestCase.swift */,
+				E85EB6F11D43C29F0012FE11 /* xsys */,
 				E8C15F391CF3382600CA5517 /* leftpad */,
 				E8C90C071CFE71F600F85436 /* mustache */,
 				E8C15F401CF3382600CA5517 /* streams */,
@@ -2552,6 +2760,7 @@
 				E8D4DFC41CFDB60000921230 /* timespec.swift */,
 				E837E5251CD03F3C00794356 /* misc.swift */,
 				E8D4DFA41CFC68B700921230 /* LinuxString.swift */,
+				E85EB6DE1D43C1790012FE11 /* UUID.swift */,
 			);
 			path = xsys;
 			sourceTree = "<group>";
@@ -2564,6 +2773,35 @@
 				E84F40FD1CBBE60200544DE5 /* Lookup.swift */,
 			);
 			path = dns;
+			sourceTree = "<group>";
+		};
+		E85EB6AF1D4383640012FE11 /* redis */ = {
+			isa = PBXGroup;
+			children = (
+				E85EB6B11D4383640012FE11 /* README.md */,
+				E85EB6B01D4383640012FE11 /* Module.swift */,
+				E85EB6B21D4383640012FE11 /* RedisClient.swift */,
+				E85EB6B31D4383640012FE11 /* RedisCoding.swift */,
+				E85EB6B41D4383640012FE11 /* RedisCommands.swift */,
+				E85EB6B51D4383640012FE11 /* RedisConnection.swift */,
+				E85EB6B61D4383640012FE11 /* RedisParser.swift */,
+				E85EB6B71D4383640012FE11 /* RedisRetry.swift */,
+				E85EB6B81D4383640012FE11 /* RedisValue.swift */,
+				E85EB6B91D4383640012FE11 /* RedisWritableStream.swift */,
+				E8C8D2611D456F450025EDF7 /* RedisPrint.swift */,
+				E858ED4D1D44FF330045FC4E /* CallbackHelpers.swift */,
+				E85EB6D61D4384C70012FE11 /* Extensions.swift */,
+			);
+			name = redis;
+			path = Sources/redis;
+			sourceTree = "<group>";
+		};
+		E85EB6F11D43C29F0012FE11 /* xsys */ = {
+			isa = PBXGroup;
+			children = (
+				E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */,
+			);
+			name = xsys;
 			sourceTree = "<group>";
 		};
 		E860C6461CCD54AF00E9F479 /* dox */ = {
@@ -2615,6 +2853,7 @@
 				E87BE8D31CF50D9700C20AE7 /* connect-git */,
 				E89CDF411D005B99008861AF /* express-simple */,
 				E89872351CFF7DBD00466E86 /* todo-mvc */,
+				E8E8FF0A1D44100D002663CD /* todo-mvc-redis */,
 			);
 			name = Samples;
 			sourceTree = "<group>";
@@ -3167,6 +3406,18 @@
 			path = leftpad;
 			sourceTree = "<group>";
 		};
+		E8E8FF0A1D44100D002663CD /* todo-mvc-redis */ = {
+			isa = PBXGroup;
+			children = (
+				E8E8FF0B1D441037002663CD /* main.swift */,
+				E8E8FF0C1D441037002663CD /* Model.swift */,
+				E8E8FF0D1D441037002663CD /* Storage.swift */,
+				E8C8D25D1D45694D0025EDF7 /* RedisStorage.swift */,
+				E8C8D25F1D4569660025EDF7 /* InMemoryStorage.swift */,
+			);
+			name = "todo-mvc-redis";
+			sourceTree = "<group>";
+		};
 		E8EA87C51CF7340500406C27 /* base64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -3250,6 +3501,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		E85EB6A61D43817B0012FE11 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8C90BE21CFE6FFE00F85436 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3426,6 +3684,47 @@
 			name = NozeIOTests;
 			productName = NozeIOTests;
 			productReference = E835BFBB1B4D4CFB00288839 /* NozeIOTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E85EB6A71D43817B0012FE11 /* redis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E85EB6AD1D43817B0012FE11 /* Build configuration list for PBXNativeTarget "redis" */;
+			buildPhases = (
+				E85EB6A41D43817B0012FE11 /* Sources */,
+				E85EB6A51D43817B0012FE11 /* Frameworks */,
+				E85EB6A61D43817B0012FE11 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E85EB6C91D43843B0012FE11 /* PBXTargetDependency */,
+				E85EB6CB1D43843B0012FE11 /* PBXTargetDependency */,
+				E85EB6CD1D43843B0012FE11 /* PBXTargetDependency */,
+				E85EB6CF1D43843B0012FE11 /* PBXTargetDependency */,
+				E85EB6D11D43843B0012FE11 /* PBXTargetDependency */,
+				E85EB6D31D43843B0012FE11 /* PBXTargetDependency */,
+			);
+			name = redis;
+			productName = redis;
+			productReference = E85EB6A81D43817B0012FE11 /* libredis.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		E85EB6E31D43C2080012FE11 /* XSysTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E85EB6EC1D43C2090012FE11 /* Build configuration list for PBXNativeTarget "XSysTests" */;
+			buildPhases = (
+				E85EB6E01D43C2080012FE11 /* Sources */,
+				E85EB6E11D43C2080012FE11 /* Frameworks */,
+				E85EB6E21D43C2080012FE11 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E85EB6EB1D43C2090012FE11 /* PBXTargetDependency */,
+			);
+			name = XSysTests;
+			productName = XSysTests;
+			productReference = E85EB6E41D43C2080012FE11 /* XSysTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		E874EC9D1D119C2B00FA0606 /* httpd-cookies */ = {
@@ -4053,6 +4352,25 @@
 			productReference = E8E276641CF49FB9004A6A34 /* libexpress.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		E8E8FF001D440FE4002663CD /* todo-mvc-redis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8E8FF091D440FE4002663CD /* Build configuration list for PBXNativeTarget "todo-mvc-redis" */;
+			buildPhases = (
+				E8E8FEFD1D440FE4002663CD /* Sources */,
+				E8E8FEFE1D440FE4002663CD /* Frameworks */,
+				E8E8FEFF1D440FE4002663CD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E8E8FF181D44106E002663CD /* PBXTargetDependency */,
+				E8E8FF1A1D44106E002663CD /* PBXTargetDependency */,
+			);
+			name = "todo-mvc-redis";
+			productName = "todo-mvc-redis";
+			productReference = E8E8FF011D440FE4002663CD /* todo-mvc-redis */;
+			productType = "com.apple.product-type.tool";
+		};
 		E8EA87BE1CF733F900406C27 /* base64 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8EA87C41CF733F900406C27 /* Build configuration list for PBXNativeTarget "base64" */;
@@ -4183,6 +4501,12 @@
 					E835BFBA1B4D4CFB00288839 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					E85EB6A71D43817B0012FE11 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					E85EB6E31D43C2080012FE11 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					E874EC9D1D119C2B00FA0606 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -4309,6 +4633,13 @@
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 0800;
 					};
+					E8E8FF001D440FE4002663CD = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 4GXF3JAMM4;
+						DevelopmentTeamName = "ZeeZide GmbH";
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
+					};
 					E8EA87BE1CF733F900406C27 = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 0800;
@@ -4357,6 +4688,7 @@
 				E8B33EDE1CFB487400091806 /* NozeChildProcessTests */,
 				E80A97DF1CF9ADE10088F560 /* NozeHttpTests */,
 				E8C90BF91CFE71B800F85436 /* MustacheTests */,
+				E85EB6E31D43C2080012FE11 /* XSysTests */,
 				E8E275551CF49E06004A6A34 /* xsys */,
 				E8E2756C1CF49E3A004A6A34 /* core */,
 				E8E275801CF49E5F004A6A34 /* events */,
@@ -4374,6 +4706,7 @@
 				E8C90BE31CFE6FFE00F85436 /* mustache */,
 				E8E276561CF49FA4004A6A34 /* connect */,
 				E8E276631CF49FB9004A6A34 /* express */,
+				E85EB6A71D43817B0012FE11 /* redis */,
 				E8EA87BE1CF733F900406C27 /* base64 */,
 				E8EB49541CF49D0700E7787A /* http_parser */,
 				E8D4DFAF1CFC773A00921230 /* HTTPParserTests */,
@@ -4392,6 +4725,7 @@
 				E87BE91D1CF50FC700C20AE7 /* connect-git */,
 				E89CDF3F1D005B99008861AF /* express-simple */,
 				E898722B1CFF7DB200466E86 /* todo-mvc */,
+				E8E8FF001D440FE4002663CD /* todo-mvc-redis */,
 				E807E3EC1CF671B500AE317B /* NozeIO */,
 				E8B8BB171CFBCCA200BA30D3 /* Samples */,
 			);
@@ -4411,6 +4745,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8F25A851CF5EC9F00355194 /* LICENSE in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85EB6E21D43C2080012FE11 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4481,6 +4822,33 @@
 				E8C15F531CF3382600CA5517 /* ServerTests.swift in Sources */,
 				E8C15F541CF3382600CA5517 /* SocketTests.swift in Sources */,
 				E8C15F581CF3382600CA5517 /* NumberGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85EB6A41D43817B0012FE11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E85EB6C11D4383640012FE11 /* RedisRetry.swift in Sources */,
+				E85EB6C31D4383640012FE11 /* RedisWritableStream.swift in Sources */,
+				E85EB6C21D4383640012FE11 /* RedisValue.swift in Sources */,
+				E85EB6C01D4383640012FE11 /* RedisParser.swift in Sources */,
+				E85EB6BF1D4383640012FE11 /* RedisConnection.swift in Sources */,
+				E858ED4E1D44FF330045FC4E /* CallbackHelpers.swift in Sources */,
+				E85EB6D71D4384C70012FE11 /* Extensions.swift in Sources */,
+				E8C8D2621D456F450025EDF7 /* RedisPrint.swift in Sources */,
+				E85EB6BC1D4383640012FE11 /* RedisClient.swift in Sources */,
+				E85EB6BA1D4383640012FE11 /* Module.swift in Sources */,
+				E85EB6BE1D4383640012FE11 /* RedisCommands.swift in Sources */,
+				E85EB6BD1D4383640012FE11 /* RedisCoding.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E85EB6E01D43C2080012FE11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E85EB6F31D43C2BC0012FE11 /* XSysTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4657,6 +5025,7 @@
 				E8E275621CF49E1D004A6A34 /* fd.swift in Sources */,
 				E8E275681CF49E1D004A6A34 /* misc.swift in Sources */,
 				E8E275611CF49E1D004A6A34 /* ntohs.swift in Sources */,
+				E85EB6DF1D43C1790012FE11 /* UUID.swift in Sources */,
 				E8E2755E1CF49E1D004A6A34 /* Module.swift in Sources */,
 				E8D4DFC51CFDB60000921230 /* timespec.swift in Sources */,
 				E8E275641CF49E1D004A6A34 /* SocketAddress.swift in Sources */,
@@ -4907,6 +5276,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E8E8FEFD1D440FE4002663CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8C8D2601D4569660025EDF7 /* InMemoryStorage.swift in Sources */,
+				E8E8FF0E1D441037002663CD /* main.swift in Sources */,
+				E8C8D25E1D45694D0025EDF7 /* RedisStorage.swift in Sources */,
+				E8E8FF0F1D441037002663CD /* Model.swift in Sources */,
+				E8E8FF101D441037002663CD /* Storage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8EA87BB1CF733F900406C27 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5077,6 +5458,51 @@
 			isa = PBXTargetDependency;
 			target = E8E276331CF49F7D004A6A34 /* http */;
 			targetProxy = E80A97E61CF9ADE10088F560 /* PBXContainerItemProxy */;
+		};
+		E85EB6C51D4384100012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8EED0F01D206738007BE73B /* cows */;
+			targetProxy = E85EB6C41D4384100012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6C71D4384100012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E85EB6A71D43817B0012FE11 /* redis */;
+			targetProxy = E85EB6C61D4384100012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6C91D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275551CF49E06004A6A34 /* xsys */;
+			targetProxy = E85EB6C81D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6CB1D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E2756C1CF49E3A004A6A34 /* core */;
+			targetProxy = E85EB6CA1D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6CD1D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275801CF49E5F004A6A34 /* events */;
+			targetProxy = E85EB6CC1D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6CF1D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E2758E1CF49E74004A6A34 /* streams */;
+			targetProxy = E85EB6CE1D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6D11D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275EB1CF49F0C004A6A34 /* console */;
+			targetProxy = E85EB6D01D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6D31D43843B0012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E276121CF49F52004A6A34 /* net */;
+			targetProxy = E85EB6D21D43843B0012FE11 /* PBXContainerItemProxy */;
+		};
+		E85EB6EB1D43C2090012FE11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275551CF49E06004A6A34 /* xsys */;
+			targetProxy = E85EB6EA1D43C2090012FE11 /* PBXContainerItemProxy */;
 		};
 		E874ECAB1D119C8700FA0606 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5543,6 +5969,26 @@
 			target = E8E2756C1CF49E3A004A6A34 /* core */;
 			targetProxy = E8E277281CF4A4EF004A6A34 /* PBXContainerItemProxy */;
 		};
+		E8E8FF121D44104C002663CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E8FF001D440FE4002663CD /* todo-mvc-redis */;
+			targetProxy = E8E8FF111D44104C002663CD /* PBXContainerItemProxy */;
+		};
+		E8E8FF161D441059002663CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E874EC9D1D119C2B00FA0606 /* httpd-cookies */;
+			targetProxy = E8E8FF151D441059002663CD /* PBXContainerItemProxy */;
+		};
+		E8E8FF181D44106E002663CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E276561CF49FA4004A6A34 /* connect */;
+			targetProxy = E8E8FF171D44106E002663CD /* PBXContainerItemProxy */;
+		};
+		E8E8FF1A1D44106E002663CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E85EB6A71D43817B0012FE11 /* redis */;
+			targetProxy = E8E8FF191D44106E002663CD /* PBXContainerItemProxy */;
+		};
 		E8EA87D01CF73AB600406C27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E8EA87BE1CF733F900406C27 /* base64 */;
@@ -5843,6 +6289,219 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = AppKitRelease;
+		};
+		E85EB6A91D43817B0012FE11 /* AppKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitDebug;
+		};
+		E85EB6AA1D43817B0012FE11 /* UIKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitDebug;
+		};
+		E85EB6AB1D43817B0012FE11 /* AppKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitRelease;
+		};
+		E85EB6AC1D43817B0012FE11 /* UIKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitRelease;
+		};
+		E85EB6ED1D43C2090012FE11 /* AppKitDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.noze.tests.XSysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = AppKitDebug;
+		};
+		E85EB6EE1D43C2090012FE11 /* UIKitDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.noze.tests.XSysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = UIKitDebug;
+		};
+		E85EB6EF1D43C2090012FE11 /* AppKitRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.noze.tests.XSysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = AppKitRelease;
+		};
+		E85EB6F01D43C2090012FE11 /* UIKitRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.noze.tests.XSysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = UIKitRelease;
 		};
 		E874ECA31D119C2B00FA0606 /* AppKitDebug */ = {
 			isa = XCBuildConfiguration;
@@ -7721,6 +8380,38 @@
 			};
 			name = UIKitRelease;
 		};
+		E8E8FF051D440FE4002663CD /* AppKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitDebug;
+		};
+		E8E8FF061D440FE4002663CD /* UIKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitDebug;
+		};
+		E8E8FF071D440FE4002663CD /* AppKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitRelease;
+		};
+		E8E8FF081D440FE4002663CD /* UIKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitRelease;
+		};
 		E8EA87C01CF733F900406C27 /* AppKitDebug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D421CB19DA9009C7B57 /* SwiftModuleFW.xcconfig */;
@@ -8269,6 +8960,28 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AppKitDebug;
 		};
+		E85EB6AD1D43817B0012FE11 /* Build configuration list for PBXNativeTarget "redis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E85EB6A91D43817B0012FE11 /* AppKitDebug */,
+				E85EB6AA1D43817B0012FE11 /* UIKitDebug */,
+				E85EB6AB1D43817B0012FE11 /* AppKitRelease */,
+				E85EB6AC1D43817B0012FE11 /* UIKitRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
+		};
+		E85EB6EC1D43C2090012FE11 /* Build configuration list for PBXNativeTarget "XSysTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E85EB6ED1D43C2090012FE11 /* AppKitDebug */,
+				E85EB6EE1D43C2090012FE11 /* UIKitDebug */,
+				E85EB6EF1D43C2090012FE11 /* AppKitRelease */,
+				E85EB6F01D43C2090012FE11 /* UIKitRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
+		};
 		E874ECA21D119C2B00FA0606 /* Build configuration list for PBXNativeTarget "httpd-cookies" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -8628,6 +9341,17 @@
 				E8E276671CF49FB9004A6A34 /* UIKitDebug */,
 				E8E276681CF49FB9004A6A34 /* AppKitRelease */,
 				E8E276691CF49FB9004A6A34 /* UIKitRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
+		};
+		E8E8FF091D440FE4002663CD /* Build configuration list for PBXNativeTarget "todo-mvc-redis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8E8FF051D440FE4002663CD /* AppKitDebug */,
+				E8E8FF061D440FE4002663CD /* UIKitDebug */,
+				E8E8FF071D440FE4002663CD /* AppKitRelease */,
+				E8E8FF081D440FE4002663CD /* UIKitRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AppKitDebug;
