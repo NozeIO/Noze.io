@@ -28,8 +28,8 @@ It comes with rechargeables included, **Noze.io** is self-contained and
 doesn't require any extra dependencies.
 
 **Noze.io** works in Cocoa environments as well as on Linux,
-and it works with Swift 2.2 as well as the latest Swift 3 drop.
-In fact we suggest 2.2 until 
+and it works with Swift 2.2/2.3 as well as the latest Swift 3 drop.
+In fact we suggest 2.2/2.3 until 
 [Swift 3](https://swift.org/blog/swift-3-0-release-process/)
 is actually released.
 Head over to our [Start](http://noze.io/start/) page for install instructions.
@@ -86,14 +86,14 @@ an email to tell us why this is crap (or not?).
 | ----- | ----- | ------- | ---------------------------------------------------------- | ---- | ---- |
 | macOS | 2.2.1 | builtin | [7.3.1](https://developer.apple.com/xcode/download/)       | 👍🏻  | 👎  |
 | macOS | 2.3   | builtin | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👎  |
-| macOS | 3p1   | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
+| macOS | 3p3   | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
 | tuxOS | 2.2.1 | [snapshot](https://github.com/helje5/swift-corelibs-libdispatch) |  | 👍🏻  | 👎  |
-| tuxOS | 3p1   | [upstream](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation) |  | 👍🏻  | 👍  |
+| tuxOS | 3p2   | [upstream](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation) |  | 👍🏻  | 👍  |
 
-Noze.io supports Swift 2.2.1 in addition to the latest Swift 3 'preview'.
-Swift 2.2.1 is still the only stable Swift version.
+Noze.io supports Swift 2.2/2.3 in addition to the latest Swift 3 'preview'.
+Swift 2.2/2.3 is still the only stable Swift version.
 Supporting both makes some code in Noze ugly, but it is still required to make 
-the usage of Noze.io smooth. Always found it a pain to use Swift 3 projects ...
+the usage of Noze.io smooth. Always a pain to use Swift 3 only projects ...
 (as you carefully need to select specific Swift 3 dumps as well as GCD).
 
 ### Status
