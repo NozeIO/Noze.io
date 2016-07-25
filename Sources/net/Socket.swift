@@ -200,7 +200,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
       return perrno
     }
     
-    log.debug("  got: \(rc)")
+    // log.debug("  got: \(rc)")
     
     return 0
   }
