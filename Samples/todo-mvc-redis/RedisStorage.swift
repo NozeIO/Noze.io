@@ -37,10 +37,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
   // MARK: - Key Generation & Parsing
   
   func nextKey(cb: ( Int ) -> Void) {
-    redis.incr("\(prefix)sequence") { err, value in
-      print("GOT: \(err) \(value)")
-      cb(value!)
-    }
+    redis.incr("\(prefix)sequence") { err, value in cb(value!) }
   }
   
   func parse(key k: String) -> Int? {
@@ -137,7 +134,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
   func deleteAll(cb: () -> Void) {
     let redis = self.redis
     
-    redis.keys("\(prefix)[0-9]+") { err, keys in
+    redis.keys("\(prefix)[0-9]*") { err, keys in
       guard let keys = keys else {
         console.error("failed to get keys: ", err)
         cb()
