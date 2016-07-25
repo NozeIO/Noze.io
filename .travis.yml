@@ -25,7 +25,7 @@ install:
 script:
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
-    - git tag 0.2.1337
+    - git tag 0.3.1337
     - make all
     - make samples
 
