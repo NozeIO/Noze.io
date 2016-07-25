@@ -15,7 +15,8 @@ SAMPLES = \
 	connect-static	\
 	connect-git	\
 	express-simple	\
-	todo-mvc
+	todo-mvc	\
+	todo-mvc-redis
 
 ifeq ($(HAVE_SPM),yes)
 
@@ -36,6 +37,7 @@ all :
 	@$(MAKE) -C connect-git      all
 	@$(MAKE) -C express-simple   all
 	@$(MAKE) -C todo-mvc         all
+	@$(MAKE) -C todo-mvc-redis   all
 
 % :
 	@make -C $(PACKAGE_DIR) $@

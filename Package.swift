@@ -112,6 +112,15 @@ let package = Package(
 	     .Target(name: "http"),
 	     .Target(name: "connect"),
              .Target(name: "mustache")
+	   ]),
+    Target(name: "redis",
+           dependencies: [
+	     .Target(name: "core"),
+	     .Target(name: "xsys"),
+	     .Target(name: "events"),
+	     .Target(name: "streams"),
+	     .Target(name: "net"),
+	     .Target(name: "console")
 	   ])
   ],
   dependencies: []
