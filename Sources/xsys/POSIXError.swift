@@ -62,13 +62,13 @@
 
 #if swift(>=3.0)
   extension POSIXErrorCode : Error {}
-#else
+#else // Swift 2.2
   extension POSIXErrorCode : ErrorType {}
 #endif
 
   public var errno : Int32 { return Glibc.errno }
   
-#else
+#else // MacOS
   import Darwin
 
   public let EWOULDBLOCK = Darwin.EWOULDBLOCK
@@ -80,5 +80,7 @@
 
 #if swift(>=3.0)
   extension POSIXErrorCode : Error {}
+#else // Swift 2.2
+  public typealias POSIXErrorCode = POSIXError
 #endif
-#endif
+#endif // MacOS
