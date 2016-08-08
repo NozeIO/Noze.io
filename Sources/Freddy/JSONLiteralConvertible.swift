@@ -6,9 +6,20 @@
 //  Copyright © 2015 Big Nerd Ranch. Licensed under MIT.
 //
 
-// MARK: - ArrayLiteralConvertible
+#if swift(>=3.0) // #swift3-fd
+#else
+typealias ExpressibleByArrayLiteral      = ArrayLiteralConvertible
+typealias ExpressibleByDictionaryLiteral = DictionaryLiteralConvertible
+typealias ExpressibleByFloatLiteral      = FloatLiteralConvertible
+typealias ExpressibleByIntegerLiteral    = IntegerLiteralConvertible
+typealias ExpressibleByStringLiteral     = StringLiteralConvertible
+typealias ExpressibleByBooleanLiteral    = BooleanLiteralConvertible
+typealias ExpressibleByNilLiteral        = NilLiteralConvertible
+#endif
 
-extension JSON: ArrayLiteralConvertible {
+// MARK: - ExpressibleByArrayLiteral
+
+extension JSON: ExpressibleByArrayLiteral {
     
 #if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each element of the `collection` into a
@@ -31,9 +42,9 @@ extension JSON: ArrayLiteralConvertible {
     
 }
 
-// MARK: - DictionaryLiteralConvertible
+// MARK: - ExpressibleByDictionaryLiteral
 
-extension JSON: DictionaryLiteralConvertible {
+extension JSON: ExpressibleByDictionaryLiteral {
     
 #if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each key/value pair of the `pairs` into
@@ -65,9 +76,9 @@ extension JSON: DictionaryLiteralConvertible {
 
 }
 
-// MARK: - FloatLiteralConvertible
+// MARK: - ExpressibleByFloatLiteral
 
-extension JSON: FloatLiteralConvertible {
+extension JSON: ExpressibleByFloatLiteral {
     
     /// Create an instance initialized to `Double` `value`.
     public init(_ value: Swift.Double) {
@@ -81,9 +92,9 @@ extension JSON: FloatLiteralConvertible {
 
 }
 
-// MARK: - IntegerLiteralConvertible
+// MARK: - ExpressibleByIntegerLiteral
 
-extension JSON: IntegerLiteralConvertible {
+extension JSON: ExpressibleByIntegerLiteral {
     
     /// Create an instance initialized to `Int` by `value`.
     public init(_ value: Swift.Int) {
@@ -97,9 +108,9 @@ extension JSON: IntegerLiteralConvertible {
 
 }
 
-// MARK: - StringLiteralConvertible
+// MARK: - ExpressibleByStringLiteral
 
-extension JSON: StringLiteralConvertible {
+extension JSON: ExpressibleByStringLiteral {
     
     /// Create an instance initialized to `String` by `text`.
     public init(_ text: Swift.String) {
@@ -123,9 +134,9 @@ extension JSON: StringLiteralConvertible {
     
 }
 
-// MARK: - BooleanLiteralConvertible
+// MARK: - ExpressibleByBooleanLiteral
 
-extension JSON: BooleanLiteralConvertible {
+extension JSON: ExpressibleByBooleanLiteral {
 
     /// Create an instance initialized to `Bool` by `value`.
     public init(_ value: Swift.Bool) {
@@ -139,9 +150,9 @@ extension JSON: BooleanLiteralConvertible {
 
 }
 
-// MARK: - NilLiteralConvertible
+// MARK: - ExpressibleByNilLiteral
 
-extension JSON: NilLiteralConvertible {
+extension JSON: ExpressibleByNilLiteral {
 
     /// Create an instance initialized with `nil`.
     public init(nilLiteral: ()) {

@@ -9,13 +9,15 @@
 #if !os(Linux)
   import Darwin
 
-private func makeArray<T: IntegerLiteralConvertible>(count c: Int) -> [ T ] {
 #if swift(>=3.0) // #swift3-fd
+private func makeArray<T: ExpressibleByIntegerLiteral>(count c: Int) -> [ T ] {
   return Array<T>(repeating: 0, count: c)
-#else
-  return Array<T>(count: c, repeatedValue: 0)
-#endif
 }
+#else // Swift 2.x
+private func makeArray<T: IntegerLiteralConvertible>(count c: Int) -> [ T ] {
+  return Array<T>(count: c, repeatedValue: 0)
+}
+#endif
 
 /// Hm, `uuid_t` is a tuple and can't be extended. Also, you can't really work
 /// with that tuple in the C API.

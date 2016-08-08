@@ -60,14 +60,14 @@ public struct SyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
   public mutating func next(queue _: DispatchQueueType, count: Int,
-                            yield : ( ErrorProtocol?, [ G.Element ]? ) -> Void)
+                            yield : ( Error?, [ G.Element ]? ) -> Void)
   {
     _next(count) { bucket in yield(nil, bucket) }
   }
   
   public mutating func _next(count: Int, yield : ( [ G.Element ]? ) -> Void) {
     // Difference to the main entry point: this `_next` has no Q and no
-    //                                     ErrorProtocol.
+    //                                     Error.
     
     guard !isDone else { yield(nil); return }
     guard let first = source.next() else {
@@ -147,7 +147,7 @@ public struct AsyncGeneratorSource<G: GeneratorType> : GReadableSourceType {
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
   public mutating func next(queue Q : DispatchQueueType, count: Int,
-                            yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
+                            yield   : ( Error?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch

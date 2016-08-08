@@ -83,7 +83,7 @@ public class NozeIOTestCase : XCTestCase {
     let didTimeout = dispatch_semaphore_wait(done, timeout) > 0
 #else
     let rc = done.wait(timeout: timeout)
-    let didTimeout = rc == .TimedOut
+    let didTimeout = rc == .timedOut
 #endif
     if didTimeout {
       // not done in time

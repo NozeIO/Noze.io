@@ -23,8 +23,8 @@ import dns
 public typealias ConnectCB = ( Socket ) -> Void
 public typealias TimeoutCB = ( Socket ) -> Void
 
-public enum SocketError : ErrorProtocol {
-  case Generic(POSIXError)
+public enum SocketError : Error {
+  case Generic(POSIXErrorCode)
   case ConnectionRefused(sockaddr_any)
   
   public init(_ errno: Int32, _ address: sockaddr_any) {
@@ -32,11 +32,11 @@ public enum SocketError : ErrorProtocol {
       self = .ConnectionRefused(address)
     }
     else {
-      self = .Generic(POSIXError(rawValue: errno)!)
+      self = .Generic(POSIXErrorCode(rawValue: errno)!)
     }
   }
   public init(_ errno: Int32) {
-    self = .Generic(POSIXError(rawValue: errno)!)
+    self = .Generic(POSIXErrorCode(rawValue: errno)!)
   }
 }
 
@@ -270,7 +270,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
 
   // MARK: - Event Handlers
   
-  var lookupListeners  = EventListenerSet<(ErrorProtocol?, sockaddr_any?)>(
+  var lookupListeners  = EventListenerSet<(Error?, sockaddr_any?)>(
                            queueLength: 1, coalesce: true)
   var connectListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)

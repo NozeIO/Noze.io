@@ -31,12 +31,12 @@ public func access(path: String, _ mode: Int = F_OK, cb: ErrorCB) {
   module.Q.evalAsync(accessSync, (path, mode), cb)
 }
 
-public func stat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) 
+public func stat(path: String, cb: ( Error?, xsys.stat_struct? ) 
             -> Void) 
 {
   module.Q.evalAsync(statSync, path, cb)
 }
-public func lstat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? ) 
+public func lstat(path: String, cb: ( Error?, xsys.stat_struct? ) 
             -> Void) 
 {
   module.Q.evalAsync(lstatSync, path, cb)
@@ -58,19 +58,19 @@ public func lstat(path: String, cb: ( ErrorProtocol?, xsys.stat_struct? )
 
 public func accessSync(path: String, mode: Int = F_OK) throws {
   let rc = xsys.access(path, Int32(mode))
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
 
 public func statSync(path: String) throws -> xsys.stat_struct {
   var info = xsys.stat_struct()
   let rc   = xsys.stat(path, &info)
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
   return info
 }
 public func lstatSync(path: String) throws -> xsys.stat_struct {
   var info = xsys.stat_struct()
   let rc   = xsys.lstat(path, &info)
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
   return info
 }
 #endif // Swift 2.2

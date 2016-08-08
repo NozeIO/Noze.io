@@ -15,7 +15,7 @@ import streams
 
 var line2msg : Transform<String, Message> {
   return through2 {
-    ( lines : [ String ], _, done: ( ErrorProtocol?, [Message]? ) -> Void ) in
+    ( lines : [ String ], _, done: ( Error?, [Message]? ) -> Void ) in
     
     /// split the line into the source, command and argument parts
     func splitIRCLine(line l: String) -> ( String?, String?, [ String ]?) {
@@ -87,7 +87,11 @@ var line2msg : Transform<String, Message> {
       
       let ( source, commandString, arguments ) = splitIRCLine(line: line)
       
-      guard let cs = commandString, args = arguments else {
+      // Note: split in two guards to compile with both S2&3
+      guard let cs = commandString else {
+        return Message(source: source, command: .Invalid(line))
+      }
+      guard let args = arguments else {
         return Message(source: source, command: .Invalid(line))
       }
       

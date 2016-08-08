@@ -16,7 +16,7 @@ import process
   import Glibc
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif
 
 /// Same like the other spawn, but uses varargs `args`
@@ -232,7 +232,7 @@ public func spawn(command: String, _ args: [ String ],
     _ = close(controlPipeFds[0])
     for ( _, fd ) in parentPipeEnds { _ = close(fd) }
     
-    let error = POSIXError(rawValue: rc)!
+    let error = POSIXErrorCode(rawValue: rc)!
     
     child = ChildProcess(pid: 0)
     child.errorListeners.emit(error)

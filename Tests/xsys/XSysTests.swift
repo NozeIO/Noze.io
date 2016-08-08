@@ -59,11 +59,11 @@ class XSysTests: XCTestCase {
 #if os(Linux)
   static var allTests = {
     return [
-#if !os(Linux)
+      /* Not on Linux
       ( "testUUIDEqual", testUUIDEqual ),
       ( "testUUIDGen",   testUUIDGen   ),
       ( "testUUIDParse", testUUIDParse ),
-#endif
+       */
       ( "testNow",       testNow       )
     ]
   }()

@@ -11,14 +11,14 @@
 #else
   import Darwin
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif
 
 import xsys
 
 public func chdir(path: String) throws {
   let rc = xsys.chdir(path)
-  guard rc == 0 else { throw POSIXError(rawValue: xsys.errno)! }
+  guard rc == 0 else { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
 
 public func cwd() -> String {

@@ -25,8 +25,8 @@ public class RawByteBuffer {
     
     if (self.capacity > 0) {
 #if swift(>=3.0) // #swift3-ptr
-      buffer = UnsafeMutablePointer<UInt8>(
-                 allocatingCapacity: self.capacity + extra)
+      buffer = UnsafeMutablePointer<UInt8>
+                 .allocate(capacity: self.capacity + extra)
 #else
       buffer = UnsafeMutablePointer<UInt8>.alloc(self.capacity + extra)
 #endif
@@ -38,7 +38,7 @@ public class RawByteBuffer {
   deinit {
     if capacity > 0 {
 #if swift(>=3.0) // #swift3-ptr
-      buffer?.deallocateCapacity(capacity + extra)
+      buffer?.deallocate(capacity: capacity + extra)
 #else
       buffer.dealloc(capacity + extra)
 #endif
@@ -76,8 +76,8 @@ public class RawByteBuffer {
     
     let newsize = newCapacity + 1024
 #if swift(>=3.0) // #swift3-ptr
-    let newbuf  = UnsafeMutablePointer<UInt8>(
-                    allocatingCapacity: newsize + extra)
+    let newbuf  = UnsafeMutablePointer<UInt8>
+                    .allocate(capacity: newsize + extra)
     
     if (count > 0) {
       assert(self.buffer != nil, "size>0, but buffer is nil?")
@@ -87,7 +87,7 @@ public class RawByteBuffer {
       _ = memcpy(newbuf, buffer, count)
 #endif
     }
-    buffer?.deallocateCapacity(capacity + extra)
+    buffer?.deallocate(capacity: capacity + extra)
 #else
     let newbuf  = UnsafeMutablePointer<UInt8>.alloc(newsize + extra)
     

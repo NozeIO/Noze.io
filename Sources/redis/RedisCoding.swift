@@ -57,7 +57,7 @@ extension Array: RedisEncodable {
 
 // MARK: - RedisDecodable
 
-enum RedisDecodingError : ErrorProtocol {
+enum RedisDecodingError : Error {
   case ValueNotConvertible     (value: RedisValue, to: Any.Type)
   case ByteStringNotConvertible(value: [UInt8]?,   to: Any.Type)
 }

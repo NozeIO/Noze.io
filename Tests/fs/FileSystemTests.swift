@@ -88,9 +88,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
         }
         .onError { err in
           XCTAssertNotNil(err)
-          XCTAssertTrue(err is POSIXError)
-          let pe = err as! POSIXError
-          XCTAssertEqual(pe, POSIXError.ENOENT)
+          XCTAssertTrue(err is POSIXErrorCode)
+          let pe = err as! POSIXErrorCode
+          XCTAssertEqual(pe, POSIXErrorCode.ENOENT)
           done()
         }
     }
@@ -108,9 +108,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
         XCTAssertNotNil(err)
         XCTAssertTrue(err is PipeSourceError)
         let pipeErr = err as! PipeSourceError
-        XCTAssertTrue(pipeErr.error is POSIXError)
-        let pe = pipeErr.error as! POSIXError
-        XCTAssertEqual(pe, POSIXError.ENOENT)
+        XCTAssertTrue(pipeErr.error is POSIXErrorCode)
+        let pe = pipeErr.error as! POSIXErrorCode
+        XCTAssertEqual(pe, POSIXErrorCode.ENOENT)
         done()
       }
     }
@@ -121,9 +121,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
       let s = fs.createReadStream("/Zzzz")
         .onError { err in
           XCTAssertNotNil(err)
-          XCTAssertTrue(err is POSIXError)
-          let pe = err as! POSIXError
-          XCTAssertEqual(pe, POSIXError.ENOENT)
+          XCTAssertTrue(err is POSIXErrorCode)
+          let pe = err as! POSIXErrorCode
+          XCTAssertEqual(pe, POSIXErrorCode.ENOENT)
         }
         | concat { data in
           // print("data is \(data)")
@@ -135,9 +135,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
         XCTAssertNotNil(err)
         XCTAssertTrue(err is PipeSourceError)
         let pipeErr = err as! PipeSourceError
-        XCTAssertTrue(pipeErr.error is POSIXError)
-        let pe = pipeErr.error as! POSIXError
-        XCTAssertEqual(pe, POSIXError.ENOENT)
+        XCTAssertTrue(pipeErr.error is POSIXErrorCode)
+        let pe = pipeErr.error as! POSIXErrorCode
+        XCTAssertEqual(pe, POSIXErrorCode.ENOENT)
         done()
       }
     }
@@ -163,9 +163,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
       let s = fs.createReadStream("/Zzzz")
         .onError { err in
           XCTAssertNotNil(err)
-          XCTAssertTrue(err is POSIXError)
-          let pe = err as! POSIXError
-          XCTAssertEqual(pe, POSIXError.ENOENT)
+          XCTAssertTrue(err is POSIXErrorCode)
+          let pe = err as! POSIXErrorCode
+          XCTAssertEqual(pe, POSIXErrorCode.ENOENT)
         }
         .pipe(concat { data in
           // print("data is \(data)")
@@ -285,8 +285,8 @@ class NozeIOFileSystemTests: NozeIOTestCase {
     inRunloop { done in
       fs.access("/Zeeeee") { error in
         XCTAssertNotNil(error)
-        XCTAssert(error is POSIXError)
-        XCTAssertEqual((error! as! POSIXError), POSIXError.ENOENT)
+        XCTAssert(error is POSIXErrorCode)
+        XCTAssertEqual((error! as! POSIXErrorCode), POSIXErrorCode.ENOENT)
         done()
       }
     }
@@ -296,11 +296,11 @@ class NozeIOFileSystemTests: NozeIOTestCase {
     inRunloop { done in
       fs.access("/bin", fs.R_OK | fs.W_OK) { error in
         XCTAssertNotNil(error)
-        XCTAssert(error is POSIXError)
+        XCTAssert(error is POSIXErrorCode)
 #if os(Linux)
-        XCTAssertEqual((error! as! POSIXError), POSIXError.EACCES)
+        XCTAssertEqual((error! as! POSIXErrorCode), POSIXErrorCode.EACCES)
 #else
-        XCTAssertEqual((error! as! POSIXError), POSIXError.EPERM)
+        XCTAssertEqual((error! as! POSIXErrorCode), POSIXErrorCode.EPERM)
 #endif
         done()
       }
