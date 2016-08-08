@@ -139,8 +139,8 @@ public class Server : ErrorEmitter, LameLogObjectType {
     )
 #else // os(Darwin)
 #if swift(>=3.0)
-    let listenSource = DispatchSource.read(fileDescriptor: fd!.fd,
-                                           queue: self.Q)
+    let listenSource = DispatchSource.makeReadSource(fileDescriptor: fd!.fd,
+                                                     queue: self.Q)
 #else
 #if swift(>=2.3)
     // TBD: this is not quite right, we really want to check the API
@@ -262,7 +262,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
         break
       }
       else {
-        let error = POSIXError(rawValue: xsys.errno)!
+        let error = POSIXErrorCode(rawValue: xsys.errno)!
         handleAccept(error: error)
       }
     }
@@ -442,7 +442,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func catched(error e: Int32, close: Bool = true) -> Self {
     // #linux-public
-    catched(error: POSIXError(rawValue: e)!)
+    catched(error: POSIXErrorCode(rawValue: e)!)
     if close { _close() }
     return self
   }

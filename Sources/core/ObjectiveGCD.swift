@@ -42,6 +42,7 @@ public typealias DispatchQueueType      = DispatchQueue
 public typealias DispatchTimeType       = DispatchTime
 public typealias DispatchIOType         = DispatchIO
 public typealias DispatchDataType       = DispatchData
+public typealias DispatchSourceType     = DispatchSourceProtocol
 
 public func dispatch_main() {
   dispatchMain()
