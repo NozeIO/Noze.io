@@ -7,13 +7,25 @@
 //
 
 #if swift(>=3.0) // #swift3-fd
-#else // Swift 2.2
 
-public typealias ErrorProtocol = ErrorType
-public typealias Sequence      = SequenceType
-public typealias Collection    = CollectionType
-public typealias OptionSet     = OptionSetType
-public typealias Boolean       = BooleanType
+public typealias SwiftError = Error
+
+#else // Swift 2.2
+  
+public typealias SwiftError = ErrorType
+public typealias Error      = ErrorType
+public typealias Sequence   = SequenceType
+public typealias Collection = CollectionType
+public typealias OptionSet  = OptionSetType
+
+public typealias ExpressibleByArrayLiteral      = ArrayLiteralConvertible
+public typealias ExpressibleByDictionaryLiteral = DictionaryLiteralConvertible
+public typealias ExpressibleByFloatLiteral      = FloatLiteralConvertible
+public typealias ExpressibleByIntegerLiteral    = IntegerLiteralConvertible
+public typealias ExpressibleByStringLiteral     = StringLiteralConvertible
+public typealias ExpressibleByBooleanLiteral    = BooleanLiteralConvertible
+public typealias ExpressibleByNilLiteral        = NilLiteralConvertible
+
 
 // MARK: - Swift 3 compatibility extensions
   
