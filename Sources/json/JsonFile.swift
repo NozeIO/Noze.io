@@ -101,7 +101,7 @@ public let jsonfile = JsonFileModule()
 #if swift(>=3.0) // #swift3-1st-arg
 public extension JsonFileModule {
   
-  public func readFile(_ path: String, cb: ( Error?, JSON? ) -> Void) {
+  public func readFile(_ path: String, cb: ( SwiftError?, JSON? ) -> Void) {
     readFile(path: path, cb: cb)
   }
   
@@ -112,8 +112,8 @@ public extension JsonFileModule {
     return readFileSync(path: path)
   }
   
-  public func writeFile(_ p: String, _ oo: Any?, cb : ( Error? ) -> Void) {
+  public func writeFile(_ p: String, _ oo: Any?, cb : ( SwiftError? ) -> Void) {
     writeFile(path: p, oo, cb: cb)
   }
 }
-#endif
+#endif // Swift 3
