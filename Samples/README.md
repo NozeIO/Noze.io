@@ -30,6 +30,9 @@ Examples:
     (Mustache templates, forms, some JSON, cookies, session)
 - [todo-mvc](todo-mvc/)
     (A simple in-memory Todolist application backend aka TodoMVC)
+- [todo-mvc-redis](todo-mvc-redis/)
+    (A simple Todolist application backend aka TodoMVC which stores the data
+     into Redis)
 
 ### building
 
