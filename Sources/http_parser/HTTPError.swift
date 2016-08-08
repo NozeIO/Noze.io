@@ -30,10 +30,10 @@
 
 #if swift(>=3.0) // #swift3-fd
 #else
-public typealias ErrorProtocol = ErrorType
+public typealias Error = ErrorType
 #endif
 
-public enum HTTPError : ErrorProtocol {
+public enum HTTPError : Error {
   case OK
   
   /* Callback-related errors */
