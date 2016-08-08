@@ -523,10 +523,10 @@
 		E8F25A631CF5EA8700355194 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A571CF5EA8700355194 /* JSON.swift */; };
 		E8F25A641CF5EA8700355194 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A581CF5EA8700355194 /* JSONDecodable.swift */; };
 		E8F25A651CF5EA8700355194 /* JSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A591CF5EA8700355194 /* JSONEncodable.swift */; };
-		E8F25A661CF5EA8700355194 /* JSONEncodingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector.swift */; };
+		E8F25A661CF5EA8700355194 /* JSONEncodingDetector2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector2.swift */; };
 		E8F25A671CF5EA8700355194 /* JSONLiteralConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5B1CF5EA8700355194 /* JSONLiteralConvertible.swift */; };
-		E8F25A681CF5EA8700355194 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5C1CF5EA8700355194 /* JSONParser.swift */; };
-		E8F25A6B1CF5EA8700355194 /* JSONSubscripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5F1CF5EA8700355194 /* JSONSubscripting.swift */; };
+		E8F25A681CF5EA8700355194 /* JSONParser2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5C1CF5EA8700355194 /* JSONParser2.swift */; };
+		E8F25A6B1CF5EA8700355194 /* JSONSubscripting2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25A5F1CF5EA8700355194 /* JSONSubscripting2.swift */; };
 		E8F25A6E1CF5EBD300355194 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E8F25A851CF5EC9F00355194 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = E8F25A791CF5EC9F00355194 /* LICENSE */; };
 		E8F25A921CF5ED5E00355194 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
@@ -1983,10 +1983,10 @@
 		E8F25A571CF5EA8700355194 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSON.swift; path = Sources/freddy/JSON.swift; sourceTree = "<group>"; };
 		E8F25A581CF5EA8700355194 /* JSONDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONDecodable.swift; path = Sources/freddy/JSONDecodable.swift; sourceTree = "<group>"; };
 		E8F25A591CF5EA8700355194 /* JSONEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodable.swift; path = Sources/freddy/JSONEncodable.swift; sourceTree = "<group>"; };
-		E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetector.swift; path = Sources/freddy/JSONEncodingDetector.swift; sourceTree = "<group>"; };
+		E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetector2.swift; path = Sources/freddy/JSONEncodingDetector2.swift; sourceTree = "<group>"; };
 		E8F25A5B1CF5EA8700355194 /* JSONLiteralConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONLiteralConvertible.swift; path = Sources/freddy/JSONLiteralConvertible.swift; sourceTree = "<group>"; };
-		E8F25A5C1CF5EA8700355194 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParser.swift; path = Sources/freddy/JSONParser.swift; sourceTree = "<group>"; };
-		E8F25A5F1CF5EA8700355194 /* JSONSubscripting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscripting.swift; path = Sources/freddy/JSONSubscripting.swift; sourceTree = "<group>"; };
+		E8F25A5C1CF5EA8700355194 /* JSONParser2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParser2.swift; path = Sources/freddy/JSONParser2.swift; sourceTree = "<group>"; };
+		E8F25A5F1CF5EA8700355194 /* JSONSubscripting2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscripting2.swift; path = Sources/freddy/JSONSubscripting2.swift; sourceTree = "<group>"; };
 		E8F25A601CF5EA8700355194 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Sources/freddy/LICENSE; sourceTree = "<group>"; };
 		E8F25A611CF5EA8700355194 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/freddy/README.md; sourceTree = "<group>"; };
 		E8F25A711CF5EC9F00355194 /* JSONDecodableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONDecodableTests.swift; path = Tests/freddy/JSONDecodableTests.swift; sourceTree = SOURCE_ROOT; };
@@ -3467,12 +3467,12 @@
 				E8F25A571CF5EA8700355194 /* JSON.swift */,
 				E8F25A581CF5EA8700355194 /* JSONDecodable.swift */,
 				E8F25A591CF5EA8700355194 /* JSONEncodable.swift */,
-				E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector.swift */,
+				E8F25A5A1CF5EA8700355194 /* JSONEncodingDetector2.swift */,
 				E8F2ACF41CF658A7000B8CD1 /* JSONEncodingDetector3.swift */,
 				E8F25A5B1CF5EA8700355194 /* JSONLiteralConvertible.swift */,
-				E8F25A5C1CF5EA8700355194 /* JSONParser.swift */,
+				E8F25A5C1CF5EA8700355194 /* JSONParser2.swift */,
 				E8F2ACEE1CF64C19000B8CD1 /* JSONParser3.swift */,
-				E8F25A5F1CF5EA8700355194 /* JSONSubscripting.swift */,
+				E8F25A5F1CF5EA8700355194 /* JSONSubscripting2.swift */,
 				E8F2ACF11CF656F6000B8CD1 /* JSONSubscripting3.swift */,
 				E8F2ACE31CF5EF7D000B8CD1 /* Swift3.swift */,
 			);
@@ -5341,12 +5341,12 @@
 				E8F25A671CF5EA8700355194 /* JSONLiteralConvertible.swift in Sources */,
 				E8F2ACF31CF656F6000B8CD1 /* JSONSubscripting3.swift in Sources */,
 				E8F2ACE41CF5EF7D000B8CD1 /* Swift3.swift in Sources */,
-				E8F25A681CF5EA8700355194 /* JSONParser.swift in Sources */,
+				E8F25A681CF5EA8700355194 /* JSONParser2.swift in Sources */,
 				E8F25A651CF5EA8700355194 /* JSONEncodable.swift in Sources */,
 				E8F25A631CF5EA8700355194 /* JSON.swift in Sources */,
-				E8F25A6B1CF5EA8700355194 /* JSONSubscripting.swift in Sources */,
+				E8F25A6B1CF5EA8700355194 /* JSONSubscripting2.swift in Sources */,
 				E8F2ACF51CF658A7000B8CD1 /* JSONEncodingDetector3.swift in Sources */,
-				E8F25A661CF5EA8700355194 /* JSONEncodingDetector.swift in Sources */,
+				E8F25A661CF5EA8700355194 /* JSONEncodingDetector2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

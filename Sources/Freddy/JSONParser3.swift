@@ -344,7 +344,7 @@ public struct JSONParser {
             loc += 2
 
             // Ensure the second code unit is valid for the surrogate pair
-            guard let secondCodeUnit = readCodeUnit() where UTF16.isTrailSurrogate(secondCodeUnit) else {
+            guard let secondCodeUnit = readCodeUnit(), UTF16.isTrailSurrogate(secondCodeUnit) else {
                 throw Error.UnicodeEscapeInvalid(offset: start)
             }
 
@@ -879,7 +879,7 @@ extension JSONParser {
     /// document. Most errors include an associated `offset`, representing the
     /// offset into the UTF-8 characters making up the document where the error
     /// occurred.
-    public enum Error: ErrorProtocol {
+    public enum Error: Swift.Error {
         /// The parser ran out of data prematurely. This usually means a value
         /// was not escaped, such as a string literal not ending with a double
         /// quote.
@@ -934,7 +934,7 @@ extension JSONParser {
         case InvalidUnicodeStreamEncoding(detectedEncoding: JSONEncodingDetector.Encoding)
     }
 
-    private enum InternalError: ErrorProtocol {
+    private enum InternalError: Swift.Error {
         /// Attempted to parse an integer outside the range of [Int.min, Int.max]
         /// or a double outside the range of representable doubles. Note that
         /// for doubles, this could be an overflow or an underflow - we don't
