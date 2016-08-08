@@ -21,7 +21,7 @@ class NozeIOStdinTests: NozeIOTestCase {
     
     _ = stream.onError { error in
       print("CCC GOT ERROR: \(error)")
-      if let perr = error as? POSIXError {
+      if let perr = error as? POSIXErrorCode {
         print("  Posix: \(perr.rawValue)")
       }
       // stream.close()?

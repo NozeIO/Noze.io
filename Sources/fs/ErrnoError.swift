@@ -13,7 +13,7 @@ import xsys
 import Darwin
 #endif
 
-public extension POSIXError {
+public extension POSIXErrorCode {
 
   var errorString : String? {
     let errno = self.rawValue
@@ -27,16 +27,16 @@ public extension POSIXError {
   
 }
 
-extension POSIXError : CustomStringConvertible {
+extension POSIXErrorCode : CustomStringConvertible {
   
   public var description : String {
     if self.rawValue == 0 {
-      return "<POSIXError: OK>"
+      return "<POSIXErrorCode: OK>"
     }
     if let s = errorString {
-      return "<POSIXError: \(rawValue) '\(s)'>"
+      return "<POSIXErrorCode: \(rawValue) '\(s)'>"
     }
-    return "<POSIXError: \(rawValue)>"
+    return "<POSIXErrorCode: \(rawValue)>"
   }
   
 }
@@ -46,11 +46,11 @@ import core
 public extension Error {
   
   var isWouldBlockError : Bool {
-    guard let posixError = self as? POSIXError else {
+    guard let posixError = self as? POSIXErrorCode else {
       return false // a non-Posix error
     }
     
-    return posixError == POSIXError.EAGAIN
+    return posixError == POSIXErrorCode.EAGAIN
   }
   
 }

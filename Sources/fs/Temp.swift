@@ -53,7 +53,7 @@ public class TempModule : NozeModule {
       ? mkstemp(inPlaceTemplate)
       : mkstemps(inPlaceTemplate, Int32(suffix.utf8.count))
     
-    guard fd != -1 else { return ( POSIXError(rawValue: xsys.errno), nil ) }
+    guard fd != -1 else { return ( POSIXErrorCode(rawValue: xsys.errno), nil ) }
     
     // Note: This is not how Node does it. Node also allows 'cleanup' calls,
     //       which I guess implies that it actually trackes the pathes it

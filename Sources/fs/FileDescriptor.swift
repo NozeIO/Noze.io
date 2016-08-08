@@ -45,7 +45,7 @@ public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiter
   {
     let fd = xsys.open(path, flags)
     guard fd >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, nil )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, nil )
     }
     
     return ( nil, FileDescriptor(fd) )
@@ -67,7 +67,7 @@ public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiter
     
     let readCount = xsys.read(fd, &buf, count)
     guard readCount >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, nil )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, nil )
     }
     
     if readCount == 0 { return ( nil, [] ) } // EOF
@@ -89,7 +89,7 @@ public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiter
     let writeCount = xsys.write(fd, buffer, lCount)
     
     guard writeCount >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, 0 )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, 0 )
     }
     
     return ( nil, writeCount )

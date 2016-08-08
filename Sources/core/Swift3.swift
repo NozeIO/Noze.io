@@ -94,6 +94,11 @@ public extension Dictionary {
 
 #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS) // #preview1
 import Foundation
+
+// In Swift 3p4 POSIXError was essentially renamed to POSIXErrorCode (the enum).
+// In *addition* it gained the `POSIXError` struct, which seems to be a 
+// namespace for this.
+public typealias POSIXErrorCode = POSIXError
 #endif
 
 public extension String {

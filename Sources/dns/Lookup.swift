@@ -40,7 +40,7 @@ public func lookup(domain : String,
     let rc = getaddrinfo(domain, nil, &hints, &ptr)
     guard rc == 0 else {
       nextTick {
-        cb(POSIXError(rawValue: rc), nil)
+        cb(POSIXErrorCode(rawValue: rc), nil)
       }
       return
     }

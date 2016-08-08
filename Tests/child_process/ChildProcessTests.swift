@@ -44,8 +44,8 @@ class NozeIOChildProcessTests: NozeIOTestCase {
     
     let child = spawn("/bin/ZZZ", "/bin")
       .onError { error in
-        XCTAssert(error is POSIXError)
-        let pe = error as! POSIXError
+        XCTAssert(error is POSIXErrorCode)
+        let pe = error as! POSIXErrorCode
       
         XCTAssert(pe.rawValue == ENOENT)
       

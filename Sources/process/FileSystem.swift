@@ -18,7 +18,7 @@ import xsys
 
 public func chdir(path: String) throws {
   let rc = xsys.chdir(path)
-  guard rc == 0 else { throw POSIXError(rawValue: xsys.errno)! }
+  guard rc == 0 else { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
 
 public func cwd() -> String {

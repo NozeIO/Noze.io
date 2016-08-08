@@ -57,7 +57,7 @@ public class TransformStream<WriteType, ReadType>
       guard readStream != nil else {
         assert(readStream != nil,
                "writing to a transform, but there is no read stream anymore?")
-        emit(error: POSIXError.EPIPE)
+        emit(error: POSIXErrorCode.EPIPE)
         return false // Note: drain will never be called
       }
       
@@ -194,6 +194,6 @@ public protocol GTransformStreamType : class {
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-import enum Foundation.POSIXError // this is for POSIXError : Error
+import Foundation // this is for POSIXError : Error
 #endif
 

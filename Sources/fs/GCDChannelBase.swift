@@ -127,11 +127,11 @@ public class GCDChannelBase: CustomStringConvertible {
   }
   
   public func createChannelIfMissing(Q q: DispatchQueueType) -> Error? {
-    guard fd.isValid     else { return POSIXError.EINVAL }
+    guard fd.isValid     else { return POSIXErrorCode.EINVAL }
     guard channel == nil else { return nil }
     
     channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
-    guard channel != nil else { return POSIXError(rawValue: xsys.errno) }
+    guard channel != nil else { return POSIXErrorCode(rawValue: xsys.errno) }
     
     // Essentially GCD channels already implement a buffer very similar to
     // Node.JS. But we do it on our own. Hence make GCD report input ASAP.
@@ -173,7 +173,7 @@ public class GCDChannelBase: CustomStringConvertible {
     
     if readsPending < 1 && writesPending < 1 {
       // otherwise the callback will get the error from GCD
-      pendingErrors.append(POSIXError(rawValue: e)!)
+      pendingErrors.append(POSIXErrorCode(rawValue: e)!)
       // This does happen with testReadStream404WithConcatPipe, might be a race
       // assert(false, "GCD OOM error")
     }
@@ -282,7 +282,7 @@ public class GCDChannelBase: CustomStringConvertible {
 
       var releaseRead = false
       if error != 0 {
-        if self.channel == nil  && error == POSIXError.ECANCELED.rawValue {
+        if self.channel == nil  && error == POSIXErrorCode.ECANCELED.rawValue {
           // this error is due to the source being shut down. For example, if
           // a Socket is closed.
           
@@ -293,9 +293,9 @@ public class GCDChannelBase: CustomStringConvertible {
           releaseRead = true
         }
         else {
-          // TODO: emit proper error when POSIXError does not construct
+          // TODO: emit proper error when POSIXErrorCode does not construct
           log.log("ERROR: \(self) \(error)")
-          yield(POSIXError(rawValue: error)!, nil)
+          yield(POSIXErrorCode(rawValue: error)!, nil)
           releaseRead = true
         }
       }
@@ -385,10 +385,10 @@ public class GCDChannelBase: CustomStringConvertible {
       log.debug("pending: #\(pendingSize) bytes ..")
       
       if error != 0 {
-        // TODO: emit proper error when POSIXError does not construct
+        // TODO: emit proper error when POSIXErrorCode does not construct
         // TODO: properly count the bytes which got written successfully
         log.debug("error: \(error)")
-        yield(POSIXError(rawValue: error)!, count - pendingSize)
+        yield(POSIXErrorCode(rawValue: error)!, count - pendingSize)
         self.writesPending -= 1
       }
       else if done {

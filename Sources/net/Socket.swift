@@ -24,7 +24,7 @@ public typealias ConnectCB = ( Socket ) -> Void
 public typealias TimeoutCB = ( Socket ) -> Void
 
 public enum SocketError : Error {
-  case Generic(POSIXError)
+  case Generic(POSIXErrorCode)
   case ConnectionRefused(sockaddr_any)
   
   public init(_ errno: Int32, _ address: sockaddr_any) {
@@ -32,11 +32,11 @@ public enum SocketError : Error {
       self = .ConnectionRefused(address)
     }
     else {
-      self = .Generic(POSIXError(rawValue: errno)!)
+      self = .Generic(POSIXErrorCode(rawValue: errno)!)
     }
   }
   public init(_ errno: Int32) {
-    self = .Generic(POSIXError(rawValue: errno)!)
+    self = .Generic(POSIXErrorCode(rawValue: errno)!)
   }
 }
 

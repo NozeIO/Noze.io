@@ -55,7 +55,7 @@ public class FileSource: GCDChannelBase, GReadableSourceType {
     
     channel = dispatch_io_create_with_path(xsys_DISPATCH_IO_STREAM, path,
                                            openFlags, mode, q, cleanupChannel)
-    return channel != nil ? nil : POSIXError(rawValue: xsys.errno)
+    return channel != nil ? nil : POSIXErrorCode(rawValue: xsys.errno)
   }
   
   

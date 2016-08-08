@@ -62,7 +62,7 @@ public class FileTarget: GCDChannelBase, GWritableTargetType {
     // Essentially GCD channels already implement a buffer very similar to
     // Node.JS. But we do it on our own. Hence make GCD report input ASAP.
     channel.setLimit(lowWater: 1)
-    return channel != nil ? nil : POSIXError(rawValue: xsys.errno)
+    return channel != nil ? nil : POSIXErrorCode(rawValue: xsys.errno)
   }
   
   // MARK: - Description

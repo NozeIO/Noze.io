@@ -264,7 +264,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
   final func onSourceError(error: Error) {
     //efprint("CCC GOT ERROR: \(error)") // TODO
     
-    //if let perr = error as? POSIXError {
+    //if let perr = error as? POSIXErrorCode {
     //  efprint("  Posix: \(perr.rawValue)")
     //}
     
