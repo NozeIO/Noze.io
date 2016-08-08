@@ -39,7 +39,7 @@ public protocol timeval_any {
   var componentsInUTC       : xsys.struct_tm { get }
   var componentsInLocalTime : xsys.struct_tm { get }
 
-  func -(left: Self, right: Self) -> Self
+  static func -(left: Self, right: Self) -> Self
 }
 
 public extension timeval_any {
