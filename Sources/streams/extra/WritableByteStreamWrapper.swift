@@ -49,7 +49,8 @@ public class WritableByteStreamWrapper
   // MARK: - GWritableStreamType
   
   public func _transferBuffer() { // #linux-public
-    guard let b = buffer, s = stream else { return }
+    guard let b = buffer else { return }
+    guard let s = stream else { return }
     b.dequeueAll { brigade, doneCB in
       _ = s.writev(buckets: brigade, done: doneCB)
     }
