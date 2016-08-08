@@ -38,8 +38,9 @@ public func stride<T : Strideable>(from s: T, to: T, by: T.Stride)
 public extension CollectionType where Generator.Element : Equatable {
   
   public func split(separator s: Self.Generator.Element,
-                    omittingEmptySubsequences: Bool = false,
-                    maxSplits: Int = Int.max) -> [Self.SubSequence]
+                    maxSplits: Int = Int.max,
+                    omittingEmptySubsequences: Bool = false)
+                    -> [Self.SubSequence]
   {
     return split(s, maxSplit: maxSplits,
                  allowEmptySlices: !omittingEmptySubsequences)
