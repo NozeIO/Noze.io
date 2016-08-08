@@ -11,14 +11,14 @@ import fs
 
 public class JsonFileModule : NozeModule {
   
-  public enum Error : ErrorProtocol {
+  public enum Error : SwiftError {
     case GotNoData
   }
   
   
   // MARK: - Reading
   
-  public func readFile(path: String, cb: ( ErrorProtocol?, JSON? ) -> Void) {
+  public func readFile(path: String, cb: ( SwiftError?, JSON? ) -> Void) {
     fs.readFile(path) { err, bytes in
       guard err == nil       else { cb(err,             nil); return }
       guard let utf8 = bytes else { cb(Error.GotNoData, nil); return }
@@ -66,7 +66,7 @@ public class JsonFileModule : NozeModule {
   
   // MARK: - Writing
   
-  public func writeFile(path: String, _ oo: Any?, cb : ( ErrorProtocol? ) -> Void) {
+  public func writeFile(path: String, _ oo: Any?, cb: ( SwiftError? ) -> Void) {
     let s = fs.createWriteStream(path)
     
     var didCall = false
@@ -101,7 +101,7 @@ public let jsonfile = JsonFileModule()
 #if swift(>=3.0) // #swift3-1st-arg
 public extension JsonFileModule {
   
-  public func readFile(_ path: String, cb: ( ErrorProtocol?, JSON? ) -> Void) {
+  public func readFile(_ path: String, cb: ( Error?, JSON? ) -> Void) {
     readFile(path: path, cb: cb)
   }
   
@@ -112,7 +112,7 @@ public extension JsonFileModule {
     return readFileSync(path: path)
   }
   
-  public func writeFile(_ p: String, _ oo: Any?, cb : ( ErrorProtocol? ) -> Void) {
+  public func writeFile(_ p: String, _ oo: Any?, cb : ( Error? ) -> Void) {
     writeFile(path: p, oo, cb: cb)
   }
 }

@@ -28,7 +28,7 @@ public class ConcatTarget<ReadType> : GWritableTargetType {
   
   public func writev(queue q : DispatchQueueType,
                      chunks  : [ [ TargetElement ] ],
-                     yield   : ( ErrorProtocol?, Int ) -> Void)
+                     yield   : ( Error?, Int ) -> Void)
   {
     var count = 0
     for chunk in chunks {

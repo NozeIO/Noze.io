@@ -504,7 +504,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // MARK: - Readable is a ReadableSource itself
   
   public func next(queue q : DispatchQueueType, count: Int,
-                   yield   : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+                   yield   : ( Error?, [ ReadType ]? ) -> Void)
   {
     // dispatching yield on queue, though it should be the same (main) queue?
     

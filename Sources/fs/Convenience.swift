@@ -92,8 +92,8 @@ public func readFileSync(path: String) -> [ UInt8 ]? {
   
   let bufsize = 4096
   #if swift(>=3.0) // #swift3-ptr
-    let buffer  = UnsafeMutablePointer<UInt8>(allocatingCapacity: bufsize)
-    defer { buffer.deallocateCapacity(bufsize) }
+    let buffer  = UnsafeMutablePointer<UInt8>.allocate(capacity: bufsize)
+    defer { buffer.deallocate(capacity: bufsize) }
   #else
     let buffer  = UnsafeMutablePointer<UInt8>.alloc(bufsize)
     defer { buffer.dealloc(bufsize) }

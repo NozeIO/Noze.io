@@ -111,7 +111,7 @@ public extension ServerResponse {
   
 }
 
-public extension Dictionary where Key : StringLiteralConvertible {
+public extension Dictionary where Key : ExpressibleByStringLiteral {
   public subscript(int key : Key) -> Int? {
     guard let v = self[key] else { return nil }
     if let i = (v as? Int) { return i }

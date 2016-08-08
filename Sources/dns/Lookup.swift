@@ -10,7 +10,7 @@ import Dispatch
 import xsys
 import core
 
-public typealias LookupCB = ( ErrorProtocol?, sockaddr_any? ) -> Void
+public typealias LookupCB = ( Error?, sockaddr_any? ) -> Void
 
 let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
                                         DISPATCH_QUEUE_CONCURRENT)

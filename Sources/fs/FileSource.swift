@@ -48,7 +48,7 @@ public class FileSource: GCDChannelBase, GReadableSourceType {
   let openFlags = xsys.O_RDONLY
   
   public override func createChannelIfMissing(Q q: DispatchQueueType)
-                       -> ErrorProtocol?
+                       -> Error?
   {
     guard channel == nil else { return nil }
     assert(!fd.isValid, "descriptor is valid, but channel is closed?")

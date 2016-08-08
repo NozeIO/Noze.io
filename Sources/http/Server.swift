@@ -12,7 +12,7 @@ import events
 import class net.Server
 import class net.Socket
 
-public typealias ClientErrorEventCB = (( ErrorProtocol, Socket )) -> Void
+public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
 public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
 
 public class Server: net.Server {
@@ -72,7 +72,7 @@ public class Server: net.Server {
   // Inherited: close, connection, listening
 
   public var continueListeners    = EventListenerSet<Void>()
-  public var clientErrorListeners = EventListenerSet<( ErrorProtocol, Socket )>()
+  public var clientErrorListeners = EventListenerSet<( Error, Socket )>()
   public var requestListeners     =
                EventListenerSet<( IncomingMessage, ServerResponse )>()
   

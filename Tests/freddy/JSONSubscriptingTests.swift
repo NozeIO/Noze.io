@@ -338,7 +338,7 @@ class JSONSubscriptingTests: XCTestCase {
         }
     }
     
-    func testJSONErrorProtocolNotConvertible() {
+    func testJSONErrorNotConvertible() {
         do {
             _ = try json.int("people", 0, "name")
         } catch let JSON.Error.ValueNotConvertible(value, to) {

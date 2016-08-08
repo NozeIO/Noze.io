@@ -23,7 +23,7 @@ import dns
 public typealias ConnectCB = ( Socket ) -> Void
 public typealias TimeoutCB = ( Socket ) -> Void
 
-public enum SocketError : ErrorProtocol {
+public enum SocketError : Error {
   case Generic(POSIXError)
   case ConnectionRefused(sockaddr_any)
   
@@ -270,7 +270,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
 
   // MARK: - Event Handlers
   
-  var lookupListeners  = EventListenerSet<(ErrorProtocol?, sockaddr_any?)>(
+  var lookupListeners  = EventListenerSet<(Error?, sockaddr_any?)>(
                            queueLength: 1, coalesce: true)
   var connectListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)

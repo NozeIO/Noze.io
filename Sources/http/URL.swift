@@ -275,7 +275,7 @@ extension URL : CustomStringConvertible {
   
 }
 
-extension URL : StringLiteralConvertible {
+extension URL : ExpressibleByStringLiteral {
   
   public init(stringLiteral value: StringLiteralType) {
     self.init(value)

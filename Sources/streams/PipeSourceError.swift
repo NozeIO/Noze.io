@@ -8,12 +8,12 @@
 
 import core
 
-public struct PipeSourceError : ErrorProtocol {
+public struct PipeSourceError : Error {
   
-  public let error  : ErrorProtocol
+  public let error  : Error
   public let stream : ReadableStreamType
   
-  init(error: ErrorProtocol, stream: ReadableStreamType) {
+  init(error: Error, stream: ReadableStreamType) {
     self.error  = error
     self.stream = stream
   }

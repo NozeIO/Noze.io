@@ -36,7 +36,7 @@ public enum StdioAction {
   //      but I guess it isn't worth it given the fail-case.
 }
 
-extension StdioAction : IntegerLiteralConvertible {
+extension StdioAction : ExpressibleByIntegerLiteral {
   
   public init(integerLiteral value: Int32) {
     let fd = FileDescriptor(value)

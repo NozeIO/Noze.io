@@ -11,7 +11,7 @@
 #else
   import Darwin
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif
 
 import xsys

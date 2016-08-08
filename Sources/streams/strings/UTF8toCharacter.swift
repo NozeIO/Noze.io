@@ -26,7 +26,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   
   var allData = Array<UInt8>() // super lame implementation
 
-  public override func _flush(done cb: ( ErrorProtocol?, [ Character ]? ) -> Void) {
+  public override func _flush(done cb: ( Error?, [ Character ]? ) -> Void) {
     
     // copy, sigh
     if !allData.isEmpty {
@@ -58,7 +58,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   }
   
   public override func _transform(bucket b : [ UInt8 ],
-                                  done     : ( ErrorProtocol?, [ Character ]? )
+                                  done     : ( Error?, [ Character ]? )
                        -> Void)
   {
     // This is still lame, but at least we don't spool up for plain ASCII

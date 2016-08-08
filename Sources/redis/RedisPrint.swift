@@ -10,7 +10,7 @@ import core
 
 // TODO: print for Hash/OHash variants
 
-public func print(error err: ErrorProtocol?, value: RedisValue?) {
+public func print(error err: Error?, value: RedisValue?) {
   assert(err != nil || value != nil, "Neither error nor value in Redis result?")
   
   if let error = err {
@@ -53,7 +53,7 @@ public func print(error err: ErrorProtocol?, value: RedisValue?) {
   }
 }
 
-public func print(error err: ErrorProtocol?, values: [RedisValue]?) {
+public func print(error err: Error?, values: [RedisValue]?) {
   assert(err != nil || values != nil, "Neither error nor vals in Redis result?")
   
   if let error = err {

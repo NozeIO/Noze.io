@@ -8,7 +8,7 @@
 
 import core
 
-public enum EncodingError : ErrorProtocol {
+public enum EncodingError : Error {
 
   case Generic
   case CouldNotDecodeCString

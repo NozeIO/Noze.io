@@ -43,7 +43,7 @@ extension POSIXError : CustomStringConvertible {
 
 import core
 
-public extension ErrorProtocol {
+public extension Error {
   
   var isWouldBlockError : Bool {
     guard let posixError = self as? POSIXError else {

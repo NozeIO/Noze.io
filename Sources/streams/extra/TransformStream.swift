@@ -84,7 +84,7 @@ public class TransformStream<WriteType, ReadType>
   let doCork      = false
   
   public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done   : ( ErrorProtocol?, Int ) -> Void)
+                                      done   : ( Error?, Int ) -> Void)
   { // #linux-public
     // called by WritableStream.writeNextBlock() (which in turn is triggered by
     // DuplexStream.writev().
@@ -166,7 +166,7 @@ public class TransformStream<WriteType, ReadType>
   // MARK: - Transform
   
   public func _transform(bucket b : [ WriteType ],
-                         done     : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+                         done     : ( Error?, [ ReadType ]? ) -> Void)
   {
     fatalError("Subclass must override transform()")
     
@@ -174,7 +174,7 @@ public class TransformStream<WriteType, ReadType>
     // bucket as written. Also does a 'push' if there is push data.
     // done(nil, nil)
   }
-  public func _flush(done cb: ( ErrorProtocol?, [ ReadType ]? ) -> Void) {
+  public func _flush(done cb: ( Error?, [ ReadType ]? ) -> Void) {
     cb(nil, nil)
   }
 }
@@ -185,8 +185,8 @@ public protocol GTransformStreamType : class {
   associatedtype ReadType
   
   func _transform(bucket b : [ WriteType ],
-                  done     : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
-  func _flush    (done cb  : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+                  done     : ( Error?, [ ReadType ]? ) -> Void)
+  func _flush    (done cb  : ( Error?, [ ReadType ]? ) -> Void)
   
 }
 
@@ -194,6 +194,6 @@ public protocol GTransformStreamType : class {
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-import enum Foundation.POSIXError // this is for POSIXError : ErrorProtocol
+import enum Foundation.POSIXError // this is for POSIXError : Error
 #endif
 

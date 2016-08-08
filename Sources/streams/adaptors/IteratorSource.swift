@@ -58,7 +58,7 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
   public mutating func next(queue _: DispatchQueueType, count: Int,
-                            yield : ( ErrorProtocol?, [ G.Element ]? ) -> Void)
+                            yield : ( Error?, [ G.Element ]? ) -> Void)
   {
     guard let first = source.next() else {
       yield(nil, nil) // EOF
@@ -132,7 +132,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// to the 'count' property which was passed in.
 
   public func next(queue Q : DispatchQueueType, count: Int,
-                   yield   : ( ErrorProtocol?, [ G.Element ]? )-> Void)
+                   yield   : ( Error?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch

@@ -27,7 +27,7 @@ class NumberPrinter : streams.SinkType, GWritableTargetType {
   
   func writev(queue q : DispatchQueueType,
               chunks  : [ [ Int ] ],
-              yield   : ( ErrorProtocol?, Int ) -> Void)
+              yield   : ( Error?, Int ) -> Void)
   {
     var count = 0
     

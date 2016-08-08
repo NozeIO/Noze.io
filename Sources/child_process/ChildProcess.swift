@@ -14,7 +14,7 @@ import streams
   import let Glibc.ECHILD
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif
 
 public typealias ExitCB = ( Int?, Int? ) -> Void

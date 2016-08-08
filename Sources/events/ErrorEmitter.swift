@@ -8,10 +8,10 @@
 
 #if swift(>=3.0)
 #else
-public typealias ErrorProtocol = ErrorType
+public typealias Error = ErrorType
 #endif
 
-public typealias ErrorCB = ( ErrorProtocol ) -> Void
+public typealias ErrorCB = ( Error ) -> Void
 
 public protocol ErrorEmitterType : EventEmitterType {
 
@@ -26,7 +26,7 @@ public protocol ErrorEmitterType : EventEmitterType {
 
 public protocol ErrorEmitTarget {
   
-  func emit(error e: ErrorProtocol)
+  func emit(error e: Error)
   
 }
 
@@ -42,9 +42,9 @@ public class ErrorEmitter : ErrorEmitterType, ErrorEmitTarget {
   
   // MARK: - ErrorEmitter
   
-  public var errorListeners = EventListenerSet<ErrorProtocol>()
+  public var errorListeners = EventListenerSet<Error>()
   
-  public func emit(error e: ErrorProtocol) { errorListeners.emit(e) }
+  public func emit(error e: Error) { errorListeners.emit(e) }
   
   public func onError(handler cb: ErrorCB) -> Self {
     errorListeners.add(handler: cb)

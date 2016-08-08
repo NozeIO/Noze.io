@@ -15,7 +15,7 @@ import streams
 
 var line2msg : Transform<String, Message> {
   return through2 {
-    ( lines : [ String ], _, done: ( ErrorProtocol?, [Message]? ) -> Void ) in
+    ( lines : [ String ], _, done: ( Error?, [Message]? ) -> Void ) in
     
     /// split the line into the source, command and argument parts
     func splitIRCLine(line l: String) -> ( String?, String?, [ String ]?) {

@@ -14,5 +14,5 @@ import core
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif

@@ -36,12 +36,12 @@ extension DispatchQueueType {
   }
 
   func evalAsync<ArgT>(f: (ArgT) throws -> Void, _ arg: ArgT,
-                       _ cb: ( ErrorProtocol? ) -> Void)
+                       _ cb: ( Error? ) -> Void)
   {
     core.module.retain()
     
     module.Q.async {
-      let returnError : ErrorProtocol?
+      let returnError : Error?
       
       do {
         try f(arg)
@@ -60,12 +60,12 @@ extension DispatchQueueType {
   
   func evalAsync<ArgT, RT>(f: (ArgT) throws -> RT,
                            _ arg: ArgT,
-                           _ cb: ( ErrorProtocol?, RT? ) -> Void)
+                           _ cb: ( Error?, RT? ) -> Void)
   {
     core.module.retain()
     
     module.Q.async {
-      let returnError : ErrorProtocol?
+      let returnError : Error?
       let result      : RT?
       
       do {
@@ -89,13 +89,13 @@ extension DispatchQueueType {
     evalAsync(f: f, arg, cb)
   }
   func evalAsync<ArgT>(_ f: (ArgT) throws -> Void, _ arg: ArgT,
-                       _ cb: ( ErrorProtocol? ) -> Void)
+                       _ cb: ( Error? ) -> Void)
   {
     evalAsync(f: f, arg, cb)
   }
   func evalAsync<ArgT, RT>(_ f: (ArgT) throws -> RT,
                            _ arg: ArgT,
-                           _ cb: ( ErrorProtocol?, RT? ) -> Void)
+                           _ cb: ( Error?, RT? ) -> Void)
   {
     evalAsync(f: f, arg, cb)
   }

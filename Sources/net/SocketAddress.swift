@@ -84,7 +84,7 @@ extension in_addr : Equatable, Hashable {
   
 }
 
-extension in_addr: StringLiteralConvertible {
+extension in_addr: ExpressibleByStringLiteral {
   // this allows you to do: let addr : in_addr = "192.168.0.1"
 
   public init(stringLiteral value: StringLiteralType) {
@@ -225,7 +225,7 @@ extension sockaddr_in: Equatable, Hashable {
  * it requires:
  *   StringInterpolationConvertible
  */
-extension sockaddr_in: StringLiteralConvertible {
+extension sockaddr_in: ExpressibleByStringLiteral {
   
   public init(stringLiteral value: String) {
     self.init(string: value)

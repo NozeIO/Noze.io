@@ -22,7 +22,7 @@ public enum BodyParserBody {
   
   case NotParsed
   case NoBody // IsPerfect
-  case Error(ErrorProtocol)
+  case Error(SwiftError)
   
   case URLEncoded(Dictionary<String, Any>)
   
@@ -73,7 +73,7 @@ public extension BodyParserBody {
   }
 }
 
-extension BodyParserBody : StringLiteralConvertible {
+extension BodyParserBody : ExpressibleByStringLiteral {
 
   public init(stringLiteral value: String) {
     self = .Text(value)
@@ -101,7 +101,7 @@ public struct bodyParser {
 }
 
 
-public enum BodyParserError : ErrorProtocol {
+public enum BodyParserError : Error {
   
   case ExtraStoreInconsistency
   
