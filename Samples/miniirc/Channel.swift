@@ -35,7 +35,8 @@ class Channel {
   // MARK: - Joining & Leaving
   
   func join(session s: Session) {
-    guard !sessions.contains({ $0 === s }) else {
+    let joinedAlready = sessions.contains { $0 === s }
+    guard !joinedAlready else {
       print("joined already?!: \(s)")
       return
     }

@@ -87,7 +87,11 @@ var line2msg : Transform<String, Message> {
       
       let ( source, commandString, arguments ) = splitIRCLine(line: line)
       
-      guard let cs = commandString, args = arguments else {
+      // Note: split in two guards to compile with both S2&3
+      guard let cs = commandString else {
+        return Message(source: source, command: .Invalid(line))
+      }
+      guard let args = arguments else {
         return Message(source: source, command: .Invalid(line))
       }
       
