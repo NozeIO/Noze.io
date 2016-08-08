@@ -353,7 +353,9 @@ public struct JSONParser {
             codeUnits = [codeUnit]
         }
 
-        let transcodeHadError = transcode(codeUnits.makeIterator(), from: UTF16.self, to: UTF8.self, stoppingOnError: true, sendingOutputTo: { self.stringDecodingBuffer.append($0) })
+        let transcodeHadError = transcode(codeUnits.makeIterator(), from: UTF16.self, to: UTF8.self, stoppingOnError: true) { (outputEncodingCodeUnit) in
+              self.stringDecodingBuffer.append(outputEncodingCodeUnit)
+        }
 
         if transcodeHadError {
             throw Error.UnicodeEscapeInvalid(offset: start)
