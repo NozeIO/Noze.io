@@ -79,7 +79,7 @@ public extension http_parser {
     -> size_t?
   {
     let len : Int
-    if let p = p, data = data {
+    if let p = p, let data = data {
       len = p - data + 1
     }
     else {
@@ -98,7 +98,7 @@ public extension http_parser {
     -> size_t?
   {
     let len : Int
-    if let p = p, data = data {
+    if let p = p, let data = data {
       len = p - data
     }
     else {
@@ -161,9 +161,9 @@ public extension http_parser {
                               _ data: UnsafePointer<CChar>?) -> size_t?
   {
     let len : size_t, er : size_t
-    if let p = p, mark = mark { len = p - mark }
+    if let p = p, let mark = mark { len = p - mark }
     else { len = 0 }
-    if let p = p, data = data { er = p - data + 1 }
+    if let p = p, let data = data { er = p - data + 1 }
     else { er = 0 }
     return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, settings, len, er)
   }
@@ -177,9 +177,9 @@ public extension http_parser {
                                         _ data: UnsafePointer<CChar>?) -> size_t?
   {
     let len : size_t, er : size_t
-    if let p = p, mark = mark { len = p - mark }
+    if let p = p, let mark = mark { len = p - mark }
     else { len = 0 }
-    if let p = p, data = data { er = p - data }
+    if let p = p, let data = data { er = p - data }
     else { er = 0 }
     return CALLBACK_DATA_(cb, &mark, &CURRENT_STATE, settings, len, er)
   }
