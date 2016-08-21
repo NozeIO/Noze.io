@@ -14,8 +14,8 @@ class HTTPParserTests: XCTestCase {
   func testSimpleGETParsing() throws {
     
     var parser   = http_parser()
-    var settings = http_parser_settings()
-    
+    var settings = http_parser_settings_cb()
+
     settings.onHeaderField { parser, buffer, size in
       print("Header: \(debugBucketAsString(buffer, size))")
       return 0
@@ -62,7 +62,7 @@ class HTTPParserTests: XCTestCase {
   func testSimplePOSTParsing() {
     
     var parser   = http_parser()
-    var settings = http_parser_settings()
+    var settings = http_parser_settings_cb()
     
     settings.onHeaderField { parser, buffer, size in
       print("Header: \(debugBucketAsString(buffer, size))")

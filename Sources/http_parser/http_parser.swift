@@ -46,41 +46,10 @@ public enum HTTPParserType {
   case Both
 }
 
-public typealias http_data_cb =
-                   ( http_parser, UnsafePointer<CChar>, size_t) -> Int
+public typealias http_data_cb = ( http_parser,
+                                  UnsafePointer<CChar>, size_t) -> Int
 public typealias http_cb      = ( http_parser ) -> Int
 
-
-public struct http_parser_settings {
-  
-  public init() {}
-  
-  var cbMessageBegin    : http_cb?      = nil
-  var cbURL             : http_data_cb? = nil
-  var cbStatus          : http_data_cb? = nil
-  var cbHeaderField     : http_data_cb? = nil
-  var cbHeaderValue     : http_data_cb? = nil
-  var cbHeadersComplete : http_cb?      = nil
-  var cbBody            : http_data_cb? = nil
-  var cbMessageComplete : http_cb?      = nil
-  
-  /* When on_chunk_header is called, the current chunk length is stored
-   * in parser->content_length.
-   */
-  var cbChunkHeader     : http_cb? = nil
-  var cbChunkComplete   : http_cb? = nil
-  
-  public mutating func onMessageBegin   (cb: http_cb)      { cbMessageBegin    = cb }
-  public mutating func onURL            (cb: http_data_cb) { cbURL             = cb }
-  public mutating func onStatus         (cb: http_data_cb) { cbStatus          = cb }
-  public mutating func onHeaderField    (cb: http_data_cb) { cbHeaderField     = cb }
-  public mutating func onHeaderValue    (cb: http_data_cb) { cbHeaderValue     = cb }
-  public mutating func onHeadersComplete(cb: http_cb)      { cbHeadersComplete = cb }
-  public mutating func onBody           (cb: http_data_cb) { cbBody            = cb }
-  public mutating func onMessageComplete(cb: http_cb)      { cbMessageComplete = cb }
-  public mutating func onChunkHeader    (cb: http_cb)      { cbChunkHeader     = cb }
-  public mutating func onChunkComplete  (cb: http_cb)      { cbChunkComplete   = cb }
-}
 
 public struct http_parser {
   // TBD: this could be a struct, except maybe for the callbacks - those would

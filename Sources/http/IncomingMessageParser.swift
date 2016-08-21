@@ -11,19 +11,18 @@ import core
 import console
 import streams
 import net
-import enum   http_parser.HTTPError
-import struct http_parser.http_parser_settings
-import struct http_parser.http_parser
+import enum     http_parser.HTTPError
+import protocol http_parser.http_parser_settings
+import struct   http_parser.http_parser
 
 private let heavyDebug   = false
 private let debugTraffic = false
 
 /// Uses the low-level parser to construct an IncomingMessage
-class IncomingMessageParser {
+class IncomingMessageParser: http_parser_settings {
   // TBD: should this be a Transform stream? (too much overhead?)
   
   var parser    = http_parser() // this is per-socket
-  var callbacks : http_parser_settings? = nil
   
   enum LastCallback { case None, Field, Value, URL }
   var lastCB    = LastCallback.None
@@ -74,8 +73,7 @@ class IncomingMessageParser {
   // MARK: - Feed the parser
   
   func write(bucket b: [ UInt8 ]) {
-    /* push to parser (and setup parser if not yet done) */
-    if callbacks == nil { _setupParser() }
+    /* push to parser */
     
     if heavyDebug {
       if  debugTraffic { print("write: #\(b.count) \(b)") }
@@ -84,7 +82,7 @@ class IncomingMessageParser {
     
     let rc : xsys.size_t = b.withUnsafeBufferPointer { ptr in
       let cp = UnsafePointer<CChar>(ptr.baseAddress)
-      return self.parser.execute(callbacks!, cp, b.count)
+      return self.parser.execute(self, cp, b.count)
     }
     
     /* exit if parser failed */
@@ -95,11 +93,10 @@ class IncomingMessageParser {
     }
   }
   func end() {
-    /* push to parser (and setup parser if not yet done) */
-    if callbacks == nil { _setupParser() }
-    
+    /* push to parser */
+
     // print("END")
-    _ = self.parser.execute(callbacks!, nil, 0)
+    _ = self.parser.execute(self, nil, 0)
           // Note: this can still generate events!!!
   }
   
@@ -115,54 +112,56 @@ class IncomingMessageParser {
   
   let buffer   = RawByteBuffer(capacity: 100)
   var lastName : String? = nil
-  
-  final func _setupParser() {
-    // Oh well, all those inline callbacks are an'bad stylz
-    var p = http_parser_settings()
-    
-    p.onMessageBegin { [unowned self] p in
-      self.lastCB = .None
-      self.headers.removeAll()
-      self.buffer.reset()
-      return 0
-    }
-    p.onMessageComplete { [unowned self] p in
-      if heavyDebug { print("on-msg complete") }
-      self.cbDone?()
-      return 0
-    }
-    
-    p.onHeadersComplete { [unowned self] p in
-      return self.onHeadersComplete(parser: p)
-    }
-    
-    p.onStatus { p, buf, len in
-      //assert(false) // should not be called, we are parsing a request ...
-      return 0
-    }
-    
-    p.onURL { [unowned self] parser, p, len in
-      return self.processDataCB(newState: .URL, p: p, len: len)
-    }
-    p.onHeaderField { [unowned self] parser, p, len in
-      return self.processDataCB(newState: .Field, p: p, len: len)
-    }
-    p.onHeaderValue { [unowned self] parser, p, len in
-      return self.processDataCB(newState: .Value, p: p, len: len)
-    }
-    
-    p.onBody { [unowned self] p, buf, len in
-      // FIXME: do proper buckets. Should have a weak-bucket which copies only
-      //        when it leaves the call stack.
-      if heavyDebug { print("on-body: #\(len)") }
-      let cp     = UnsafePointer<UInt8>(buf) // hm. should onBody be UInt8?
-      let buffer = UnsafeBufferPointer<UInt8>(start: cp, count:len)
-      self.push(data: Array(buffer))
-      return 0
-    }
-    
-    callbacks = p
+
+  func onMessageBegin(parser p: http_parser ) -> Int {
+    self.lastCB = .None
+    self.headers.removeAll()
+    self.buffer.reset()
+    return 0
   }
+  func onMessageComplete(parser p: http_parser ) -> Int {
+    if heavyDebug { print("on-msg complete") }
+    self.cbDone?()
+    return 0
+  }
+  func onStatus(parser p: http_parser, _ data: UnsafePointer<CChar>, _ len: size_t)
+       -> Int
+  {
+    //assert(false) // should not be called, we are parsing a request ...
+    return 0
+  }
+  
+  func onURL(parser p: http_parser, _ data: UnsafePointer<CChar>, _ len: size_t)
+       -> Int
+  {
+    return self.processDataCB(newState: .URL, p: data, len: len)
+  }
+  func onHeaderField(parser p: http_parser,
+                     _ data: UnsafePointer<CChar>, _ l: size_t)
+       -> Int
+  {
+    return self.processDataCB(newState: .Field, p: data, len: l)
+  }
+  func onHeaderValue(parser p: http_parser,
+                     _ data: UnsafePointer<CChar>, _ l: size_t)
+       -> Int
+  {
+    return self.processDataCB(newState: .Value, p: data, len: l)
+  }
+  
+  func onBody(parser p: http_parser,
+              _ data: UnsafePointer<CChar>, _ len: size_t)
+       -> Int
+  {
+    // FIXME: do proper buckets. Should have a weak-bucket which copies only
+    //        when it leaves the call stack.
+    if heavyDebug { print("on-body: #\(len)") }
+    let cp     = UnsafePointer<UInt8>(data) // hm. should onBody be UInt8?
+    let buffer = UnsafeBufferPointer<UInt8>(start: cp, count:len)
+    self.push(data: Array(buffer))
+    return 0
+  }
+  
   
   final func addHeaderLine(name ln: String, value: String) {
     // FIXME: multi-value etc
