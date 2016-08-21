@@ -559,6 +559,7 @@
 		E8F668521CFB49CD00A6900B /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
 		E8F668531CFB49CD00A6900B /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E8F668541CFB49D900A6900B /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
+		E8F75D2F1D58EA21001F7559 /* http_parser_settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2007,6 +2008,7 @@
 		E8F2ACF41CF658A7000B8CD1 /* JSONEncodingDetector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetector3.swift; path = Sources/freddy/JSONEncodingDetector3.swift; sourceTree = "<group>"; };
 		E8F668431CFB494E00A6900B /* Swift3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swift3.swift; sourceTree = "<group>"; };
 		E8F6684E1CFB49AD00A6900B /* Swift3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swift3.swift; sourceTree = "<group>"; };
+		E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = http_parser_settings.swift; path = Sources/http_parser/http_parser_settings.swift; sourceTree = SOURCE_ROOT; };
 		E8FF78801CDA3657000256E2 /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Sources/http/URL.swift; sourceTree = SOURCE_ROOT; };
 		E8FF78841CDA403F000256E2 /* Directory2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Directory2.swift; path = Sources/fs/Directory2.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -3385,6 +3387,7 @@
 				E8DA646A1CE5E24900531F54 /* AUTHORS */,
 				E8DA64731CE5E24900531F54 /* LICENSE-MIT */,
 				E84C9CED1D0981840080B55B /* http_parser.swift */,
+				E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */,
 				E8DA646F1CE5E24900531F54 /* http_parser2.swift */,
 				E8DA64701CE5E24900531F54 /* http_parser3.swift */,
 				E8DA64691CE5E24900531F54 /* ascii.swift */,
@@ -5309,6 +5312,7 @@
 				E8EB495E1CF49D3200E7787A /* CString.swift in Sources */,
 				E8EB495F1CF49D3200E7787A /* HTTPError.swift in Sources */,
 				E8EB495D1CF49D3200E7787A /* ascii.swift in Sources */,
+				E8F75D2F1D58EA21001F7559 /* http_parser_settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
