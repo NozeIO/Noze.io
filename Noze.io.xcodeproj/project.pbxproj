@@ -1714,7 +1714,7 @@
 		E85EB6D61D4384C70012FE11 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E85EB6DE1D43C1790012FE11 /* UUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UUID.swift; path = Sources/xsys/UUID.swift; sourceTree = SOURCE_ROOT; };
 		E85EB6E41D43C2080012FE11 /* XSysTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XSysTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XSysTests.swift; path = Tests/xsys/XSysTests.swift; sourceTree = SOURCE_ROOT; };
+		E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XSysTests.swift; path = Tests/xsysTests/XSysTests.swift; sourceTree = SOURCE_ROOT; };
 		E85EF89C1CFF9CA300BDA997 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Route.swift; path = Sources/express/Route.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A01CFFA97B00BDA997 /* Render.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Render.swift; path = Sources/express/Render.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerResponse.swift; path = Sources/express/ServerResponse.swift; sourceTree = SOURCE_ROOT; };
@@ -1726,9 +1726,9 @@
 		E860C6491CCD54C700E9F479 /* NozeConcepts4NonNodePeople.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = NozeConcepts4NonNodePeople.md; path = Documentation/NozeConcepts4NonNodePeople.md; sourceTree = "<group>"; };
 		E8619BC41CF339EE004CCF5A /* Directory3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Directory3.swift; path = Sources/fs/Directory3.swift; sourceTree = SOURCE_ROOT; };
 		E869BED31D411761007BFE54 /* Pause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pause.swift; path = Sources/connect/Pause.swift; sourceTree = SOURCE_ROOT; };
-		E86BC6F51CF3AEA200A397BE /* DNSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DNSTests.swift; path = Tests/dns/DNSTests.swift; sourceTree = SOURCE_ROOT; };
+		E86BC6F51CF3AEA200A397BE /* DNSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DNSTests.swift; path = Tests/dnsTests/DNSTests.swift; sourceTree = SOURCE_ROOT; };
 		E86BC6F71CF3AEB300A397BE /* PipeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipeTests.swift; sourceTree = "<group>"; };
-		E86BC6F91CF3AEEE00A397BE /* NozeIOTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NozeIOTestCase.swift; path = Tests/streams/NozeIOTestCase.swift; sourceTree = SOURCE_ROOT; };
+		E86BC6F91CF3AEEE00A397BE /* NozeIOTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NozeIOTestCase.swift; path = Tests/streamsTests/NozeIOTestCase.swift; sourceTree = SOURCE_ROOT; };
 		E86D8ABC1CF353F4007BE28A /* PosixWrappers3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PosixWrappers3.swift; path = Sources/fs/PosixWrappers3.swift; sourceTree = SOURCE_ROOT; };
 		E86FC1461CD38A5D00E9A594 /* Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Misc.swift; path = Sources/http/Misc.swift; sourceTree = SOURCE_ROOT; };
 		E874EC981D119C0E00FA0606 /* Cookies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cookies.swift; path = Sources/http/Cookies.swift; sourceTree = SOURCE_ROOT; };
@@ -1863,7 +1863,7 @@
 		E8C90BED1CFE704B00F85436 /* SimpleKVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVC.swift; path = Sources/mustache/SimpleKVC.swift; sourceTree = "<group>"; };
 		E8C90BF31CFE709700F85436 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/mustache/README.md; sourceTree = "<group>"; };
 		E8C90BFA1CFE71B800F85436 /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8C90C081CFE722E00F85436 /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustache/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
+		E8C90C081CFE722E00F85436 /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustacheTests/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
 		E8C90C0A1CFE74B400F85436 /* MustacheNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode.swift; path = Sources/mustache/MustacheNode.swift; sourceTree = "<group>"; };
 		E8C90C0C1CFE74E400F85436 /* MustacheParser3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser3.swift; path = Sources/mustache/MustacheParser3.swift; sourceTree = "<group>"; };
 		E8C90C0E1CFE759E00F85436 /* MustacheNode3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode3.swift; path = Sources/mustache/MustacheNode3.swift; sourceTree = "<group>"; };
@@ -1918,7 +1918,7 @@
 		E8D4DFA21CFC67D000921230 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E8D4DFA41CFC68B700921230 /* LinuxString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LinuxString.swift; path = Sources/xsys/LinuxString.swift; sourceTree = SOURCE_ROOT; };
 		E8D4DFB01CFC773A00921230 /* HTTPParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTTPParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8D4DFBE1CFC779700921230 /* HTTPParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPParserTests.swift; path = Tests/http_parser/HTTPParserTests.swift; sourceTree = SOURCE_ROOT; };
+		E8D4DFBE1CFC779700921230 /* HTTPParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPParserTests.swift; path = Tests/httpTests_parser/HTTPParserTests.swift; sourceTree = SOURCE_ROOT; };
 		E8D4DFC01CFDADB200921230 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sources/connect/Logger.swift; sourceTree = SOURCE_ROOT; };
 		E8D4DFC41CFDB60000921230 /* timespec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = timespec.swift; path = Sources/xsys/timespec.swift; sourceTree = SOURCE_ROOT; };
 		E8D4DFC71CFDD04F00921230 /* SocketSourceTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SocketSourceTarget.swift; path = Sources/net/SocketSourceTarget.swift; sourceTree = SOURCE_ROOT; };
@@ -1965,7 +1965,7 @@
 		E8EA87BF1CF733F900406C27 /* libbase64.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libbase64.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8EA87C61CF734AF00406C27 /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64.swift; path = Sources/base64/Base64.swift; sourceTree = "<group>"; };
 		E8EA87C71CF734AF00406C27 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Sources/base64/LICENSE; sourceTree = "<group>"; };
-		E8EA87CC1CF73A7E00406C27 /* Base64Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64Tests.swift; path = Tests/base64/Base64Tests.swift; sourceTree = SOURCE_ROOT; };
+		E8EA87CC1CF73A7E00406C27 /* Base64Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64Tests.swift; path = Tests/base64Tests/Base64Tests.swift; sourceTree = SOURCE_ROOT; };
 		E8EB49551CF49D0700E7787A /* libhttp_parser.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhttp_parser.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8EED0F11D206738007BE73B /* libcows.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libcows.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8EED0F81D206903007BE73B /* cows.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = cows.txt; path = Sources/cows/cows.txt; sourceTree = "<group>"; };
@@ -1978,7 +1978,7 @@
 		E8EED1271D20AE7A007BE73B /* Extensions3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions3.swift; path = Samples/cows2code/Extensions3.swift; sourceTree = "<group>"; };
 		E8EED12B1D20B383007BE73B /* cows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = cows.swift; path = Sources/cows/cows.swift; sourceTree = "<group>"; };
 		E8F130131D01D48B00FCEC9B /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Storage.swift; path = "Samples/todo-mvc/Storage.swift"; sourceTree = "<group>"; };
-		E8F226161CF66B85002761C6 /* NSDataHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDataHelpers.swift; path = Tests/freddy/NSDataHelpers.swift; sourceTree = SOURCE_ROOT; };
+		E8F226161CF66B85002761C6 /* NSDataHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDataHelpers.swift; path = Tests/freddyTests/NSDataHelpers.swift; sourceTree = SOURCE_ROOT; };
 		E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libFreddy.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F25A561CF5EA8700355194 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CONTRIBUTING.md; path = Sources/freddy/CONTRIBUTING.md; sourceTree = "<group>"; };
 		E8F25A571CF5EA8700355194 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSON.swift; path = Sources/freddy/JSON.swift; sourceTree = "<group>"; };
@@ -1990,17 +1990,17 @@
 		E8F25A5F1CF5EA8700355194 /* JSONSubscripting2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscripting2.swift; path = Sources/freddy/JSONSubscripting2.swift; sourceTree = "<group>"; };
 		E8F25A601CF5EA8700355194 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Sources/freddy/LICENSE; sourceTree = "<group>"; };
 		E8F25A611CF5EA8700355194 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/freddy/README.md; sourceTree = "<group>"; };
-		E8F25A711CF5EC9F00355194 /* JSONDecodableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONDecodableTests.swift; path = Tests/freddy/JSONDecodableTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A721CF5EC9F00355194 /* JSONEncodableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodableTests.swift; path = Tests/freddy/JSONEncodableTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A731CF5EC9F00355194 /* JSONEncodingDetectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetectorTests.swift; path = Tests/freddy/JSONEncodingDetectorTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A741CF5EC9F00355194 /* JSONParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParserTests.swift; path = Tests/freddy/JSONParserTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A761CF5EC9F00355194 /* JSONSubscriptingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscriptingTests.swift; path = Tests/freddy/JSONSubscriptingTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A771CF5EC9F00355194 /* JSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTests.swift; path = Tests/freddy/JSONTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A781CF5EC9F00355194 /* JSONTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTypeTests.swift; path = Tests/freddy/JSONTypeTests.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A791CF5EC9F00355194 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Tests/freddy/LICENSE; sourceTree = SOURCE_ROOT; };
-		E8F25A7A1CF5EC9F00355194 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Tests/freddy/Person.swift; sourceTree = SOURCE_ROOT; };
-		E8F25A7B1CF5EC9F00355194 /* sample.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = sample.JSON; path = Tests/freddy/sample.JSON; sourceTree = SOURCE_ROOT; };
-		E8F25A7C1CF5EC9F00355194 /* sampleNoWhiteSpace.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = sampleNoWhiteSpace.JSON; path = Tests/freddy/sampleNoWhiteSpace.JSON; sourceTree = SOURCE_ROOT; };
+		E8F25A711CF5EC9F00355194 /* JSONDecodableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONDecodableTests.swift; path = Tests/freddyTests/JSONDecodableTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A721CF5EC9F00355194 /* JSONEncodableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodableTests.swift; path = Tests/freddyTests/JSONEncodableTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A731CF5EC9F00355194 /* JSONEncodingDetectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetectorTests.swift; path = Tests/freddyTests/JSONEncodingDetectorTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A741CF5EC9F00355194 /* JSONParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParserTests.swift; path = Tests/freddyTests/JSONParserTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A761CF5EC9F00355194 /* JSONSubscriptingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscriptingTests.swift; path = Tests/freddyTests/JSONSubscriptingTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A771CF5EC9F00355194 /* JSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTests.swift; path = Tests/freddyTests/JSONTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A781CF5EC9F00355194 /* JSONTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTypeTests.swift; path = Tests/freddyTests/JSONTypeTests.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A791CF5EC9F00355194 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = Tests/freddyTests/LICENSE; sourceTree = SOURCE_ROOT; };
+		E8F25A7A1CF5EC9F00355194 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Tests/freddyTests/Person.swift; sourceTree = SOURCE_ROOT; };
+		E8F25A7B1CF5EC9F00355194 /* sample.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = sample.JSON; path = Tests/freddyTests/sample.JSON; sourceTree = SOURCE_ROOT; };
+		E8F25A7C1CF5EC9F00355194 /* sampleNoWhiteSpace.JSON */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = sampleNoWhiteSpace.JSON; path = Tests/freddyTests/sampleNoWhiteSpace.JSON; sourceTree = SOURCE_ROOT; };
 		E8F25A8D1CF5ED5E00355194 /* FreddyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FreddyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F2ACE31CF5EF7D000B8CD1 /* Swift3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Swift3.swift; path = Sources/freddy/Swift3.swift; sourceTree = "<group>"; };
 		E8F2ACEE1CF64C19000B8CD1 /* JSONParser3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParser3.swift; path = Sources/freddy/JSONParser3.swift; sourceTree = "<group>"; };
@@ -3067,7 +3067,7 @@
 				E8F668431CFB494E00A6900B /* Swift3.swift */,
 			);
 			name = child_process;
-			path = Tests/child_process;
+			path = Tests/child_processTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F2E1CF3382600CA5517 /* fs */ = {
@@ -3082,7 +3082,7 @@
 				E8F6684E1CFB49AD00A6900B /* Swift3.swift */,
 			);
 			name = fs;
-			path = Tests/fs;
+			path = Tests/fsTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F341CF3382600CA5517 /* http */ = {
@@ -3092,7 +3092,7 @@
 				E8C15F361CF3382600CA5517 /* URLTests.swift */,
 			);
 			name = http;
-			path = Tests/http;
+			path = Tests/httpTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F371CF3382600CA5517 /* json */ = {
@@ -3101,7 +3101,7 @@
 				E8C15F381CF3382600CA5517 /* JSONModuleTests.swift */,
 			);
 			name = json;
-			path = Tests/json;
+			path = Tests/jsonTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F391CF3382600CA5517 /* leftpad */ = {
@@ -3110,7 +3110,7 @@
 				E8C15F3A1CF3382600CA5517 /* LeftPadTests.swift */,
 			);
 			name = leftpad;
-			path = Tests/leftpad;
+			path = Tests/leftpadTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F3B1CF3382600CA5517 /* net */ = {
@@ -3120,7 +3120,7 @@
 				E8C15F3E1CF3382600CA5517 /* SocketTests.swift */,
 			);
 			name = net;
-			path = Tests/net;
+			path = Tests/netTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C15F401CF3382600CA5517 /* streams */ = {
@@ -3134,7 +3134,7 @@
 				E8C15F471CF3382600CA5517 /* TransformTests.swift */,
 			);
 			name = streams;
-			path = Tests/streams;
+			path = Tests/streamsTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		E8C90BA11CFE28D600F85436 /* Middleware */ = {
@@ -8779,7 +8779,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Tests/freddy/Info.plist;
+				INFOPLIST_FILE = Tests/freddyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -8823,7 +8823,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Tests/freddy/Info.plist;
+				INFOPLIST_FILE = Tests/freddyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -8865,7 +8865,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Tests/freddy/Info.plist;
+				INFOPLIST_FILE = Tests/freddyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -8907,7 +8907,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Tests/freddy/Info.plist;
+				INFOPLIST_FILE = Tests/freddyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
