@@ -42,7 +42,7 @@ public extension http_parser {
   // FIXME: the error codes are wrong
   
   /// Run the notify callback FOR, returning ER if it fails
-  @inline(__always)
+  //@inline(__always) // crashes Swift3p4
   internal mutating func CALLBACK_NOTIFY_(_ cbe           : Callback,
                                  _ CURRENT_STATE : inout ParserState,
                                  _ settings : http_parser_settings,
@@ -111,7 +111,7 @@ public extension http_parser {
   //      directly patch the `mark`
   
   /// Run data callback FOR with LEN bytes, returning ER if it fails
-  @inline(__always)
+  // @inline(__always) // crashes Swift 3p4
   internal mutating func CALLBACK_DATA_(_ cbe           : Callback,
                                _ mark          : inout UnsafePointer<CChar>?,
                                _ CURRENT_STATE : inout ParserState,
