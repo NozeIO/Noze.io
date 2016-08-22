@@ -1,5 +1,8 @@
 language:  generic
 
+notifications:
+    slack: nozeio:LIFY1Jtkx0FRcLq3u1WliHRZ
+
 matrix:
     include:
         - os:   Linux
