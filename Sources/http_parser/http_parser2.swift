@@ -55,11 +55,11 @@ public extension http_parser {
   {
     let cb : http_cb!
     switch cbe {
-      case .MessageBegin:    cb = settings.cbMessageBegin
-      case .HeadersComplete: cb = settings.cbHeadersComplete
-      case .MessageComplete: cb = settings.cbMessageComplete
-      case .ChunkHeader:     cb = settings.cbChunkHeader
-      case .ChunkComplete:   cb = settings.cbChunkComplete
+      case .MessageBegin:    cb = settings.onMessageBegin
+      case .HeadersComplete: cb = settings.onHeadersComplete
+      case .MessageComplete: cb = settings.onMessageComplete
+      case .ChunkHeader:     cb = settings.onChunkHeader
+      case .ChunkComplete:   cb = settings.onChunkComplete
       default: assert(false, "incorrect CB");  cb = nil
     }
     
@@ -116,11 +116,11 @@ public extension http_parser {
     if mark != nil {
       let cb : http_data_cb!
       switch cbe {
-        case .URL:         cb = settings.cbURL
-        case .Status:      cb = settings.cbStatus
-        case .HeaderField: cb = settings.cbHeaderField
-        case .HeaderValue: cb = settings.cbHeaderValue
-        case .Body:        cb = settings.cbBody
+        case .URL:         cb = settings.onURL
+        case .Status:      cb = settings.onStatus
+        case .HeaderField: cb = settings.onHeaderField
+        case .HeaderValue: cb = settings.onHeaderValue
+        case .Body:        cb = settings.onBody
         default: assert(false, "incorrect CB"); cb = nil
       }
       
@@ -1219,19 +1219,17 @@ public extension http_parser {
            * We'd like to use CALLBACK_NOTIFY_NOADVANCE() here but we cannot, so
            * we have to simulate it by handling a change in errno below.
            */
-          if let cb = settings.cbHeadersComplete {
-            switch cb(self) {
-              case 0:
-                break;
+          switch settings.onHeadersComplete(parser: self) {
+            case 0:
+              break;
 
-              case 1:
-                self.flags.insert(.F_SKIPBODY)
-                break;
+            case 1:
+              self.flags.insert(.F_SKIPBODY)
+              break;
 
-              default:
-                error = .CB_headers_complete
-                return .Return(p - data)
-            }
+            default:
+              error = .CB_headers_complete
+              return .Return(p - data)
           }
           
           guard error == .OK else { return .Return(p - data)}
