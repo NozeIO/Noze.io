@@ -129,10 +129,11 @@
 #endif
 
 #else // Darwin
-  @noreturn public func abort() { Darwin.abort() }
 #if swift(>=3.0) // #swift3-1st-arg
-  @noreturn public func exit(_ code: Int32) { Darwin.exit(code) }
+  public func abort()             -> Never { Darwin.abort() }
+  public func exit(_ code: Int32) -> Never { Darwin.exit(code) }
 #else
+  @noreturn public func abort() { Darwin.abort() }
   @noreturn public func exit(code:   Int32) { Darwin.exit(code) }
 #endif
 
