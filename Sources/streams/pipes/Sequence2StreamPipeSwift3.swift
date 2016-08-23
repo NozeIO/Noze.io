@@ -16,9 +16,9 @@ import core
 ///
 ///   [ 'a', 'a', 'a' ] | zip | encrypt | fs
 ///
-public func |<TI: Sequence, TO: GWritableStreamType
-              where TI.Iterator.Element == TO.WriteType>
-            (left: TI, right: TO) -> TO
+  public func |<TI: Sequence, TO: GWritableStreamType>
+              (left: TI, right: TO) -> TO
+              where TI.Iterator.Element == TO.WriteType
 {
   return left.pipe(right)
 }
@@ -40,10 +40,10 @@ public extension Sequence {
   // TODO: We could support an async mode for blocking Sequences similar to
   //       the GeneratorSource.
   
-  public func pipe<TO: GWritableStreamType
-                   where Self.Iterator.Element == TO.WriteType>
-                  (_ outStream: TO, batchSize: Int = 10, endOnFinish: Bool = true)
+  public func pipe<TO: GWritableStreamType>
+              (_ outStream: TO, batchSize: Int = 10, endOnFinish: Bool = true)
               -> TO
+              where Self.Iterator.Element == TO.WriteType
   {
     let state = SequencePipeState(self, outStream,
                                   batchSize   : batchSize,
@@ -59,8 +59,8 @@ public extension Sequence {
   }
 }
 
-private class SequencePipeState<TI: Sequence, TO: GWritableStreamType
-                                where TI.Iterator.Element == TO.WriteType>
+private class SequencePipeState<TI: Sequence, TO: GWritableStreamType>
+              where TI.Iterator.Element == TO.WriteType
 {
   // TBD: should TI be bound to just a generator?
   

@@ -45,9 +45,7 @@ public class UniqStrings: TransformStream<String, String> {
   // TBD: we could also store just hashes? This might grow a little big ;-)
   var seenStrings = Set<String>()
   
-  public override func _transform(bucket b : [ String ],
-                                  done     : ( Error?, [String]? ) -> Void)
-  {
+  public override func _transform(bucket b: [ String ], done: TransformDoneCB) {
     guard !b.isEmpty else {
       done(nil, nil)
       return

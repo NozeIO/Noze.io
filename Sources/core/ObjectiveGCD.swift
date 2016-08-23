@@ -53,7 +53,7 @@ public func dispatch_get_main_queue() -> dispatch_queue_t {
 }
 
 public func dispatch_after(_ t: DispatchTimeType, _ q: DispatchQueueType,
-                           _ block: () ->())
+                           _ block: @escaping () ->())
 {
   q.asyncAfter(deadline: t, execute: block)
 }
@@ -83,7 +83,8 @@ public let  xsys_DISPATCH_IO_RANDOM = DispatchIO.StreamType.random
 public func dispatch_io_create          (_ type  : DispatchIO.StreamType,
                                          _ fileDescriptor: Int32,
                                          _ queue : DispatchQueue,
-                                         _ cleanupHandler: (error: Int32)->Void)
+                                         _ cleanupHandler:
+                                             @escaping (_ error: Int32)->Void)
             -> DispatchIO
 {
   return DispatchIO(type: type, fileDescriptor: fileDescriptor, queue: queue,
@@ -94,7 +95,8 @@ public func dispatch_io_create_with_path(_ type  : DispatchIO.StreamType,
                                          _ oflag : Int32,
                                          _ mode  : mode_t,
                                          _ queue : DispatchQueue,
-                                         _ cleanupHandler: (error: Int32)->Void)
+                                         _ cleanupHandler:
+                                             @escaping (_ error: Int32)->Void)
             -> DispatchIO
 {
   return DispatchIO(type: type, path: path, oflag: oflag, mode: mode,
@@ -103,12 +105,12 @@ public func dispatch_io_create_with_path(_ type  : DispatchIO.StreamType,
 
 public let DISPATCH_DATA_DESTRUCTOR_DEFAULT : (@convention(block) () -> Void)? = nil
 
-public func dispatch_data_create(_ buffer: UnsafePointer<Void>, _ size: Int,
+public func dispatch_data_create(_ buffer: UnsafeRawPointer, _ size: Int,
                                  _ queue: DispatchQueueType? = nil,
                                  _ destructor: (@convention(block) () -> Void)? = nil)
             -> DispatchDataType
 {
-  let tptr = UnsafePointer<UInt8>(buffer)
+  let tptr = buffer.assumingMemoryBound(to: UInt8.self)
   let bptr = UnsafeBufferPointer(start: tptr, count: size)
   if destructor == nil {
     return DispatchData(bytesNoCopy: bptr)
@@ -244,13 +246,15 @@ public extension DispatchIOType {
   
   public func read(offset off: off_t, length: Int,
                    queue: DispatchQueueType,
-                   ioHandler: (done: Bool, data: DispatchDataType?, error: Int32) -> Void)
+                   ioHandler: (_ done: Bool, _ data: DispatchDataType?,
+                               _ error: Int32) -> Void)
   {
     dispatch_io_read(self, off, length, queue, ioHandler)
   }
   public func write(offset off: off_t, data: DispatchDataType,
                     queue: DispatchQueueType,
-                    ioHandler: (done: Bool, data: DispatchDataType?, error: Int32) -> Void)
+                    ioHandler: (_ done: Bool, _ data: DispatchDataType?,
+                                _ error: Int32) -> Void)
   {
     dispatch_io_write(self, off, data, queue, ioHandler)
   }
@@ -276,9 +280,9 @@ extension DispatchDataType {
   }
   
   
-  public func enumerateBytes(block b: (buffer    : UnsafeBufferPointer<UInt8>,
-                                       byteIndex : Int,
-                                       stop      : inout Bool) -> Void)
+  public func enumerateBytes(block b: (_ buffer    : UnsafeBufferPointer<UInt8>,
+                                       _ byteIndex : Int,
+                                       _ stop      : inout Bool) -> Void)
   {
     //public typealias dispatch_data_applier_t = (dispatch_data_t, Int, UnsafePointer<Void>, Int) -> Bool
     _ = dispatch_data_apply(self) { subdata, offset, ptr, len in

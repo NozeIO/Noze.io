@@ -12,6 +12,8 @@ import core
 
 // TODO: flush
 
+
+
 /// TransformStream
 ///
 /// DuplexStream (aka a GReadableStreamType & GWritableStreamType at the same
@@ -32,6 +34,12 @@ public class TransformStream<WriteType, ReadType>
 {
   // Note that WriteType and ReadType are reversed for TransformStream to make
   // it less confusing ;-)
+  
+  #if swift(>=3.0) // #swift3-escape
+  public typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
+  #else // Swift 2.x
+  public typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
+  #endif // Swift 2.x
   
   override public init(readHWM      : Int? = nil,
                        writeHWM     : Int? = nil,
@@ -84,7 +92,7 @@ public class TransformStream<WriteType, ReadType>
   let doCork      = false
   
   public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done   : ( Error?, Int ) -> Void)
+                                      done      : DuplexWriteDoneCB)
   { // #linux-public
     // called by WritableStream.writeNextBlock() (which in turn is triggered by
     // DuplexStream.writev().
@@ -165,9 +173,7 @@ public class TransformStream<WriteType, ReadType>
   
   // MARK: - Transform
   
-  public func _transform(bucket b : [ WriteType ],
-                         done     : ( Error?, [ ReadType ]? ) -> Void)
-  {
+  public func _transform(bucket b: [ WriteType ], done: TransformDoneCB) {
     fatalError("Subclass must override transform()")
     
     // the CB essentially calls the `yield` of the write stream marking the

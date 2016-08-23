@@ -105,7 +105,7 @@ public class RawByteBuffer {
     count = 0
   }
   
-  public func addBytes(src: UnsafePointer<Void>, length: Int) {
+  public func addBytes(src: UnsafeRawPointer, length: Int) {
     // debugPrint("add \(length) count: \(count) capacity: \(capacity)")
     guard length > 0 else {
       // This is fine, happens for empty bodies (like in OPTION requests)
@@ -120,7 +120,7 @@ public class RawByteBuffer {
     let dest = buffer + count
 #endif
     
-    _ = memcpy(UnsafeMutablePointer<Void>(dest), src, length)
+    _ = memcpy(UnsafeMutableRawPointer(dest), src, length)
     count += length
     // debugPrint("--- \(length) count: \(count) capacity: \(capacity)")
   }
@@ -138,9 +138,9 @@ public class RawByteBuffer {
     guard buffer != nil else { return nil }
     
 #if swift(>=3.0) // #swift3-ptr #swift3-cstr
-    let cptr = UnsafeMutablePointer<CChar>(buffer!)
-    cptr[count] = 0 // null terminate, buffer is always bigger than it claims
-    return String(cString: cptr)
+    guard let buffer = buffer else { return nil }
+    buffer[count] = 0 // null terminate, buffer is always bigger than it claims
+    return String(cString: buffer)
 #else
     let cptr = UnsafeMutablePointer<CChar>(buffer)
     cptr[count] = 0 // null terminate, buffer is always bigger than it claims
@@ -152,7 +152,7 @@ public class RawByteBuffer {
 #if swift(>=3.0) // #swift3-1st-arg
 
 extension RawByteBuffer {
-  public final func addBytes(_ src: UnsafePointer<Void>?, length: Int) {
+  public final func addBytes(_ src: UnsafeRawPointer?, length: Int) {
     guard let nsrc = src else {
       assert(length == 0, "nil ptr, but length \(length)")
       return

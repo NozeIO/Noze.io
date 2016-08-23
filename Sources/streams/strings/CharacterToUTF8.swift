@@ -24,9 +24,7 @@ class CharacterToUTF8: TransformStream<Character, UInt8> {
   
   // MARK: - Transform
   
-  override func _transform(bucket b : [ Character ],
-                           done     : ( Error?, [ UInt8 ]? ) -> Void)
-  {
+  override func _transform(bucket b: [ Character ], done: TransformDoneCB) {
     guard !b.isEmpty else { done(nil, []); return }
     
     // FIXME: All this is lame and to much copying. It should be all redone for

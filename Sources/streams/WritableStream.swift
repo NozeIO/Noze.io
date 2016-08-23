@@ -10,6 +10,13 @@ import Dispatch
 import core
 import events
 
+#if swift(>=3.0) // #swift3-escape
+  public typealias PrimaryWriteDoneCB = @escaping ( Error?, Int ) -> Void
+#else // Swift 2.x
+  public typealias PrimaryWriteDoneCB = ( ErrorType?, Int ) -> Void
+#endif // Swift 2.x
+
+// Swift3: this must be open ...
 public class WritableStream<WriteType>
              : Stream, GWritableStreamType, PipeEmitTarget
 {
@@ -284,7 +291,7 @@ public class WritableStream<WriteType>
   
   // MARK: - extension points for subclass
 
-  func _primaryWriteV(buckets chunks: Brigade, done: ( Error?, Int ) -> Void) {
+  func _primaryWriteV(buckets chunks: Brigade, done: PrimaryWriteDoneCB) {
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
   }

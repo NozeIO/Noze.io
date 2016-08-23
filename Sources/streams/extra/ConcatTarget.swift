@@ -22,13 +22,19 @@ public class ConcatTarget<ReadType> : GWritableTargetType {
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
+  #if swift(>=3.0) // #swift3-escape
+  public init(_ doneCB: @escaping ( [ TargetElement ] ) -> Void) {
+    self.doneCB = doneCB
+  }
+  #else
   public init(_ doneCB: ( [ TargetElement ] ) -> Void) {
     self.doneCB = doneCB
   }
+  #endif
   
   public func writev(queue q : DispatchQueueType,
                      chunks  : [ [ TargetElement ] ],
-                     yield   : ( Error?, Int ) -> Void)
+                     yield   : PrimaryWriteDoneCB)
   {
     var count = 0
     for chunk in chunks {

@@ -49,7 +49,7 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   init(_ source: G) {
     self.source = source
   }
-  init<S: Sequence where S.Iterator == G>(_ source: S) {
+  init<S: Sequence>(_ source: S) where S.Iterator == G {
     self.init(source.makeIterator())
   }
   
@@ -113,8 +113,9 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
     self.workerQueue         = workerQueue
     self.maxCountPerDispatch = maxCountPerDispatch
   }
-  public convenience init<S: Sequence where S.Iterator == G>
+  public convenience init<S: Sequence>
     (_ source: S, workerQueue: DispatchQueueType = getDefaultWorkerQueue())
+    where S.Iterator == G
   {
     self.init(source.makeIterator(), workerQueue: workerQueue)
   }
@@ -132,7 +133,7 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// to the 'count' property which was passed in.
 
   public func next(queue Q : DispatchQueueType, count: Int,
-                   yield   : ( Error?, [ G.Element ]? )-> Void)
+                   yield   : @escaping ( Error?, [ G.Element ]? )-> Void)
   {
     // Note: we do capture self for the generator ...
     let maxCount = self.maxCountPerDispatch

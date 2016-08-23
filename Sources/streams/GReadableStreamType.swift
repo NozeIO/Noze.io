@@ -7,8 +7,13 @@
 //
 
 // those need to be global so that we can also use them in GReadableStreamType
+#if swift(>=3.0) // #swift3-escaping
+public typealias ReadableCB = @escaping () -> Void
+public typealias EndCB      = @escaping () -> Void
+#else
 public typealias ReadableCB = () -> Void
 public typealias EndCB      = () -> Void
+#endif
 
 
 /// Primarily a marker interface which can be used as a *type* (which

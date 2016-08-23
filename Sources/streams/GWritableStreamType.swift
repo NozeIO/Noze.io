@@ -6,10 +6,17 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-public typealias DoneCB   = ( Void ) -> Void
+#if swift(>=3.0) // #swift3-escape
+public typealias DoneCB   = @escaping () -> Void
+public typealias DrainCB  = @escaping () -> Void
+public typealias FinishCB = @escaping () -> Void
+public typealias PipeCB   = @escaping ( ReadableStreamType ) -> Void
+#else // Swift 2.x
+public typealias DoneCB   = () -> Void
 public typealias DrainCB  = () -> Void
 public typealias FinishCB = () -> Void
 public typealias PipeCB   = ( ReadableStreamType ) -> Void
+#endif
 
 
 /// A marker interface which can be used as a *type* (which

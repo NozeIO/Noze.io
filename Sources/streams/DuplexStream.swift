@@ -25,6 +25,11 @@ import events
 public class DuplexStream<ReadType, WriteType>
            : Stream, GReadableStreamType, GWritableStreamType, PipeEmitTarget
 {
+  #if swift(>=3.0) // #swift3-escape
+  public typealias DuplexWriteDoneCB = @escaping ( Error?, Int ) -> Void
+  #else // Swift 2.x
+  public typealias DuplexWriteDoneCB = ( ErrorType?, Int ) -> Void
+  #endif // Swift 2.x
   
   // NOTE: TODO: those are NOT really optionals, the streams need to be setup
   //             after init() returns, so that people can hook up event handlers
@@ -60,7 +65,7 @@ public class DuplexStream<ReadType, WriteType>
   }
   
   public func _primaryWriteV(buckets chunks : [ [ WriteType ] ],
-                             done   : ( Error?, Int ) -> Void)
+                             done           : DuplexWriteDoneCB)
   { // #linux-public
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
@@ -114,7 +119,7 @@ public class DuplexStream<ReadType, WriteType>
   @discardableResult public func onceEnd(handler cb: EndCB) -> Self {
     _ = readStream.onceEnd(handler: cb); return self
   }
-#else
+#else // Swift 2.x
   public func onReadable(handler cb: ReadableCB) -> Self {
     _ = readStream.onReadable(handler: cb);   return self
   }
@@ -127,15 +132,19 @@ public class DuplexStream<ReadType, WriteType>
   public func onceEnd(handler cb: EndCB) -> Self {
     _ = readStream.onceEnd(handler: cb); return self
   }
-#endif
+#endif // Swift 2.x
   
-  public var hitEOF : Bool { return readStream.hitEOF ?? true }
+  public var hitEOF : Bool {
+    guard let readStream = readStream else { return true }
+    return readStream.hitEOF
+  }
   
   
   // MARK: - WritableStream
   
   public func writev(buckets chunks: [ [ WriteType ] ], done: DoneCB?) -> Bool {
-    return writeStream.writev(buckets: chunks, done: done) ?? false
+    guard let writeStream = writeStream else { return false }
+    return writeStream.writev(buckets: chunks, done: done)
   }
   
   public func end() {
@@ -213,7 +222,10 @@ public class DuplexStream<ReadType, WriteType>
   
   // MARK: - Corking
   
-  public var isCorked : Bool { return writeStream.isCorked ?? false }
+  public var isCorked : Bool {
+    guard let writeStream = writeStream else { return false }
+    return writeStream.isCorked
+  }
   public func cork()   { writeStream.cork()   }
   public func uncork() { writeStream.uncork() }
   
@@ -223,7 +235,10 @@ public class DuplexStream<ReadType, WriteType>
   // TBD: should remove, doesn't belong here. It depends on a concrete
   //      implementation
   public var highWaterMark : Int {
-    get { return readStream.highWaterMark ?? -1 }
+    get {
+      guard let readStream = readStream else { return -1 }
+      return readStream.highWaterMark
+    }
     set {
       readStream.highWaterMark = newValue
     }
@@ -277,6 +292,12 @@ private class _DuplexReadStream<TI, TO> : ReadableStream<TI> {
 
 private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
   
+  #if swift(>=3.0) // #swift3-escape
+  public typealias DuplexWriteDoneCB = @escaping ( Error?, Int ) -> Void
+  #else // Swift 2.x
+  public typealias DuplexWriteDoneCB = ( ErrorType?, Int ) -> Void
+  #endif // Swift 2.x
+
   unowned let parent : DuplexStream<TI, TO>
   
   init(_ parent : DuplexStream<TI, TO>, highWaterMark : Int? = nil) {
@@ -285,9 +306,7 @@ private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
                queue: parent.Q, enableLogger: parent.log.enabled)
   }
   
-  override func _primaryWriteV(buckets c : [ [ TO ] ],
-                               done      : ( Error?, Int ) -> Void)
-  {
+  override func _primaryWriteV(buckets c: [ [ TO ] ], done: DuplexWriteDoneCB) {
     parent._primaryWriteV(buckets: c, done: done)
   }
   

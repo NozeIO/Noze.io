@@ -24,9 +24,7 @@ public class StringToUTF8: TransformStream<String, UInt8> {
   
   // MARK: - Transform
   
-  public override func _transform(bucket b : [ String ],
-                                  done     : ( Error?, [ UInt8 ]? ) -> Void)
-  {
+  public override func _transform(bucket b: [ String ], done: TransformDoneCB) {
     guard !b.isEmpty else { done(nil, []); return }
 
     for s in b {

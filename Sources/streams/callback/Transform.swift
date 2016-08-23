@@ -15,10 +15,22 @@ public class Transform<WriteType, ReadType>
              : TransformStream<WriteType, ReadType>
 {
   
-  public typealias TransformCB = ( bucket: [ WriteType ],
-                                   push: ( [ ReadType ]? ) -> Void,
-                                   done: ( Error?, [ ReadType ]? ) -> Void
+  #if swift(>=3.0) // #swift3-escape
+  public typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
+  
+  public typealias TransformCB = @escaping ( _ bucket: [ WriteType ],
+                                   _ push: @escaping ( [ ReadType ]? ) -> Void,
+                                   _ done: TransformDoneCB
                                  ) -> Void
+  #else // Swift 2.x
+  public typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
+  
+  public typealias TransformCB = ( _ bucket: [ WriteType ],
+                                   _ push: ( [ ReadType ]? ) -> Void,
+                                   _ done: ( Error?, [ ReadType ]? ) -> Void
+                                 ) -> Void
+  #endif // Swift 2.x
+  
   
   var transform : TransformCB!
   
@@ -38,8 +50,7 @@ public class Transform<WriteType, ReadType>
   // MARK: - TransformStream overrides
   
   override public func _transform(bucket b : [ WriteType ],
-                                  done     : ( Error?, [ ReadType ]? )
-                       -> Void)
+                                  done     : TransformDoneCB)
   {
     transform(bucket: b, push: { self.push(bucket: $0) }, done: done)
   }

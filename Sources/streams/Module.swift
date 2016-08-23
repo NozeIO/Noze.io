@@ -16,6 +16,21 @@ public class NozeStreams : NozeModule, EventEmitterType {
   lazy var newWritableListeners : EventListenerSet<WritableStreamType>=
                                     EventListenerSet(queueLength: 0)
   
+#if swift(>=3.0) // #swift3-escape
+  public func onNewReadable(cb: @escaping ( ReadableStreamType ) -> Void)
+              -> Self
+  {
+    newReadableListeners.add(handler: cb)
+    return self
+  }
+  
+  public func onNewWritable(cb: @escaping ( WritableStreamType ) -> Void)
+              -> Self
+  {
+    newWritableListeners.add(handler: cb)
+    return self
+  }
+#else // Swift 2.x
   public func onNewReadable(cb: ( ReadableStreamType ) -> Void) -> Self {
     newReadableListeners.add(handler: cb)
     return self
@@ -25,6 +40,7 @@ public class NozeStreams : NozeModule, EventEmitterType {
     newWritableListeners.add(handler: cb)
     return self
   }
+#endif // Swift 2.x
 }
 
 public let module = NozeStreams()
@@ -32,21 +48,25 @@ public let module = NozeStreams()
 
 // MARK: - Global Events
 
-#if swift(>=3.0)
-public func onNewReadable(_ cb: ( ReadableStreamType ) -> Void) -> NozeStreams {
+#if swift(>=3.0) // #swift3-1st-kwarg #swift3-escape
+public func onNewReadable(_ cb: @escaping ( ReadableStreamType ) -> Void)
+            -> NozeStreams
+{
   return module.onNewReadable(cb: cb)
 }
-public func onNewWritable(_ cb: ( WritableStreamType ) -> Void) -> NozeStreams {
+public func onNewWritable(_ cb: @escaping ( WritableStreamType ) -> Void)
+            -> NozeStreams
+{
   return module.onNewWritable(cb: cb)
 }
-#else
+#else // Swift 2.x
 public func onNewReadable(cb: ( ReadableStreamType ) -> Void) -> NozeStreams {
   return module.onNewReadable(cb)
 }
 public func onNewWritable(cb: ( WritableStreamType ) -> Void) -> NozeStreams {
   return module.onNewWritable(cb)
 }
-#endif
+#endif // Swift 2.x
 
 
 // MARK: - Strings
@@ -84,8 +104,16 @@ public var toUTF8 : TransformStream<Character, UInt8> {
 ///
 /// Note: Useful for testing, but usually you don't want to buffer stuff up,
 ///       but - stream, boy, stream!
+#if swift(>=3.0) // #swift3-1st-kwarg #swift3-escape
+public func concat<T>(_ doneCB: @escaping ( [ T ] ) -> Void)
+            -> TargetStream<ConcatTarget<T>>
+{
+  return ConcatTarget<T>(doneCB).writable(hwm: 1 /* hwm */)
+}
+#else
 public func concat<T>(doneCB: ( [ T ] ) -> Void)
             -> TargetStream<ConcatTarget<T>>
 {
   return ConcatTarget<T>(doneCB).writable(hwm: 1 /* hwm */)
 }
+#endif

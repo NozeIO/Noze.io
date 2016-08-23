@@ -56,10 +56,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
     cb(nil, nil /* nil doesn't mean EOF here but don't push */) // done
   }
   
-  public override func _transform(bucket b : [ UInt8 ],
-                                  done     : ( Error?, [ String ]? )
-                       -> Void)
-  {
+  public override func _transform(bucket b: [ UInt8 ], done: TransformDoneCB) {
     let bucket = b
     guard !bucket.isEmpty else {
       done(nil, nil)
@@ -129,10 +126,10 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
     t0.append(0) // zero terminate line
     
     let s : String? = t0.withUnsafeBufferPointer { ptr in
-      let cp = UnsafePointer<CChar>(ptr.baseAddress)
 #if swift(>=3.0) // #swift3-ptr #swift3-cstr
-      return String(cString: cp!)
+      return String(cString: ptr!)
 #else
+      let cp = UnsafePointer<CChar>(ptr.baseAddress)
       return String.fromCString(cp) // fails on empty string in 2.2?
 #endif
     }

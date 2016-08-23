@@ -174,10 +174,17 @@ class ListenerEntry<T> { // class to support isEmitting
   let once       : Bool
   var isEmitting = 0 // counter
   
+#if swift(>=3.0) // #swift3-escaping
+  init(cb: @escaping ( T ) -> Void, once : Bool = false) {
+    self.cb         = cb
+    self.once       = once
+  }
+#else
   init(cb: ( T ) -> Void, once : Bool = false) {
     self.cb         = cb
     self.once       = once
   }
+#endif
 }
 
 
