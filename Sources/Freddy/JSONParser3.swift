@@ -90,7 +90,7 @@ private let ParserMaximumDepth = 512
 /// input and it does not allow trailing commas in arrays or dictionaries.
 public struct JSONParser {
 
-    private enum Sign: Int {
+    fileprivate enum Sign: Int {
         case Positive = 1
         case Negative = -1
     }
@@ -283,10 +283,15 @@ public struct JSONParser {
                 loc = input.index(after: loc)
                 stringDecodingBuffer.append(0)
 
-                guard let string = (stringDecodingBuffer.withUnsafeBufferPointer {
-                    String(validatingUTF8: UnsafePointer($0.baseAddress!))
+                guard let string = stringDecodingBuffer.withUnsafeBufferPointer({
+                  ( bp ) -> String? in
+                  guard let ( s, _ ) =
+                    String.decodeCString(bp.baseAddress!, as: UTF8.self,
+                                         repairingInvalidCodeUnits: false)
+                    else { return nil }
+                  return s
                 }) else {
-                    throw Error.UnicodeEscapeInvalid(offset: start)
+                  throw Error.UnicodeEscapeInvalid(offset: start)
                 }
 
                 return .String(string)
@@ -619,8 +624,14 @@ public struct JSONParser {
 
             case .Done:
                 stringDecodingBuffer.append(0)
-                guard let string = (stringDecodingBuffer.withUnsafeBufferPointer {
-                    String(validatingUTF8: UnsafePointer($0.baseAddress!))
+                
+                guard let string = stringDecodingBuffer.withUnsafeBufferPointer({
+                  ( bp ) -> String? in
+                  guard let ( s, _ ) =
+                    String.decodeCString(bp.baseAddress!, as: UTF8.self,
+                                         repairingInvalidCodeUnits: false)
+                    else { return nil }
+                  return s
                 }) else {
                     // Should never fail - any problems with the number string should
                     // result in thrown errors above
@@ -634,7 +645,7 @@ public struct JSONParser {
     }
 
 #if swift(>=3.0) // #swift3-1st-arg
-    private func detectingFloatingPointErrors<T>(_ loc: Int, _ f: @noescape () throws -> T) throws -> T {
+    private func detectingFloatingPointErrors<T>(_ loc: Int, _ f: () throws -> T) throws -> T {
         let flags : Int32 = FE_UNDERFLOW | FE_OVERFLOW
         feclearexcept(flags)
         let value = try f()
@@ -719,7 +730,7 @@ private struct NumberParser {
         state = .Decimal
     }
 
-    mutating func parsePreDecimalDigits(f: @noescape (UInt8) throws -> Void) rethrows {
+    mutating func parsePreDecimalDigits(f: (UInt8) throws -> Void) rethrows {
         // FIXME
         // TODO: This is funny because:
         //   (lldb) print state
@@ -765,7 +776,7 @@ private struct NumberParser {
         }
     }
 
-    mutating func parsePostDecimalDigits(f: @noescape (UInt8) throws -> Void) rethrows {
+    mutating func parsePostDecimalDigits(f: (UInt8) throws -> Void) rethrows {
         assert(state == .PostDecimalDigits, "Unexpected state entering parsePostDecimalDigits")
 
         advancing: while loc < input.count {
@@ -829,7 +840,7 @@ private struct NumberParser {
         }
     }
 
-    mutating func parseExponentDigits(f: @noescape (UInt8) throws -> Void) rethrows {
+    mutating func parseExponentDigits(f: (UInt8) throws -> Void) rethrows {
         assert(state == .ExponentDigits, "Unexpected state entering parseExponentDigits")
         advancing: while loc < input.count {
             let c = input[loc]
@@ -853,10 +864,19 @@ public extension JSONParser {
     ///
     /// The synthesized string is lifetime-extended for the duration of parsing.
     init(string: String) {
-        let codePoints = string.nulTerminatedUTF8
-        let buffer = codePoints.withUnsafeBufferPointer { nulTerminatedBuffer in
+        let codePoints = string.utf8CString
+      
+        let buffer = codePoints.withUnsafeBufferPointer {
+            ( nulTerminatedBuffer ) -> UnsafeBufferPointer<UInt8> in
+          
+            // TODO(hh): Trouble ahead. I guess this is fine, but I'm not
+            //           quite sure. What is a proper simple cast?
+            let cs = // TODO: Ouch!
+              unsafeBitCast(nulTerminatedBuffer.baseAddress!,
+                            to: UnsafePointer<UInt8>.self)
+          
             // don't want to include the nul termination in the buffer - trim it off
-            UnsafeBufferPointer(start: nulTerminatedBuffer.baseAddress, count: nulTerminatedBuffer.count - 1)
+            return UnsafeBufferPointer(start: cs, count: nulTerminatedBuffer.count - 1)
         }
         self.init(buffer: buffer, owner: codePoints)
     }
@@ -936,7 +956,7 @@ extension JSONParser {
         case InvalidUnicodeStreamEncoding(detectedEncoding: JSONEncodingDetector.Encoding)
     }
 
-    private enum InternalError: Swift.Error {
+    fileprivate enum InternalError: Swift.Error {
         /// Attempted to parse an integer outside the range of [Int.min, Int.max]
         /// or a double outside the range of representable doubles. Note that
         /// for doubles, this could be an overflow or an underflow - we don't

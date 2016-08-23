@@ -94,7 +94,7 @@ private extension JSON {
         case let .Array(array):
             return try fragment.valueInArray(array)
         default:
-            throw Error.UnexpectedSubscript(type: fragment.dynamicType)
+            throw Error.UnexpectedSubscript(type: type(of: fragment))
         }
     }
 
@@ -234,7 +234,7 @@ extension JSON {
         public static let MissingKeyBecomesNil = SubscriptingOptions(rawValue: 1 << 1)
     }
     
-    func mapOptionalAtPath<Value>(_ path: [JSONPathType], alongPath: SubscriptingOptions, transform: @noescape (JSON) throws -> Value) throws -> Value? {
+    func mapOptionalAtPath<Value>(_ path: [JSONPathType], alongPath: SubscriptingOptions, transform: (JSON) throws -> Value) throws -> Value? {
         let detectNull = alongPath.contains(.NullBecomesNil)
         let detectNotFound = alongPath.contains(.MissingKeyBecomesNil)
         var json: JSON?
@@ -406,7 +406,7 @@ extension JSON {
 
 extension JSON {
     
-    private func mapOptionalAtPath<Value>(_ path: [JSONPathType], fallback: @noescape () -> Value, transform: @noescape (JSON) throws -> Value) throws -> Value {
+    private func mapOptionalAtPath<Value>(_ path: [JSONPathType], fallback: () -> Value, transform: (JSON) throws -> Value) throws -> Value {
         return try mapOptionalAtPath(path, alongPath: .MissingKeyBecomesNil, transform: transform) ?? fallback()
     }
   
