@@ -432,7 +432,12 @@ public class GCDChannelBase: CustomStringConvertible {
   }
   
   public var description : String {
-    return "<\(self.dynamicType):\(descriptionAttributes())>"
+    #if swift(>=3.0) // #swift3
+      let t = type(of: self)
+      return "<\(t):\(descriptionAttributes())>"
+    #else
+      return "<\(self.dynamicType):\(descriptionAttributes())>"
+    #endif
   }
   
   // must live in the main-class as 'declarations in extensions cannot be

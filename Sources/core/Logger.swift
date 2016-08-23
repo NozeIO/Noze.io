@@ -197,6 +197,11 @@ public extension LameLogObjectType {
   }
   
   public var description : String {
-    return "<\(self.dynamicType):\(logStateInfo)>"
+    #if swift(>=3.0) // #swift3
+      let t = type(of: self)
+      return "<\(t):\(logStateInfo)>"
+    #else
+      return "<\(self.dynamicType):\(logStateInfo)>"
+    #endif
   }
 }
