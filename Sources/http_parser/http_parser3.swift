@@ -1004,11 +1004,18 @@ public extension http_parser {
                 let p_cr = UnsafePointer<CChar>(memchr(p!, Int32(CR), limit))
                 let p_lf = UnsafePointer<CChar>(memchr(p!, Int32(LF), limit))
 #else
-                let p_cr = UnsafePointer<CChar>(memchr(p, Int32(CR), limit))
-                let p_lf = UnsafePointer<CChar>(memchr(p, Int32(LF), limit))
+                let rCR = memchr(p!, Int32(CR), limit)
+                let rLF = memchr(p!, Int32(LF), limit)
+  
+                let p_cr = rCR != nil
+                       ? UnsafePointer(rCR!.assumingMemoryBound(to: CChar.self))
+                       : nil
+                let p_lf = rLF != nil
+                       ? UnsafePointer(rLF!.assumingMemoryBound(to: CChar.self))
+                       : nil
 #endif
                 if p_cr != nil {
-                  if p_lf != nil && p_cr >= p_lf {
+                  if p_lf != nil && p_cr! >= p_lf! {
                     p = p_lf
                   } else {
                     p = p_cr

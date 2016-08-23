@@ -77,7 +77,7 @@ public struct http_parser {
   public var upgrade        = false
   
   #if swift(>=3.0) // #swift3-ptr
-    public var data : UnsafePointer<Void>? = nil // user data
+    public var data : UnsafeRawPointer? = nil // user data
   #else
     public var data : UnsafePointer<Void> = nil // user data
   #endif

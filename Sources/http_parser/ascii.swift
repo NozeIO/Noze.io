@@ -109,23 +109,21 @@ let c9 : CChar = 57 // 9
 // There is a tiny speed gain by converting the Swift arrays into a C array aka
 // UnsafePointer. Subscripting still works with that.
 internal func copyArrayToBuffer<T>(array a: [ T ]) -> UnsafePointer<T> {
-  let size = a.count * sizeof(T.self)
-
   #if swift(>=3.0) // #swift3-ptr
-    let res  = UnsafeMutablePointer<CChar>.allocate(capacity: size)
-    _ = a.withUnsafeBufferPointer { p in
-      memcpy(UnsafeMutablePointer<Void>(res),
-             UnsafePointer<Void>(p.baseAddress)!, size)
-    }
+    let res  = UnsafeMutablePointer<T>.allocate(capacity: a.count)
+    res.initialize(from: a)
+    return UnsafePointer<T>(res)
   #else
+    let size = a.count * sizeof(T.self)
+    
     let res  = UnsafeMutablePointer<CChar>.alloc(size)
     _ = a.withUnsafeBufferPointer { p in
       memcpy(UnsafeMutablePointer<Void>(res),
              UnsafePointer<Void>(p.baseAddress), size)
     }
+    
+    return UnsafePointer(res)
   #endif
-  
-  return UnsafePointer(res)
 }
 
 /* Tokens as defined by rfc 2616. Also lowercases them.
