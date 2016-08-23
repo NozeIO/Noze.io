@@ -37,14 +37,14 @@ public class MustacheParser {
       let s = String(newValue).unicodeScalars
       cStart = CChar(s[s.startIndex].value)
     }
-    get { return Character(UnicodeScalar(UInt32(cStart))) }
+    get { return Character(UnicodeScalar(UInt32(cStart))!) }
   }
   public var closeCharacter : Character {
     set {
       let s = String(newValue).unicodeScalars
       cEnd = CChar(s[s.startIndex].value)
     }
-    get { return Character(UnicodeScalar(UInt32(cEnd))) }
+    get { return Character(UnicodeScalar(UInt32(cEnd))!) }
   }
   
   
