@@ -34,7 +34,11 @@ public func lookup(domain : String,
     var hints = addrinfo()
     hints.ai_family = Int32(family)
     
+#if swift(>=3.0) // #swift3-ptr
+    var ptr : UnsafeMutablePointer<addrinfo>? = nil
+#else
     var ptr = UnsafeMutablePointer<addrinfo>(nil)
+#endif
     defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
     
     let rc = getaddrinfo(domain, nil, &hints, &ptr)
@@ -56,18 +60,23 @@ public func lookup(domain : String,
     /* copy results - we just take the first match */
 #if swift(>=3.0) // #swift3-ptr
     let info   = ptr!.pointee
-    let result : sockaddr_any?
+    var result : sockaddr_any? = nil
     
     if info.ai_addr == nil {
       result = nil // TODO: proper error
     }
     else if info.ai_family == xsys.AF_INET {
-      let aiptr = UnsafePointer<xsys_sockaddr_in>(info.ai_addr) // cast
-      result = sockaddr_any.AF_INET(aiptr!.pointee)
+      //let aiptr = UnsafePointer<xsys_sockaddr_in>(info.ai_addr) // cast
+      info.ai_addr.withMemoryRebound(to: xsys_sockaddr_in.self, capacity: 1) {
+        aiptr in
+        result = sockaddr_any.AF_INET(aiptr.pointee)
+      }
     }
     else if info.ai_family == xsys.AF_INET6 {
-      let aiptr = UnsafePointer<xsys_sockaddr_in6>(info.ai_addr) // cast
-      result = sockaddr_any.AF_INET6(aiptr!.pointee)
+      info.ai_addr.withMemoryRebound(to: xsys_sockaddr_in6.self, capacity: 1) {
+        aiptr in
+        result = sockaddr_any.AF_INET6(aiptr.pointee)
+      }
     }
     else {
       result = nil // TODO: proper error
