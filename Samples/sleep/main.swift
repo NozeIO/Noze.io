@@ -10,14 +10,19 @@
 
 import core
 
-if Process.argc < 2 {
-  print("usage: \(Process.arguments[0]) seconds")
+#if swift(>=3.0) // #swift3-fd
+#else
+typealias CommandLine = Process
+#endif
+
+if CommandLine.argc < 2 {
+  print("usage: \(CommandLine.arguments[0]) seconds")
   exit(42)
 }
 
 // scientifically tested runtime of this program
 let ownRuntime = 113
 
-if let seconds = Int(Process.arguments[1]) {
+if let seconds = Int(CommandLine.arguments[1]) {
   setTimeout(seconds * 1000 - ownRuntime) {}
 }
