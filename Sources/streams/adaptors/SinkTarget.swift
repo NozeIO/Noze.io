@@ -46,7 +46,7 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
   
   public mutating func writev(queue q : DispatchQueueType,
                               chunks  : [ [ S.Element ] ],
-                              yield   : ( Error?, Int ) -> Void)
+                              yield   : PrimaryWriteDoneCB)
   {
 #if swift(>=3.0) // #swift3-1st-kwarg
     let count = _writev(chunks: chunks)
@@ -100,7 +100,7 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   /// to the 'count' property which was passed in.
   public func writev(queue Q : DispatchQueueType,
                      chunks  : [ [ S.Element ] ],
-                     yield   : ( Error?, Int ) -> Void)
+                     yield   : PrimaryWriteDoneCB)
   {
     // Note: we do capture self for the sink ...
     let maxCount = self.maxCountPerDispatch

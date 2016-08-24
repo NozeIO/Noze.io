@@ -21,6 +21,12 @@ public protocol GReadableSourceType {
   
   associatedtype SourceElement
   
+  #if swift(>=3.0) // #swift3-escape
+    typealias YieldCB = @escaping ( Error?, [ Self.SourceElement ]? ) -> Void
+  #else
+    typealias YieldCB = ( ErrorType?, [ Self.SourceElement ]? ) -> Void
+  #endif
+  
   /// Called by a Readable to ask a source for more data. The source can respond
   /// with one or more calls to yield() and signal EOF by a yield(null).
   ///
@@ -29,7 +35,7 @@ public protocol GReadableSourceType {
   /// control of the Readable).
   mutating func next(queue q : DispatchQueueType,
                      count   : Int,
-                     yield   : ( Error?, [ Self.SourceElement ]? ) -> Void)
+                     yield   : YieldCB)
   
   /// Called by a Readable if it doesn't want to be fed additional data. Most
   /// commonly because its internal buffer is full.

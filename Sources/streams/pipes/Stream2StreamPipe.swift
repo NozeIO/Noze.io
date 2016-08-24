@@ -24,17 +24,17 @@ private let enableHeavyLog = false
 ///   request | zip | encrypt | fs
 ///
 @discardableResult
-public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
-              where ReadStream.ReadType == WriteStream.WriteType>
+public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType>
              (left: ReadStream, right: WriteStream) -> WriteStream
+             where ReadStream.ReadType == WriteStream.WriteType
 {
   return left.pipe(right)
 }
 
 @discardableResult
-public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
-              where ReadStream.ReadType == WriteStream.WriteType>
+public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType>
              (left: ReadStream?, right: WriteStream) -> WriteStream
+             where ReadStream.ReadType == WriteStream.WriteType
 {
   guard left != nil else {
     // left side has nothing to pipe, immediately end target stream.
@@ -45,7 +45,7 @@ public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
   
   return left!.pipe(right)
 }
-#else
+#else // Swift 2.x
 /// Pipe operator for streams, neat :-)
 ///
 /// Like so:
@@ -72,20 +72,21 @@ public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
   
   return left!.pipe(right)
 }
-#endif
+#endif // Swift 2.x
 
 public extension GReadableStreamType {
 
 #if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
   @discardableResult
-  public func pipe<TO: GWritableStreamType where Self.ReadType == TO.WriteType>
+  public func pipe<TO: GWritableStreamType>
                   (_ outStream: TO,
                    endOnFinish: Bool = true, passErrors: Bool = true)
               -> TO
+              where Self.ReadType == TO.WriteType
   {
     return pipe(to: outStream, endOnFinish: endOnFinish, passErrors: passErrors)
   }
-#else
+#else // Swift 2.x
   public func pipe<TO: GWritableStreamType where Self.ReadType == TO.WriteType>
                   (outStream: TO,
                    endOnFinish: Bool = true, passErrors: Bool = true)
@@ -93,7 +94,7 @@ public extension GReadableStreamType {
   {
     return pipe(to: outStream, endOnFinish: endOnFinish, passErrors: passErrors)
   }
-#endif
+#endif // Swift 2.x
 
   /// pipe(in: GReadableStreamType, out: GWritableStreamType)
   ///
@@ -357,8 +358,8 @@ import Glibc
 
 private var nzStdErr = StdErrStream()
 
-#if swift(>=3.0)
-private struct StdErrStream : OutputStream {
+#if swift(>=3.0) // #swift3-fd
+private struct StdErrStream : TextOutputStream {
   mutating func write(_ string: String) { fputs(string, stderr) }
 }
 
@@ -370,7 +371,7 @@ private func efprint<T>(_ value: T) {
 private func heavyLog<T>(_ value: T) {
   if enableHeavyLog { efprint(value) }
 }
-#else
+#else // Swift 2.x
 private struct StdErrStream : OutputStreamType {
   mutating func write(string: String) { fputs(string, stderr) }
 }
@@ -383,4 +384,4 @@ private func efprint<T>(value: T) {
 private func heavyLog<T>(value: T) {
   if enableHeavyLog { efprint(value) }
 }
-#endif
+#endif // Swift 2.x

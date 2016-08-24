@@ -37,10 +37,19 @@ public class Writable<WriteType> : WritableStream<WriteType> {
                enableLogger: enableLogger)
   }
   
-  public convenience init(cb: ([ WriteType ], ( Error? ) -> Void) -> Void) {
+#if swift(>=3.0) // #swift3-escape
+  public convenience init
+    (cb: @escaping ([ WriteType ], @escaping ( Error? ) -> Void) -> Void)
+  {
     self.init()
     self._write(cb: cb)
   }
+#else // Swift 2.x
+  public convenience init(cb: ([ WriteType ], ( ErrorType? ) -> Void) -> Void) {
+    self.init()
+    self._write(cb: cb)
+  }
+#endif // Swift 2.x
   
   
   // MARK: - The Callback
@@ -52,16 +61,20 @@ public class Writable<WriteType> : WritableStream<WriteType> {
     cb = .JustChunk(lcb)
   }
   */
-  func _write(cb lcb: ([ WriteType ], ( Error? ) -> Void) -> Void) {
+#if swift(>=3.0) // #swift3-escape
+  func _write(cb: @escaping ([WriteType], @escaping (Error?) -> Void) -> Void) {
+    self.cb = .ChunkAndError(cb)
+  }
+#else // Swift 2.x
+  func _write(cb lcb: ([ WriteType ], ( ErrorType? ) -> Void) -> Void) {
     cb = .ChunkAndError(lcb)
   }
+#endif // Swift 2.x
   
   
   // MARK: - Writable Overrides
   
-  override func _primaryWriteV(buckets c: Brigade,
-                               done: ( Error?, Int ) -> Void)
-  {
+  override func _primaryWriteV(buckets c: Brigade, done: PrimaryWriteDoneCB) {
     log.enter(); defer { log.leave() }
     
     switch cb {
@@ -82,9 +95,21 @@ public class Writable<WriteType> : WritableStream<WriteType> {
 }
 
 enum WritableWriteCB<WriteType> {
+#if swift(>=3.0) // #swift3-escape
+  public typealias WritableWriteCBJustChunk =
+                     @escaping ([ WriteType ], @escaping ( ) -> Void) -> Void
+  public typealias WritableWriteCBChunkAndError =
+                @escaping ([ WriteType ], @escaping ( Error? ) -> Void) -> Void
+#else // Swift 2.x
+  public typealias WritableWriteCBJustChunk =
+                     ([ WriteType ], ( ) -> Void) -> Void
+  public typealias WritableWriteCBChunkAndError =
+                     ([ WriteType ], ( ErrorType? ) -> Void) -> Void
+#endif // Swift 2.x
+  
   case None
-  case JustChunk    (([ WriteType ], ( )          -> Void) -> Void)
-  case ChunkAndError(([ WriteType ], (Error?) -> Void) -> Void)
+  case JustChunk    (WritableWriteCBJustChunk)
+  case ChunkAndError(WritableWriteCBChunkAndError)
 }
 
 // lame, but gets the job done for now

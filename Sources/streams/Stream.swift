@@ -58,14 +58,6 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   }
 
   
-  // MARK: - Queue Integration
-  
-  final func nextTick(handler cb: () -> Void) {
-    log.debug("Tick CB ..")
-    // Q.async(cb) // hm, really allow them to have an own queue?
-    core.nextTick(handler: cb)
-  }
-  
   // MARK: - ErrorEmitter
   
   public func catched(error e: Error) {

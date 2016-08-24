@@ -35,11 +35,11 @@ public class TransformStream<WriteType, ReadType>
   // Note that WriteType and ReadType are reversed for TransformStream to make
   // it less confusing ;-)
   
-  #if swift(>=3.0) // #swift3-escape
+#if swift(>=3.0) // #swift3-escape
   public typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
-  #else // Swift 2.x
+#else // Swift 2.x
   public typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
-  #endif // Swift 2.x
+#endif // Swift 2.x
   
   override public init(readHWM      : Int? = nil,
                        writeHWM     : Int? = nil,
@@ -108,7 +108,11 @@ public class TransformStream<WriteType, ReadType>
     log.enter(); defer { log.leave() }
     
     // TODO: I hate this. But it'll do for now.
+#if swift(>=3.0) // #swift3-fd
+    let bigChunk = Array(c.joined())
+#else // Swift 2.x
     let bigChunk = Array(c.flatten())
+#endif // Swift 2.x
     
     _transform(bucket: bigChunk) { error, data in
       log.debug("done: \(error) \(data)")
@@ -180,7 +184,7 @@ public class TransformStream<WriteType, ReadType>
     // bucket as written. Also does a 'push' if there is push data.
     // done(nil, nil)
   }
-  public func _flush(done cb: ( Error?, [ ReadType ]? ) -> Void) {
+  public func _flush(done cb: TransformDoneCB) {
     cb(nil, nil)
   }
 }
@@ -189,10 +193,15 @@ public protocol GTransformStreamType : class {
   
   associatedtype WriteType
   associatedtype ReadType
+
+#if swift(>=3.0) // #swift3-escape
+  typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
+#else // Swift 2.x
+  typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
+#endif // Swift 2.x
   
-  func _transform(bucket b : [ WriteType ],
-                  done     : ( Error?, [ ReadType ]? ) -> Void)
-  func _flush    (done cb  : ( Error?, [ ReadType ]? ) -> Void)
+  func _transform(bucket b: [ WriteType ], done: TransformDoneCB)
+  func _flush    (done cb: TransformDoneCB)
   
 }
 

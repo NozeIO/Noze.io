@@ -62,7 +62,7 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
       self.push(bucket: bucket)
       
       // TBD: in here or in read? or in both?
-      self.nextTick {
+      nextTick {
         self.maybeGenerateMore()
       }
     }

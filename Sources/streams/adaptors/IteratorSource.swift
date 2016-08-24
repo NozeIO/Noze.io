@@ -40,6 +40,8 @@ public extension IteratorProtocol {
 /// Note that this one is synchronous, aka, the Generator should not block on
 /// I/O or be otherwise expensive. For such cases use the AsyncGeneratorSource.
 public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
+
+  public typealias YieldCB = @escaping ( Error?, [ G.Element ]? ) -> Void
   
   public static var defaultHighWaterMark : Int { return 5 } // TODO
   var source : G
@@ -57,8 +59,9 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   /// Synchronously generates an item. That is, this directly yields a value
   /// back to the Readable.
-  public mutating func next(queue _: DispatchQueueType, count: Int,
-                            yield : ( Error?, [ G.Element ]? ) -> Void)
+  public mutating func next(queue _ : DispatchQueueType,
+                            count   : Int,
+                            yield   : YieldCB)
   {
     guard let first = source.next() else {
       yield(nil, nil) // EOF
@@ -106,8 +109,9 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
-  public init(_ source: G, workerQueue: DispatchQueueType = getDefaultWorkerQueue(),
-              maxCountPerDispatch: Int = 16)
+  public init(_ source            : G,
+              workerQueue         : DispatchQueueType = getDefaultWorkerQueue(),
+              maxCountPerDispatch : Int = 16)
   {
     self.source              = source
     self.workerQueue         = workerQueue

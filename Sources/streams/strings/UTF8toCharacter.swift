@@ -26,7 +26,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   
   var allData = Array<UInt8>() // super lame implementation
 
-  public override func _flush(done cb: ( Error?, [ Character ]? ) -> Void) {
+  public override func _flush(done cb: TransformDoneCB) {
     
     // copy, sigh
     if !allData.isEmpty {

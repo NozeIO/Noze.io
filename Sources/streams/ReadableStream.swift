@@ -502,9 +502,14 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   
   // MARK: - Readable is a ReadableSource itself
+#if swift(>=3.0) // #swift3-escape
+  public typealias YieldCB = @escaping ( Error?, [ ReadType ]? ) -> Void
+#else
+  public typealias YieldCB = ( ErrorType?, [ ReadType ]? ) -> Void
+#endif
   
   public func next(queue q : DispatchQueueType, count: Int,
-                   yield   : ( Error?, [ ReadType ]? ) -> Void)
+                   yield   : YieldCB)
   {
     // dispatching yield on queue, though it should be the same (main) queue?
     

@@ -23,16 +23,27 @@ public extension GReadableStreamType {
     }
   }
   
+#if swift(>=3.0) // #swift3-escape
+  public func then<U>(cb: @escaping () -> U) -> Promise<U> {
+    return promise.then(run: cb)
+  }
+  public func then<U>(cb: @escaping () -> Promise<U>) -> Promise<U> {
+    return promise.then(run: cb)
+  }
+  public func error(cb: @escaping  ( Error ) -> Void) {
+    promise.error(run: cb)
+  }
+#else // Swift 2.x
   public func then<U>(cb: () -> U) -> Promise<U> {
     return promise.then(run: cb)
   }
   public func then<U>(cb: () -> Promise<U>) -> Promise<U> {
     return promise.then(run: cb)
   }
-  public func error(cb: (Error) -> Void) {
+  public func error(cb: ( ErrorType ) -> Void) {
     promise.error(run: cb)
   }
-  
+#endif // Swift 2.x
 }
 
 public extension GWritableStreamType {
@@ -50,13 +61,31 @@ public extension GWritableStreamType {
     }
   }
   
+#if swift(>=3.0) // #swift3-escape
+  public func then<U>(cb: @escaping () -> U) -> Promise<U> {
+    return promise.then(run: cb)
+  }
+  public func then<U>(cb: @escaping () -> Promise<U>) -> Promise<U> {
+    return promise.then(run: cb)
+  }
+  public func error(cb: @escaping ( Error ) -> Void) {
+    promise.error(run: cb)
+  }
+  
+  public func then<S: GWritableStreamType>(cb: @escaping () -> S)
+              -> Promise<Void>
+  {
+    return promise.then { () -> Promise<Void> in
+                          let stream = cb(); return stream.promise }
+  }
+#else // Swift 2.x
   public func then<U>(cb: () -> U) -> Promise<U> {
     return promise.then(run: cb)
   }
   public func then<U>(cb: () -> Promise<U>) -> Promise<U> {
     return promise.then(run: cb)
   }
-  public func error(cb: (Error) -> Void) {
+  public func error(cb: ( ErrorType ) -> Void) {
     promise.error(run: cb)
   }
   
@@ -64,4 +93,5 @@ public extension GWritableStreamType {
     return promise.then { () -> Promise<Void> in
                           let stream = cb(); return stream.promise }
   }
+#endif // Swift 2.x
 }
