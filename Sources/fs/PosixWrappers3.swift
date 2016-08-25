@@ -12,7 +12,7 @@ import Dispatch
 import xsys
 #if os(Linux)
 #else
-  import enum Foundation.POSIXError
+  import Foundation // for POSIXError
 #endif
 
 import core
@@ -31,12 +31,12 @@ public func access(_ path: String, _ mode: Int = F_OK, cb: ErrorCB) {
 }
 
 public func stat(_ path: String,
-                 cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void)
+                 cb: ( Error?, xsys.stat_struct? ) -> Void)
   {
   module.Q.evalAsync(statSync, path, cb)
 }
 public func lstat(_ path: String,
-                  cb: ( ErrorProtocol?, xsys.stat_struct? ) -> Void)
+                  cb: ( Error?, xsys.stat_struct? ) -> Void)
 {
   module.Q.evalAsync(lstatSync, path, cb)
 }
@@ -57,19 +57,19 @@ public func lstat(_ path: String,
 
 public func accessSync(_ path: String, mode: Int = F_OK) throws {
   let rc = xsys.access(path, Int32(mode))
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
 
 public func statSync(_ path: String) throws -> xsys.stat_struct {
   var info = xsys.stat_struct()
   let rc   = xsys.stat(path, &info)
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
   return info
 }
 public func lstatSync(_ path: String) throws -> xsys.stat_struct {
   var info = xsys.stat_struct()
   let rc   = xsys.lstat(path, &info)
-  if rc != 0 { throw POSIXError(rawValue: xsys.errno)! }
+  if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
   return info
 }
   

@@ -271,7 +271,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     if let lBucket = b {
       assert(!hitEOF, "cannot push, already hit EOF")
       guard !hitEOF else {
-        emit(error: POSIXError.EBADF) // TODO: better error
+        emit(error: POSIXErrorCode.EBADF) // TODO: better error
         return
       }
       _enqueue(bucket: lBucket) // add to buffer and emitReadable
@@ -504,7 +504,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // MARK: - Readable is a ReadableSource itself
   
   public func next(queue q : DispatchQueueType, count: Int,
-                   yield   : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+                   yield   : ( Error?, [ ReadType ]? ) -> Void)
   {
     // dispatching yield on queue, though it should be the same (main) queue?
     

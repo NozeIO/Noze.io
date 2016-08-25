@@ -123,23 +123,23 @@ public extension MustacheNode {
   public func render(inContext ctx: MustacheRenderingContext) {
     
     switch self {
-      case Empty: return
+      case .Empty: return
       
-      case Global(let nodes):
+      case .Global(let nodes):
         render(nodes: nodes, inContext: ctx)
       
-      case Text(let text):
+      case .Text(let text):
         ctx.append(string: text)
           
-      case Section(let tag, let nodes):
+      case .Section(let tag, let nodes):
         render(section: tag, nodes: nodes, inContext: ctx)
       
-      case InvertedSection(let tag, let nodes):
+      case .InvertedSection(let tag, let nodes):
         let v = ctx.value(forTag: tag)
         guard !ctx.isMustacheTrue(value: v) else { return }
         render(nodes: nodes, inContext: ctx)
       
-      case Tag(let tag):
+      case .Tag(let tag):
         if let v = ctx.value(forTag: tag) {
           if let s = v as? String {
             ctx.append(string: ctx.escape(string: s))
@@ -149,7 +149,7 @@ public extension MustacheNode {
           }
         }
       
-      case UnescapedTag(let tag):
+      case .UnescapedTag(let tag):
         if let v = ctx.value(forTag: tag) {
           if let s = v as? String {
             ctx.append(string: s)
@@ -159,7 +159,7 @@ public extension MustacheNode {
           }
         }
       
-      case Partial(let name):
+      case .Partial(let name):
         guard let partial = ctx.retrievePartial(name: name) else { return }
         partial.render(inContext: ctx)
     }

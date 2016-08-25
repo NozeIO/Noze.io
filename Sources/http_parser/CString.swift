@@ -34,12 +34,12 @@ extension String {
     }
     
     let buflen = length + 1
-    let buf    = UnsafeMutablePointer<CChar>(allocatingCapacity: buflen)
+    let buf    = UnsafeMutablePointer<CChar>.allocate(capacity: buflen)
     memcpy(buf, cs, length)
     buf[length] = 0 // zero terminate
 
     let s = String(validatingUTF8: buf)
-    buf.deallocateCapacity(buflen)
+    buf.deallocate(capacity: buflen)
 
     return s
   }

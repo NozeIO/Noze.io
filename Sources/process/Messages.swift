@@ -11,10 +11,10 @@
 public struct Warning {
   let name    : String
   let message : String
-  let error   : ErrorProtocol?
+  let error   : Error?
   // us have nope stack
   
-  init(name: String, message: String? = nil, error: ErrorProtocol? = nil) {
+  init(name: String, message: String? = nil, error: Error? = nil) {
     self.name    = name
     self.error   = error
     
@@ -40,7 +40,7 @@ extension NozeProcess {
 public func emitWarning(warning: String, name: String = "Warning") {
   module.emit(warning: Warning(name: name, message: warning))
 }
-public func emitWarning(warning: ErrorProtocol, name: String = "Warning") {
+public func emitWarning(warning: Error, name: String = "Warning") {
   module.emit(warning: Warning(name: name, error: warning))
 }
 
@@ -48,7 +48,7 @@ public func emitWarning(warning: ErrorProtocol, name: String = "Warning") {
 public func emitWarning(_ warning: String, name: String = "Warning") {
   module.emit(warning: Warning(name: name, message: warning))
 }
-public func emitWarning(_ warning: ErrorProtocol, name: String = "Warning") {
+public func emitWarning(_ warning: Error, name: String = "Warning") {
   module.emit(warning: Warning(name: name, error: warning))
 }
 #endif

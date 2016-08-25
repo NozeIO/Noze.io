@@ -38,7 +38,7 @@ public class TempModule : NozeModule {
   
   /// Wrap mkstemp/mkstemps. Synchronous.
   func openSync(template: String, suffix: String)
-       -> ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
+       -> ( Error?, ( fd: FileDescriptor, path: String )? )
   {
     // mkstemp modifies the incoming buffer to contain the resulting name
 #if swift(>=3.0) // #swift3-cstr
@@ -53,7 +53,7 @@ public class TempModule : NozeModule {
       ? mkstemp(inPlaceTemplate)
       : mkstemps(inPlaceTemplate, Int32(suffix.utf8.count))
     
-    guard fd != -1 else { return ( POSIXError(rawValue: xsys.errno), nil ) }
+    guard fd != -1 else { return ( POSIXErrorCode(rawValue: xsys.errno), nil ) }
     
     // Note: This is not how Node does it. Node also allows 'cleanup' calls,
     //       which I guess implies that it actually trackes the pathes it
@@ -74,7 +74,7 @@ public class TempModule : NozeModule {
                    suffix:  String = "",
                    dir:     String = "/tmp", // TODO: use os.tmpDir()
                    pattern: String = "XXXXXXXX",
-                   cb: ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
+                   cb: ( Error?, ( fd: FileDescriptor, path: String )? )
               -> Void)
   {
     // TODO: Node does dir = os.tmpDir(), "myapp"
@@ -119,7 +119,7 @@ public class TempModule : NozeModule {
 
 #if swift(>=3.0) // #swift3-1st-arg
   func openSync(_ template: String, suffix: String)
-       -> ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
+       -> ( Error?, ( fd: FileDescriptor, path: String )? )
   {
     return openSync(template: template, suffix: suffix)
   }
@@ -127,7 +127,7 @@ public class TempModule : NozeModule {
                    suffix:   String = "",
                    dir:      String = "/tmp", // TODO: use os.tmpDir()
                    pattern:  String = "XXXXXXXX",
-                   cb: ( ErrorProtocol?, ( fd: FileDescriptor, path: String )? )
+                   cb: ( Error?, ( fd: FileDescriptor, path: String )? )
               -> Void)
   {
     open(prefix: prefix, suffix: suffix, dir: dir, pattern: pattern, cb: cb)

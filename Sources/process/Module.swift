@@ -11,7 +11,7 @@
 #else
   import Darwin
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
 #endif
 
 import xsys
@@ -57,7 +57,7 @@ public func exit(code: Int? = nil) { core.module.exit(code) }
 
 public func kill(pid: Int, _ signal: Int32 = xsys.SIGTERM) throws {
   let rc = xsys.kill(pid_t(pid), signal)
-  guard rc == 0 else { throw POSIXError(rawValue: xsys.errno)! }
+  guard rc == 0 else { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
 public func kill(pid: Int, _ signal: String) throws {
   var sc : Int32 = xsys.SIGTERM

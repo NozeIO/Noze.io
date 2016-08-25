@@ -184,12 +184,12 @@ extension String {
       
       // lame and slow zero terminate
       let buflen = len + 1
-      let buf    = UnsafeMutablePointer<CChar>(allocatingCapacity: buflen)
+      let buf    = UnsafeMutablePointer<CChar>.allocate(capacity: buflen)
       _ = memcpy(buf, p, len)
       buf[len] = 0 // zero terminate
       
       let s = String(cString: buf)
-      buf.deallocateCapacity(buflen)
+      buf.deallocate(capacity: buflen)
       return s
 #else
       if !didTrimRight { return String.fromCString(p)! }
@@ -275,7 +275,11 @@ private extension IncomingMessage {
     }
     
     if let va = cookieHeader as? [ String ] {
+#if swift(>=3.0) // #swift3-fd
+      return va.reduce([], { $0 + splitCookieFields(headerValue: $1) })
+#else
       return va.reduce([], combine: { $0 + splitCookieFields(headerValue: $1) })
+#endif
     }
     
     console.error("Could not parse Cookie header: \(cookieHeader)")

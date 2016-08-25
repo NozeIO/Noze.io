@@ -14,7 +14,7 @@ import streams
   import let Glibc.ECHILD
 #else
   // importing this from xsys doesn't seem to work
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXErrorCode : Error
 #endif
 
 public typealias ExitCB = ( Int?, Int? ) -> Void
@@ -88,7 +88,7 @@ public class ChildProcess : ErrorEmitter {
     
     if rc == -1 {
       // TODO
-      let error = POSIXError(rawValue: xsys.errno)
+      let error = POSIXErrorCode(rawValue: xsys.errno)
       print("ERROR: waitpid error: \(error)")
       
       if error?.rawValue == ECHILD {

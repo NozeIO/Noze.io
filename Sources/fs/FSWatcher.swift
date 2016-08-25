@@ -66,10 +66,10 @@ public class FSWatcher: ErrorEmitter {
           assert(false, "unexpected change event: \(changes)")
         }
       }      
-#else
+#else // new Swift 3 Objective-GCD
       let flags : DispatchSource.FileSystemEvent = [ .write, .rename, .delete ]
-      src = DispatchSource.fileSystemObject(fileDescriptor: fd,
-                                            eventMask: flags, queue: Q)
+  
+      src = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: flags,queue: Q)
       src!.setEventHandler {
         // TODO
         // MultiCrap dispatches `cb` on main queue
@@ -108,7 +108,7 @@ public class FSWatcher: ErrorEmitter {
       src!.resume()
     }
     else {
-      let error = POSIXError(rawValue: xsys.errno)!
+      let error = POSIXErrorCode(rawValue: xsys.errno)!
       errorListeners.emit(error)
     }
   }

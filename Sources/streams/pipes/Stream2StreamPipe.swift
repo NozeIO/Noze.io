@@ -261,10 +261,10 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
   
   var ignoreTargetErrors = false // in case we are the ones emitting them ;-)
   
-  final func onSourceError(error: ErrorProtocol) {
+  final func onSourceError(error: Error) {
     //efprint("CCC GOT ERROR: \(error)") // TODO
     
-    //if let perr = error as? POSIXError {
+    //if let perr = error as? POSIXErrorCode {
     //  efprint("  Posix: \(perr.rawValue)")
     //}
     
@@ -306,7 +306,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
     onEnd()
   }
   
-  final func onTargetError(error: ErrorProtocol) {
+  final func onTargetError(error: Error) {
     // TODO: do we actually care about target errors?
     
     // Note: The OutStream can be a Duplex! I.e. the error might also be an
@@ -343,8 +343,8 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
   }
   
 #if swift(>=3.0) // #swift3-1st-arg
-  final func onSourceError(_ error: ErrorProtocol) { onSourceError(error: error) }
-  final func onTargetError(_ error: ErrorProtocol) { onTargetError(error: error) }
+  final func onSourceError(_ error: Error) { onSourceError(error: error) }
+  final func onTargetError(_ error: Error) { onTargetError(error: error) }
 #endif
 }
 

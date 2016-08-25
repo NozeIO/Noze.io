@@ -6,7 +6,7 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-public extension Dictionary where Key : StringLiteralConvertible {
+public extension Dictionary where Key : ExpressibleByStringLiteral {
   // http://tinyurl.com/hazrvas
   
   func lookupStoredKey(forCaseInsensitiveKey key: Key) -> Key? {

@@ -7,13 +7,25 @@
 //
 
 #if swift(>=3.0) // #swift3-fd
-#else // Swift 2.2
 
-public typealias ErrorProtocol = ErrorType
-public typealias Sequence      = SequenceType
-public typealias Collection    = CollectionType
-public typealias OptionSet     = OptionSetType
-public typealias Boolean       = BooleanType
+public typealias SwiftError = Error
+
+#else // Swift 2.2
+  
+public typealias SwiftError = ErrorType
+public typealias Error      = ErrorType
+public typealias Sequence   = SequenceType
+public typealias Collection = CollectionType
+public typealias OptionSet  = OptionSetType
+
+public typealias ExpressibleByArrayLiteral      = ArrayLiteralConvertible
+public typealias ExpressibleByDictionaryLiteral = DictionaryLiteralConvertible
+public typealias ExpressibleByFloatLiteral      = FloatLiteralConvertible
+public typealias ExpressibleByIntegerLiteral    = IntegerLiteralConvertible
+public typealias ExpressibleByStringLiteral     = StringLiteralConvertible
+public typealias ExpressibleByBooleanLiteral    = BooleanLiteralConvertible
+public typealias ExpressibleByNilLiteral        = NilLiteralConvertible
+
 
 // MARK: - Swift 3 compatibility extensions
   
@@ -26,8 +38,9 @@ public func stride<T : Strideable>(from s: T, to: T, by: T.Stride)
 public extension CollectionType where Generator.Element : Equatable {
   
   public func split(separator s: Self.Generator.Element,
-                    omittingEmptySubsequences: Bool = false,
-                    maxSplits: Int = Int.max) -> [Self.SubSequence]
+                    maxSplits: Int = Int.max,
+                    omittingEmptySubsequences: Bool = false)
+                    -> [Self.SubSequence]
   {
     return split(s, maxSplit: maxSplits,
                  allowEmptySlices: !omittingEmptySubsequences)
@@ -81,6 +94,11 @@ public extension Dictionary {
 
 #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS) // #preview1
 import Foundation
+
+// In Swift 3p4 POSIXError was essentially renamed to POSIXErrorCode (the enum).
+// In *addition* it gained the `POSIXError` struct, which seems to be a 
+// namespace for this.
+public typealias POSIXErrorCode = POSIXError
 #endif
 
 public extension String {

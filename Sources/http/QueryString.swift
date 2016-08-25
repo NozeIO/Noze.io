@@ -61,10 +61,11 @@ private func _parse(string s     : String,
   var qp = Dictionary<String, Any>()
   
   let pairs = s.characters.split(separator: separator,
-                                      omittingEmptySubsequences: true)
+                                 omittingEmptySubsequences: true)
   for pair in pairs {
     let pairParts = pair.split(separator: pairSeparator,
-                               omittingEmptySubsequences: true, maxSplits: 1)
+                               maxSplits: 1,
+                               omittingEmptySubsequences: true)
     guard !pairParts.isEmpty else { continue }
     
     // check key and whether it contains Zope style formats

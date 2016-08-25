@@ -11,11 +11,11 @@ import events
 import console
 import net
 
-public typealias RedisReplyCB      = ( ErrorProtocol?, RedisValue?   ) -> Void
-public typealias RedisIntReplyCB   = ( ErrorProtocol?, Int?          ) -> Void
-public typealias RedisArrayReplyCB = ( ErrorProtocol?, [RedisValue]? ) -> Void
-public typealias RedisHashReplyCB  = ( ErrorProtocol?, [String:String ]? )->Void
-public typealias RedisOHashReplyCB = ( ErrorProtocol?, [String:String?]? )->Void
+public typealias RedisReplyCB      = ( Error?, RedisValue?   ) -> Void
+public typealias RedisIntReplyCB   = ( Error?, Int?          ) -> Void
+public typealias RedisArrayReplyCB = ( Error?, [RedisValue]? ) -> Void
+public typealias RedisHashReplyCB  = ( Error?, [String:String ]? )->Void
+public typealias RedisOHashReplyCB = ( Error?, [String:String?]? )->Void
 
 public typealias SubscribeCB = ( String, Int        ) -> Void
 public typealias MessageCB   = ( String, RedisValue ) -> Void
@@ -141,7 +141,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     _ = stream!.onError(handler: self.handleSocketError)
   }
   
-  func handleSocketError(err: ErrorProtocol) {
+  func handleSocketError(err: Error) {
     console.error("socket error", err)
     
     retryInfo.lastSocketError = err
@@ -158,7 +158,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     retryConnectAfterFailure()
   }
   
-  func stopAll(error err: ErrorProtocol) {
+  func stopAll(error err: Error) {
     let oldPending = pendingCommands
     let oldSent    = sentCommands
     pendingCommands.removeAll()
@@ -168,7 +168,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     for cmd in oldSent    { cmd.callback?(err, nil) }
   }
   
-  func stop(error e: ErrorProtocol?) {
+  func stop(error e: Error?) {
     state = .DidStop
     
     if let socket = stream {
@@ -551,7 +551,7 @@ extension RedisClient : CustomStringConvertible {
 
 // MARK: - Errors
 
-public enum RedisClientError : ErrorProtocol {
+public enum RedisClientError : Error {
   case UnexpectedPublishReplyType(String, [RedisValue])
   case UnexpectedReplyType(RedisValue)
   case ConnectionQuit

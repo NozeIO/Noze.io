@@ -6,6 +6,9 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+// TBD: This is a bit weird. Now even more due to POSIXErrorCode vs POSIXError.
+//      But well :-)
+
 #if os(Linux)
   import Glibc
 
@@ -17,7 +20,7 @@
   // code from, hopefully they are kinda stable :-):
   //   /usr/include/asm-generic/errno-base.h
   
-  public enum POSIXError : CInt {
+  public enum POSIXErrorCode : CInt {
     case EPERM   = 1
     case ENOENT  = 2
     case ESRCH   = 3
@@ -58,14 +61,14 @@
   }
 
 #if swift(>=3.0)
-  extension POSIXError : ErrorProtocol {}
-#else
-  extension POSIXError : ErrorType {}
+  extension POSIXErrorCode : Error {}
+#else // Swift 2.2
+  extension POSIXErrorCode : ErrorType {}
 #endif
 
   public var errno : Int32 { return Glibc.errno }
   
-#else
+#else // MacOS
   import Darwin
 
   public let EWOULDBLOCK = Darwin.EWOULDBLOCK
@@ -73,5 +76,11 @@
   public var errno : Int32 { return Darwin.errno }
 
   // this doesn't seem to work though
-  import Foundation // this is for POSIXError : ErrorProtocol
+  import Foundation // this is for POSIXError : Error
+
+#if swift(>=3.0)
+  extension POSIXErrorCode : Error {}
+#else // Swift 2.2
+  public typealias POSIXErrorCode = POSIXError
 #endif
+#endif // MacOS

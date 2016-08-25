@@ -42,7 +42,7 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
   
   typealias WriteTypeBucket = [ WriteType ]
 
-  enum ParserError : ErrorProtocol {
+  enum ParserError : Error {
     case UnexpectedStartByte(char: UInt8, bucket: [UInt8])
   }
   
@@ -93,7 +93,7 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
   
   var context    : ParseContext?  = nil
   
-  var lastError  : ErrorProtocol? = nil
+  var lastError  : Error? = nil
   
   func append(value v: ReadType) {
     guard let ctx = context else {
@@ -111,7 +111,7 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
   }
   
   override func _transform(bucket b : [ WriteType ],
-                           done     : ( ErrorProtocol?, [ ReadType ]? ) -> Void)
+                           done     : ( Error?, [ ReadType ]? ) -> Void)
   {
     guard !b.isEmpty else {
       assert(!b.isEmpty, "transform bucket is empty?")

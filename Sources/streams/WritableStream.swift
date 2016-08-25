@@ -284,7 +284,7 @@ public class WritableStream<WriteType>
   
   // MARK: - extension points for subclass
 
-  func _primaryWriteV(buckets chunks: Brigade, done: ( ErrorProtocol?, Int ) -> Void) {
+  func _primaryWriteV(buckets chunks: Brigade, done: ( Error?, Int ) -> Void) {
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
   }

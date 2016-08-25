@@ -8,7 +8,7 @@
 
 import core
 
-public struct RedisError : ErrorProtocol {
+public struct RedisError : Error {
   let code    : String
   let message : String
 }
@@ -89,13 +89,13 @@ public func ==(lhs: RedisValue, rhs: String) -> Bool {
 
 // MARK: - Parse Literals
 
-extension RedisValue : IntegerLiteralConvertible {
+extension RedisValue : ExpressibleByIntegerLiteral {
   public init(integerLiteral value: IntegerLiteralType) {
     self = .Integer(value)
   }
 }
 
-extension RedisValue : StringLiteralConvertible {
+extension RedisValue : ExpressibleByStringLiteral {
   
   public init(stringLiteral value: String) {
     self = .BulkString(Swift.Array(value.utf8))

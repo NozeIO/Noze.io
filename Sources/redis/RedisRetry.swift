@@ -21,7 +21,7 @@ public struct RedisRetryInfo {
   var attempt         : Int            = 0
   var totalRetryTime  : timeval        = timeval()
   var timesConnected  : Int            = 0
-  var lastSocketError : ErrorProtocol? = nil
+  var lastSocketError : Error? = nil
   
   mutating func registerSuccessfulConnect() {
     self.timesConnected  += 1
@@ -33,7 +33,7 @@ public struct RedisRetryInfo {
 
 public enum RedisRetryResult {
   case RetryAfter(milliseconds: Int)
-  case Error(ErrorProtocol)
+  case Error(SwiftError)
   case Stop
 }
 
@@ -48,7 +48,7 @@ public enum RedisRetryResult {
 /// To retry after 250ms. Makes it more similar
 /// to the original API.
 ///
-extension RedisRetryResult : IntegerLiteralConvertible {
+extension RedisRetryResult : ExpressibleByIntegerLiteral {
   
   public init(integerLiteral value: Int) {
     self = .RetryAfter(milliseconds: value)

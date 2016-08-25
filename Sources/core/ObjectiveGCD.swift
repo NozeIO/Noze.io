@@ -42,6 +42,7 @@ public typealias DispatchQueueType      = DispatchQueue
 public typealias DispatchTimeType       = DispatchTime
 public typealias DispatchIOType         = DispatchIO
 public typealias DispatchDataType       = DispatchData
+public typealias DispatchSourceType     = DispatchSourceProtocol
 
 public func dispatch_main() {
   dispatchMain()
@@ -54,7 +55,7 @@ public func dispatch_get_main_queue() -> dispatch_queue_t {
 public func dispatch_after(_ t: DispatchTimeType, _ q: DispatchQueueType,
                            _ block: () ->())
 {
-  q.after(when: t, execute: block)
+  q.asyncAfter(deadline: t, execute: block)
 }
 
 public func xsys_dispatch_time(_ base : DispatchTime, _ offset : Int64)
@@ -65,9 +66,9 @@ public func xsys_dispatch_time(_ base : DispatchTime, _ offset : Int64)
 
 public var DISPATCH_TIME_NOW : DispatchTimeType { return DispatchTime.now() }
 
-public let DISPATCH_QUEUE_CONCURRENT = DispatchQueueAttributes.concurrent
+public let DISPATCH_QUEUE_CONCURRENT = DispatchQueue.Attributes.concurrent
 public func dispatch_queue_create(_ label: String,
-                                  _ attrs: DispatchQueueAttributes)
+                                  _ attrs: DispatchQueue.Attributes)
             -> DispatchQueue
 {
   return DispatchQueue(label: label, attributes: attrs)

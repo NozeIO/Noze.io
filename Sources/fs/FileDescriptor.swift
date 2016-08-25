@@ -18,7 +18,7 @@ import core
 
 /// This essentially wraps the Integer representing a file descriptor in a
 /// struct for the whole reason to attach methods to it.
-public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
+public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiteral {
 
   public static let stdin  = FileDescriptor(xsys.STDIN_FILENO)
   public static let stdout = FileDescriptor(xsys.STDOUT_FILENO)
@@ -41,11 +41,11 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
   // MARK: - Operations
   
   public static func open(path: String, flags: CInt)
-                     -> ( ErrorProtocol?, FileDescriptor? )
+                     -> ( Error?, FileDescriptor? )
   {
     let fd = xsys.open(path, flags)
     guard fd >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, nil )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, nil )
     }
     
     return ( nil, FileDescriptor(fd) )
@@ -55,7 +55,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
     _ = xsys.close(fd)
   }
   
-  public func read(count: Int) -> ( ErrorProtocol?, [ UInt8 ]? ) {
+  public func read(count: Int) -> ( Error?, [ UInt8 ]? ) {
     // TODO: inefficient init. Also: reuse buffers.
 #if swift(>=3.0) // #swift3-fd
     var buf = [ UInt8 ](repeating: 0, count: count)
@@ -67,7 +67,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
     
     let readCount = xsys.read(fd, &buf, count)
     guard readCount >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, nil )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, nil )
     }
     
     if readCount == 0 { return ( nil, [] ) } // EOF
@@ -78,7 +78,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
   }
   
   public func write<T>(buffer: [ T ], count: Int = -1)
-                -> ( ErrorProtocol?, Int )
+                -> ( Error?, Int )
   {
     guard buffer.count > 0 else { return ( nil, 0 ) }
     
@@ -89,7 +89,7 @@ public struct FileDescriptor: IntegerLiteralConvertible, NilLiteralConvertible {
     let writeCount = xsys.write(fd, buffer, lCount)
     
     guard writeCount >= 0 else {
-      return ( POSIXError(rawValue: xsys.errno)!, 0 )
+      return ( POSIXErrorCode(rawValue: xsys.errno)!, 0 )
     }
     
     return ( nil, writeCount )
@@ -259,17 +259,6 @@ extension FileDescriptor: CustomStringConvertible {
   
   public var description : String {
     return "<FileDescriptor:" + descriptionAttributes() + ">"
-  }
-  
-}
-
-
-// MARK: - Boolean
-
-extension FileDescriptor: Boolean { // TBD: Swift doesn't want us to do this
-  
-  public var boolValue : Bool {
-    return isValid
   }
   
 }
