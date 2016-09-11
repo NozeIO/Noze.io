@@ -6,8 +6,6 @@
 //  Copyright © 2015 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0) // #swift3-fd
-
 import Dispatch
 import core
 
@@ -40,8 +38,6 @@ public extension IteratorProtocol {
 /// Note that this one is synchronous, aka, the Generator should not block on
 /// I/O or be otherwise expensive. For such cases use the AsyncGeneratorSource.
 public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
-
-  public typealias YieldCB = @escaping ( Error?, [ G.Element ]? ) -> Void
   
   public static var defaultHighWaterMark : Int { return 5 } // TODO
   var source : G
@@ -61,7 +57,7 @@ public struct SyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   /// back to the Readable.
   public mutating func next(queue _ : DispatchQueueType,
                             count   : Int,
-                            yield   : YieldCB)
+                            yield   : @escaping ( Error?, [ G.Element ]? ) -> Void)
   {
     guard let first = source.next() else {
       yield(nil, nil) // EOF
@@ -183,11 +179,5 @@ private func getDefaultWorkerQueue() -> DispatchQueueType {
   return dispatch_get_global_queue(QOS_CLASS_DEFAULT,
                                    UInt(DISPATCH_QUEUE_PRIORITY_DEFAULT))
   */
-#if !swift(>=3.0) || !(os(OSX) || os(iOS) || os(watchOS) || os(tvOS))
-  return dispatch_queue_create("io.noze.source.iterator.async", nil)
-#else
   return DispatchQueue(label: "io.noze.source.iterator.async")
-#endif
 }
-
-#endif // Swift 3.x+

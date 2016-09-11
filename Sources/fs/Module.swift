@@ -28,7 +28,7 @@ public typealias ErrorCB  = ( Error?             ) -> Void
 
 // MARK: - Watch Files or Directories. Get notified on changes.
 
-public func watch(filename   : String,
+public func watch(_ filename : String,
                   persistent : Bool = true,
                   recursive  : Bool = false,
                   listener   : FSWatcherCB? = nil) -> FSWatcher
@@ -40,14 +40,3 @@ public func watch(filename   : String,
   return FSWatcher(filename, persistent: persistent,
                    listener: listener)
 }
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public func watch(_ filename : String,
-                  persistent : Bool = true,
-                  recursive  : Bool = false,
-                  listener   : FSWatcherCB? = nil) -> FSWatcher
-{
-  return watch(filename: filename, persistent: persistent, recursive: recursive,
-               listener: listener)
-}
-#endif

@@ -41,10 +41,10 @@ public class EventListenerSet<T> {
     listeners.removeAll()
   }
   
-  public func add(handler listener: EventHandler) {
+  public func add(handler listener: @escaping EventHandler) {
     add(handler: listener, once: false)
   }
-  public func add(handler listener: EventHandler, once: Bool) {
+  public func add(handler listener: @escaping EventHandler, once: Bool) {
     listeners.append( ListenerEntry(cb: listener, once: once) )
     if once && !hasOnce { hasOnce = true }
     
@@ -80,7 +80,7 @@ public class EventListenerSet<T> {
     queue.append(v)
   }
   
-  public func emit(v: T) {
+  public func emit(_ v: T) {
     if listeners.isEmpty {
       // have no listeners yet, queue event for later delivery
       _queueValue(value: v)
@@ -111,21 +111,12 @@ public class EventListenerSet<T> {
         }
         
         if entry.once {
-#if swift(>=3.0) // #swift3-1st-kwarg
           if let idx = listeners.index(where: { $0 === entry }) {
             listeners.remove(at: idx)
           }
           else {
             print("WARN: listener race, already removed once-entry.")
           }
-#else
-          if let idx = listeners.indexOf({ $0 === entry }) {
-            listeners.remove(at: idx)
-          }
-          else {
-            print("WARN: listener race, already removed once-entry.")
-          }
-#endif
         }
       }
     }
@@ -143,11 +134,6 @@ public class EventListenerSet<T> {
       }
     }
   }
-#if swift(>=3.0) // #swift3-1st-kwarg
-  public func emit(_ v: T) {
-    emit(v: v)
-  }
-#endif
   
   
   // TODO: cannot compare references to closures? Need a token?
@@ -174,17 +160,10 @@ class ListenerEntry<T> { // class to support isEmitting
   let once       : Bool
   var isEmitting = 0 // counter
   
-#if swift(>=3.0) // #swift3-escaping
   init(cb: @escaping ( T ) -> Void, once : Bool = false) {
     self.cb         = cb
     self.once       = once
   }
-#else
-  init(cb: ( T ) -> Void, once : Bool = false) {
-    self.cb         = cb
-    self.once       = once
-  }
-#endif
 }
 
 

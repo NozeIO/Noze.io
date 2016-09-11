@@ -14,7 +14,7 @@ import XCTest
 class NozeJSONTests: NozeIOTestCase {
   
   let fixJson1 = "{ \"name\": \"John Doe\", \"age\": 42 }"
-  let fixObj1  = [ "name": "John Doe", "age": 42 ]
+  let fixObj1  : [ String : Any ] = [ "name": "John Doe", "age": 42 ]
   
   func testSimpleDictStringParse() throws {
     let obj : JSON! = JSON.parse(fixJson1)

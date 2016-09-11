@@ -25,7 +25,7 @@ import core
 ///   lines, or records as well). While Node.JS also has an 'object mode',
 ///   this works on a 'per item' basis.
 ///
-public class TargetStream<T : GWritableTargetType>
+open class TargetStream<T : GWritableTargetType>
            : WritableStream<T.TargetElement>
 {
   
@@ -49,7 +49,9 @@ public class TargetStream<T : GWritableTargetType>
   
   // MARK: - extension points for subclass
   
-  override func _primaryWriteV(buckets c: Brigade, done: PrimaryWriteDoneCB) {
+  override open func _primaryWriteV(buckets c: Brigade,
+                                    done: @escaping ( Error?, Int ) -> Void)
+  {
     log.enter(); defer { log.leave() }
     target.writev(queue: Q, chunks: c, yield: done)
   }
@@ -63,7 +65,7 @@ public class TargetStream<T : GWritableTargetType>
   }
   
 
-  override var _primaryCanEnd : Bool { return target.canEnd }
+  override open var _primaryCanEnd : Bool { return target.canEnd }
 }
 
 public extension GWritableTargetType {

@@ -9,7 +9,7 @@
 import streams
 import net
 
-public class RequestOptions : ConnectOptions {
+open class RequestOptions : ConnectOptions {
   // In a 'regular' framework this would be called 'Request' ... In Node the
   // request is the thing which is already queued on the socket.
   
@@ -37,7 +37,7 @@ public class RequestOptions : ConnectOptions {
   }
 }
 
-extension RequestOptions {
+public extension RequestOptions {
   
   func getAgent() -> Agent {
     switch agent {

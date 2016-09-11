@@ -24,14 +24,16 @@ public class StringToUTF8: TransformStream<String, UInt8> {
   
   // MARK: - Transform
   
-  public override func _transform(bucket b: [ String ], done: TransformDoneCB) {
+  public override func _transform(bucket b: [ String ],
+                                  done: @escaping ( Error?, [UInt8]? ) -> Void)
+  {
     guard !b.isEmpty else { done(nil, []); return }
 
     for s in b {
       // FIXME: All this is lame and to much copying. It should be all redone
       //        for proper speed
       let bytes = Array<UInt8>(s.utf8)
-      push(bucket: bytes)
+      push(bytes)
     }
     
     done(nil, nil)

@@ -39,26 +39,8 @@ public extension MustacheRenderingContext {
     newUTF8.append(0)
     
     return newUTF8.withUnsafeBufferPointer { bp in
-      #if swift(>=3.0) // #swift3-fd
-        return String(cString: bp.baseAddress!)
-      #else
-        let cs = UnsafePointer<CChar>(bp.baseAddress)
-        return String.fromCString(cs) ?? s
-      #endif
+      return String(cString: bp.baseAddress!)
     }
   }
   
 }
-
-#if swift(>=3.0) // #swift3-fd
-#else
-extension _ArrayType {
-  
-  public mutating func append
-    <S: SequenceType where S.Generator.Element == Self.Generator.Element>
-    (contentsOf newElements: S)
-  {
-    appendContentsOf(newElements)
-  }
-}
-#endif

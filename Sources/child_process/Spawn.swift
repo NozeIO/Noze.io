@@ -20,7 +20,7 @@ import process
 #endif
 
 /// Same like the other spawn, but uses varargs `args`
-public func spawn(command: String,
+public func spawn(_ command: String,
                   stdio: [ StdioAction ] = [ .Pipe, .Pipe, .Pipe ],
                   env:   [ String : String/*CustomStringConvertible*/ ] = [:],
                   _ args : String...)
@@ -29,11 +29,7 @@ public func spawn(command: String,
   return spawn(command, args, stdio: stdio, env: env)
 }
 
-#if swift(>=3.0) // #swift3-ptr
 private typealias MutableCCharPtrArray = [ UnsafeMutablePointer<CChar>? ]
-#else
-private typealias MutableCCharPtrArray = [ UnsafeMutablePointer<CChar> ]
-#endif
 
 /// Execute a shell command.
 ///
@@ -56,7 +52,7 @@ private typealias MutableCCharPtrArray = [ UnsafeMutablePointer<CChar> ]
 ///
 /// Sample: [ .Pipe, .Pipe, process.stderr ] (setting 0, 1, 2)
 ///
-public func spawn(command: String, _ args: [ String ],
+public func spawn(_ command: String, _ args: [ String ],
                   stdio: [ StdioAction ] = [ .Pipe, .Pipe, .Pipe ],
                   env:   [ String : String/*CustomStringConvertible*/ ]? = nil)
             -> ChildProcess
@@ -79,19 +75,11 @@ public func spawn(command: String, _ args: [ String ],
   
   /* setup arguments */
   var argsWithCmd = [ command ] + args
-#if swift(>=3.0) // #swift3-ptr
-  var argv : MutableCCharPtrArray = argsWithCmd.map { argument in
-    argument.withCString(strdup)
-  }
-  argv.append(UnsafeMutablePointer<CChar>(nil))
-  defer { for case let arg in argv { free(arg) } }
-#else
   var argv : MutableCCharPtrArray = argsWithCmd.map { argument in
     argument.withCString(strdup)
   }
   argv.append(nil)
   defer { for case let arg in argv { free(arg) } }
-#endif
   
   
   /* file actions */
@@ -101,11 +89,7 @@ public func spawn(command: String, _ args: [ String ],
 #if os(Linux)
   var fileActions = posix_spawn_file_actions_t()
 #else
-#if swift(>=3.0) // #swift3-ptr
-  var fileActions = posix_spawn_file_actions_t(nil)
-#else
-  var fileActions : posix_spawn_file_actions_t = nil
-#endif
+  var fileActions : posix_spawn_file_actions_t? = nil
 #endif
   posix_spawn_file_actions_init(&fileActions)
   
@@ -204,7 +188,7 @@ public func spawn(command: String, _ args: [ String ],
   let child : ChildProcess
   if rc == 0 {
     // Setup control pipe in parent
-    let cp = PipeSource(fd: controlPipeFds[0]).readable(1)
+    let cp = PipeSource(fd: controlPipeFds[0]).readable(hwm: 1)
     
     child = ChildProcess(pid: pid, controlPipe:cp)
     
@@ -257,20 +241,11 @@ private func prepare(environment env: [ String : String],
   for key in preserveKeys {
     guard environment[key] == nil else { continue }
     
-#if swift(>=3.0) // #swift3-ptr #swift3-cstr
     guard let p = xsys.getenv(key) else { continue }
     
     if let s = String(validatingUTF8: p) {
       environment[key] = s
     }
-#else
-    let p = xsys.getenv(key)
-    guard p != nil else { continue }
-    
-    if let s = String.fromCString(p) {
-      environment[key] = s
-    }
-#endif    
   }
   
   var env : MutableCCharPtrArray = environment.map { pair in
@@ -286,13 +261,8 @@ func setAllCloseOnExec() {
   let openMax = Int32(xsys.sysconf(Int32(xsys._SC_OPEN_MAX)))
   var rlim = xsys.rlimit()
   let limMax : Int32
-#if swift(>=3.0)
   let xRLIMIT_NOFILE =
         unsafeBitCast(xsys.RLIMIT_NOFILE, to: __rlimit_resource_t.self)
-#else
-  let xRLIMIT_NOFILE =
-        unsafeBitCast(xsys.RLIMIT_NOFILE, __rlimit_resource_t.self)
-#endif
   if xsys.getrlimit(xRLIMIT_NOFILE, &rlim) != 0 {
     limMax = 0
   }
@@ -300,7 +270,6 @@ func setAllCloseOnExec() {
     limMax = Int32(rlim.rlim_max)
    }
 #else
-  // Swift 2.2: coredumps the above at runtime on OSX
   let openMax = Int32(xsys.sysconf(xsys._SC_OPEN_MAX))
   let limMax = xsys.NOFILE
 #endif
@@ -315,21 +284,3 @@ func setAllCloseOnExec() {
     }
   }
 }
-
-#if swift(>=3.0) // #swift3-1st-arg
-public func spawn(_ command: String,
-                  stdio: [ StdioAction ] = [ .Pipe, .Pipe, .Pipe ],
-                  env:   [ String : String/*CustomStringConvertible*/ ] = [:],
-                  _ args : String...)
-            -> ChildProcess
-{
-  return spawn(command: command, args, stdio: stdio, env: env)
-}
-public func spawn(_ command: String, _ args: [ String ],
-                  stdio: [ StdioAction ] = [ .Pipe, .Pipe, .Pipe ],
-                  env:   [ String : String/*CustomStringConvertible*/ ]? = nil)
-            -> ChildProcess
-{
-  return spawn(command: command, args, stdio: stdio, env: env)
-}
-#endif

@@ -14,8 +14,8 @@ public typealias CloseCB = () -> Void
 
 public protocol StreamType : ErrorEmitterType {
   
-  func onClose  (handler cb: CloseCB) -> Self
-  func onceClose(handler cb: CloseCB) -> Self
+  @discardableResult func onClose  (handler cb: @escaping CloseCB) -> Self
+  @discardableResult func onceClose(handler cb: @escaping CloseCB) -> Self
   
 }
 
@@ -23,7 +23,7 @@ public protocol StreamType : ErrorEmitterType {
 ///
 /// TODO: document more
 ///
-public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
+open class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   // TODO: improve buffer implementation. Ideas:
   // - bucket as a class / linked list with 'next' pointer
   // - bucket has fix UnmanagedPointer buffer
@@ -75,12 +75,15 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   public var closeListeners =
                EventListenerSet<Void>(queueLength: 1, coalesce: true)
   
-  public func onClose(handler cb: CloseCB) -> Self {
+  @discardableResult
+  public func onClose(handler cb: @escaping CloseCB) -> Self {
     log.enter(); defer { log.leave() }
     closeListeners.add(handler: cb, once: false)
     return self
   }
-  public func onceClose(handler cb: CloseCB) -> Self {
+  
+  @discardableResult
+  public func onceClose(handler cb: @escaping CloseCB) -> Self {
     log.enter(); defer { log.leave() }
     closeListeners.add(handler: cb, once: true)
     return self
@@ -89,7 +92,7 @@ public class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   
   // MARK: - Logging
   
-  public var logStateInfo : String {
+  open var logStateInfo : String {
     return ""
   }
 }

@@ -29,17 +29,9 @@ class NozeIOPipeTests: NozeIOTestCase {
                 fs.createWriteStream("/dev/null"))
   }
   
-#if swift(>=3.0) // #swift3-1st-kwarg
-  private func impTestPipe<TI: GReadableStreamType, TO: GWritableStreamType
-                           where TI.ReadType == TO.WriteType>
-                (_ src: TI, _ dest: TO)
-  {
-    impTestPipe(src: src, dest)
-  }
-#endif
-  private func impTestPipe<TI: GReadableStreamType, TO: GWritableStreamType
-                           where TI.ReadType == TO.WriteType>
-                (src: TI, _ dest: TO)
+  private func impTestPipe<TI: GReadableStreamType, TO: GWritableStreamType>
+               (_ src: TI, _ dest: TO)
+                           where TI.ReadType == TO.WriteType
   {
     enableRunLoop()
     

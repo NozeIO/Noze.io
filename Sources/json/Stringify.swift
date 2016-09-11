@@ -11,7 +11,7 @@
 
 public extension JSON {
   
-  public static func stringify(object: Any?) -> Swift.String {
+  public static func stringify(_ object: Any?) -> Swift.String {
     guard let o = object else { return "null" }
     
     if let json = object as? JSON {
@@ -31,11 +31,6 @@ public extension JSON {
     return jsonString
   }
   
-#if swift(>=3.0) // #swift3-1st-kwarg
-  public static func stringify(_ object: Any?) -> Swift.String {
-    return JSON.stringify(object: object)
-  }
-#endif
 }
 
 public extension String {

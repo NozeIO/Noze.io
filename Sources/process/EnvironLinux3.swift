@@ -10,7 +10,6 @@
 
 import Glibc
 
-#if swift(>=3.0) // #swift3-ptr
 // what a heck! ;-)
 private let pEnviron  = Glibc.dlsym(nil, "environ")
 private let cpEnviron =
@@ -70,7 +69,6 @@ public var environ : [ String : String ] {
   
   return env
 }
-#endif // Swift 3+
 
 #endif // Linux
 

@@ -17,7 +17,7 @@ public extension ServerResponse {
   // TODO: Maybe we don't want to convert to a `JSON`, but rather stream real
   //       object.
   
-  public func json(object: JSON) {
+  public func json(_ object: JSON) {
     if canAssignContentType {
       setHeader("Content-Type", "application/json; charset=utf-8")
     }
@@ -29,14 +29,10 @@ public extension ServerResponse {
 
 // MARK: - Helpers
 
-#if swift(>=3.0) // #swift3-1st-kwarg
-
 public extension ServerResponse {
 
-  public func json(_ object: JSON) { json(object: object) }
-  
   public func json(_ object: JSONEncodable) {
-    json(object: object.toJSON())
+    json(object.toJSON())
   }
   
   public func json(_ object: Any?) {
@@ -49,33 +45,8 @@ public extension ServerResponse {
       }
     }
     else {
-      json(object: .Null)
-    }
-  }
-}
-
-#else // Swift 2.2
-  
-public extension ServerResponse {
-  
-  public func json(object: JSONEncodable) {
-    json(object.toJSON())
-  }
-
-  public func json(object: Any?) {
-    if let o = object {
-      if let jsonEncodable = (o as? JSONEncodable) {
-        json(jsonEncodable)
-      }
-      else {
-        json("\(o)")
-      }
-    }
-    else {
       json(.Null)
     }
   }
-  
 }
-  
-#endif // Swift 2.2
+

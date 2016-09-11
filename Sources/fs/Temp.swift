@@ -37,16 +37,11 @@ public class TempModule : NozeModule {
   
   
   /// Wrap mkstemp/mkstemps. Synchronous.
-  func openSync(template: String, suffix: String)
+  func openSync(_ template: String, suffix: String)
        -> ( Error?, ( fd: FileDescriptor, path: String )? )
   {
     // mkstemp modifies the incoming buffer to contain the resulting name
-#if swift(>=3.0) // #swift3-cstr
     let inPlaceTemplate = strdup(template + suffix)!
-#else
-    let inPlaceTemplate = strdup(template + suffix)
-    assert(inPlaceTemplate != nil)
-#endif
     defer { free(inPlaceTemplate) }
     
     let fd = suffix.isEmpty
@@ -60,21 +55,18 @@ public class TempModule : NozeModule {
     //       created and then registers an atexit handler to clean them up.
     if isTracking { unlink(inPlaceTemplate) }
     
-#if swift(>=3.0) // #swift3-cstr
     let resolvedTemplate = String(validatingUTF8: inPlaceTemplate)
-#else
-    let resolvedTemplate = String.fromCString(inPlaceTemplate)
-#endif
     assert(resolvedTemplate != nil)
     
     return ( nil, ( FileDescriptor(fd), resolvedTemplate! ) )
   }
 
-  public func open(prefix:  String = "nzf-",
-                   suffix:  String = "",
-                   dir:     String = "/tmp", // TODO: use os.tmpDir()
-                   pattern: String = "XXXXXXXX",
-                   cb: ( Error?, ( fd: FileDescriptor, path: String )? )
+  public func open(_ prefix : String = "nzf-",
+                   suffix   : String = "",
+                   dir      : String = "/tmp", // TODO: use os.tmpDir()
+                   pattern  : String = "XXXXXXXX",
+                   cb       : @escaping
+                              ( Error?, ( fd: FileDescriptor, path: String )? )
               -> Void)
   {
     // TODO: Node does dir = os.tmpDir(), "myapp"
@@ -89,10 +81,10 @@ public class TempModule : NozeModule {
     }
   }
   
-  public func createWriteStream(prefix:  String = "nzf-",
-                                suffix:  String = "",
-                                dir:     String = "/tmp", // TODO: use os.tmpDir()
-                                pattern: String = "XXXXXXXX")
+  public func createWriteStream(_ prefix : String = "nzf-",
+                                suffix   : String = "",
+                                dir      : String = "/tmp", // TODO: use os.tmpDir()
+                                pattern  : String = "XXXXXXXX")
               -> TargetStream<FileTarget>
   {
     // A lame, blocking implementation. It'll do for now. FIXME
@@ -117,32 +109,6 @@ public class TempModule : NozeModule {
     }
   }
 
-#if swift(>=3.0) // #swift3-1st-arg
-  func openSync(_ template: String, suffix: String)
-       -> ( Error?, ( fd: FileDescriptor, path: String )? )
-  {
-    return openSync(template: template, suffix: suffix)
-  }
-  public func open(_ prefix: String = "nzf-",
-                   suffix:   String = "",
-                   dir:      String = "/tmp", // TODO: use os.tmpDir()
-                   pattern:  String = "XXXXXXXX",
-                   cb: ( Error?, ( fd: FileDescriptor, path: String )? )
-              -> Void)
-  {
-    open(prefix: prefix, suffix: suffix, dir: dir, pattern: pattern, cb: cb)
-  }
-  public func createWriteStream(_ prefix: String = "nzf-",
-                                suffix:   String = "",
-                                dir:      String = "/tmp",
-                                            // TODO: use os.tmpDir()
-                                pattern:  String = "XXXXXXXX")
-              -> TargetStream<FileTarget>
-  {
-    return createWriteStream(prefix: prefix, suffix: suffix, dir: dir,
-                             pattern: pattern)
-  }
-#endif
 }
 
 public let temp = TempModule()

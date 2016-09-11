@@ -168,7 +168,7 @@ extension http_parser {
   
 }
 
-func debugBucketAsString(buf: UnsafePointer<CChar>, _ len: size_t) -> String {
+func debugBucketAsString(_ buf: UnsafePointer<CChar>, _ len: size_t) -> String {
   var s = ""
   for i in 0..<len {
     let c = buf[i]
@@ -181,9 +181,3 @@ func debugBucketAsString(buf: UnsafePointer<CChar>, _ len: size_t) -> String {
   }
   return s
 }
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-func debugBucketAsString(_ buf: UnsafePointer<CChar>, _ len: size_t) -> String {
-  return debugBucketAsString(buf: buf, len)
-}
-#endif

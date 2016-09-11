@@ -11,7 +11,7 @@ import streams
 // MARK: - Convenience Read * Write Methods
 
 /// Asynchronously reads the entire contents of a file.
-public func readFile(path: String, cb: DataCB) {
+public func readFile(_ path: String, cb: @escaping DataCB) {
   // TODO: support open-flags (r+, a, etc)
   let s = createReadStream(path) | concat { bucket in
     cb(nil, bucket)
@@ -21,7 +21,9 @@ public func readFile(path: String, cb: DataCB) {
 }
 
 /// Asynchronously reads the entire contents of a file into a string.
-public func readFile(path: String, _ encoding: String, cb: StringCB) {
+public func readFile(_ path: String, _ encoding: String,
+                     cb: @escaping StringCB)
+{
   // Note: The encoding does not default to utf-8 because otherwise we need to 
   //       explicitly type the closure on the caller site - which happens to be
   //       inconvenient, which is something we do not appreciated.
@@ -47,7 +49,7 @@ public func readFile(path: String, _ encoding: String, cb: StringCB) {
 ///
 /// NOTE: The creator of Noze begs you not to use this method. Please stream
 ///       your write.
-public func writeFile(path: String, _ data: [ UInt8 ], cb: ErrorCB) {
+public func writeFile(_ path: String, _ data: [ UInt8 ], cb: @escaping ErrorCB){
   // TODO: support open-flags (r+, a, etc)
   _ = data | createWriteStream(path, hwm: data.count)
              .onFinish { cb(nil) }
@@ -59,7 +61,7 @@ public func writeFile(path: String, _ data: [ UInt8 ], cb: ErrorCB) {
 ///
 /// NOTE: The creator of Noze begs you not to use this method. Please stream
 ///       your write.
-public func writeFile(path: String, _ string: String, cb: ErrorCB) {
+public func writeFile(_ path: String, _ string: String, cb: @escaping ErrorCB) {
   // TODO: support open-flags (r+, a, etc)
   _ = string.utf8 | createWriteStream(path)
                     .onFinish { cb(nil) }
@@ -81,23 +83,13 @@ public func writeFile(path: String, _ string: String, cb: ErrorCB) {
   import func Darwin.memcpy
 #endif
 
-public func readFileSync(path: String) -> [ UInt8 ]? {
-  #if swift(>=3.0) // #swift3-ptr
-    guard let fh = fopen(path, "rb") else { return nil }
-  #else
-    let fh = fopen(path, "rb")
-    if fh == nil { return nil }
-  #endif
+public func readFileSync(_ path: String) -> [ UInt8 ]? {
+  guard let fh = fopen(path, "rb") else { return nil }
   defer { fclose(fh) }
   
   let bufsize = 4096
-  #if swift(>=3.0) // #swift3-ptr
-    let buffer  = UnsafeMutablePointer<UInt8>.allocate(capacity: bufsize)
-    defer { buffer.deallocate(capacity: bufsize) }
-  #else
-    let buffer  = UnsafeMutablePointer<UInt8>.alloc(bufsize)
-    defer { buffer.dealloc(bufsize) }
-  #endif
+  let buffer  = UnsafeMutablePointer<UInt8>.allocate(capacity: bufsize)
+  defer { buffer.deallocate(capacity: bufsize) }
   
   var result = [ UInt8 ]()
   
@@ -107,17 +99,10 @@ public func readFileSync(path: String) -> [ UInt8 ]? {
     if rc > 0 {
       // Isn't there a better way? Define an own SequenceType which has a ptr
       // and a length? And then do a append(contentsOf:)
-      #if swift(>=3.0) // #swift3-fd
-        var subbuf = Array<UInt8>(repeating: 0, count: rc)
-        _ = subbuf.withUnsafeMutableBufferPointer { bp in
-          memcpy(bp.baseAddress!, buffer, rc)
-        }
-      #else
-        var subbuf = Array<UInt8>(count: rc, repeatedValue: 0)
-        _ = subbuf.withUnsafeMutableBufferPointer { bp in
-          memcpy(bp.baseAddress, buffer, rc)
-        }
-      #endif
+      var subbuf = Array<UInt8>(repeating: 0, count: rc)
+      _ = subbuf.withUnsafeMutableBufferPointer { bp in
+        memcpy(bp.baseAddress!, buffer, rc)
+      }
       result.append(contentsOf: subbuf)
     }
     
@@ -130,7 +115,7 @@ public func readFileSync(path: String) -> [ UInt8 ]? {
   return result
 }
 
-public func readFileSync(path: String, _ encoding: String) -> String? {
+public func readFileSync(_ path: String, _ encoding: String) -> String? {
   // Note: The encoding does not default to utf-8 because otherwise we need to
   //       explicitly type the closure on the caller site - which happens to be
   //       inconvenient, which is something we do not appreciated.
@@ -141,41 +126,7 @@ public func readFileSync(path: String, _ encoding: String) -> String? {
 
   guard var bytes = readFileSync(path) else { return nil }
   
-  bytes.append(0)
-  #if swift(>=3.0) // #swift3-fd #swift3-cstr
-    return bytes.withUnsafeBufferPointer { bp in
-      let cs = UnsafePointer<CChar>(bp.baseAddress)
-      return String(cString: cs!)
-    }
-  #else
-    return bytes.withUnsafeBufferPointer { bp in
-      let cs = UnsafePointer<CChar>(bp.baseAddress)
-      return String.fromCString(cs)
-    }
-  #endif
+  bytes.append(0) // zero terminate
+  
+  return String(cString: &bytes)
 }
-
-
-// MARK: - Swift 3
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public func readFile(_ path: String, cb: DataCB) {
-  readFile(path: path, cb: cb)
-}
-public func readFile(_ path: String, _ encoding: String, cb: StringCB) {
-  readFile(path: path, encoding, cb: cb)
-}
-public func writeFile(_ path: String, _ data: [ UInt8 ], cb: ErrorCB) {
-  writeFile(path: path, data, cb: cb)
-}
-public func writeFile(_ path: String, _ string: String, cb: ErrorCB) {
-  writeFile(path: path, string, cb: cb)
-}
-
-public func readFileSync(_ path: String) -> [ UInt8 ]? {
-  return readFileSync(path: path)
-}
-public func readFileSync(_ path: String, _ encoding: String) -> String? {
-  return readFileSync(path: path, encoding)
-}
-#endif

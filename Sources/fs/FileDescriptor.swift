@@ -57,11 +57,7 @@ public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiter
   
   public func read(count: Int) -> ( Error?, [ UInt8 ]? ) {
     // TODO: inefficient init. Also: reuse buffers.
-#if swift(>=3.0) // #swift3-fd
     var buf = [ UInt8 ](repeating: 0, count: count)
-#else
-    var buf = [ UInt8 ](count: count, repeatedValue: 0)
-#endif
 
     // synchronous
     

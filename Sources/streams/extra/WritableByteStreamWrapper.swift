@@ -14,7 +14,7 @@ import events
 ///
 /// Careful with using this. It essentially side tracks `GWritableStreamType`.
 ///
-public class WritableByteStreamWrapper
+open class WritableByteStreamWrapper
              : GWritableStreamType, WritableByteStreamType
 {
   // FIXME: This is not quite the right thing. We essentially want to spool
@@ -57,7 +57,7 @@ public class WritableByteStreamWrapper
     if didEnd > 0 { s.end() }
   }
 
-  public func writev(buckets chunks: [ [ UInt8 ] ], done: DoneCB?) -> Bool {
+  open func writev(buckets chunks: [ [ UInt8 ] ], done: DoneCB?) -> Bool {
     if let s = stream {
       return s.writev(buckets: chunks, done: done)
     }
@@ -68,7 +68,7 @@ public class WritableByteStreamWrapper
     }
   }
   
-  public func end() {
+  open func end() {
     if let s = stream {
       didEnd = 0
       s.end()
@@ -78,53 +78,63 @@ public class WritableByteStreamWrapper
     }
   }
   
-  public func closeWriteStream() {
+  open func closeWriteStream() {
     stream?.closeWriteStream()
   }
   
   
   // MARK: - Events
   
-  public func onDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onDrain(handler cb: @escaping DrainCB) -> Self {
     _ = stream?.onDrain(handler: cb)
     return self
   }
-  public func onceDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onceDrain(handler cb: @escaping DrainCB) -> Self {
     _ = stream?.onceDrain(handler: cb)
     return self
   }
-  public func onFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onFinish(handler cb: @escaping FinishCB) -> Self {
     _ = stream?.onFinish(handler: cb)
     return self
   }
-  public func onceFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onceFinish(handler cb: @escaping FinishCB) -> Self {
     _ = stream?.onceFinish(handler: cb)
     return self
   }
   
-  public func onClose(handler cb: CloseCB) -> Self {
+  @discardableResult
+  public func onClose(handler cb: @escaping CloseCB) -> Self {
     _ = stream?.onClose(handler: cb)
     return self
   }
-  public func onceClose(handler cb: CloseCB) -> Self {
+  @discardableResult
+  public func onceClose(handler cb: @escaping CloseCB) -> Self {
     _ = stream?.onceClose(handler: cb)
     return self
   }
   
-  public func onPipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onPipe(handler cb: @escaping PipeCB) -> Self {
     _ = stream?.onPipe(handler: cb)
     return self
   }
-  public func oncePipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func oncePipe(handler cb: @escaping PipeCB) -> Self {
     _ = stream?.oncePipe(handler: cb)
     return self
   }
   
-  public func onUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onUnpipe(handler cb: @escaping PipeCB) -> Self {
     _ = stream?.onUnpipe(handler: cb)
     return self
   }
-  public func onceUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onceUnpipe(handler cb: @escaping PipeCB) -> Self {
     _ = stream?.onceUnpipe(handler: cb)
     return self
   }
@@ -133,10 +143,12 @@ public class WritableByteStreamWrapper
   public func emit(unpipe src: ReadableStreamType) { stream?.emit(unpipe: src) }
   
   
-  public func onError(handler cb: ErrorCB) -> Self {
+  @discardableResult
+  public func onError(handler cb: @escaping ErrorCB) -> Self {
     _ = stream?.onError(handler: cb);   return self
   }
-  public func onceError(handler cb: ErrorCB) -> Self {
+  @discardableResult
+  public func onceError(handler cb: @escaping ErrorCB) -> Self {
     _ = stream?.onceError(handler: cb); return self
   }
   public func emit(error e: Error) { stream?.emit(error: e) }

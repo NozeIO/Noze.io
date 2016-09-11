@@ -59,13 +59,13 @@ public class HTTPMessageWrapper : WritableByteStreamWrapper {
 
   var headers = Dictionary<String, Any>()
   
-  public func setHeader(name: String, _ value: Any) {
+  public func setHeader(_ name: String, _ value: Any) {
     headers[ci: name] = value
   }
-  public func removeHeader(name: String) {
+  public func removeHeader(_ name: String) {
     _ = headers.removeValue(forCIKey: name)
   }
-  public func getHeader(name: String) -> Any? {
+  public func getHeader(_ name: String) -> Any? {
     return headers[ci: name]
   }
   
@@ -73,12 +73,12 @@ public class HTTPMessageWrapper : WritableByteStreamWrapper {
   
   // MARK: - GWritableStreamType
 
-  override public func writev(buckets c: [ [ UInt8 ] ], done: DoneCB?) -> Bool {
+  override open func writev(buckets c: [ [ UInt8 ] ], done: DoneCB?) -> Bool {
     if !headersSent { _primaryWriteHTTPMessageHead() }
     return super.writev(buckets: c, done: done)
   }
   
-  override public func end() {
+  override open func end() {
     if !headersSent { _primaryWriteHTTPMessageHead() }
     
     // TODO: emit trailers? (only on chunked/HTTP 1.1)
@@ -86,24 +86,3 @@ public class HTTPMessageWrapper : WritableByteStreamWrapper {
     super.end()
   }
 }
-
-
-// MARK: - Swift 3 Helpers
-
-#if swift(>=3.0) // #swift3-1st-arg
-public extension HTTPMessageWrapper {
-  // In this case we really want those non-kwarg methods.
-  
-  public func setHeader(_ name: String, _ value: Any) {
-    setHeader(name: name, value)
-  }
-  
-  public func removeHeader(_ name: String) {
-    removeHeader(name: name)
-  }
-  
-  public func getHeader(_ name: String) -> Any? {
-    return getHeader(name: name)
-  }
-}
-#endif

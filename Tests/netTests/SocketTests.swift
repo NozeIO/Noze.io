@@ -130,25 +130,8 @@ class NozeIOSocketTests: NozeIOTestCase {
 // This does not seem to work as an extension:
 // - Array can't be constrained via where
 // - _ArrayType does not have withUnsafeBufferPointer
-func byteBucketToString(bucket: Array<UInt8>) -> String? {
+func byteBucketToString(_ bucket: Array<UInt8>) -> String? {
   var padded = bucket
   padded.append(0) // zero terminate
-  
-#if swift(>=3.0) // #swift3-fd #swift3-ptr
-  let s = padded.withUnsafeBufferPointer { ptr in
-    // case UInt8 to Int8 ...
-    return String(cString: UnsafePointer<Int8>(ptr.baseAddress)!)
-  }
-#else
-  let s = padded.withUnsafeBufferPointer { ptr in
-    // case UInt8 to Int8 ...
-    return String.fromCString(UnsafePointer<Int8>(ptr.baseAddress))
-  }
-#endif
-  return s
+  return String(cString: padded)
 }
-#if swift(>=3.0) // #swift3-1st-kwarg
-func byteBucketToString(_ bucket: Array<UInt8>) -> String? {
-  return byteBucketToString(bucket: bucket)
-}
-#endif

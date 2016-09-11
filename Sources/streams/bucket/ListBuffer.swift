@@ -52,7 +52,7 @@ public class ListBuffer<T> {
   
   // MARK: - Buffer
   
-  func enqueue(brigade: Brigade, front: Bool = false, done: DoneCB? = nil) {
+  func enqueue(_ brigade: Brigade, front: Bool = false, done: DoneCB? = nil) {
     if front {
       firstBuffer = BufferNode(chunks: brigade, done: done, next: firstBuffer)
       totalCount += firstBuffer!.totalCount
@@ -128,11 +128,11 @@ class BufferNode<T> {
 
 // Brigade helpers
 
-func countBrigade<T>(brigade: [[ T ]]) -> Int { // cannot be private
+func countBrigade<T>(_ brigade: [[ T ]]) -> Int { // cannot be private
   return brigade.reduce(0) { $0 + $1.count }
 }
 
-func consumeFromBrigade<T>(brigade: [[ T ]], consumed: Int) -> [[ T ]] {
+func consumeFromBrigade<T>(_ brigade: [[ T ]], consumed: Int) -> [[ T ]] {
   // TODO: improve me. Oh man. :-) A brigade should be a (the?) list.
   typealias Bucket = [ T ]
   var newBrigade : [ Bucket ] = []
@@ -159,20 +159,3 @@ func consumeFromBrigade<T>(brigade: [[ T ]], consumed: Int) -> [[ T ]] {
   
   return newBrigade
 }
-
-
-#if swift(>=3.0) // #swift3-1st-arg
-
-extension ListBuffer {
-  func enqueue(_ brigade: Brigade, front: Bool = false, done: DoneCB? = nil) {
-    enqueue(brigade: brigade, front: front, done: done)
-  }
-}
-
-func countBrigade<T>(_ brigade: [[ T ]]) -> Int {
-  return countBrigade(brigade: brigade)
-}
-func consumeFromBrigade<T>(_ brigade: [[ T ]], consumed: Int) -> [[ T ]] {
-  return consumeFromBrigade(brigade: brigade, consumed: consumed)
-}
-#endif // Swift3

@@ -6,18 +6,10 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+import class Foundation.NSObject
 #if os(Linux)
-#if swift(>=3.0) // #swift3-foundation
-import class Foundation.NSObject
 let lx30hack = true
-#else
-// No Foundation on Linux Swift 2.2
-typealias NSObject = Int // HACK
-let lx22hack = true
 #endif
-#else // Darwin
-import class Foundation.NSObject
-#endif // Dawin
 
 public protocol KeyValueCodingType {
   
@@ -37,11 +29,7 @@ public extension KeyValueCodingType {
 public struct KeyValueCoding {
   
   public static func value(forKeyPath p: String, inObject o: Any?) -> Any? {
-#if swift(>=3.0) // #swift3-fd
     let path = p.characters.split(separator: ".").map { String($0) }
-#else
-    let path = p.characters.split(".").map { String($0) }
-#endif
     var cursor = o
     for key in path {
       cursor = value(forKey: key, inObject: cursor)
@@ -64,13 +52,8 @@ public struct KeyValueCoding {
     let mirror = Mirror(reflecting: object)
     
     // extra guard against Optionals
-#if swift(>=3.0) // #swift3-fd
     let isOpt  = mirror.displayStyle == .optional
     let isDict = mirror.displayStyle == .dictionary
-#else
-    let isOpt  = mirror.displayStyle == .Optional
-    let isDict = mirror.displayStyle == .Dictionary
-#endif
     if isOpt {
       guard mirror.children.count > 0 else { return nil }
       let (_, some) = mirror.children.first!
@@ -88,11 +71,7 @@ public struct KeyValueCoding {
       guard okey == k        else { continue }
       
       let valueMirror = Mirror(reflecting: value)
-#if swift(>=3.0) // #swift3-fd
       if valueMirror.displayStyle != .optional { return value }
-#else
-      if valueMirror.displayStyle != .Optional { return value }
-#endif
       
       guard valueMirror.children.count > 0 else { return nil }
       
@@ -129,11 +108,7 @@ public extension KeyValueCoding {
       // print("  \(key) = \(value)")
       
       let valueMirror = Mirror(reflecting: value)
-#if swift(>=3.0) // #swift3-fd
       if valueMirror.displayStyle != .optional { return value }
-#else
-      if valueMirror.displayStyle != .Optional { return value }
-#endif
       
       guard valueMirror.children.count > 0 else { return nil }
       
@@ -145,13 +120,3 @@ public extension KeyValueCoding {
   }
   
 }
-
-#if swift(>=3.0) // #swift3-fd
-#else
-public extension CollectionType {
-  
-  public func index(after idx: Self.Index) -> Index { // v3 compat
-    return idx.successor()
-  }
-}
-#endif

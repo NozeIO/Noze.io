@@ -32,14 +32,15 @@ public let module = NozeNet()
 ///       sock.end  ("\r\n")
 ///     }
 ///
-public func connect(port: Int, _ host: String = "localhost",
+@discardableResult
+public func connect(_ port: Int, _ host: String = "localhost",
                     onConnect: ConnectCB? = nil)
             -> Socket
 {
   return Socket().connect(port: port, host: host, onConnect: onConnect)
 }
 
-public class ConnectOptions {
+open class ConnectOptions {
   public var hostname : String?     = "localhost"
   public var port     : Int         = 80
 
@@ -49,6 +50,7 @@ public class ConnectOptions {
   public init() {}
 }
 
+@discardableResult
 public func connect(options o: ConnectOptions = ConnectOptions(),
                     onConnect cb: ConnectCB? = nil)
   -> Socket
@@ -57,7 +59,6 @@ public func connect(options o: ConnectOptions = ConnectOptions(),
 }
 
 
-#if swift(>=3.0) // #swift3-discardable-result
 /// Creates a new `net.Server` object.
 ///
 /// Optional onConnection block.
@@ -84,47 +85,10 @@ public func createServer(allowHalfOpen  : Bool = false,
   if let cb = onConnection { _ = srv.onConnection(handler: cb) }
   return srv
 }
-#else // Swift 2.2
-/// Creates a new `net.Server` object.
-///
-/// Optional onConnection block.
-///
-/// Sample:
-///
-///     let server = net.createServer { sock in
-///       print("connected")
-///     }
-///     .onError { error in
-///       print("error: \(error)")
-///     }
-///     .listen {
-///       print("Server is listening on \($0.address)")
-///     }
-///
-public func createServer(allowHalfOpen ho: Bool = false,
-                         pauseOnConnect : Bool = false,
-                         onConnection   : ConnectCB? = nil) -> Server
-{
-  let srv = Server(allowHalfOpen:  ho,
-                   pauseOnConnect: pauseOnConnect)
-  if let cb = onConnection { _ = srv.onConnection(handler: cb) }
-  return srv
-}
-#endif // Swift 2.2
 
 
 #if os(Linux)
 #else
   // importing this from xsys doesn't seem to work
   import Foundation // this is for POSIXError : Error
-#endif
-
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-@discardableResult
-public func connect(_ port: Int, _ host: String = "localhost",
-                    onConnect: ConnectCB? = nil)
-            -> Socket
-{
-  return connect(port: port, host, onConnect: onConnect)
-}
 #endif

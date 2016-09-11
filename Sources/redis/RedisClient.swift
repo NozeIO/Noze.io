@@ -446,11 +446,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
       _subscribe(channels: channels)
     }
     
-#if swift(>=3.0) // #swift3-fd
     subscribedChannels.formUnion(Set(channels))
-#else
-    subscribedChannels.unionInPlace(channels)
-#endif
     didSubscribe = !subscribedChannels.isEmpty
   }
   public func unsubscribe(channels: String...) {
@@ -459,11 +455,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     }
     else {
       // TBD: should those get handled in the respective reply?
-#if swift(>=3.0) // #swift3-fd
       subscribedChannels.subtract(Set(channels))
-#else
-      subscribedChannels.subtractInPlace(channels)
-#endif
     }
     // This is done when the unsubscribe reply is received
     //   didSubscribe = !subscribedChannels.isEmpty
@@ -484,7 +476,11 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     }
     
     // TODO: callback?
-    let cmd = RedisCommand(command: values, callback: nil)
+    let cmd = RedisCommand(command: values) { err, value in
+      if let err = err {
+        console.error("could not subscribe", ch, err)
+      }
+    }
     stream.write(redisValue: cmd.command)
   }
   
@@ -499,7 +495,11 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
     }
     
     // TODO: callback?
-    let cmd = RedisCommand(command: values, callback: nil)
+    let cmd = RedisCommand(command: values) { err, value in
+      if let err = err {
+        console.error("could not unsubscribe", ch, err)
+      }
+    }
     stream.write(redisValue: cmd.command)
   }
   
@@ -508,15 +508,18 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
   public var unsubscribeListeners = EventListenerSet<(String, Int)>()
   public var messageListeners     = EventListenerSet<(String, RedisValue)>()
   
-  public func onSubscribe(handler cb: SubscribeCB) -> Self {
+  @discardableResult
+  public func onSubscribe(handler cb: @escaping SubscribeCB) -> Self {
     subscribeListeners.add(handler: cb)
     return self
   }
-  public func onUnsubscribe(handler cb: SubscribeCB) -> Self {
+  @discardableResult
+  public func onUnsubscribe(handler cb: @escaping SubscribeCB) -> Self {
     unsubscribeListeners.add(handler: cb)
     return self
   }
-  public func onMessage(handler cb: MessageCB) -> Self {
+  @discardableResult
+  public func onMessage(handler cb: @escaping MessageCB) -> Self {
     messageListeners.add(handler: cb)
     return self
   }
@@ -569,18 +572,20 @@ public class RedisCommand {
   let command  : [ RedisValue ]
   let callback : RedisReplyCB?
   
-  init(command: [ RedisValue ], callback: RedisReplyCB?) {
+  init(command: [ RedisValue ], callback: @escaping RedisReplyCB) {
     self.command  = command
     self.callback = callback
   }
   
-  init(command: String, _ argument: RedisValue, callback: RedisReplyCB?) {
+  init(command: String, _ argument: RedisValue,
+       callback: @escaping RedisReplyCB)
+  {
     self.command  = [ RedisValue(bulkString: command), argument ]
     self.callback = callback
   }
   
   init(command: String, _ arg0: RedisValue, _ arg1: RedisValue,
-       callback: RedisReplyCB?)
+       callback: @escaping RedisReplyCB)
   {
     self.command  = [ RedisValue(bulkString: command), arg0, arg1 ]
     self.callback = callback
@@ -588,7 +593,7 @@ public class RedisCommand {
 
   init(command: String,
        _ arg0: RedisValue, _ arg1: RedisValue, _ arg2 : RedisValue,
-       callback: RedisReplyCB?)
+       callback: @escaping RedisReplyCB)
   {
     self.command  = [ RedisValue(bulkString: command), arg0, arg1, arg2 ]
     self.callback = callback

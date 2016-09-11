@@ -36,7 +36,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
   
   // MARK: - Key Generation & Parsing
   
-  func nextKey(cb: ( Int ) -> Void) {
+  func nextKey(cb: @escaping ( Int ) -> Void) {
     redis.incr("\(prefix)sequence") { err, value in cb(value!) }
   }
   
@@ -67,7 +67,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
   
   // MARK: - Bulk Fetch Keys
   
-  func get(ids keys: [Int], cb: ( [ T ] ) -> Void) {
+  func get(ids keys: [Int], cb: @escaping ( [ T ] ) -> Void) {
     // check for empty results
     guard !keys.isEmpty else { cb([]); return }
     
@@ -98,7 +98,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
   
   // MARK: - Regular API
   
-  func getAll(cb: ( [ T ] ) -> Void) {
+  func getAll(cb: @escaping ( [ T ] ) -> Void) {
     // TODO: here we just use keys, do not do this in PROD, use SCAN instead
     redis.keys("\(prefix)[0-9]*") { err, keys in
       guard let keys = keys else { cb([]); return }
@@ -106,7 +106,7 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
     }
   }
   
-  func get(id key: Int, cb: ( T? ) -> Void) {
+  func get(id key: Int, cb: @escaping ( T? ) -> Void) {
     redis.hgetall("\(prefix)\(key)") { err, value in
       guard let hash = value else {
         console.error("got no hash for key \(key)")
@@ -119,19 +119,19 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
     }
   }
   
-  func delete(id key: Int, cb: () -> Void) {
+  func delete(id key: Int, cb: @escaping () -> Void) {
     redis.del("\(prefix)\(key)") { err, value in
       cb()
     }
   }
   
-  func update(id key: Int, value v: T, cb: ( T ) -> Void) {
+  func update(id key: Int, value v: T, cb: @escaping ( T ) -> Void) {
     redis.hmset("\(prefix)\(key)", v.redisHash) { err, value in
       cb(v)
     }
   }
   
-  func deleteAll(cb: () -> Void) {
+  func deleteAll(cb: @escaping () -> Void) {
     let redis = self.redis
     
     redis.keys("\(prefix)[0-9]*") { err, keys in

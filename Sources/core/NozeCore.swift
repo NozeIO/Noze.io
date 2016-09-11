@@ -107,14 +107,9 @@ public class NozeCore : NozeModule {
   }
   
   public var  exitCode : Int = 0
-  public func exit(code: Int? = nil) {
+  public func exit(_ code: Int? = nil) {
     exitFunction(code ?? exitCode)
   }
-#if swift(>=3.0) // #swift3-1st-arg
-  public func exit(_ code: Int?) {
-    exitFunction(code ?? exitCode)
-  }
-#endif
 
   
   // Use atexit to invoke dispatch_main. Bad hack, never do that at home!!

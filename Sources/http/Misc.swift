@@ -22,8 +22,9 @@ func generateDateHeader(timestamp ts: time_t = xsys.time(nil)) -> String {
   return ts.componentsInUTC.format(HTTPDateFormat)
 }
 
-func writeHeaders<T: GWritableStreamType where T.WriteType == UInt8>
+func writeHeaders<T: GWritableStreamType>
        (toStream out: T, _ headers: Dictionary<String, Any>)
+                  where T.WriteType == UInt8
 {
   // FIXME: using write(String) is WRONG here, HTTP is ISO-Latin-1, not UTF-8
   for ( name, value ) in headers {

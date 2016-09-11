@@ -42,7 +42,7 @@ public class Cookies : NozeModule {
   
   // get/set funcs
   
-  public func get(name: String) -> String? {
+  public func get(_ name: String) -> String? {
     return cookies[name]
   }
   
@@ -54,7 +54,7 @@ public class Cookies : NozeModule {
     res!.setHeader("Set-Cookie", c.description)
   }
   
-  public func set(name: String, _ value: String,
+  public func set(_ name: String, _ value: String,
                   path     : String? = "/",
                   httpOnly : Bool    = true,
                   domain   : String? = nil,
@@ -72,7 +72,7 @@ public class Cookies : NozeModule {
     set(cookie: cookie)
   }
   
-  public func reset(name: String) {
+  public func reset(_ name: String) {
     set(cookie: Cookie(name: name, maxAge: 0))
   }
   
@@ -162,13 +162,8 @@ extension String {
       
       var p = start
       var didTrimLeft = false
-#if swift(>=3.0) // #swift3-ptr
       while p.pointee == c && p.pointee != 0 { p += 1; didTrimLeft = true }
       guard p.pointee != 0 else { return "" }
-#else
-      while p.memory == c && p.memory != 0 { p += 1; didTrimLeft = true }
-      guard p.memory != 0 else { return "" }
-#endif
       
       var len = Int(strlen(p))
       var didTrimRight = false
@@ -179,7 +174,6 @@ extension String {
       guard len != 0 else { return "" }
       
       if !didTrimLeft && !didTrimRight { return self } // as-is
-#if swift(>=3.0) // #swift3-cstr #swift3-ptr
       if !didTrimRight { return String(cString: p) }
       
       // lame and slow zero terminate
@@ -191,19 +185,6 @@ extension String {
       let s = String(cString: buf)
       buf.deallocate(capacity: buflen)
       return s
-#else
-      if !didTrimRight { return String.fromCString(p)! }
-      
-      // lame and slow zero terminate
-      let buflen = len + 1
-      let buf    = UnsafeMutablePointer<CChar>.alloc(buflen)
-      memcpy(buf, p, len)
-      buf[len] = 0 // zero terminate
-      
-      let s = String.fromCString(buf)
-      buf.dealloc(buflen)
-      return s!
-#endif 
     }
   }
   
@@ -211,11 +192,7 @@ extension String {
     guard !isEmpty else { return [] }
     
     let splitChar : UInt8 = 59 // semicolon
-#if swift(>=3.0) // #swift3-fd
     let rawFields = utf8.split(separator: splitChar)
-#else
-    let rawFields = utf8.split(splitChar)
-#endif
     
     // TODO: lame imp, too much copying
     var fields = Array<String>()
@@ -233,14 +210,12 @@ extension String {
   }
   
   func splitPair(splitchar c: UInt8) -> ( String, String ) {
-#if swift(>=3.0) // #swift3-fd
     let splits = utf8.split(separator: c, maxSplits: 1)
-#else
-    let splits = utf8.split(c, maxSplit: 1)
-#endif
     guard splits.count > 1 else { return ( self, "" ) }
     assert(splits.count == 2, "max split was 1, but got more items?")
-    return ( String(splits[0]), String(splits[1]) )
+    // TODO: using describing here is wrong
+    let s0 = splits[0], s1 = splits[1]
+    return ( String(describing: s0), String(describing: s1) )
   }
 }
 
@@ -275,11 +250,7 @@ private extension IncomingMessage {
     }
     
     if let va = cookieHeader as? [ String ] {
-#if swift(>=3.0) // #swift3-fd
       return va.reduce([], { $0 + splitCookieFields(headerValue: $1) })
-#else
-      return va.reduce([], combine: { $0 + splitCookieFields(headerValue: $1) })
-#endif
     }
     
     console.error("Could not parse Cookie header: \(cookieHeader)")
@@ -287,26 +258,3 @@ private extension IncomingMessage {
   }
   
 }
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public extension Cookies {
-
-  public func get(_ name: String) -> String? { return get(name: name) }
-
-  public func set(_ name: String, _ value: String,
-                  path     : String? = "/",
-                  httpOnly : Bool    = true,
-                  domain   : String? = nil,
-                  comment  : String? = nil,
-                  expires  : time_t? = nil,
-                  maxAge   : Int?    = nil)
-  {
-    set(name: name, value, path: path, httpOnly: httpOnly, domain: domain,
-        comment: comment, expires: expires, maxAge: maxAge)
-  }
-
-  public func reset(_ name: String) {
-    reset(name: name)
-  }
-}
-#endif

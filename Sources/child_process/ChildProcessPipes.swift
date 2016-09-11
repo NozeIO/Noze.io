@@ -12,9 +12,9 @@ import streams
 ///
 ///     spawn("ls") | readlines | concat { lines in print("LINES: \(lines)") }
 ///
-public func |<WriteStream: GWritableStreamType
-                           where WriteStream.WriteType == UInt8>
+public func |<WriteStream: GWritableStreamType>
              (left: ChildProcess, right: WriteStream) -> WriteStream
+             where WriteStream.WriteType == UInt8
 {
   guard let stdout = left.stdout else {
     // process has no stdout
@@ -32,9 +32,10 @@ public func |<WriteStream: GWritableStreamType
 /// This is essentially a transform stream where the transformation is done by
 /// the child process.
 ///
-public func |<ReadStream: GReadableStreamType
-                           where ReadStream.ReadType == UInt8>
-             (left: ReadStream, right: ChildProcess) -> SourceStream<PipeSource>
+public func |<ReadStream: GReadableStreamType>
+             (left: ReadStream, right: ChildProcess)
+            -> SourceStream<PipeSource>
+              where ReadStream.ReadType == UInt8
 {
   // funky stuff :-)
   assert(right.stdin != nil, "child process has no stdin!")
@@ -43,7 +44,6 @@ public func |<ReadStream: GReadableStreamType
   return right.stdout!
 }
 
-#if swift(>=3.0) // #swift3-fd
 /// Pipe a sequence into a child process (stdin). Returns the stdout of the
 /// child process, like so:
 ///
@@ -52,8 +52,9 @@ public func |<ReadStream: GReadableStreamType
 /// This is essentially a transform stream where the transformation is done by
 /// the child process.
 ///
-public func |<TI: Sequence where TI.Iterator.Element == UInt8>
-            (left: TI, right: ChildProcess) -> SourceStream<PipeSource>
+public func |<TI: Sequence>(left: TI, right: ChildProcess)
+            -> SourceStream<PipeSource>
+              where TI.Iterator.Element == UInt8
 {
   // funky stuff :-)
   assert(right.stdin != nil, "child process has no stdin!")
@@ -61,25 +62,6 @@ public func |<TI: Sequence where TI.Iterator.Element == UInt8>
   _ = left.pipe(right.stdin!)
   return right.stdout!
 }
-#else
-/// Pipe a sequence into a child process (stdin). Returns the stdout of the
-/// child process, like so:
-///
-///      "Hello World!".utf8 | spawn("base64") | utf8 | concat { b64 in ... }
-///
-/// This is essentially a transform stream where the transformation is done by
-/// the child process.
-///
-public func |<TI: SequenceType where TI.Generator.Element == UInt8>
-            (left: TI, right: ChildProcess) -> SourceStream<PipeSource>
-{
-  // funky stuff :-)
-  assert(right.stdin != nil, "child process has no stdin!")
-  
-  left.pipe(right.stdin!)
-  return right.stdout!
-}
-#endif
 
 /// Pipe a String into a child process (stdin). Returns the stdout of the
 /// child process, like so:

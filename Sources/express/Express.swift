@@ -10,7 +10,7 @@ import net
 import http
 import connect
 
-public class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
+open class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
   
   let router   = Router()
   var settings = [ String : Any ]()
@@ -24,9 +24,9 @@ public class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
   
   // MARK: - MiddlewareObject
   
-  public func handle(request  req: IncomingMessage,
-                     response res: ServerResponse,
-                     next     cb:  Next)
+  public func handle(request  req : IncomingMessage,
+                     response res : ServerResponse,
+                     next     cb  : @escaping Next)
   {
     let oldApp = req.app
     let oldReq = res.request
@@ -51,7 +51,7 @@ public class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
   
   // MARK: - SettingsHolder
   
-  public func set(key: String, _ value: Any?) {
+  public func set(_ key: String, _ value: Any?) {
     if let v = value {
       settings[key] = v
     }
@@ -60,7 +60,7 @@ public class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
     }
   }
   
-  public func get(key: String) -> Any? {
+  public func get(_ key: String) -> Any? {
     return settings[key]
   }
   
@@ -68,7 +68,7 @@ public class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
   
   var engines = [ String : ExpressEngine]()
   
-  public func engine(key: String, _ engine: ExpressEngine) {
+  public func engine(_ key: String, _ engine: @escaping ExpressEngine) {
     engines[key] = engine
   }
 }
@@ -78,9 +78,9 @@ private let reqKey    = "io.noze.express.request"
 private let paramsKey = "io.noze.express.params"
 
 public typealias ExpressEngine = (
-    path:    String,
-    options: Any?,
-    done:    ( Any?... ) -> Void
+    _ path:    String,
+    _ options: Any?,
+    _ done:    @escaping ( Any?... ) -> Void
   ) -> Void
 
 
@@ -124,7 +124,8 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
 
 public extension Express {
   
-  public func listen(port: Int? = nil, backlog: Int = 5,
+  @discardableResult
+  public func listen(_ port: Int? = nil, backlog: Int = 5,
                      onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
     let mo     = self as! MiddlewareObject // not sure why this is necessary
@@ -134,21 +135,3 @@ public extension Express {
   }
 
 }
-
-
-// MARK: - Swift 3 Helpers
-
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-public extension Express {
-  
-  @discardableResult
-  public func listen(_ port: Int?, backlog: Int = 5,
-                     onListening cb : (( net.Server ) -> Void)? = nil) -> Self
-  {
-    return listen(port: port, backlog: backlog, onListening: cb)
-  }
-  public func engine(_ key: String, _ e: ExpressEngine) {
-    engine(key: key, e)
-  }
-}
-#endif // Swift 3+

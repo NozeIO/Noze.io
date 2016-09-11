@@ -152,7 +152,7 @@ public class ClientRequest : HTTPMessageWrapper {
     
     _ = p.onData { data in
       assert(self.message != nil)
-      self.message?.push(bucket: data)
+      self.message?.push(data)
     }
     
     self.parser = p
@@ -171,7 +171,7 @@ public class ClientRequest : HTTPMessageWrapper {
   }
   
   func doneParsing() {
-    self.message?.push(bucket: nil) // EOF - notifies the client that the read is done
+    self.message?.push(nil) // EOF - notifies the client that the read is done
     
     // TBD: self.message = nil
     self.parser = nil
@@ -214,47 +214,57 @@ public class ClientRequest : HTTPMessageWrapper {
                 EventListenerSet<( IncomingMessage, ServerResponse )>()
   public var socketListeners   = EventListenerSet<Socket>() // #onetime
   
-  public func onResponse(handler cb: ResponseEventCB) -> Self {
+  @discardableResult
+  public func onResponse(handler cb: @escaping ResponseEventCB) -> Self {
     responseListeners.add(handler: cb)
     return self
   }
-  public func onceResponse(handler cb: ResponseEventCB) -> Self {
+  @discardableResult
+  public func onceResponse(handler cb: @escaping ResponseEventCB) -> Self {
     responseListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onAbort(handler cb: AbortEventCB) -> Self {
+  @discardableResult
+  public func onAbort(handler cb: @escaping AbortEventCB) -> Self {
     abortListeners.add(handler: cb)
     return self
   }
-  public func onceAbort(handler cb: AbortEventCB) -> Self {
+  @discardableResult
+  public func onceAbort(handler cb: @escaping AbortEventCB) -> Self {
     abortListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onContinue(handler cb: ContinueEventCB) -> Self {
+  @discardableResult
+  public func onContinue(handler cb: @escaping ContinueEventCB) -> Self {
     continueListeners.add(handler: cb)
     return self
   }
-  public func onceContinue(handler cb: ContinueEventCB) -> Self {
+  @discardableResult
+  public func onceContinue(handler cb: @escaping ContinueEventCB) -> Self {
     continueListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onCheckExpectation(handler cb: ExpectEventCB) -> Self {
+  @discardableResult
+  public func onCheckExpectation(handler cb: @escaping ExpectEventCB) -> Self {
     expectListeners.add(handler: cb)
     return self
   }
-  public func onceCheckExpectation(handler cb: ExpectEventCB) -> Self {
+  @discardableResult
+  public func onceCheckExpectation(handler cb: @escaping ExpectEventCB) -> Self{
     expectListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onSocket(handler cb: SocketEventCB) -> Self {
+  @discardableResult
+  public func onSocket(handler cb: @escaping SocketEventCB) -> Self {
     socketListeners.add(handler: cb)
     return self
   }
-  public func onceSocket(handler cb: SocketEventCB) -> Self {
+  @discardableResult
+  public func onceSocket(handler cb: @escaping SocketEventCB) -> Self {
     socketListeners.add(handler: cb, once: true)
     return self
   }

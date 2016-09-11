@@ -12,21 +12,15 @@ public class Promise<T> : LiarType {
   var state         : PromiseState<T>
   var stateListeners = Array<Handler>()
   
-#if swift(>=3.0) // #swift3-escape
-  public typealias Resolver =
-                      @escaping ( @escaping ( T     ) -> Void,
+  public typealias Resolver = ( @escaping ( T     ) -> Void,
                                   @escaping ( Error ) -> Void ) -> Void
-  typealias Handler = @escaping ( PromiseState<T> ) -> Void
-#else
-  public typealias Resolver = ( ( T ) -> Void, ( Error ) -> Void ) -> Void
   typealias Handler = ( PromiseState<T> ) -> Void
-#endif
 
   public init() {
     state = .Initial
   }
   
-  public init(resolver: Resolver) {
+  public init(resolver: @escaping Resolver) {
     state = .Initial
     
     // run resolver
@@ -59,7 +53,7 @@ public class Promise<T> : LiarType {
     stateListeners.removeAll()
   }
   
-  func onStateChange(cb: Handler) {
+  func onStateChange(cb: @escaping Handler) {
     stateListeners.append(cb)
   }
   
@@ -68,7 +62,6 @@ public class Promise<T> : LiarType {
   
   public var promise : Promise<T> { return self }
 
-#if swift(>=3.0) // #swift3-escape
   public func then<U>(run cb: @escaping ( T ) -> Promise<U>) -> Promise<U> {
     // Essentially an AND between the gateway Promise to the success of `self`
     // and the new Promise returned by the callback.
@@ -153,95 +146,7 @@ public class Promise<T> : LiarType {
         }
     }
   }
-
-#else // Swift 2.x
-  public func then<U>(run cb: ( T ) -> Promise<U>) -> Promise<U> {
-    // Essentially an AND between the gateway Promise to the success of `self`
-    // and the new Promise returned by the callback.
-    switch state {
-      case .Fulfilled(let v):
-        return cb(v) // immediately execute, return new Promise from block
-      
-      case .Rejected (let e):
-        return Promise<U>(error: e) // already rejected, return error promise
-      
-      case .Initial:
-        // Note: we capture `cb` and the returned promise
-        let p = Promise<U> { ok, fail in
-          // this is the gate to the source Promise. It calls the callback which
-          // then returns a new promise.
-          
-          self.onStateChange { state in
-            switch state {
-              case .Fulfilled(let v): // means `self` got resolved, NOT the p
-                let nestedPromise = cb(v)
-                // TBD: not sure this is right
-                nestedPromise.onStateChange { state in
-                  switch state {
-                    case .Fulfilled(let v): // the returned close also resolved
-                      ok(v)
-                    case .Rejected (let e):
-                      fail(e)
-                    default: assert(false, "cannot change to this state ...")
-                  }
-                }
-              
-              case .Rejected (let e):
-                fail(e)
-              default: assert(false, "cannot change to this state ...")
-            }
-          }
-        }
-        return p
-    }
-  }
-  public func then<U>(run cb: ( T ) -> U) -> Promise<U> {
-    switch state {
-      case .Fulfilled(let v):
-        let value = cb(v)               // immediately execute
-        return Promise<U>(value: value) // return already resolved promise
-      
-      case .Rejected (let e):
-        return Promise<U>(error: e)
-      
-      case .Initial:
-        // Note: we capture `cb` and the returned promise
-        let p = Promise<U> { ok, fail in
-          self.onStateChange { state in
-            switch state {
-              case .Fulfilled(let v): ok(cb(v))
-              case .Rejected (let e): fail(e)
-              default: assert(false, "cannot change to this state ...")
-            }
-          }
-        }
-        return p
-    }
-  }
   
-  public func error(run cb: ( Error ) -> Void) {
-    // `catch` is used already in Swift
-    switch state {
-      case .Fulfilled:
-        break // no error, nothing to do
-      
-      case .Rejected(let e): // error, execute closure
-        cb(e)
-      
-      case .Initial:
-        // Note: we capture `cb` and the returned promise
-        self.onStateChange { state in
-          switch state {
-            case .Rejected (let e): cb(e)
-            case .Fulfilled: break
-            default: assert(false, "cannot change to this state ...")
-          }
-        }
-    }
-  }
-#endif // Swift 2.x
-  
-#if swift(>=3.0) // #swift3-func-arg-tuple
   // FIXME: Find a better way to do those. They haven't been necessary in
   //        Swift 2, but they are now. Maybe a bug in swiftc, maybe not.
   public func then(run cb: @escaping () -> Void) -> Void {
@@ -284,7 +189,6 @@ public class Promise<T> : LiarType {
         }
     }
   }
-#endif // Swift 3
   
 }
 
@@ -303,19 +207,13 @@ public protocol LiarType {
   
   var promise : Promise<T> { get }
   
-#if swift(>=3.0) // #swift3-escape
   func then<U>(run cb: @escaping ( T ) -> Promise<U>) -> Promise<U>
   func then<U>(run cb: @escaping ( T ) -> U)          -> Promise<U>
   func error  (run cb: @escaping ( Error ) -> Void)
-#else
-  func then<U>(run cb: ( T ) -> Promise<U>) -> Promise<U>
-  func then<U>(run cb: ( T ) -> U)          -> Promise<U>
-  func error  (run cb: ( Error ) -> Void)
-#endif
   
 }
 
-/* makes it break, picked up in places which make it fail.
+/* 2016-06-xx: makes it break, picked up in places which make it fail.
 public extension LiarType { // default liars
   
   public func then<U>(cb: () -> U) -> Promise<U> {

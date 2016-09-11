@@ -45,7 +45,9 @@ public class UniqStrings: TransformStream<String, String> {
   // TBD: we could also store just hashes? This might grow a little big ;-)
   var seenStrings = Set<String>()
   
-  public override func _transform(bucket b: [ String ], done: TransformDoneCB) {
+  public override func _transform(bucket b: [ String ],
+                                  done: @escaping ( Error?, [String]? ) -> Void)
+  {
     guard !b.isEmpty else {
       done(nil, nil)
       return
@@ -77,7 +79,6 @@ public class UniqStrings: TransformStream<String, String> {
   final func searchLine(forLine lLine: String) -> String {
     let searchLine : String
 
-#if swift(>=3.0) // #swift3-fd
     if self.startIndex > 0 {
       let startIndex = lLine.index(lLine.startIndex, offsetBy:self.startIndex)
       let shortLine  = lLine[startIndex..<lLine.endIndex]
@@ -86,16 +87,6 @@ public class UniqStrings: TransformStream<String, String> {
     else {
       searchLine = caseInsensitive ? lLine.lowercased() : lLine
     }
-#else
-    if self.startIndex > 0 {
-      let startIndex = lLine.startIndex.advancedBy(self.startIndex)
-      let shortLine  = lLine[startIndex..<lLine.endIndex]
-      searchLine = caseInsensitive ? shortLine.lowercaseString : shortLine
-    }
-    else {
-      searchLine = caseInsensitive ? lLine.lowercaseString : lLine
-    }
-#endif    
     return searchLine
   }
 }

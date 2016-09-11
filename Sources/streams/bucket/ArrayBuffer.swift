@@ -40,22 +40,18 @@ public struct ArrayBuffer<T> {
   
   // MARK: - Buffer
 
-  mutating func enqueue(brigade b: Brigade, front: Bool = false) {
+  mutating func enqueue(_ b: Brigade, front: Bool = false) {
     for bucket in b {
-      enqueue(bucket: bucket, front: front)
+      enqueue(bucket, front: front)
     }
   }
   
-  mutating func enqueue(bucket b: Bucket, front: Bool = false) {
+  mutating func enqueue(_ b: Bucket, front: Bool = false) {
     let bucketCount = b.count
     guard bucketCount > 0 else { return }
     
     if front { // unshift
-#if swift(>=3.0)
       brigade.insert(b, at: 0)
-#else
-      brigade.insert(b, atIndex: 0)
-#endif
     }
     else { // push
       brigade.append(b)
@@ -84,11 +80,7 @@ public struct ArrayBuffer<T> {
         joinBucket += bucket[0..<pending]
         
         // cannot insert a slice, this likely really does a copy
-#if swift(>=3.0)
         brigade.insert(Bucket(bucket[pending..<bucket.count]), at: 0)
-#else
-        brigade.insert(Bucket(bucket[pending..<bucket.count]), atIndex: 0)
-#endif
         
         totalCount -= pending
       }
@@ -99,16 +91,6 @@ public struct ArrayBuffer<T> {
     return joinBucket
   }
 
-
-#if swift(>=3.0) // #swift3-1st-arg
-  mutating func enqueue(_ brigade: Brigade, front: Bool = false) {
-    enqueue(brigade: brigade, front: front)
-  }
-  mutating func enqueue(_ bucket: Bucket, front: Bool = false) {
-    enqueue(bucket: bucket, front: front)
-  }
-#endif
-  
   // MARK: - Logging
   
   var logStateInfo : String {

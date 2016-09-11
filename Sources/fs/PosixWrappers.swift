@@ -6,7 +6,6 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0)
 import Dispatch
 
 import xsys
@@ -26,17 +25,17 @@ public let X_OK = Int(xsys.X_OK)
 // MARK: - Async functions, Unix functions are dispatched to a different Q
 
 /// Check whether we have access to the given path in the given mode.
-public func access(_ path: String, _ mode: Int = F_OK, cb: ErrorCB) {
+public func access(_ path: String, _ mode: Int = F_OK, cb: @escaping ErrorCB) {
   module.Q.evalAsync(accessSync, (path, mode), cb)
 }
 
 public func stat(_ path: String,
-                 cb: ( Error?, xsys.stat_struct? ) -> Void)
+                 cb: @escaping ( Error?, xsys.stat_struct? ) -> Void)
   {
   module.Q.evalAsync(statSync, path, cb)
 }
 public func lstat(_ path: String,
-                  cb: ( Error?, xsys.stat_struct? ) -> Void)
+                  cb: @escaping ( Error?, xsys.stat_struct? ) -> Void)
 {
   module.Q.evalAsync(lstatSync, path, cb)
 }
@@ -72,5 +71,3 @@ public func lstatSync(_ path: String) throws -> xsys.stat_struct {
   if rc != 0 { throw POSIXErrorCode(rawValue: xsys.errno)! }
   return info
 }
-  
-#endif // Swift >= 3

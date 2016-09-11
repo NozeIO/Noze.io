@@ -6,8 +6,6 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0) // #swift3-fd
-
 extension Collection where Self.Iterator.Element : Equatable {
   // Can be done on SequenceType, but w/ the current imp only by converting
   // the sequences to collections ... So the user should rather do this
@@ -96,5 +94,3 @@ extension Collection where Self.Iterator.Element : Equatable {
   }
   
 }
-
-#endif

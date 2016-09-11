@@ -55,11 +55,11 @@ public var exitCode : Int {
 public func exit(code: Int? = nil) { core.module.exit(code) }
 
 
-public func kill(pid: Int, _ signal: Int32 = xsys.SIGTERM) throws {
+public func kill(_ pid: Int, _ signal: Int32 = xsys.SIGTERM) throws {
   let rc = xsys.kill(pid_t(pid), signal)
   guard rc == 0 else { throw POSIXErrorCode(rawValue: xsys.errno)! }
 }
-public func kill(pid: Int, _ signal: String) throws {
+public func kill(_ pid: Int, _ signal: String) throws {
   var sc : Int32 = xsys.SIGTERM
   switch signal {
     case "SIGTERM": sc = xsys.SIGTERM
@@ -73,14 +73,6 @@ public func kill(pid: Int, _ signal: String) throws {
   }
   try kill(pid, sc)
 }
-#if swift(>=3.0) // #swift3-1st-arg
-public func kill(_ pid: Int, _ signal: Int32 = xsys.SIGTERM) throws {
-  try kill(pid: pid, signal)
-}
-public func kill(_ pid: Int, _ signal: String) throws {
-  try kill(pid: pid, signal)
-}
-#endif
 
 public let nextTick = core.nextTick
 

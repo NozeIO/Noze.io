@@ -131,18 +131,9 @@ public func serveStatic(path    p : String = process.cwd(),
 
 // MARK: - Convenience methods
 
-#if swift(>=3.0) // #swift3-1st-arg
 public func serveStatic(_       p : String = process.cwd(),
                         options o : ServeStaticOptions = ServeStaticOptions())
             -> Middleware
 {
   return serveStatic(path: p, options: o)
 }
-#else // Swift 2.2
-public func serveStatic(p         : String = process.cwd(),
-                        options o : ServeStaticOptions = ServeStaticOptions())
-            -> Middleware
-{
-  return serveStatic(path: p, options: o)
-}
-#endif // Swift 2.2

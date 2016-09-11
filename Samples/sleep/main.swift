@@ -10,11 +10,6 @@
 
 import core
 
-#if swift(>=3.0) // #swift3-fd
-#else
-typealias CommandLine = Process
-#endif
-
 if CommandLine.argc < 2 {
   print("usage: \(CommandLine.arguments[0]) seconds")
   exit(42)

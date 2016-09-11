@@ -60,7 +60,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     super.init(highWaterMark: highWaterMark, queue: queue,
                enableLogger: enableLogger)
   }
-  public convenience init(cb: ReadableReadCBNoArgs) {
+  public convenience init(cb: @escaping ( Void ) -> Void) {
     self.init()
     self._read(cb: cb)
   }
@@ -73,14 +73,14 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   /// A `read` callback producing values. It is called if a consumer desires
   /// values.
   /// This has a leading underscore just for Node compat.
-  func _read(cb lcb: ReadableReadCBNoArgs) {
+  func _read(cb lcb: @escaping ( Void ) -> Void) {
     cb = ReadableReadCB.NoArgs(lcb)
   }
   
   /// A `read` callback producing values. It is called if a consumer desires
   /// values.
   /// This has a leading underscore just for Node compat.
-  func _read(cb lcb: ReadableReadCBAmount) {
+  func _read(cb lcb: @escaping ( Int  ) -> Void) {
     cb = ReadableReadCB.Amount(lcb)
   }
   
@@ -93,7 +93,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     switch cb {
       case .None:
         if !hitEOF {
-          push(bucket: nil) // right?
+          push(nil) // right?
         }
         break
       
@@ -107,16 +107,8 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   }
 }
 
-#if swift(>=3.0) // #swift3-escape
-public typealias ReadableReadCBNoArgs = @escaping ( Void ) -> Void
-public typealias ReadableReadCBAmount = @escaping ( Int  ) -> Void
-#else
-public typealias ReadableReadCBNoArgs = ( Void ) -> Void
-public typealias ReadableReadCBAmount = ( Int  ) -> Void
-#endif
-
 enum ReadableReadCB {
   case None
-  case NoArgs(ReadableReadCBNoArgs)
-  case Amount(ReadableReadCBAmount)
+  case NoArgs(( Void ) -> Void)
+  case Amount(( Int  ) -> Void)
 }

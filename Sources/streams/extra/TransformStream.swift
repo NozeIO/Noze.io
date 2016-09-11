@@ -29,17 +29,11 @@ import core
 ///          being pushed into the transform) and the Readable is the OUTPUT
 ///          (this is how the transformed data is consumed by other ends!)
 ///
-public class TransformStream<WriteType, ReadType>
-             : DuplexStream<ReadType, WriteType>, GTransformStreamType
+open class TransformStream<WriteType, ReadType>
+           : DuplexStream<ReadType, WriteType>, GTransformStreamType
 {
   // Note that WriteType and ReadType are reversed for TransformStream to make
   // it less confusing ;-)
-  
-#if swift(>=3.0) // #swift3-escape
-  public typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
-#else // Swift 2.x
-  public typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
-#endif // Swift 2.x
   
   override public init(readHWM      : Int? = nil,
                        writeHWM     : Int? = nil,
@@ -52,8 +46,8 @@ public class TransformStream<WriteType, ReadType>
   
   
   // MARK: - Writable (the INPUT!)
-  override public func writev(buckets c: [ [WriteType] ], done: DoneCB?)
-                  -> Bool
+  override open func writev(buckets c: [ [WriteType] ], done: DoneCB?)
+                -> Bool
   {
     // Returning `false` makes a behaving writer stop writing and install an
     // `onDrain` handler.
@@ -91,8 +85,8 @@ public class TransformStream<WriteType, ReadType>
   let enableDrain = true
   let doCork      = false
   
-  public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done      : DuplexWriteDoneCB)
+  override open func _primaryWriteV(buckets c: [ [ WriteType ] ],
+                                    done: @escaping ( Error?, Int ) -> Void)
   { // #linux-public
     // called by WritableStream.writeNextBlock() (which in turn is triggered by
     // DuplexStream.writev().
@@ -108,29 +102,25 @@ public class TransformStream<WriteType, ReadType>
     log.enter(); defer { log.leave() }
     
     // TODO: I hate this. But it'll do for now.
-#if swift(>=3.0) // #swift3-fd
     let bigChunk = Array(c.joined())
-#else // Swift 2.x
-    let bigChunk = Array(c.flatten())
-#endif // Swift 2.x
     
     _transform(bucket: bigChunk) { error, data in
       log.debug("done: \(error) \(data)")
       // Note: invoking done(nil, nil) doesn't do EOF! It just doesn't push
       //       anything.
-      if let data = data { self.push(bucket: data) }
+      if let data = data { self.push(data) }
       done(error, bigChunk.count) // this unblocks the WritableStream
     }
   }
   
-  override public func closeWriteStream() { // subclasses can override this
+  override open func closeWriteStream() { // subclasses can override this
     log.enter(); defer { log.leave() }
     _flush() { error, data in
       if !self.hitEOF { // _flush may have called this already
         if let data = data {
-          self.push(bucket: data)
+          self.push(data)
         }
-        self.push(bucket: nil /* EOF */)
+        self.push(nil /* EOF */)
       }
       else {
         assert(data == nil || data!.isEmpty,
@@ -143,7 +133,7 @@ public class TransformStream<WriteType, ReadType>
   
   // MARK: - Readable (the OUTPUT!)
 
-  public override func _primaryRead(count howMuchToRead: Int) { // #linux-public
+  override open func _primaryRead(count howMuchToRead: Int) { // #linux-public
     log.enter(); defer { log.leave() }
     
     //fatalError("should not be called in transform streams")
@@ -157,7 +147,7 @@ public class TransformStream<WriteType, ReadType>
     // push to the readable).
   }
   
-  override public func read(count c: Int?) -> [ ReadType ]? {
+  override open func read(count c: Int?) -> [ ReadType ]? {
     let bucket = super.read(count: c)
     
     if drainCount > 0 {
@@ -177,14 +167,16 @@ public class TransformStream<WriteType, ReadType>
   
   // MARK: - Transform
   
-  public func _transform(bucket b: [ WriteType ], done: TransformDoneCB) {
+  open func _transform(bucket b: [ WriteType ],
+                       done: @escaping ( Error?, [ ReadType ]? ) -> Void)
+  {
     fatalError("Subclass must override transform()")
     
     // the CB essentially calls the `yield` of the write stream marking the
     // bucket as written. Also does a 'push' if there is push data.
     // done(nil, nil)
   }
-  public func _flush(done cb: TransformDoneCB) {
+  open func _flush(done cb: @escaping ( Error?, [ ReadType ]? ) -> Void) {
     cb(nil, nil)
   }
 }
@@ -194,14 +186,9 @@ public protocol GTransformStreamType : class {
   associatedtype WriteType
   associatedtype ReadType
 
-#if swift(>=3.0) // #swift3-escape
-  typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
-#else // Swift 2.x
-  typealias TransformDoneCB = ( Error?, [ ReadType ]? ) -> Void
-#endif // Swift 2.x
-  
-  func _transform(bucket b: [ WriteType ], done: TransformDoneCB)
-  func _flush    (done cb: TransformDoneCB)
+  func _transform(bucket b: [ WriteType ], 
+                  done: @escaping ( Error?, [ ReadType ]? ) -> Void)
+  func _flush    (done cb: @escaping ( Error?, [ ReadType ]? ) -> Void)
   
 }
 

@@ -2,8 +2,6 @@
 
 // MARK: - String Helpers
 
-#if swift(>=3.0) // #swift3-fd
-
 extension Collection where Iterator.Element : Equatable {
   
   func index(of v: Self.Iterator.Element, from: Self.Index) -> Index? {
@@ -27,5 +25,3 @@ extension String {
   }
   
 }
-
-#endif // Swift >=3

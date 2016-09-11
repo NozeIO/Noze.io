@@ -13,21 +13,15 @@ import core
 
 class NumberPrinter : streams.SinkType, GWritableTargetType {
 
-#if swift(>=3.0)
   func put(_ x: Int) {
     print("NP: value: \(x)")
   }
-#else
-  func put(x: Int) {
-    print("NP: value: \(x)")
-  }
-#endif
   
   static var defaultHighWaterMark : Int { return 2 }
   
   func writev(queue q : DispatchQueueType,
               chunks  : [ [ Int ] ],
-              yield   : ( Error?, Int ) -> Void)
+              yield   : @escaping ( Error?, Int ) -> Void)
   {
     var count = 0
     

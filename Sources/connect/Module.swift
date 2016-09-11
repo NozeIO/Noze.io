@@ -14,7 +14,7 @@ public struct NozeConnect : NozeModule {
 
 public var module = NozeConnect()
 
-public func connect(middleware: Middleware...) -> Connect {
+public func connect(middleware: @escaping Middleware...) -> Connect {
   let app = Connect()
   
   for m in middleware {

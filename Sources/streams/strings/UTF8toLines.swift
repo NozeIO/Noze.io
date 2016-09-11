@@ -38,7 +38,9 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
   
   var pendingData = Array<UInt8>() // super lame implementation
 
-  public override func _flush(done cb: TransformDoneCB) {
+  public override func _flush
+    (done cb: @escaping ( Error?, [ String ]? ) -> Void)
+  {
     // copy, sigh
     if !pendingData.isEmpty {
       let s = makeLine(bytebuf: pendingData)
@@ -49,14 +51,16 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
         return
       }
       
-      push(bucket: [ line ])
+      push([ line ])
     }
     
-    push(bucket: nil) // EOF
+    push(nil) // EOF
     cb(nil, nil /* nil doesn't mean EOF here but don't push */) // done
   }
   
-  public override func _transform(bucket b: [ UInt8 ], done: TransformDoneCB) {
+  public override func _transform(bucket b: [ UInt8 ],
+                                  done: @escaping ( Error?, [String]? ) -> Void)
+  {
     let bucket = b
     guard !bucket.isEmpty else {
       done(nil, nil)
@@ -88,16 +92,12 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
           lines.append(line)
         }
         else {
-          if !lines.isEmpty { push(bucket: lines) }
+          if !lines.isEmpty { push(lines) }
           done(EncodingError.CouldNotDecodeCString, nil)
           return // early exit
         }
         
-#if swift(>=3.0) // #swift3-fd
         lastStart = i + 1
-#else
-        lastStart = i.advancedBy(1)
-#endif
       }
     }
     
@@ -106,7 +106,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
       pendingData.append(contentsOf: bucket[lastStart..<bucket.endIndex])
     }
     
-    if !lines.isEmpty { push(bucket: lines) }
+    if !lines.isEmpty { push(lines) }
     done(nil, nil)
   }
   
@@ -126,12 +126,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
     t0.append(0) // zero terminate line
     
     let s : String? = t0.withUnsafeBufferPointer { ptr in
-#if swift(>=3.0) // #swift3-ptr #swift3-cstr
-      return String(cString: ptr!)
-#else
-      let cp = UnsafePointer<CChar>(ptr.baseAddress)
-      return String.fromCString(cp) // fails on empty string in 2.2?
-#endif
+      return String(cString: ptr.baseAddress!)
     }
     
     return s

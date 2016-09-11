@@ -11,7 +11,9 @@ import core
 /// This checks whether the reply is an array. If it is, the array is returned
 /// as one, else an error is returned.
 ///
-func makeArrayReplyHelper(callback cb: RedisArrayReplyCB) -> RedisReplyCB {
+func makeArrayReplyHelper(callback cb: @escaping RedisArrayReplyCB)
+     -> RedisReplyCB
+{
   return { err, vals in
     guard let vals = vals else { return cb(err, nil) }
     
@@ -30,7 +32,9 @@ func makeArrayReplyHelper(callback cb: RedisArrayReplyCB) -> RedisReplyCB {
 /// returned to the callback.
 /// If not, an error is returned.
 ///
-func makeHashReplyHelper(callback cb: RedisHashReplyCB) -> RedisReplyCB {
+func makeHashReplyHelper(callback cb: @escaping RedisHashReplyCB)
+     -> RedisReplyCB
+{
   return { err, vals in
     guard let vals = vals else { return cb(err, nil) }
     
@@ -73,7 +77,8 @@ func makeHashReplyHelper(callback cb: RedisHashReplyCB) -> RedisReplyCB {
 /// returned to the callback.
 /// If not, an error is returned.
 ///
-func makeOHashReplyHelper(keys ks: [String], callback cb: RedisOHashReplyCB)
+func makeOHashReplyHelper(keys ks: [String],
+                          callback cb: @escaping RedisOHashReplyCB)
      -> RedisReplyCB
 {
   return { err, vals in
@@ -138,7 +143,7 @@ func makeOHashReplyHelper(keys ks: [String], callback cb: RedisOHashReplyCB)
   }
 }
 
-func makeIntReplyHelper(callback cb: RedisIntReplyCB) -> RedisReplyCB {
+func makeIntReplyHelper(callback cb: @escaping RedisIntReplyCB) -> RedisReplyCB{
   return { err, vals in
     guard let vals = vals else { return cb(err, nil) }
     

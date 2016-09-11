@@ -43,30 +43,6 @@ public class FSWatcher: ErrorEmitter {
     
     if let fd = fd {
       // TBD: is the `else if` right? Or could it contain multiple? Probably!
-#if !swift(>=3.0) || !(os(OSX) || os(iOS) || os(watchOS) || os(tvOS)) // #swift3-new-gcd
-      let flags =
-        (DISPATCH_VNODE_WRITE | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_DELETE)
-      src = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
-                                   UInt(fd),
-                                   flags, Q)
-      src!.setEventHandler {
-        // TODO
-        // MultiCrap dispatches `cb` on main queue
-        let changes = self.src!.data
-        if (changes & DISPATCH_VNODE_DELETE != 0) {
-          self.changeListeners.emit( ( .Delete, nil ) )
-        }
-        else if (changes & DISPATCH_VNODE_RENAME != 0) {
-          self.changeListeners.emit( ( .Rename, nil ) )
-        }
-        else if (changes & DISPATCH_VNODE_WRITE != 0) {
-          self.changeListeners.emit( ( .Write, nil ) )
-        }
-        else {
-          assert(false, "unexpected change event: \(changes)")
-        }
-      }      
-#else // new Swift 3 Objective-GCD
       let flags : DispatchSource.FileSystemEvent = [ .write, .rename, .delete ]
   
       src = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: flags,queue: Q)
@@ -87,7 +63,6 @@ public class FSWatcher: ErrorEmitter {
           assert(false, "unexpected change event: \(changes)")
         }
       }      
-#endif
 
       src!.setCancelHandler { [unowned self] in
         if let fd = self.fd {
@@ -134,20 +109,20 @@ public class FSWatcher: ErrorEmitter {
   public var closeListeners  = EventListenerSet<FSWatcher>()
   public var changeListeners = EventListenerSet<FSWatcherEvent>()
   
-  public func onClose(cb: ( FSWatcher ) -> Void) -> Self {
+  public func onClose(cb: @escaping ( FSWatcher ) -> Void) -> Self {
     closeListeners.add(handler: cb)
     return self
   }
-  public func onceClose(cb: ( FSWatcher ) -> Void) -> Self {
+  public func onceClose(cb: @escaping ( FSWatcher ) -> Void) -> Self {
     closeListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onChange(cb: ( FSWatcherEvent ) -> Void) -> Self {
+  public func onChange(cb: @escaping ( FSWatcherEvent ) -> Void) -> Self {
     changeListeners.add(handler: cb)
     return self
   }
-  public func onceChange(cb: ( FSWatcherEvent ) -> Void) -> Self {
+  public func onceChange(cb: @escaping ( FSWatcherEvent ) -> Void) -> Self {
     changeListeners.add(handler: cb, once: true)
     return self
   }

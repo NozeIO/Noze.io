@@ -6,34 +6,17 @@
 //  Copyright © 2015 Big Nerd Ranch. Licensed under MIT.
 //
 
-#if swift(>=3.0) // #swift3-fd
-#else
-typealias ExpressibleByArrayLiteral      = ArrayLiteralConvertible
-typealias ExpressibleByDictionaryLiteral = DictionaryLiteralConvertible
-typealias ExpressibleByFloatLiteral      = FloatLiteralConvertible
-typealias ExpressibleByIntegerLiteral    = IntegerLiteralConvertible
-typealias ExpressibleByStringLiteral     = StringLiteralConvertible
-typealias ExpressibleByBooleanLiteral    = BooleanLiteralConvertible
-typealias ExpressibleByNilLiteral        = NilLiteralConvertible
-#endif
-
 // MARK: - ExpressibleByArrayLiteral
 
 extension JSON: ExpressibleByArrayLiteral {
     
-#if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each element of the `collection` into a
     /// new `Array`.
-    public init<C: Collection>(_ collection: C) where C.Iterator.Element == JSON {
+    public init<C: Collection>(_ collection: C) 
+           where C.Iterator.Element == JSON 
+    {
         self = .Array(Swift.Array(collection))
     }
-#else
-    /// Create an instance by copying each element of the `collection` into a
-    /// new `Array`.
-    public init<Collection: CollectionType where Collection.Generator.Element == JSON>(_ collection: Collection) {
-        self = .Array(Swift.Array(collection))
-    }
-#endif
   
     /// Create an instance initialized with `elements`.
     public init(arrayLiteral elements: JSON...) {
@@ -46,7 +29,6 @@ extension JSON: ExpressibleByArrayLiteral {
 
 extension JSON: ExpressibleByDictionaryLiteral {
     
-#if swift(>=3.0) // #swift3-fd
     /// Create an instance by copying each key/value pair of the `pairs` into
     /// a new `Dictionary`.
     public init<Dictionary: Sequence>(_ pairs: Dictionary)
@@ -59,17 +41,6 @@ extension JSON: ExpressibleByDictionaryLiteral {
         }
         self = .Dictionary(dictionary)
     }
-#else
-    /// Create an instance by copying each key/value pair of the `pairs` into
-    /// a new `Dictionary`.
-    public init<Dictionary: SequenceType where Dictionary.Generator.Element == (Swift.String, JSON)>(_ pairs: Dictionary) {
-        var dictionary = Swift.Dictionary<Swift.String, JSON>(minimumCapacity: pairs.underestimateCount())
-        for (key, value) in pairs {
-            dictionary[key] = value
-        }
-        self = .Dictionary(dictionary)
-    }
-#endif
   
     /// Create an instance initialized with `pairs`.
     public init(dictionaryLiteral pairs: (Swift.String, JSON)...) {

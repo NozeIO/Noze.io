@@ -16,7 +16,6 @@ import events
 private let tickPipe       = true
 private let enableHeavyLog = false
 
-#if swift(>=3.0) // #swift3-discardable-result
 /// Pipe operator for streams, neat :-)
 ///
 /// Like so:
@@ -45,56 +44,8 @@ public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType>
   
   return left!.pipe(right)
 }
-#else // Swift 2.x
-/// Pipe operator for streams, neat :-)
-///
-/// Like so:
-///
-///   request | zip | encrypt | fs
-///
-public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
-              where ReadStream.ReadType == WriteStream.WriteType>
-             (left: ReadStream, right: WriteStream) -> WriteStream
-{
-  return left.pipe(right)
-}
-
-public func |<ReadStream: GReadableStreamType, WriteStream: GWritableStreamType
-              where ReadStream.ReadType == WriteStream.WriteType>
-             (left: ReadStream?, right: WriteStream) -> WriteStream
-{
-  guard left != nil else {
-    // left side has nothing to pipe, immediately end target stream.
-    // TBD: good idea? :-) Added this to support: spawn("ls").stdout | ...
-    right.end()
-    return right
-  }
-  
-  return left!.pipe(right)
-}
-#endif // Swift 2.x
 
 public extension GReadableStreamType {
-
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-  @discardableResult
-  public func pipe<TO: GWritableStreamType>
-                  (_ outStream: TO,
-                   endOnFinish: Bool = true, passErrors: Bool = true)
-              -> TO
-              where Self.ReadType == TO.WriteType
-  {
-    return pipe(to: outStream, endOnFinish: endOnFinish, passErrors: passErrors)
-  }
-#else // Swift 2.x
-  public func pipe<TO: GWritableStreamType where Self.ReadType == TO.WriteType>
-                  (outStream: TO,
-                   endOnFinish: Bool = true, passErrors: Bool = true)
-              -> TO
-  {
-    return pipe(to: outStream, endOnFinish: endOnFinish, passErrors: passErrors)
-  }
-#endif // Swift 2.x
 
   /// pipe(in: GReadableStreamType, out: GWritableStreamType)
   ///
@@ -104,10 +55,12 @@ public extension GReadableStreamType {
   ///   output stream
   /// - if the output stream is busy/full, the input stream is suspended
   ///
-  public func pipe<TO: GWritableStreamType where Self.ReadType == TO.WriteType>
-                  (to outStream: TO,
-                   endOnFinish: Bool = true, passErrors: Bool = true)
+  @discardableResult
+  public func pipe<TO: GWritableStreamType>
+                (_ outStream: TO,
+                 endOnFinish: Bool = true, passErrors: Bool = true)
               -> TO
+              where Self.ReadType == TO.WriteType
   {
     // Node.JS notes:
     // - onPipe is sent by writable stream (and onUnpipe)
@@ -153,8 +106,8 @@ public extension GReadableStreamType {
   // TODO: unpipe() function? not really necessary though ...
 }
 
-private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
-                              where TI.ReadType == TO.WriteType>
+private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
+              where TI.ReadType == TO.WriteType
 {
   let src         : TI
   let dest        : TO
@@ -175,11 +128,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
     let inStream  = src
     let outStream = dest
     
-#if swift(>=3.0) // #swift3-1st-arg
     func heavyPipeLog(_ s : String) { heavyLog("  <<[DO pipe: \(s)]>>  ") }
-#else
-    func heavyPipeLog(s   : String) { heavyLog("  <<[DO pipe: \(s)]>>  ") }
-#endif
     
     heavyPipeLog("before read \(inStream)")
     let bucketOrEOF = inStream.read()
@@ -262,7 +211,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
   
   var ignoreTargetErrors = false // in case we are the ones emitting them ;-)
   
-  final func onSourceError(error: Error) {
+  final func onSourceError(_ error: Error) {
     //efprint("CCC GOT ERROR: \(error)") // TODO
     
     //if let perr = error as? POSIXErrorCode {
@@ -307,7 +256,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
     onEnd()
   }
   
-  final func onTargetError(error: Error) {
+  final func onTargetError(_ error: Error) {
     // TODO: do we actually care about target errors?
     
     // Note: The OutStream can be a Duplex! I.e. the error might also be an
@@ -343,10 +292,6 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType
     // TODO: need to do anything on self, like pause the source?
   }
   
-#if swift(>=3.0) // #swift3-1st-arg
-  final func onSourceError(_ error: Error) { onSourceError(error: error) }
-  final func onTargetError(_ error: Error) { onTargetError(error: error) }
-#endif
 }
 
 
@@ -358,7 +303,6 @@ import Glibc
 
 private var nzStdErr = StdErrStream()
 
-#if swift(>=3.0) // #swift3-fd
 private struct StdErrStream : TextOutputStream {
   mutating func write(_ string: String) { fputs(string, stderr) }
 }
@@ -371,17 +315,3 @@ private func efprint<T>(_ value: T) {
 private func heavyLog<T>(_ value: T) {
   if enableHeavyLog { efprint(value) }
 }
-#else // Swift 2.x
-private struct StdErrStream : OutputStreamType {
-  mutating func write(string: String) { fputs(string, stderr) }
-}
-
-private func efprint<T>(value: T) {
-  fflush(stderr)
-  print(value, toStream:&nzStdErr)
-  fflush(stderr)
-}
-private func heavyLog<T>(value: T) {
-  if enableHeavyLog { efprint(value) }
-}
-#endif // Swift 2.x

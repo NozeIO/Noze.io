@@ -22,9 +22,9 @@ let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
 ///
 /// Family is AF_INET4 / AF_INET6
 ///
-public func lookup(domain : String,
+public func lookup(_ domain : String,
                    family : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
-                   cb     : LookupCB)
+                   cb     : @escaping LookupCB)
 {
   core.module.retain()
   
@@ -34,11 +34,7 @@ public func lookup(domain : String,
     var hints = addrinfo()
     hints.ai_family = Int32(family)
     
-#if swift(>=3.0) // #swift3-ptr
     var ptr : UnsafeMutablePointer<addrinfo>? = nil
-#else
-    var ptr = UnsafeMutablePointer<addrinfo>(nil)
-#endif
     defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
     
     let rc = getaddrinfo(domain, nil, &hints, &ptr)
@@ -58,7 +54,6 @@ public func lookup(domain : String,
     }
     
     /* copy results - we just take the first match */
-#if swift(>=3.0) // #swift3-ptr
     let info   = ptr!.pointee
     var result : sockaddr_any? = nil
     
@@ -81,37 +76,9 @@ public func lookup(domain : String,
     else {
       result = nil // TODO: proper error
     }
-#else /* Swift 2.2 */
-    let info   = ptr.memory
-    let result : sockaddr_any?
-    
-    if info.ai_addr == nil {
-      result = nil // TODO: proper error
-    }
-    else if info.ai_family == xsys.AF_INET {
-      let aiptr = UnsafePointer<xsys_sockaddr_in>(info.ai_addr) // cast
-      result = sockaddr_any.AF_INET(aiptr.memory)
-    }
-    else if info.ai_family == xsys.AF_INET6 {
-      let aiptr = UnsafePointer<xsys_sockaddr_in6>(info.ai_addr) // cast
-      result = sockaddr_any.AF_INET6(aiptr.memory)
-    }
-    else {
-      result = nil // TODO: proper error
-    }
-#endif /* Swift 2.2 */
         
     nextTick {
       cb(nil, result)
     }
   }
 }
-
-#if swift(>=3.0) // #swift3-1st-arg
-public func lookup(_ domain : String,
-                   family   : sa_family_t = sa_family_t(xsys.PF_UNSPEC),
-                   cb       : LookupCB)
-{
-  lookup(domain: domain, family: family, cb: cb)
-}
-#endif

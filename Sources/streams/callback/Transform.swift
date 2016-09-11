@@ -15,23 +15,10 @@ public class Transform<WriteType, ReadType>
              : TransformStream<WriteType, ReadType>
 {
   
-#if swift(>=3.0) // #swift3-escape
-  public typealias TransformDoneCB = @escaping ( Error?, [ ReadType ]? ) -> Void
-  
-  public typealias TransformCB = @escaping (
-                                   _ bucket: [ WriteType ],
+  public typealias TransformCB = ( _ bucket: [ WriteType ],
                                    _ push: @escaping ( [ ReadType ]? ) -> Void,
-                                   _ done: TransformDoneCB
+                                   _ done: @escaping ( Error?, [ ReadType ]? ) -> Void
                                  ) -> Void
-#else // Swift 2.x
-  public typealias TransformDoneCB = ( ErrorType?, [ ReadType ]? ) -> Void
-  
-  public typealias TransformCB = ( bucket: [ WriteType ],
-                                   push: ( [ ReadType ]? ) -> Void,
-                                   done: TransformDoneCB
-                                 ) -> Void
-#endif // Swift 2.x
-  
   
   var transform : TransformCB!
   
@@ -39,7 +26,7 @@ public class Transform<WriteType, ReadType>
               writeHWM     : Int? = nil,
               queue        : DispatchQueueType = core.Q,
               enableLogger : Bool = false,
-              transform    : TransformCB)
+              transform    : @escaping TransformCB)
   {
     self.transform = transform
     
@@ -51,17 +38,13 @@ public class Transform<WriteType, ReadType>
   // MARK: - TransformStream overrides
   
   override public func _transform(bucket b : [ WriteType ],
-                                  done     : TransformDoneCB)
+                                  done     : @escaping ( Error?, [ ReadType ]? ) -> Void)
   {
     guard let transform = transform else { fatalError("no transform CB?") }
-#if swift(>=3.0) // #swift3-closure-call
-    transform(b, { self.push(bucket: $0) }, done)
-#else
-    transform(bucket: b, push: { self.push(bucket: $0) }, done: done)
-#endif
+    transform(b, { self.push($0) }, done)
   }
   
-  override public func _flush(done cb: TransformDoneCB) {
+  override public func _flush(done cb: @escaping ( Error?, [ ReadType ]? ) -> Void) {
     // TBD: support a flush callback?
     self.transform = nil // break cycles
     cb(nil, nil)

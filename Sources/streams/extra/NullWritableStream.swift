@@ -22,7 +22,9 @@ public class NullWritableStream<WriteType>
   
   // MARK: - extension points for subclass
 
-  override func _primaryWriteV(buckets c: Brigade, done: PrimaryWriteDoneCB) {
+  override public func _primaryWriteV(buckets c: Brigade,
+                                      done: @escaping ( Error?, Int ) -> Void)
+  {
     log.enter(); defer { log.leave() }
     let brigadeCount = c.reduce(0 /* start value */) { $0 + $1.count }
     done(nil, brigadeCount)
