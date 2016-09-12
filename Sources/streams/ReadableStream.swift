@@ -154,7 +154,9 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
     // TBD: in here or in push? or in both?
     // TBD: why is this even in here? It doesn't seem to make sense flow-wise?
     //      maybe to pick up an EOF?
-    maybeGenerateMore()
+    if !inGenerator { // TBD: this happens with pipes in the tests, debug why
+      maybeGenerateMore()
+    }
     
     // OK, so the buffer is empty and we hit EOF.
     if buffer.isEmpty && hitEOF {
