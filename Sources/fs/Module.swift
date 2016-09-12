@@ -26,6 +26,7 @@ public typealias StringCB = ( Error?, String?    ) -> Void
 public typealias ErrorCB  = ( Error?             ) -> Void
 
 
+#if !os(Linux) // 2016-09-12: Not yet available on Linux
 // MARK: - Watch Files or Directories. Get notified on changes.
 
 public func watch(_ filename : String,
@@ -40,3 +41,5 @@ public func watch(_ filename : String,
   return FSWatcher(filename, persistent: persistent,
                    listener: listener)
 }
+#endif /* !Linux */
+

@@ -6,6 +6,10 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+#if !os(Linux) // 2016-09-12: Not yet available on Linux
+// TBD: can we do an own implementation? using inotify?
+// http://www.ibm.com/developerworks/linux/library/l-ubuntu-inotify/
+
 import Dispatch
 import xsys
 import core
@@ -127,3 +131,6 @@ public class FSWatcher: ErrorEmitter {
     return self
   }
 }
+
+#endif /* !Linux */
+
