@@ -48,7 +48,7 @@ class NozeIOSocketTests: NozeIOTestCase {
     // Note: using the UTF-8 write() is actually wrong for HTTP [ISO-Latin-1 ..]
     sock.write("GET / HTTP/1.0\r\n")
     sock.write("Content-Length: 0\r\n")
-    sock.write("Host: zeezide.de\r\n")
+    sock.write("Host: zeezide.com\r\n")
     sock.write("\r\n") // end() would immediately close socket
   }
   
