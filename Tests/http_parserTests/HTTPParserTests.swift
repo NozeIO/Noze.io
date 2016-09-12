@@ -173,7 +173,7 @@ func debugBucketAsString(_ buf: UnsafePointer<CChar>, _ len: size_t) -> String {
   for i in 0..<len {
     let c = buf[i]
     if isprint(Int32(c)) != 0 {
-      s += " \(UnicodeScalar(Int(c)))"
+      s += " \(UnicodeScalar(Int(c))!)"
     }
     else {
       s += " \\\(c)"
