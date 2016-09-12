@@ -9,7 +9,7 @@
 import http
 import connect
 
-public class Router: MiddlewareObject {
+open class Router: MiddlewareObject {
   
   var routes = [Route]()
   
@@ -20,9 +20,9 @@ public class Router: MiddlewareObject {
   
   // MARK: MiddlewareObject
   
-  public func handle(request  req: IncomingMessage,
-                     response res: ServerResponse,
-                     next     endNext: Next)
+  public func handle(request  req     : IncomingMessage,
+                     response res     : ServerResponse,
+                     next     endNext : @escaping Next)
   {
     let routes = self.routes // make a copy to protect against modifications
     var next : Next = { _ in } // cannot be let as it's self-referencing

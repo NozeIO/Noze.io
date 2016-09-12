@@ -16,7 +16,7 @@ public extension ServerResponse {
   // TODO: How do we get access to the application?? Need to attach to the
   //       request? We need to retrieve values.
   
-  public func render(template: String, _ options : Any? = nil) {
+  public func render(_ template: String, _ options : Any? = nil) {
     let res = self
     
     guard let app = self.app else {
@@ -48,7 +48,7 @@ public extension ServerResponse {
         return
       }
       
-      engine(path: path, options: viewOptions) { results in
+      engine(path, viewOptions) { results in
         let rc = results.count
         let v0 = rc > 0 ? results[0] : nil
         let v1 = rc > 1 ? results[1] : nil
@@ -84,7 +84,8 @@ public extension ServerResponse {
 }
 
 private func lookupTemplate(views p: String, template t: String,
-                            engine e: String, _ cb: ( String? ) -> Void)
+                            engine e: String,
+                            _ cb: @escaping ( String? ) -> Void)
 {
   // TODO: try other combos
   let fsPath = "\(p)/\(t).\(e)"
@@ -103,21 +104,5 @@ private func lookupTemplate(views p: String, template t: String,
   }
 }
 
-
-#if swift(>=3.0) // #swift3-1st-arg
-public extension ServerResponse {
-  public func render(_ t: String, _ options : Any? = nil) {
-    render(template: t, options)
-  }
-}
-#endif
-
-
 // Some protocol is implemented in Foundation, requiring this.
-#if os(Linux)
-#if swift(>=3.0)
-  import Foundation
-#endif
-#else // Darwin
-  import Foundation
-#endif // Darwin
+import Foundation

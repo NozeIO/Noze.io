@@ -9,17 +9,10 @@
 import xsys
 import core
 
-#if swift(>=3.0) // #swift3-1st-kwarg
 func uniqueRandomArray<T>(_ array: [ T ]) -> () -> T {
   let ura = UniqueRandomArray(array)
   return { return ura.next() }
 }
-#else
-func uniqueRandomArray<T>(array: [ T ]) -> () -> T {
-  let ura = UniqueRandomArray(array)
-  return { return ura.next() }
-}
-#endif
 
 class UniqueRandomArray<T> {
   

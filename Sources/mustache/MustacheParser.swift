@@ -6,8 +6,6 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0) // #swift3-ptr
-
 public class MustacheParser {
   
   public init() {}
@@ -37,14 +35,14 @@ public class MustacheParser {
       let s = String(newValue).unicodeScalars
       cStart = CChar(s[s.startIndex].value)
     }
-    get { return Character(UnicodeScalar(UInt32(cStart))) }
+    get { return Character(UnicodeScalar(UInt32(cStart))!) }
   }
   public var closeCharacter : Character {
     set {
       let s = String(newValue).unicodeScalars
       cEnd = CChar(s[s.startIndex].value)
     }
-    get { return Character(UnicodeScalar(UInt32(cEnd))) }
+    get { return Character(UnicodeScalar(UInt32(cEnd))!) }
   }
   
   
@@ -212,9 +210,9 @@ public class MustacheParser {
 }
 
 #if os(Linux)
-import func Glibc.memcpy
+  import func Glibc.memcpy
 #else
-import func Darwin.memcpy
+  import func Darwin.memcpy
 #endif
 
 extension String {
@@ -235,5 +233,3 @@ extension String {
     return s
   }
 }
-
-#endif // Swift 3+

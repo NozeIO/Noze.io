@@ -15,7 +15,7 @@ import fs
 public typealias ServerEventCB = ( Server ) -> Void
 
 /// TODO: doc
-public class Server : ErrorEmitter, LameLogObjectType {
+open class Server : ErrorEmitter, LameLogObjectType {
   // Kinda like the SwiftSockets `PassiveSocket<T>`.
   // TBD: We could make Server a generic type on the SocketAddress, like in
   //      SwiftSockets. But the Node Server class doesn't work like that, so
@@ -27,8 +27,8 @@ public class Server : ErrorEmitter, LameLogObjectType {
   public var isListening  : Bool { return backlog != nil }
   public var fd           : FileDescriptor?     = nil // fd can be invalid too
   public var address      : sockaddr_any?       = nil
-  public var listenSource : DispatchSourceType? = nil
-  public let Q            : DispatchQueueType
+  public var listenSource : DispatchSourceProtocol? = nil
+  public let Q            : DispatchQueue
   public var didRetainQ   : Bool = false // #linux-public
   
   public let allowHalfOpen  : Bool
@@ -36,7 +36,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public init(allowHalfOpen  : Bool = false,
               pauseOnConnect : Bool = false,
-              queue          : DispatchQueueType = core.Q,
+              queue          : DispatchQueue = core.Q,
               enableLogger   : Bool = false)
   {
     self.Q   = queue
@@ -62,9 +62,10 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - Listening
   
-  public func listen(port        : Int? = nil,
-                     backlog     : Int  = 5,
-                     onListening : ServerEventCB? = nil) -> Self
+  @discardableResult
+  open func listen(_ port      : Int? = nil,
+                   backlog     : Int  = 5,
+                   onListening : ServerEventCB? = nil) -> Self
   {
     if let cb = onListening { _ = self.onListening(handler: cb) }
     
@@ -75,7 +76,8 @@ public class Server : ErrorEmitter, LameLogObjectType {
     return self.listen(address, backlog: backlog)
   }
   
-  public func listen(address: sockaddr_any, backlog: Int = 5) -> Self {
+  @discardableResult
+  public func listen(_ address: sockaddr_any, backlog: Int = 5) -> Self {
     switch address {
       case .AF_INET (let addr): return listen(addr, backlog: backlog)
       case .AF_INET6(let addr): return listen(addr, backlog: backlog)
@@ -83,7 +85,8 @@ public class Server : ErrorEmitter, LameLogObjectType {
     }
   }
   
-  public func listen<AT: SocketAddress>(address: AT, backlog: Int = 5,
+  @discardableResult
+  public func listen<AT: SocketAddress>(_ address: AT, backlog: Int = 5,
                                         exclusive: Bool = false) -> Self
   {
     // Note: Everything here runs synchronously, which I guess is fine in this
@@ -119,51 +122,15 @@ public class Server : ErrorEmitter, LameLogObjectType {
     
     // determine the address we bound to
     
-#if swift(>=3.0) // #swift3-1st-arg
     let boundAddress : AT? = getasockname(fd: fd!.fd, xsys.getsockname)
-#else
-    let boundAddress : AT? = getasockname(fd!.fd, xsys.getsockname)
-#endif
     self.address = sockaddr_any(boundAddress)
     assert(self.address != nil)
     
     
     // setup GCD source
     
-#if os(Linux) // is this GCD Linux vs GCD OSX or Swift 2.1 vs 2.2?
-    let listenSource = dispatch_source_create(
-      DISPATCH_SOURCE_TYPE_READ,
-      UInt(fd!.fd), // is this going to bite us?
-      0,
-      self.Q
-    )
-#else // os(Darwin)
-#if swift(>=3.0)
     let listenSource = DispatchSource.makeReadSource(fileDescriptor: fd!.fd,
                                                      queue: self.Q)
-#else
-#if swift(>=2.3)
-    // TBD: this is not quite right, we really want to check the API
-    let listenSource = dispatch_source_create(
-      DISPATCH_SOURCE_TYPE_READ,
-      UInt(fd!.fd), // is this going to bite us?
-      0,
-      self.Q
-    )
-#else
-    guard let listenSource = dispatch_source_create(
-      DISPATCH_SOURCE_TYPE_READ,
-      UInt(fd!.fd), // is this going to bite us?
-      0,
-      self.Q
-    )
-    else {
-      // TBD: hm
-      xsys.abort()
-    }
-#endif
-#endif
-#endif // os(Darwin)
     self.listenSource = listenSource
     if !self.didRetainQ { core.module.retain() }
     
@@ -173,29 +140,10 @@ public class Server : ErrorEmitter, LameLogObjectType {
     //       (Server object should not go away until the dispatch source is
     //        active? Or should it go away an drop the source properly)
     //       In other words: the server only goes away if it is closed.
-#if os(Linux)
-    // TBD: what is the better way?
-    dispatch_source_set_event_handler(listenSource) {
-      self._onListenEvent(address: boundAddress)
-    }
-#if swift(>=3.0)
-    dispatch_resume(unsafeBitCast(listenSource, to: dispatch_object_t.self))
-#else
-    dispatch_resume(unsafeBitCast(listenSource, dispatch_object_t.self))
-#endif
-#else /* os(Darwin) */
-#if swift(>=3.0)
     listenSource.setEventHandler {
       self._onListenEvent(address: boundAddress)
     }
     listenSource.resume()
-#else
-    dispatch_source_set_event_handler(listenSource) {
-      self._onListenEvent(address: boundAddress)
-    }
-    dispatch_resume(listenSource)
-#endif
-#endif /* os(Darwin) */
     
     
     // make non-blocking
@@ -232,10 +180,12 @@ public class Server : ErrorEmitter, LameLogObjectType {
       var baddr    = AT()
       var baddrlen = socklen_t(baddr.len) // this can change! (AF_LOCAL)
       
-      let newFD = withUnsafeMutablePointer(&baddr) {
+      let newFD = withUnsafeMutablePointer(to: &baddr) {
         ptr -> Int32 in
-        let bptr = UnsafeMutablePointer<xsys_sockaddr>(ptr) // cast
-        return xsys.accept(lfd, bptr, &baddrlen);// buflenptr)
+        return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
+          bptr -> Int32 in
+          return xsys.accept(lfd, bptr, &baddrlen);// buflenptr)
+        }
       }
       
       if newFD != -1 {
@@ -269,7 +219,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
     while true
   }
   
-  public func accept(socket s: Socket) {
+  open func accept(socket s: Socket) {
     log.enter(); defer { log.leave() }
     log.log("socket: \(socket)")
     
@@ -279,7 +229,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
     }
   }
   
-  public func handleAccept(error e: Error) { // #linux-public
+  open func handleAccept(error e: Error) { // #linux-public
     // TBD: is this a close condition? Probably, or not? :-) Let's say no
     //      for now and assume the socket is still good and can potentially
     //      accept() successfully in the future (once that RoR process
@@ -295,9 +245,11 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func _bind<AT: SocketAddress>(address a: AT) -> Int32 { // #linux-public
     var address = a
-    return withUnsafePointer(&address) { ptr -> Int32 in
-      let bptr = UnsafePointer<xsys_sockaddr>(ptr) // cast
-      return xsys.bind(fd!.fd, bptr, socklen_t(address.len))
+    return withUnsafePointer(to: &address) { ptr -> Int32 in
+      return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
+        bptr in
+        return xsys.bind(fd!.fd, bptr, socklen_t(address.len))
+      }
     }
   }
   
@@ -306,7 +258,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   public func _makeNonExclusive(fd lfd: FileDescriptor) -> Int32 { // #linux-public
     var buf    = Int32(1)
-    let buflen = socklen_t(strideof(Int32.self))
+    let buflen = socklen_t(MemoryLayout<Int32>.stride)
     let rc     = xsys.setsockopt(lfd.fd, xsys.SOL_SOCKET, xsys.SO_REUSEADDR,
                                  &buf, buflen)
     return rc
@@ -315,7 +267,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - Closing the server
   
-  public func close() {
+  open func close() {
     // TODO: Stop accepting connections.
     // TODO: In Node the server keeps a list of the connections and only closes
     //       once all connections have ended. Which probably makes some sense.
@@ -384,53 +336,34 @@ public class Server : ErrorEmitter, LameLogObjectType {
   public var connectionListeners = EventListenerSet<Socket>()
   public var listeningListeners  = EventListenerSet<Server>()
   
-#if swift(>=3.0) // #swift3-discardable-result This-is-so-depressing
-  @discardableResult public func onClose  (handler cb: ServerEventCB) -> Self {
+  @discardableResult
+  public func onClose  (handler cb: @escaping ServerEventCB) -> Self {
     closeListeners.add(handler: cb);                  return self
   }
-  @discardableResult public func onceClose(handler cb: ServerEventCB) -> Self {
+  @discardableResult
+  public func onceClose(handler cb: @escaping ServerEventCB) -> Self {
     closeListeners.add(handler: cb, once: true);      return self
   }
   
-  @discardableResult public func onConnection  (handler cb: ConnectCB) -> Self {
+  @discardableResult
+  public func onConnection  (handler cb: @escaping ConnectCB) -> Self {
     connectionListeners.add(handler: cb);             return self
   }
-  @discardableResult public func onceConnection(handler cb: ConnectCB) -> Self {
+  @discardableResult
+  public func onceConnection(handler cb: @escaping ConnectCB) -> Self {
     connectionListeners.add(handler: cb, once: true); return self
   }
   
   @discardableResult
-  public func onListening(handler cb: ServerEventCB) -> Self
+  public func onListening(handler cb: @escaping ServerEventCB) -> Self
   {
     listeningListeners.add(handler: cb);              return self
   }
   @discardableResult
-  public func onceListening(handler cb: ServerEventCB) -> Self
+  public func onceListening(handler cb: @escaping ServerEventCB) -> Self
   {
     listeningListeners.add(handler: cb, once: true);  return self
   }
-#else
-  public func onClose(handler cb: ServerEventCB) -> Self {
-    closeListeners.add(handler: cb);                  return self
-  }
-  public func onceClose(handler cb: ServerEventCB) -> Self {
-    closeListeners.add(handler: cb, once: true);      return self
-  }
-  
-  public func onConnection(handler cb: ConnectCB) -> Self {
-    connectionListeners.add(handler: cb);             return self
-  }
-  public func onceConnection(handler cb: ConnectCB) -> Self {
-    connectionListeners.add(handler: cb, once: true); return self
-  }
-  
-  public func onListening(handler cb: ServerEventCB) -> Self {
-    listeningListeners.add(handler: cb);              return self
-  }
-  public func onceListening(handler cb: ServerEventCB) -> Self {
-    listeningListeners.add(handler: cb, once: true);  return self
-  }
-#endif
   
   
   // MARK: - ErrorEmitter
@@ -450,7 +383,7 @@ public class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - Logging
   
-  public var logStateInfo : String {
+  open var logStateInfo : String {
     var s = ""
     if let address = address { s += " \(address)" }
     if let fd      = fd      { s += " fd=\(fd.fd)" }
@@ -458,31 +391,9 @@ public class Server : ErrorEmitter, LameLogObjectType {
     return s
   }
   
-  public func logState() {
+  open func logState() {
     guard log.enabled else { return }
     log.debug("[\(logStateInfo)]")
   }
-
-
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-  @discardableResult
-  public func listen(_ port      : Int?,
-                     backlog     : Int  = 5,
-                     onListening : ServerEventCB? = nil) -> Self
-  {
-    return listen(port: port, backlog: backlog, onListening: onListening)
-  }
   
-  @discardableResult
-  public func listen(_ address: sockaddr_any, backlog: Int = 5) -> Self {
-    return listen(address: address, backlog: backlog)
-  }
-  
-  @discardableResult
-  public func listen<AT: SocketAddress>(_ address: AT, backlog: Int = 5,
-                                        exclusive: Bool = false) -> Self
-  {
-    return listen(address: address, backlog: backlog, exclusive: exclusive)
-  }
-#endif
 }

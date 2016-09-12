@@ -15,7 +15,7 @@ import class net.Socket
 public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
 public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
 
-public class Server: net.Server {
+open class Server: net.Server {
   
   // TODO
   var httpConnections = [ HTTPConnection ]()
@@ -51,11 +51,7 @@ public class Server: net.Server {
   func _connectionIsDone(c con: HTTPConnection) {
     log.enter(); defer { log.leave() }
     
-#if swift(>=3.0) // #swift3-fd
     let idx = httpConnections.index(where: { $0 === con }) // not Equatable
-#else
-    let idx = httpConnections.indexOf { $0 === con } // not Equatable
-#endif
     assert(idx != nil)
     if let idx = idx {
       httpConnections.remove(at: idx)
@@ -76,63 +72,38 @@ public class Server: net.Server {
   public var requestListeners     =
                EventListenerSet<( IncomingMessage, ServerResponse )>()
   
-#if swift(>=3.0) // #swift3-discardable-result This-is-so-depressing
   @discardableResult
-  public func onContinue(handler cb: ContinueEventCB) -> Self {
+  public func onContinue(handler cb: @escaping ContinueEventCB) -> Self {
     continueListeners.add(handler: cb);             return self
   }
   @discardableResult
-  public func onceContinue(handler cb: ContinueEventCB) -> Self {
+  public func onceContinue(handler cb: @escaping ContinueEventCB) -> Self {
     continueListeners.add(handler: cb, once: true); return self
   }
   
   @discardableResult
-  public func onClientError(handler cb: ClientErrorEventCB) -> Self {
+  public func onClientError(handler cb: @escaping ClientErrorEventCB) -> Self {
     clientErrorListeners.add(handler: cb);             return self
   }
   @discardableResult
-  public func onceClientError(handler cb: ClientErrorEventCB) -> Self {
+  public func onceClientError(handler cb: @escaping ClientErrorEventCB) -> Self {
     clientErrorListeners.add(handler: cb, once: true); return self
   }
   
   @discardableResult
-  public func onRequest(handler lcb: RequestEventCB) -> Self {
+  public func onRequest(handler lcb: @escaping RequestEventCB) -> Self {
     requestListeners.add(handler: lcb);            return self
   }
   @discardableResult
-  public func onceRequest(handler cb: RequestEventCB) -> Self {
+  public func onceRequest(handler cb: @escaping RequestEventCB) -> Self {
     requestListeners.add(handler: cb, once: true); return self
   }
-#else // Swift 2.2
-  public func onContinue(handler cb: ContinueEventCB) -> Self {
-    continueListeners.add(handler: cb);             return self
-  }
-  public func onceContinue(handler cb: ContinueEventCB) -> Self {
-    continueListeners.add(handler: cb, once: true); return self
-  }
-  
-  public func onClientError(handler cb: ClientErrorEventCB) -> Self {
-    clientErrorListeners.add(handler: cb);             return self
-  }
-  public func onceClientError(handler cb: ClientErrorEventCB) -> Self {
-    clientErrorListeners.add(handler: cb, once: true); return self
-  }
-  
-  public func onRequest(handler lcb: RequestEventCB) -> Self {
-    requestListeners.add(handler: lcb);            return self
-  }
-  public func onceRequest(handler cb: RequestEventCB) -> Self {
-    requestListeners.add(handler: cb, once: true); return self
-  }
-#endif // Swift 2.2
-  
   
   // TODO: connect, upgrade
 
-
   // MARK: - Logging
   
-  public override var logStateInfo : String {
+  override open var logStateInfo : String {
     var s = ""
     s += " #http=\(httpConnections.count)"
     

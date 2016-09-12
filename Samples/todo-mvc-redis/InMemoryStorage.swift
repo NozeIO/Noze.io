@@ -19,30 +19,30 @@ class InMemoryCollectionStore<T> : CollectionStore {
   init() {
   }
   
-  func nextKey(cb: ( Int ) -> Void) {
+  func nextKey(cb: @escaping ( Int ) -> Void) {
     sequence += 1
     cb(sequence)
   }
   
-  func getAll(cb: ( [ T ] ) -> Void) {
+  func getAll(cb: @escaping ( [ T ] ) -> Void) {
     cb(Array(objects.values))
   }
   
-  func get(id key: Int, cb: ( T? ) -> Void) {
+  func get(id key: Int, cb: @escaping ( T? ) -> Void) {
     cb(objects[key])
   }
   
-  func delete(id key: Int, cb: () -> Void) {
+  func delete(id key: Int, cb: @escaping () -> Void) {
     objects.removeValue(forKey: key)
     cb()
   }
   
-  func update(id key: Int, value v: T, cb: ( T ) -> Void) {
+  func update(id key: Int, value v: T, cb: @escaping ( T ) -> Void) {
     objects[key] = v // value type!
     cb(v)
   }
   
-  func deleteAll(cb: () -> Void) {
+  func deleteAll(cb: @escaping () -> Void) {
     objects.removeAll()
     cb()
   }

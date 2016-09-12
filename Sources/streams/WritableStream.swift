@@ -10,8 +10,9 @@ import Dispatch
 import core
 import events
 
-public class WritableStream<WriteType>
-             : Stream, GWritableStreamType, PipeEmitTarget
+// Swift3: this must be open ...
+open class WritableStream<WriteType>
+           : Stream, GWritableStreamType, PipeEmitTarget
 {
   /*
   Notes: (TODO: update for split between WritableStream and Writable)
@@ -54,7 +55,7 @@ public class WritableStream<WriteType>
   // MARK: - Init
   
   public init(highWaterMark : Int?,
-              queue         : DispatchQueueType,
+              queue         : DispatchQueue,
               enableLogger  : Bool)
   {
     buffer = ListBuffer<WriteType>(highWaterMark: highWaterMark)
@@ -64,7 +65,7 @@ public class WritableStream<WriteType>
   
   // MARK: - Client API
   
-  public func end() {
+  open func end() {
     log.enter(); defer { log.leave() }
     
     // happens. assert(!calledEnd || !_primaryCanEnd) // right?
@@ -101,7 +102,7 @@ public class WritableStream<WriteType>
   /// Returns true if all chunks got written fully or enough buffer space was
   /// available. Return falls if the buffer space overflowed (but the chunks
   /// are still queued!)
-  public func writev(buckets chunks: Brigade, done: DoneCB? = nil) -> Bool {
+  open func writev(buckets chunks: Brigade, done: DoneCB? = nil) -> Bool {
     log.enter(); defer { log.leave() }
     
     guard chunks.count > 0 && chunks[0].count > 0 else { return true }
@@ -146,11 +147,11 @@ public class WritableStream<WriteType>
     return buffer.availableBufferSpace > 0
   }
   
-  public func cork() {
+  open func cork() {
     log.enter(); defer { log.leave() }
     self.corkCount += 1
   }
-  public func uncork() {
+  open func uncork() {
     log.enter(); defer { log.leave() }
     assert(self.corkCount > 0, "uncork called on an open stream ..")
     self.corkCount -= 1
@@ -237,7 +238,7 @@ public class WritableStream<WriteType>
     inSink = false
   }
   
-  func afterPrimaryWrite() { // Q: main
+  open func afterPrimaryWrite() { // Q: main
     // called by writeNextBlock() when it is done with one `_primaryWriteV`
     // call.
     log.enter(); defer { log.leave() }
@@ -284,12 +285,14 @@ public class WritableStream<WriteType>
   
   // MARK: - extension points for subclass
 
-  func _primaryWriteV(buckets chunks: Brigade, done: ( Error?, Int ) -> Void) {
+  open func _primaryWriteV(buckets chunks: Brigade,
+                           done: @escaping ( Error?, Int ) -> Void)
+  {
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
   }
   
-  var _primaryCanEnd : Bool { return true }
+  open var _primaryCanEnd : Bool { return true }
   
   private func finishWritable() {
     let log = self.log
@@ -345,38 +348,46 @@ public class WritableStream<WriteType>
   var pipeListeners   = EventListenerSet<ReadableStreamType>()
   var unpipeListeners = EventListenerSet<ReadableStreamType>()
   
-  public func onDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onDrain(handler cb: @escaping DrainCB) -> Self {
     drainListeners.add(handler: cb)
     return self
   }
-  public func onceDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onceDrain(handler cb: @escaping DrainCB) -> Self {
     drainListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onFinish(handler cb: @escaping FinishCB) -> Self {
     finishListeners.add(handler: cb)
     return self
   }
-  public func onceFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onceFinish(handler cb: @escaping FinishCB) -> Self {
     finishListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onPipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onPipe(handler cb: @escaping PipeCB) -> Self {
     pipeListeners.add(handler: cb)
     return self
   }
-  public func oncePipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func oncePipe(handler cb: @escaping PipeCB) -> Self {
     pipeListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onUnpipe(handler cb: @escaping PipeCB) -> Self {
     unpipeListeners.add(handler: cb)
     return self
   }
-  public func onceUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onceUnpipe(handler cb: @escaping PipeCB) -> Self {
     unpipeListeners.add(handler: cb, once: true)
     return self
   }
@@ -387,7 +398,7 @@ public class WritableStream<WriteType>
   
   // MARK: - Logging
   
-  public override var logStateInfo : String {
+  override open var logStateInfo : String {
     var s = super.logStateInfo
     
     s += " " + buffer.logStateInfo

@@ -25,7 +25,7 @@ public class ServerResponse : HTTPMessageWrapper {
   public var statusCode    : Int? = nil
   public var statusMessage : String? = nil
   
-  public func writeHead(statusCode: Int, _ statusMessage: String?,
+  public func writeHead(_ statusCode: Int, _ statusMessage: String?,
                         _ headers: Dictionary<String, Any> = [:])
   {
     assert(!headersSent)
@@ -40,7 +40,7 @@ public class ServerResponse : HTTPMessageWrapper {
     
     _primaryWriteHTTPMessageHead()
   }
-  public func writeHead(statusCode: Int, _ h: Dictionary<String, Any> = [:]) {
+  public func writeHead(_ statusCode: Int, _ h: Dictionary<String, Any> = [:]) {
     // Yup, default args don't do here
     writeHead(statusCode, nil, h)
   }
@@ -54,23 +54,3 @@ public class ServerResponse : HTTPMessageWrapper {
   
   // TODO: events: finish, close(terminated before end() was called)
 }
-
-
-// MARK: - Swift 3 Helpers
-
-#if swift(>=3.0) // #swift3-1st-arg
-public extension ServerResponse {
-  // In this case we really want those non-kwarg methods.
-  
-  public func writeHead(_ s: Int, _ m: String?,
-                        _ h: Dictionary<String, Any> = [:])
-  {
-    writeHead(statusCode: s, m, h)
-  }
-  public func writeHead(_ s: Int, _ h: Dictionary<String, Any> = [:]) {
-    // Yup, default args don't do here
-    writeHead(statusCode: s, nil, h)
-  }
-  
-}
-#endif

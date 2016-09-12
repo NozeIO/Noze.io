@@ -18,7 +18,7 @@ public var module = NozeRedis()
 public let DefaultRedisPort = 6379
 
 public func connect(port p: Int = DefaultRedisPort,
-                    cb: ( RedisConnection ) -> Void)
+                    cb: @escaping ( RedisConnection ) -> Void)
 {
   _ = net.connect(p) { socket in
     

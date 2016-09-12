@@ -6,22 +6,12 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0)
-#else
-public typealias Error = ErrorType
-#endif
-
 public typealias ErrorCB = ( Error ) -> Void
 
 public protocol ErrorEmitterType : EventEmitterType {
 
-#if swift(>=3.0) // #swift3-discardable-result
-  @discardableResult func onError  (handler cb: ErrorCB) -> Self
-  @discardableResult func onceError(handler cb: ErrorCB) -> Self
-#else
-  func onError  (handler cb: ErrorCB) -> Self
-  func onceError(handler cb: ErrorCB) -> Self
-#endif  
+  @discardableResult func onError  (handler cb: @escaping ErrorCB) -> Self
+  @discardableResult func onceError(handler cb: @escaping ErrorCB) -> Self
 }
 
 public protocol ErrorEmitTarget {
@@ -36,7 +26,7 @@ public protocol ErrorEmitTarget {
 ///
 /// I think this can be usefully done as a protocol as we can't add the required
 /// storage.
-public class ErrorEmitter : ErrorEmitterType, ErrorEmitTarget {
+open class ErrorEmitter : ErrorEmitterType, ErrorEmitTarget {
   
   public init() {}
   
@@ -46,11 +36,14 @@ public class ErrorEmitter : ErrorEmitterType, ErrorEmitTarget {
   
   public func emit(error e: Error) { errorListeners.emit(e) }
   
-  public func onError(handler cb: ErrorCB) -> Self {
+  @discardableResult
+  public func onError(handler cb: @escaping ErrorCB) -> Self {
     errorListeners.add(handler: cb)
     return self
   }
-  public func onceError(handler cb: ErrorCB) -> Self {
+  
+  @discardableResult
+  public func onceError(handler cb: @escaping ErrorCB) -> Self {
     errorListeners.add(handler: cb, once: true)
     return self
   }

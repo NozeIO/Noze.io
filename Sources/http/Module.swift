@@ -18,7 +18,6 @@ public let module = NozeHTTP()
 
 // MARK: - Server
 
-#if swift(>=3.0) // #swift3-discardable-result
 /// Creates an `http.Server` object and attaches a provided `onRequest` handler.
 ///
 /// To activate the server, the `listen` method needs to be called.
@@ -37,25 +36,6 @@ public func createServer(enableLogger el: Bool = false,
   if let cb = onRequest { _ = srv.onRequest(handler: cb) }
   return srv
 }
-#else // Swift 2.2
-/// Creates an `http.Server` object and attaches a provided `onRequest` handler.
-///
-/// To activate the server, the `listen` method needs to be called.
-///
-/// Example:
-///
-///     http.createServer { req, res in
-///       res.end("Hello World!")
-///     }
-///     .listen(1337)
-///
-public func createServer(enableLogger el: Bool = false,
-                         onRequest: RequestEventCB? = nil) -> Server {
-  let srv = Server(enableLogger: el)
-  if let cb = onRequest { _ = srv.onRequest(handler: cb) }
-  return srv
-}
-#endif
 
 
 // MARK: - Client
@@ -105,7 +85,6 @@ public func get(options    o  : RequestOptions,
 }
 
 
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
 @discardableResult
 public func request(_ s : String,
                     onResponse cb : (( IncomingMessage ) -> Void)?)
@@ -119,19 +98,6 @@ public func get(_ s : String, onResponse cb : (( IncomingMessage ) -> Void)?)
 {
   return get(url: s, onResponse: cb)
 }
-#else // Swift 2.2
-public func request(s : String,
-                    onResponse cb : (( IncomingMessage ) -> Void)?)
-            -> ClientRequest
-{
-  return request(url: s, onResponse: cb)
-}
-public func get(s : String, onResponse cb : (( IncomingMessage ) -> Void)?)
-            -> ClientRequest
-{
-  return get(url: s, onResponse: cb)
-}
-#endif // Swift 2.2
 
 
 // MARK: - Reexport some Parser things

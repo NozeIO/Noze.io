@@ -15,18 +15,18 @@ public class Transform<WriteType, ReadType>
              : TransformStream<WriteType, ReadType>
 {
   
-  public typealias TransformCB = ( bucket: [ WriteType ],
-                                   push: ( [ ReadType ]? ) -> Void,
-                                   done: ( Error?, [ ReadType ]? ) -> Void
+  public typealias TransformCB = ( _ bucket: [ WriteType ],
+                                   _ push: @escaping ( [ ReadType ]? ) -> Void,
+                                   _ done: @escaping ( Error?, [ ReadType ]? ) -> Void
                                  ) -> Void
   
   var transform : TransformCB!
   
   public init(readHWM      : Int? = nil,
               writeHWM     : Int? = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool = false,
-              transform    : TransformCB)
+              transform    : @escaping TransformCB)
   {
     self.transform = transform
     
@@ -38,13 +38,13 @@ public class Transform<WriteType, ReadType>
   // MARK: - TransformStream overrides
   
   override public func _transform(bucket b : [ WriteType ],
-                                  done     : ( Error?, [ ReadType ]? )
-                       -> Void)
+                                  done     : @escaping ( Error?, [ ReadType ]? ) -> Void)
   {
-    transform(bucket: b, push: { self.push(bucket: $0) }, done: done)
+    guard let transform = transform else { fatalError("no transform CB?") }
+    transform(b, { self.push($0) }, done)
   }
   
-  override public func _flush(done cb: ( Error?, [ ReadType ]? ) -> Void) {
+  override public func _flush(done cb: @escaping ( Error?, [ ReadType ]? ) -> Void) {
     // TBD: support a flush callback?
     self.transform = nil // break cycles
     cb(nil, nil)

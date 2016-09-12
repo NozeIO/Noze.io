@@ -44,15 +44,10 @@ private func ==(lhs: JSONParser.Error, rhs: JSONParser.Error) -> Bool {
 
 class JSONParserTests: XCTestCase {
 
-    private func JSONFromString(s: String) throws -> JSON {
+    private func JSONFromString(_ s: String) throws -> JSON {
         var parser = JSONParser(string: s)
         return try parser.parse()
     }
-#if swift(>=3.0) // #swift3-1st-arg
-    private func JSONFromString(_ s: String) throws -> JSON {
-        return try JSONFromString(s: s)
-    }
-#endif
 
     func testThatParserThrowsAnErrorForAnEmptyNSData() {
         
@@ -82,17 +77,10 @@ class JSONParserTests: XCTestCase {
     }
     
     func testThatParserCompletesWithSingleZero() {
-#if swift(>=3.0) // #swift3-fd
         guard let data = "0".data(using: NSUTF8StringEncoding) else {
             XCTFail("Cannot create data from string")
             return
         }
-#else
-        guard let data = "0".dataUsingEncoding(NSUTF8StringEncoding) else {
-            XCTFail("Cannot create data from string")
-            return
-        }
-#endif
 
         do {
             try JSONParser.createJSONFromData(data)
@@ -111,7 +99,7 @@ class JSONParserTests: XCTestCase {
             XCTFail("Unexpected error \(error)")
         }
     }
-#endif
+#endif // !Linux
 
     func testThatParserUnderstandsNull() {
         let value = try! JSONFromString("null")
@@ -254,11 +242,7 @@ class JSONParserTests: XCTestCase {
         let anyValueExceedingIntMax = UInt.max
         let jsonString = "{\"exceedsIntMax\": \(anyValueExceedingIntMax)}"
 
-#if swift(>=3.0) // #swift3-fd
         let data = jsonString.data(using: NSUTF8StringEncoding)!
-#else
-        let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-#endif
         guard let json = try? JSON(data: data) else {
             XCTFail("Failed to even parse JSON: \(jsonString)")
             return
@@ -277,11 +261,7 @@ class JSONParserTests: XCTestCase {
         let anyFloatingPointValueExceedingIntMax = Double(UInt(Int.max) + 1)
         let jsonString = "{\"exceedsIntMax\": \(anyFloatingPointValueExceedingIntMax)}"
 
-#if swift(>=3.0) // #swift3-fd
         let data = jsonString.data(using: NSUTF8StringEncoding)!
-#else
-        let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-#endif
         guard let json = try? JSON(data: data) else {
             XCTFail("Failed to even parse JSON: \(jsonString)")
             return
@@ -289,7 +269,7 @@ class JSONParserTests: XCTestCase {
 
         XCTAssertEqual(try? json.int("exceedsIntMax"), nil, "as int")
     }
-#endif
+#endif // !Linux
 
     func testThatParserUnderstandsEmptyArrays() {
         let expect = JSON.Array([])

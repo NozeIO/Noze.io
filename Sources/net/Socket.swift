@@ -48,12 +48,12 @@ enum SocketConnectionState {
   case Connected
 }
 
-let connectQueue = dispatch_queue_create("io.noze.net.connect",
-                                         DISPATCH_QUEUE_CONCURRENT)
+let connectQueue = DispatchQueue(label:     "io.noze.net.connect",
+                                attributes: DispatchQueue.Attributes.concurrent)
 
 /// TODO: doc
-public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
-                      DuplexByteStreamType, FileDescriptorStream
+open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
+                    DuplexByteStreamType, FileDescriptorStream
 {
   // TBD: We could make Socket a generic type on the SocketAddress, like in
   //      SwiftSockets. But the Node Socket is more dynamic and does stuff like
@@ -66,7 +66,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   }
   
   public init(_ fd         : FileDescriptor   = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool             = false)
   {
     io = SocketSourceTarget(fd)
@@ -155,7 +155,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     return self
   }
 
-  public func connect(address: sockaddr_any) {
+  public func connect(_ address: sockaddr_any) {
     switch address {
       case .AF_INET (let addr): connect(addr)
       case .AF_INET6(let addr): connect(addr)
@@ -188,9 +188,11 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     
     log.debug("connect socket to \(addr) " +
               "\(self.io.fd)  \(self.io.fd.isNonBlocking) ...")
-    let rc = withUnsafePointer(&addr) { ptr -> Int32 in
-      let bptr = UnsafePointer<xsys_sockaddr>(ptr) // cast
-      return xsys.connect(lfd, bptr, socklen_t(addr.len)) //only returns block
+    let rc = withUnsafePointer(to: &addr) { ptr -> Int32 in
+      return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
+        bptr in
+        return xsys.connect(lfd, bptr, socklen_t(addr.len)) //only returns block
+      }
     }
     let perrno = xsys.errno
     
@@ -219,7 +221,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     self.uncork()
   }
   
-  public func connect<AT: SocketAddress>(address: AT) {
+  public func connect<AT: SocketAddress>(_ address: AT) {
     let log = self.log
     log.enter(); defer { log.leave() }
     log.debug("   address: \(address)")
@@ -277,29 +279,35 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   var timeoutListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)
 
-  public func onLookup(handler cb: LookupCB) -> Self {
+  @discardableResult
+  public func onLookup(handler cb: @escaping LookupCB) -> Self {
     lookupListeners.add(handler: cb)
     return self
   }
-  public func onceLookup(handler cb: LookupCB) -> Self {
+  @discardableResult
+  public func onceLookup(handler cb: @escaping LookupCB) -> Self {
     lookupListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onConnect(handler cb: ConnectCB) -> Self {
+  @discardableResult
+  public func onConnect(handler cb: @escaping ConnectCB) -> Self {
     connectListeners.add(handler: cb)
     return self
   }
-  public func onceConnect(handler cb: ConnectCB) -> Self {
+  @discardableResult
+  public func onceConnect(handler cb: @escaping ConnectCB) -> Self {
     connectListeners.add(handler: cb, once: true)
     return self
   }
   
-  public func onTimeout(handler cb: TimeoutCB) -> Self {
+  @discardableResult
+  public func onTimeout(handler cb: @escaping TimeoutCB) -> Self {
     timeoutListeners.add(handler: cb)
     return self
   }
-  public func onceTimeout(handler cb: TimeoutCB) -> Self {
+  @discardableResult
+  public func onceTimeout(handler cb: @escaping TimeoutCB) -> Self {
     timeoutListeners.add(handler: cb, once: true)
     return self
   }
@@ -350,7 +358,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     
     var buf = value
     let rc  = xsys.setsockopt(io.fd.fd, xsys.SOL_SOCKET, o,
-                              &buf, socklen_t(strideof(Int32.self)))
+                              &buf, socklen_t(MemoryLayout<Int32>.stride))
     
     if rc != 0 { // ps: Great Error Handling
       print("Could not set option \(o) on socket \(self)")
@@ -364,7 +372,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     guard io.fd.isValid else { return nil }
     
     var buf    = Int32(0)
-    var buflen = socklen_t(strideof(Int32.self))
+    var buflen = socklen_t(MemoryLayout<Int32>.stride)
     
     let rc = getsockopt(io.fd.fd, xsys.SOL_SOCKET, o, &buf, &buflen)
     guard rc == 0 else { // ps: Great Error Handling
@@ -385,7 +393,7 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   
   // MARK: - Logging
   
-  override public var logStateInfo : String {
+  override open var logStateInfo : String {
     return "io=\(io) \(super.logStateInfo)"
   }
   
@@ -397,21 +405,3 @@ public class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     get { return io.allowsHalfOpen }
   }
 }
-
-
-#if swift(>=3.0) // #swift3-1st-arg
-extension Socket {
-  public func connect(_ port    : Int,
-                      host      : String     = "localhost",
-                      onConnect : ConnectCB? = nil) -> Self
-  {
-    return connect(port: port, host: host, onConnect: onConnect)
-  }
-  public func connect(_ address: sockaddr_any) {
-    return connect(address: address)
-  }
-  public func connect<AT: SocketAddress>(_ address: AT) {
-    return connect(address: address)
-  }
-}
-#endif

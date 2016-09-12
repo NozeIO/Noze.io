@@ -31,31 +31,25 @@ public protocol ConsoleType {
   
   var logLevel : LogLevel { get }
   
-#if swift(>=3.0) // #swift3-type #swift3-1st-arg
-  func primaryLog(_ logLevel: LogLevel, _ msgfunc : @noescape () -> String,
-                  _ values : [ Any ] )
-#else
-  func primaryLog(logLevel: LogLevel, @noescape _ msgfunc : () -> String,
-                  _ values : [ Any ] )
-#endif
+  func primaryLog(_ logLevel: LogLevel, _ msgfunc: () -> String,
+                  _ values: [ Any ] )
 }
 
 public extension ConsoleType { // Actual logging funcs
   
-#if swift(>=3.0) // #swift3-type
-  public func error(_ msg: @autoclosure () -> String, _ values : Any...) {
+  public func error(_ msg: @autoclosure () -> String, _ values: Any...) {
     primaryLog(.Error, msg, values)
   }
-  public func warn(_ msg: @autoclosure () -> String, _ values : Any...) {
+  public func warn (_ msg: @autoclosure () -> String, _ values: Any...) {
     primaryLog(.Warn, msg, values)
   }
-  public func log(_ msg: @autoclosure () -> String, _ values : Any...) {
+  public func log  (_ msg: @autoclosure () -> String, _ values: Any...) {
     primaryLog(.Log, msg, values)
   }
-  public func info(_ msg: @autoclosure () -> String, _ values : Any...) {
+  public func info (_ msg: @autoclosure () -> String, _ values: Any...) {
     primaryLog(.Info, msg, values)
   }
-  public func trace(_ msg: @autoclosure () -> String, _ values : Any...) {
+  public func trace(_ msg: @autoclosure () -> String, _ values: Any...) {
     primaryLog(.Trace, msg, values)
   }
   
@@ -63,28 +57,6 @@ public extension ConsoleType { // Actual logging funcs
     // TODO: implement more
     log("\(obj)")
   }
-#else // Swift 2.2
-  public func error(@autoclosure msg: () -> String, _ values : Any...) {
-    primaryLog(.Error, msg, values)
-  }
-  public func warn(@autoclosure msg: () -> String, _ values : Any...) {
-    primaryLog(.Warn, msg, values)
-  }
-  public func log(@autoclosure msg: () -> String, _ values : Any...) {
-    primaryLog(.Log, msg, values)
-  }
-  public func info(@autoclosure msg: () -> String, _ values : Any...) {
-    primaryLog(.Info, msg, values)
-  }
-  public func trace(@autoclosure msg: () -> String, _ values : Any...) {
-    primaryLog(.Trace, msg, values)
-  }
-  
-  public func dir(obj: Any) {
-    // TODO: implement more
-    log("\(obj)")
-  }
-#endif // Swift 2.2
 }
 
 public class ConsoleBase : ConsoleType {
@@ -96,22 +68,15 @@ public class ConsoleBase : ConsoleType {
     self.logLevel = logLevel
   }
 
-#if swift(>=3.0) // #swift3-type
   public func primaryLog(_ logLevel: LogLevel,
-                         _ msgfunc : @noescape () -> String,
+                         _ msgfunc : () -> String,
                          _ values : [ Any ] )
   {
   }
-#else
-  public func primaryLog(logLevel: LogLevel, @noescape _ msgfunc : () -> String,
-                         _ values : [ Any ] )
-  {
-  }
-#endif
 }
 
-func writeValues<T: GWritableStreamType where T.WriteType == UInt8>
-  (to t: T, _ values : [ Any ])
+func writeValues<T: GWritableStreamType>(to t: T, _ values : [ Any ])
+                 where T.WriteType == UInt8
 {
   for v in values {
     _ = t.writev(buckets: spaceBrigade, done: nil)
@@ -135,9 +100,8 @@ func writeValues<T: GWritableStreamType where T.WriteType == UInt8>
 let eolBrigade   : [ [ UInt8 ] ] = [ [ 10 ] ]
 let spaceBrigade : [ [ UInt8 ] ] = [ [ 32 ] ] // best name evar
 
-public class Console<OutStreamType: GWritableStreamType
-                     where OutStreamType.WriteType == UInt8>
-             : ConsoleBase
+public class Console<OutStreamType: GWritableStreamType> : ConsoleBase
+                     where OutStreamType.WriteType == UInt8
 {
   
   let stdout : OutStreamType
@@ -149,9 +113,8 @@ public class Console<OutStreamType: GWritableStreamType
     super.init(logLevel)
   }
   
-#if swift(>=3.0) // #swift3-type
   public override func primaryLog(_ logLevel : LogLevel,
-                                  _ msgfunc  : @noescape () -> String,
+                                  _ msgfunc  : () -> String,
                                   _ values   : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
@@ -166,33 +129,15 @@ public class Console<OutStreamType: GWritableStreamType
     writeValues(to: stdout, values)
     _ = stdout.writev(buckets: eolBrigade, done: nil)
   }
-#else
-  public override func primaryLog(logLevel : LogLevel,
-                                  @noescape _ msgfunc : () -> String,
-                                  _ values : [ Any ] )
-  {
-    // Note: We just write and write and write, not waiting for the stream
-    //       to actually drain the buffer.
-    // TBD:  We could make this threadsafe by dispatching the write to core.Q.
-    //       Not sure it's worth it.
-    guard logLevel.rawValue <= self.logLevel.rawValue else { return }
-    
-    let s = msgfunc()
-    stdout.write(logLevel.logPrefix)
-    stdout.write(s)
-    writeValues(to: stdout, values)
-    stdout.writev(buckets: eolBrigade, done: nil)
-  }
-#endif
 }
 
 // Unfortunately we can't name this 'Console' as I hoped. Swift complains about
 // invalid redeclaration..
 public class Console2<OutStreamType: GWritableStreamType,
-                      ErrStreamType: GWritableStreamType
-                      where OutStreamType.WriteType == UInt8,
-                            ErrStreamType.WriteType == UInt8>
+                      ErrStreamType: GWritableStreamType>
              : ConsoleBase
+             where OutStreamType.WriteType == UInt8,
+                   ErrStreamType.WriteType == UInt8
 {
   
   let stdout : OutStreamType
@@ -208,9 +153,8 @@ public class Console2<OutStreamType: GWritableStreamType,
     super.init(logLevel)
   }
   
-#if swift(>=3.0) // #swift3-type #swift3-1st-arg
   public override func primaryLog(_ logLevel : LogLevel,
-                                  _ msgfunc  : @noescape () -> String,
+                                  _ msgfunc  : () -> String,
                                   _ values   : [ Any ] )
   {
     // Note: We just write and write and write, not waiting for the stream
@@ -234,31 +178,4 @@ public class Console2<OutStreamType: GWritableStreamType,
       _ = stdout.writev(buckets: eolBrigade, done: nil)
     }
   }
-#else // Swift 2.2
-  public override func primaryLog(logLevel : LogLevel,
-                                  @noescape _ msgfunc : () -> String,
-                                  _ values : [ Any ] )
-  {
-    // Note: We just write and write and write, not waiting for the stream
-    //       to actually drain the buffer.
-    // TBD:  We could make this threadsafe by dispatching the write to core.Q.
-    //       Not sure it's worth it.
-    guard logLevel.rawValue <= self.logLevel.rawValue else { return }
-    
-    let s = msgfunc()
-    
-    if logLevel.rawValue <= stderrLogLevel.rawValue {
-      stderr.write(logLevel.logPrefix)
-      stderr.write(s)
-      writeValues(to: stdout, values)
-      stderr.writev(buckets: eolBrigade, done: nil)
-    }
-    else {
-      stdout.write(logLevel.logPrefix)
-      stdout.write(s)
-      writeValues(to: stdout, values)
-      stdout.writev(buckets: eolBrigade, done: nil)
-    }
-  }
-#endif // Swift 2.2
 }

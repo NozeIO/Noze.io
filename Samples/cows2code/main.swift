@@ -12,12 +12,12 @@ import process
 var formatOutput = false
   // this looks better, but kills Swift 3
 
-if Process.argc < 2 {
-  print("usage: \(Process.arguments[0]) cows.txt")
+if CommandLine.argc < 2 {
+  print("usage: \(CommandLine.arguments[0]) cows.txt")
   xsys.exit(42)
 }
 
-let cowsTextFile  = Process.arguments[1]
+let cowsTextFile  = CommandLine.arguments[1]
 
 func escape(cString cs: String) -> String {
   var s = ""

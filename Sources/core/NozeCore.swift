@@ -88,8 +88,10 @@ public class NozeCore : NozeModule {
   func maybeTerminate() {
     // invoke a little later, in case some new work comes in
     // TBD: does this actually make any sense?
-    let nsecs = exitDelayInMS * Int64(NSEC_PER_MSEC)
-    dispatch_after(xsys_dispatch_time(DISPATCH_TIME_NOW, nsecs), Q) {
+    let to = DispatchTime.now() +
+                DispatchTimeInterval.milliseconds(Int(exitDelayInMS))
+    
+    Q.asyncAfter(deadline: to) {
       if self.workCount == 0 { // work still zero, terminate
         self.exit()
       }
@@ -98,7 +100,7 @@ public class NozeCore : NozeModule {
   
   /// use `run` as your runloop sink
   public func run() {
-    dispatch_main() // never returns
+    dispatchMain() // never returns
   }
   
   public var exitFunction : ( Int ) -> Void = { code in
@@ -107,20 +109,15 @@ public class NozeCore : NozeModule {
   }
   
   public var  exitCode : Int = 0
-  public func exit(code: Int? = nil) {
+  public func exit(_ code: Int? = nil) {
     exitFunction(code ?? exitCode)
   }
-#if swift(>=3.0) // #swift3-1st-arg
-  public func exit(_ code: Int?) {
-    exitFunction(code ?? exitCode)
-  }
-#endif
 
   
-  // Use atexit to invoke dispatch_main. Bad hack, never do that at home!!
+  // Use atexit to invoke dispatchMain. Bad hack, never do that at home!!
   //
   // Without this hack all Noze tools would have to call core.module.run()
-  // or dispatch_main(). This way they don't.
+  // or dispatchMain(). This way they don't.
   //
   // Essentially the process tries to exit normally (falls through
   // main.swift), and calls the atexit() handler. At this point we start
@@ -133,7 +130,7 @@ public class NozeCore : NozeModule {
     atexit {
       if !nozeWasInAtExit {
         nozeWasInAtExit = true
-        dispatch_main()
+        dispatchMain()
       }
     }
   }

@@ -13,8 +13,8 @@ import core
 /// 'source' and a 'target' aka a `GReadableSourceType` and
 /// `GWritableTargetType`.
 ///
-public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
-             : DuplexStream<TSource.SourceElement, TTarget.TargetElement>
+open class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
+           : DuplexStream<TSource.SourceElement, TTarget.TargetElement>
 {
   typealias ReadType  = TSource.SourceElement
   typealias WriteType = TTarget.TargetElement
@@ -25,7 +25,7 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
   
   public init(source        : TSource,
               target        : TTarget,
-              queue         : DispatchQueueType = core.Q,
+              queue         : DispatchQueue = core.Q,
               enableLogger  : Bool = false)
   {
     self.source = source
@@ -59,10 +59,10 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
       
       // Push the bucket (or EOF) we got from the source into our interal
       // buffer. This will trigger a Readable event.
-      self.push(bucket: bucket)
+      self.push(bucket)
       
       // TBD: in here or in read? or in both?
-      self.nextTick {
+      nextTick {
         self.maybeGenerateMore()
       }
     }
@@ -72,8 +72,8 @@ public class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
     source.pause()
   }
 
-  public override func _primaryWriteV(buckets c : [ [ WriteType ] ],
-                                      done      : ( Error?, Int ) -> Void)
+  public override func _primaryWriteV(buckets c: [ [ WriteType ] ],
+                                      done: @escaping ( Error?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     target.writev(queue: Q, chunks: c, yield: done)

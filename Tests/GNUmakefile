@@ -12,7 +12,7 @@ all : copy-nozeio-testcase-master
 
 copy-nozeio-testcase-master :
 	for i in child_processTests dnsTests fsTests httpTests jsonTests leftpadTests netTests; do \
-	  cp streams/NozeIOTestCase.swift $$i; \
+	  cp streamsTests/NozeIOTestCase.swift $$i; \
 	done
 
 test-clean :

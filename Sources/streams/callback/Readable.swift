@@ -54,13 +54,13 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   // MARK: - Init
   
   override public init(highWaterMark : Int? = 1,
-                       queue         : DispatchQueueType = core.Q,
+                       queue         : DispatchQueue = core.Q,
                        enableLogger  : Bool = false)
   {
     super.init(highWaterMark: highWaterMark, queue: queue,
                enableLogger: enableLogger)
   }
-  public convenience init(cb: () -> Void) {
+  public convenience init(cb: @escaping ( Void ) -> Void) {
     self.init()
     self._read(cb: cb)
   }
@@ -73,14 +73,14 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   /// A `read` callback producing values. It is called if a consumer desires
   /// values.
   /// This has a leading underscore just for Node compat.
-  func _read(cb lcb: () -> Void) {
+  func _read(cb lcb: @escaping ( Void ) -> Void) {
     cb = ReadableReadCB.NoArgs(lcb)
   }
   
   /// A `read` callback producing values. It is called if a consumer desires
   /// values.
   /// This has a leading underscore just for Node compat.
-  func _read(cb lcb: (Int) -> Void) {
+  func _read(cb lcb: @escaping ( Int  ) -> Void) {
     cb = ReadableReadCB.Amount(lcb)
   }
   
@@ -93,7 +93,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     switch cb {
       case .None:
         if !hitEOF {
-          push(bucket: nil) // right?
+          push(nil) // right?
         }
         break
       
@@ -109,6 +109,6 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
 
 enum ReadableReadCB {
   case None
-  case NoArgs(() -> Void)
-  case Amount((Int) -> Void)
+  case NoArgs(( Void ) -> Void)
+  case Amount(( Int  ) -> Void)
 }

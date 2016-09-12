@@ -98,7 +98,7 @@ class NozeIOBasicAsyncTests: NozeIOTestCase {
     
     if testCork {
       print("C: uncorking later ...")
-      stream.nextTick {
+      nextTick {
         print("C: uncork ...")
         stream.uncork()
       }

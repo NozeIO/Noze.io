@@ -72,7 +72,7 @@ public class SourceStream<G : GReadableSourceType>
   
   init(source        : G,
        highWaterMark : Int? = nil,
-       queue         : DispatchQueueType = core.Q,
+       queue         : DispatchQueue = core.Q,
        enableLogger  : Bool = false)
   {
     self.source = source
@@ -106,7 +106,7 @@ public class SourceStream<G : GReadableSourceType>
       
       // Push the bucket (or EOF) we got from the source into our interal
       // buffer. This will trigger a Readable event.
-      self.push(bucket: bucket)
+      self.push(bucket)
       
       // In here we used to call `self.nextTick { self.maybeGenerateMore() }`,
       // but I think this is wrong. It is called in other places and if
@@ -142,11 +142,5 @@ public extension GReadableSourceType {
   {
     return SourceStream(source: self, highWaterMark: hwm)
   }
-
-#if swift(>=3.0) // #swift3-1st-arg
-  public func readable(_ hwm: Int) -> SourceStream<Self> {
-    return readable(hwm: hwm)
-  }
-#endif
 
 }

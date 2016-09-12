@@ -23,7 +23,7 @@ import leftpad
 /// - tiny
 /// - dev    (colorized status)
 ///
-public func logger(format: String = "default") -> Middleware {
+public func logger(_ format: String = "default") -> Middleware {
   return { req, res, next in
     let startTS = timespec.monotonic()
     let fmt     = formats[format] ?? format
@@ -71,12 +71,6 @@ public func logger(format: String = "default") -> Middleware {
     next()
   }
 }
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public func logger(_ format: String = "default") -> Middleware {
-  return logger(format: format)
-}
-#endif
 
 
 private let formats = [
@@ -170,11 +164,7 @@ private struct LogInfoProvider {
     let padlen = LogInfoProvider.urlPadLen
     
     // right pad :-)
-    #if swift(>=3.0) // #swift3-fd
-      let s = Array<Character>(repeating: " ", count: (padlen - oldLength))
-    #else
-      let s = Array<Character>(count: padlen - oldLength, repeatedValue: " ")
-    #endif
+    let s = Array<Character>(repeating: " ", count: (padlen - oldLength))
     return url + String(s)
   }
 }

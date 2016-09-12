@@ -18,11 +18,7 @@ public extension POSIXErrorCode {
   var errorString : String? {
     let errno = self.rawValue
     guard errno != 0 else { return nil }
-#if swift(>=3.0) // #swift3-fd
     return String(cString: strerror(errno))
-#else
-    return String.fromCString(strerror(errno))
-#endif
   }
   
 }

@@ -20,15 +20,9 @@
 
   // Looks like todays Linux Swift doesn't have arc4random either.
   // Emulate it (badly).
-#if swift(>=3.0) // #swift3-1st-kwarg
   public func arc4random_uniform(_ v : UInt32) -> UInt32 { // sigh
     return UInt32(rand() % Int32(v))
   }
-#else
-  public func arc4random_uniform(v : UInt32) -> UInt32 { // sigh
-    return UInt32(rand() % Int32(v))
-  }
-#endif
   
   public let kill          = Glibc.kill
   public let chdir         = Glibc.chdir
@@ -121,27 +115,16 @@
 //   public let abort         = Darwin.abort
 //   public let exit          = Darwin.exit
 #if os(Linux)
-  @noreturn public func abort() { Glibc.abort() }
-#if swift(>=3.0) // #swift3-1st-arg
-  @noreturn public func exit(_ code: Int32) { Glibc.exit(code) }
-#else
-  @noreturn public func exit(code:   Int32) { Glibc.exit(code) }
-#endif
-
+  public func abort()             -> Never { Glibc.abort()    }
+  public func exit(_ code: Int32) -> Never { Glibc.exit(code) }
 #else // Darwin
-  @noreturn public func abort() { Darwin.abort() }
-#if swift(>=3.0) // #swift3-1st-arg
-  @noreturn public func exit(_ code: Int32) { Darwin.exit(code) }
-#else
-  @noreturn public func exit(code:   Int32) { Darwin.exit(code) }
-#endif
-
+  public func abort()             -> Never { Darwin.abort()    }
+  public func exit(_ code: Int32) -> Never { Darwin.exit(code) }
 #endif // Darwin
 
 
 // MARK: - process status macros
 
-#if swift(>=3.0) // #swift3-1st-arg
 private func _WSTATUS (_ x: CInt) -> CInt  { return x & 0x7F         }
 public  func WSTOPSIG (_ x: CInt) -> CInt  { return x >> 8           }
 public  func WIFEXITED(_ x: CInt) -> Bool  { return _WSTATUS(x) == 0 }
@@ -156,19 +139,3 @@ public func WIFSIGNALED (_ x: CInt) -> Bool {
 
 public func WEXITSTATUS(_ x: CInt) -> CInt { return (x >> 8) & 0xFF }
 public func WTERMSIG   (_ x: CInt) -> CInt { return _WSTATUS(x) }
-#else
-private func _WSTATUS (x: CInt) -> CInt  { return x & 0x7F         }
-public  func WSTOPSIG (x: CInt) -> CInt  { return x >> 8           }
-public  func WIFEXITED(x: CInt) -> Bool  { return _WSTATUS(x) == 0 }
-
-public func WIFSTOPPED (x: CInt) -> Bool {
-  return _WSTATUS(x) == 0x7F && WSTOPSIG(x) != 0x13
-}
-
-public func WIFSIGNALED (x: CInt) -> Bool {
-  return _WSTATUS(x) != 0x7F && _WSTATUS(x) != 0
-}
-
-public func WEXITSTATUS(x: CInt) -> CInt { return (x >> 8) & 0xFF }
-public func WTERMSIG   (x: CInt) -> CInt { return _WSTATUS(x) }
-#endif

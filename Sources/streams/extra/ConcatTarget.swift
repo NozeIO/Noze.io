@@ -22,13 +22,13 @@ public class ConcatTarget<ReadType> : GWritableTargetType {
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
-  public init(_ doneCB: ( [ TargetElement ] ) -> Void) {
+  public init(_ doneCB: @escaping ( [ TargetElement ] ) -> Void) {
     self.doneCB = doneCB
   }
   
-  public func writev(queue q : DispatchQueueType,
+  public func writev(queue q : DispatchQueue,
                      chunks  : [ [ TargetElement ] ],
-                     yield   : ( Error?, Int ) -> Void)
+                     yield   : @escaping ( Error?, Int ) -> Void)
   {
     var count = 0
     for chunk in chunks {

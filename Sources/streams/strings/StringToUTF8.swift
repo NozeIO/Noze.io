@@ -14,7 +14,7 @@ public class StringToUTF8: TransformStream<String, UInt8> {
   
   override init(readHWM      : Int? = nil,
                 writeHWM     : Int? = nil,
-                queue        : DispatchQueueType = core.Q,
+                queue        : DispatchQueue = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,
@@ -24,8 +24,8 @@ public class StringToUTF8: TransformStream<String, UInt8> {
   
   // MARK: - Transform
   
-  public override func _transform(bucket b : [ String ],
-                                  done     : ( Error?, [ UInt8 ]? ) -> Void)
+  public override func _transform(bucket b: [ String ],
+                                  done: @escaping ( Error?, [UInt8]? ) -> Void)
   {
     guard !b.isEmpty else { done(nil, []); return }
 
@@ -33,7 +33,7 @@ public class StringToUTF8: TransformStream<String, UInt8> {
       // FIXME: All this is lame and to much copying. It should be all redone
       //        for proper speed
       let bytes = Array<UInt8>(s.utf8)
-      push(bucket: bytes)
+      push(bytes)
     }
     
     done(nil, nil)

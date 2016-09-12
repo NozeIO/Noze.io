@@ -91,11 +91,7 @@ public struct Base64 {
     var encoded: String = ""
     
     func appendCharacterFromBase(idx character: Int) {
-      #if swift(>=3.0) // #swift3-fd
-        let idx = base64.index(base64.startIndex, offsetBy: character)
-      #else
-        let idx = base64.startIndex.advancedBy(character)
-      #endif
+      let idx = base64.index(base64.startIndex, offsetBy: character)
       encoded.append(base64[idx])
     }
     

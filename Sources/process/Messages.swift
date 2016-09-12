@@ -37,18 +37,9 @@ extension NozeProcess {
   }
 }
 
-public func emitWarning(warning: String, name: String = "Warning") {
-  module.emit(warning: Warning(name: name, message: warning))
-}
-public func emitWarning(warning: Error, name: String = "Warning") {
-  module.emit(warning: Warning(name: name, error: warning))
-}
-
-#if swift(>=3.0) // #swift3-1st-arg
 public func emitWarning(_ warning: String, name: String = "Warning") {
   module.emit(warning: Warning(name: name, message: warning))
 }
 public func emitWarning(_ warning: Error, name: String = "Warning") {
   module.emit(warning: Warning(name: name, error: warning))
 }
-#endif

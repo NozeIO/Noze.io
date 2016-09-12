@@ -6,11 +6,6 @@
 //  Copyright © 2016 Always Right Institute. All rights reserved.
 //
 
-#if swift(>=3.0) // #swift3-fd
-#else
-public typealias OptionSet = OptionSetType
-#endif
-
 // enum in original
 public struct HTTPParserOptions : OptionSet {
   // Use: let justChunked = HTTPParserOptions.F_CHUNKED

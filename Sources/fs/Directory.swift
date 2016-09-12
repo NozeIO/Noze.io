@@ -5,12 +5,11 @@
 //  Created by Helge Hess on 04/05/16.
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
-#if swift(>=3.0)
 import Dispatch
 import xsys
 import core
 
-public func readdir(_ path: String, cb: ( [ String ]? ) -> Void) {
+public func readdir(_ path: String, cb: @escaping ( [ String ]? ) -> Void) {
   module.Q.evalAsync(readdirSync, path, cb)
 }
 
@@ -27,7 +26,7 @@ public func readdirSync(_ path: String) -> [ String ]? {
   
   var entries = [ String ]()
   repeat {
-    var lEntry = UnsafeMutablePointer<xsys.dirent>(nil)
+    var lEntry : UnsafeMutablePointer<xsys.dirent>? = nil
     var buffer = xsys.dirent()
     let rc     = xsys.readdir_r(dir, &buffer, &lEntry)
     
@@ -44,10 +43,18 @@ public func readdirSync(_ path: String) -> [ String ]? {
       if entry.pointee.d_name.1 == 46 /* .. */ {
         guard entry.pointee.d_name.2 != 0 else { continue }
       }
-    }    
-    withUnsafePointer(&entry.pointee.d_name) { p in
-      let cs = UnsafePointer<CChar>(p) // cast
-      s = String(cString: cs) // TBD: rather validatingUTF8?
+    }
+   
+    
+    //&entry.pointee.d_name
+    
+    withUnsafePointer(to: &entry.pointee.d_name) { p in
+      // TBD: Cast ptr to (CChar,CChar) tuple to an UnsafePointer<CChar>.
+      //      Is this the right way to do it? No idea.
+      //      Rather do withMemoryRebound? But what about the capacity?
+      let rp  = UnsafeRawPointer(p)
+      let crp = rp.assumingMemoryBound(to: CChar.self)
+      s       = String(cString: crp) // TBD: rather validatingUTF8?
     }
 
     if let s = s {
@@ -60,5 +67,4 @@ public func readdirSync(_ path: String) -> [ String ]? {
   
   return entries
 }
-#endif // Swift >= 3
 

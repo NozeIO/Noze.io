@@ -83,7 +83,7 @@ public extension time_t {
   ///
   ///     xsys.time(nil).format("%a, %d %b %Y %H:%M:%S %Z")
   ///
-  public func format(sf: String) -> String {
+  public func format(_ sf: String) -> String {
     return self.componentsInUTC.format(sf)
   }
 }
@@ -116,7 +116,7 @@ public extension xsys.struct_tm {
   /// Example `strftime` format (`man strftime`):
   ///   "%a, %d %b %Y %H:%M:%S GMT"
   ///
-  public func format(sf: String, defaultCapacity: Int = 100) -> String {
+  public func format(_ sf: String, defaultCapacity: Int = 100) -> String {
     var tm = self
     
     // Yes, yes, I know.
@@ -124,7 +124,6 @@ public extension xsys.struct_tm {
     let attempt2Capacity = defaultCapacity > 1024 ? defaultCapacity * 2 : 1024
     var capacity = attempt1Capacity
     
-#if swift(>=3.0) // #swift3-cstr #swift3-ptr
     var buf = UnsafeMutablePointer<CChar>.allocate(capacity: capacity)
     defer { buf.deallocate(capacity: capacity) }
   
@@ -141,36 +140,6 @@ public extension xsys.struct_tm {
     }
   
     return String(cString: buf);
-#else // Swift 2.2
-    var buf = UnsafeMutablePointer<CChar>.alloc(capacity)
-    defer { buf.dealloc(capacity) }
-  
-    let rc = xsys.strftime(buf, capacity, sf, &tm)
-  
-    if rc == 0 {
-      buf.dealloc(capacity)
-      capacity = attempt2Capacity
-      buf = UnsafeMutablePointer<CChar>.alloc(capacity)
-      
-      let rc = xsys.strftime(buf, capacity, sf, &tm)
-      assert(rc != 0)
-      guard rc != 0 else { return "" }
-    }
-  
-    let s = String.fromCString(buf);
-    assert(s != nil)
-    return s ?? ""
-#endif
   }
   
 }
-
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public extension time_t {
-  public func format(_ sf: String) -> String { return self.format(sf: sf) }
-}
-public extension xsys.struct_tm {
-  public func format(_ sf: String) -> String { return self.format(sf: sf) }
-}
-#endif

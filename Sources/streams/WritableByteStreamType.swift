@@ -34,20 +34,6 @@ public protocol WritableByteStreamType
 public extension GWritableStreamType where WriteType == UInt8 {
   // TODO: UTF8View should be a BucketType ...
   
-  public func write(chunk: String, done: DoneCB? = nil) -> Bool {
-    let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    return writev(buckets: [ bucket ], done: done)
-  }
-  
-  public func end(chunk: String, doneWriting: DoneCB? = nil) {
-    let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    _ = writev(buckets: [ bucket ]) {
-      if let cb = doneWriting { cb() }
-      self.end()
-    }
-  }
-  
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
   @discardableResult
   public func write(_ chunk: String, done: DoneCB? = nil) -> Bool {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
@@ -61,5 +47,4 @@ public extension GWritableStreamType where WriteType == UInt8 {
       self.end()
     }
   }
-#endif
 }

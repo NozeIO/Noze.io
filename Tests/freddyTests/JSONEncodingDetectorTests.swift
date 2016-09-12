@@ -92,7 +92,7 @@ class JSONEncodingDetectorTests: XCTestCase {
 
 struct JSONEncodingUTFTestFixtures {
 
-    func hexArray(encoding: JSONEncodingDetector.Encoding, includeBOM: Bool) -> [UInt8] {
+    func hexArray(_ encoding: JSONEncodingDetector.Encoding, includeBOM: Bool) -> [UInt8] {
         switch encoding {
         case .UTF8:
             return includeBOM ? utf8BOM + utf8Hex : utf8Hex
@@ -106,27 +106,13 @@ struct JSONEncodingUTFTestFixtures {
             return includeBOM ? utf32BEBOM + utf32BEHex : utf32BEHex
         }
     }
-#if swift(>=3.0) // #swift3-1st-arg
-    func hexArray(_ encoding: JSONEncodingDetector.Encoding, includeBOM: Bool) -> [UInt8] {
-        return hexArray(encoding: encoding, includeBOM: includeBOM)
-    }
-#endif
 
-#if swift(>=3.0) // #swift3-1st-arg #swift3-decl #swift3-fd
     func withPrefixSlice<R>(_ encoding: JSONEncodingDetector.Encoding, includeBOM: Bool, body: @noescape (RandomAccessSlice<UnsafeBufferPointer<UInt8>>) -> R) -> R {
         let array = hexArray(encoding: encoding, includeBOM: includeBOM)
         return array.withUnsafeBufferPointer() {
             body($0.prefix(4))
         }
     }
-#else
-    func withPrefixSlice<R>(encoding: JSONEncodingDetector.Encoding, includeBOM: Bool, @noescape body: Slice<UnsafeBufferPointer<UInt8>> -> R) -> R {
-        let array = hexArray(encoding, includeBOM: includeBOM)
-        return array.withUnsafeBufferPointer() {
-            body($0.prefix(4))
-        }
-    }
-#endif
 
     // MARK: - UTF16
 

@@ -25,9 +25,9 @@ public protocol GWritableTargetType {
   /// The yield returns an error and/or the number of elements
   /// written (NOT the number of buckets!).
   /// The queue is the queue in which the yield must be run.
-  mutating func writev(queue q : DispatchQueueType,
+  mutating func writev(queue q : DispatchQueue,
                        chunks  : [ [ Self.TargetElement ] ],
-                       yield   : ( Error?, Int ) -> Void)
+                       yield   : @escaping ( Error?, Int ) -> Void)
 
   // TODO: need an 'end' (which then closes the target)
   

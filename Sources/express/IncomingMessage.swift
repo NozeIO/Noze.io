@@ -13,7 +13,7 @@ public extension IncomingMessage {
   // TODO: baseUrl, originalUrl, path
   // TODO: hostname, ip, ips, protocol
   
-  public func accepts(s: String) -> String? {
+  public func accepts(_ s: String) -> String? {
     // TODO: allow array values
     guard let acceptHeader = (self.headers[ci: "accept"] as? String) else {
       return nil
@@ -37,11 +37,3 @@ public extension IncomingMessage {
     return h.contains("XMLHttpRequest")
   }
 }
-
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public extension IncomingMessage {
-  public func accepts(_ s: String) -> String? { return accepts(s: s) }
-}
-#else // Swift 2.2
-#endif // Swift 2.2

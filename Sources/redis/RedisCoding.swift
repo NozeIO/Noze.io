@@ -48,7 +48,7 @@ extension Array: RedisEncodable {
         return rv.toRedis()
       }
       else { // hm, hm
-        return String(v).toRedis()
+        return String(describing: v).toRedis()
       }
     }
     return .Array(array)

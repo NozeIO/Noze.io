@@ -13,17 +13,11 @@ import core
 public class URLModule : NozeModule {
   // TODO: doesn't really belong here, but well.
   
-  public func parse(string: String) -> URL {
+  public func parse(_ string: String) -> URL {
     // TODO: parseQueryString, slashesDenoteHost
     return URL(string)
   }
-  
-  
-#if swift(>=3.0) // #swift3-1st-arg
-  public func parse(_ string: String) -> URL {
-    return parse(string: string)
-  }
-#endif
+
 }
 public let url = URLModule()
 
@@ -58,7 +52,7 @@ public struct URL {
   public init() {
   }
   public init(_ string: String) {
-    self = parse_url(string: string)
+    self = parse_url(string)
   }
   public init(baseURL: URL, path: String) {
     // FIXME: very basic implementation, should be more clever
@@ -199,14 +193,9 @@ public extension URL {
     guard uPath != ""      else { return nil }
     
     let isAbsolute = uPath.hasPrefix("/")
-#if swift(>=3.0) // #swift3-fd
     let pathComps  = uPath.characters.split(separator: "/",
                                             omittingEmptySubsequences: false)
                                      .map { String($0) }
-#else
-    let pathComps  = uPath.characters.split("/", allowEmptySlices: true)
-                                     .map { String($0) }
-#endif
     /* Note: we cannot just return a leading slash for absolute pathes as we
      *       wouldn't be able to distinguish between an absolute path and a
      *       relative path starting with an escaped slash.
@@ -294,19 +283,14 @@ extension URL : ExpressibleByStringLiteral {
 extension String {
   
   public func toURL() -> URL {
-    return parse_url(string: self)
+    return parse_url(self)
   }
   
 }
 
 extension String {
   
-#if swift(>=3.0) // #swift3-index
   func strstr(_ other: String) -> String.Index? {
-    return strstr(other: other)
-  }
-#endif
-  func strstr(other: String) -> String.Index? {
     // FIXME: make this a generic
     var start = startIndex
     
@@ -315,11 +299,7 @@ extension String {
       if subString.hasPrefix(other) {
         return start
       }
-#if swift(>=3.0) // #swift3-index
       start = self.index(after: start)
-#else
-      start = start.successor()
-#endif
     } while start != endIndex
     
     return nil
@@ -327,21 +307,11 @@ extension String {
   
 }
 
-#if swift(>=3.0) // #swift3-1st-arg #swift3-cstr
-func parse_url(_ us: String) -> URL {
-  return parse_url(string: us)
-}
-
 private func index(string: String, c: Character) -> String.Index? {
   return string.characters.index(of: c)
 }
-#else
-private func index(string s: String, c: Character) -> String.Index? {
-  return s.characters.indexOf(c)
-}
-#endif
 
-func parse_url(string us: String) -> URL {
+func parse_url(_ us: String) -> URL {
   // yes, yes, I know. Pleaze send me a proper version ;-)
   var url = URL()
   var s   = us
@@ -349,11 +319,7 @@ func parse_url(string us: String) -> URL {
   
   if let idx = s.strstr("://") {
     url.scheme = s[s.startIndex..<idx]
-#if swift(>=3.0) // #swift3-fd
     s = s[s.index(idx, offsetBy:3)..<s.endIndex]
-#else
-    s = s[idx.advancedBy(3)..<s.endIndex]
-#endif
     
     // cut off path
     if let idx = index(string: s, c: "/") {
@@ -364,21 +330,13 @@ func parse_url(string us: String) -> URL {
     // s: joe:pwd@host:port
     if let idx = index(string: s, c: "@") {
       url.userInfo = s[s.startIndex..<idx]
-#if swift(>=3.0) // #swift3-fd
       s = s[s.index(after:idx)..<s.endIndex]
-#else
-      s = s[idx.advancedBy(1)..<s.endIndex]
-#endif
     }
     
     // s: host:port
     if let idx = index(string: s, c: ":") {
       url.host = s[s.startIndex..<idx]
-#if swift(>=3.0) // #swift3-fd
       let portS = s[s.index(after:idx)..<s.endIndex]
-#else
-      let portS = s[idx.successor()..<s.endIndex]
-#endif
       let portO = Int(portS)
       debugPrint("ports \(portS) is \(portO)")
       if let port = portO {
@@ -396,20 +354,12 @@ func parse_url(string us: String) -> URL {
   
   if ps != "" {
     if let idx = index(string: ps, c: "?") {
-#if swift(>=3.0) // #swift3-fd
       url.query = ps[ps.index(after:idx)..<ps.endIndex]
-#else
-      url.query = ps[idx.advancedBy(1)..<ps.endIndex]
-#endif
       ps = ps[ps.startIndex..<idx]
     }
     
     if let idx = index(string: ps, c: "#") {
-#if swift(>=3.0) // #swift3-fd
       url.fragment = ps[ps.index(after:idx)..<ps.endIndex]
-#else
-      url.fragment = ps[idx.advancedBy(1)..<ps.endIndex]
-#endif
       ps = ps[ps.startIndex..<idx]
     }
     
@@ -432,32 +382,20 @@ func percentUnescape(string src: String) -> String {
   
   while cursor != endIdx {
     if src[cursor] == "%" { // %40 = @
-#if swift(>=3.0) // #swift3-fd
       let   v0idx = src.index(after:cursor)
-#else
-      let   v0idx = cursor.successor()
-#endif
       guard v0idx != endIdx else {
         dest += src[cursor..<endIdx]
         break
       }
       
-#if swift(>=3.0) // #swift3-fd
       let   v1idx = src.index(after:v0idx)
-#else
-      let   v1idx = v0idx.successor()
-#endif
       guard v1idx != endIdx else {
         dest += src[cursor..<endIdx]
         break
       }
       
-#if swift(>=3.0) // #swift3-fd
       // funny thing
       let hex   = src[v0idx..<src.index(after:v1idx)]
-#else
-      let hex   = src[v0idx...v1idx]
-#endif
       var isHex = true
       for c in hex.utf8 { // UTF-8 is fine because any UTF-8 is not hex
         guard (c >= 48 && c <= 57) || (c >= 65 && c <= 70)
@@ -469,33 +407,21 @@ func percentUnescape(string src: String) -> String {
       
       if !isHex {
         debugPrint("Invalid percent escapes: \(src)")
-#if swift(>=3.0) // #swift3-fd
         // funny thing
         dest += src[cursor..<src.index(after:v1idx)]
-#else
-        dest += src[cursor...v1idx]
-#endif
       }
       else {
         let code = hex.withCString {
           ( cs : UnsafePointer<CChar> ) -> Int in
           return strtol(cs, nil, 16)
         }
-        dest.append(UnicodeScalar(code))
+        dest.append(String(UnicodeScalar(code)!)) // TBD: !
       }
-#if swift(>=3.0) // #swift3-fd
       cursor = src.index(after:v1idx)
-#else
-      cursor = v1idx.successor()
-#endif
     }
     else {
       dest.append(src[cursor])
-#if swift(>=3.0) // #swift3-fd
       cursor = src.index(after:cursor)
-#else
-      cursor = cursor.successor()
-#endif
     }
   }
   return dest

@@ -17,7 +17,7 @@ import core
 ///       res.send("Waited 1337 ms")
 ///     }
 ///
-public func pause(timeout: Int, _ error: Error? = nil) -> Middleware {
+public func pause(_ timeout: Int, _ error: Error? = nil) -> Middleware {
   return { req, res, next in
     setTimeout(timeout) {
       if let error = error {
@@ -29,9 +29,3 @@ public func pause(timeout: Int, _ error: Error? = nil) -> Middleware {
     }
   }
 }
-
-#if swift(>=3.0) // #swift3-1st-arg
-public func pause(_ timeout: Int, _ error: Error? = nil) -> Middleware {
-  return pause(timeout: timeout, error)
-}
-#endif

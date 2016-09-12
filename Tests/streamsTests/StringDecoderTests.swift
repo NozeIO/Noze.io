@@ -48,7 +48,8 @@ class NozeIOStringDecoderTests: NozeIOTestCase {
     XCTAssertEqual(s, "Heß")
   }
   
-  private final func _testReadLines(input: String, _ expectedLines: [String]) {
+  private final func _testReadLines(_ input: String, _ expectedLines: [String])
+  {
     enableRunLoop() // pipes need runloops, that's why.
     
     input.utf8
@@ -65,11 +66,6 @@ class NozeIOStringDecoderTests: NozeIOTestCase {
     
     waitForExit()
   }
-#if swift(>=3.0) // #swift3-1st-arg
-  private final func _testReadLines(_ input: String, _ expectedLines: [String]) {
-    _testReadLines(input: input, expectedLines)
-  }
-#endif
   
   func testReadlines() {
     _testReadLines("Hello\nWorld", [ "Hello", "World" ])

@@ -6,8 +6,6 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0) // #swift3-fd
-
 extension Collection where Self.Iterator.Element : Equatable {
   // Can be done on SequenceType, but w/ the current imp only by converting
   // the sequences to collections ... So the user should rather do this
@@ -17,11 +15,11 @@ extension Collection where Self.Iterator.Element : Equatable {
 
   /// This is like SequenceType.split, except it doesn't just split on a single
   /// element, but on another sequence.
-  public func split<ST: Collection where ItemType == ST.Iterator.Element,
-                                         Index == ST.Index>
-                (separator sep: ST,
-                 omittingEmptySubsequences: Bool = false)
-                -> [ [ ItemType ] ]
+  public func split<ST: Collection>(separator sep: ST,
+                                    omittingEmptySubsequences: Bool = false)
+              -> [ [ ItemType ] ]
+                    where ItemType == ST.Iterator.Element,
+                          Index == ST.Index
   {
     // TODO: make available as a core stream
     // TODO: can we avoid the Array<T>()? This doesn't work, right?:
@@ -96,5 +94,3 @@ extension Collection where Self.Iterator.Element : Equatable {
   }
   
 }
-
-#endif

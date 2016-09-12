@@ -18,7 +18,9 @@ public class JsonFileModule : NozeModule {
   
   // MARK: - Reading
   
-  public func readFile(path: String, cb: ( SwiftError?, JSON? ) -> Void) {
+  public func readFile(_ path: String,
+                       cb: @escaping ( SwiftError?, JSON? ) -> Void)
+  {
     fs.readFile(path) { err, bytes in
       guard err == nil       else { cb(err,             nil); return }
       guard let utf8 = bytes else { cb(Error.GotNoData, nil); return }
@@ -36,7 +38,7 @@ public class JsonFileModule : NozeModule {
     }
   }
   
-  public func readFileSync(path: String, throws t: Bool=true) throws -> JSON? {
+  public func readFileSync(_ path: String, throws t: Bool=true) throws -> JSON?{
     // read file synchronously
     let bytes = fs.readFileSync(path)
     
@@ -59,20 +61,22 @@ public class JsonFileModule : NozeModule {
       else { return nil }
     }
   }
-  public func readFileSync(path: String) -> JSON? {
+  public func readFileSync(_ path: String) -> JSON? {
     return try! readFileSync(path, throws: false)
   }
   
   
   // MARK: - Writing
   
-  public func writeFile(path: String, _ oo: Any?, cb: ( SwiftError? ) -> Void) {
+  public func writeFile(_ path: String, _ oo: Any?,
+                        cb: @escaping (SwiftError?) -> Void)
+  {
     let s = fs.createWriteStream(path)
     
     var didCall = false
       // just to avoid multiple CB invocations, just report the first thing
-    _ = s.onError  { err in if !didCall { cb(err); didCall = true } }
-    _ = s.onFinish {        if !didCall { cb(nil); didCall = true } }
+    s.onError  { err in if !didCall { cb(err); didCall = true } }
+    s.onFinish {        if !didCall { cb(nil); didCall = true } }
     
     // TBD: This should support draining and such instead of filling the
     //      output buffer? Though what would be the gain? It needs to live
@@ -96,24 +100,3 @@ public class JsonFileModule : NozeModule {
 }
 
 public let jsonfile = JsonFileModule()
-
-
-#if swift(>=3.0) // #swift3-1st-arg
-public extension JsonFileModule {
-  
-  public func readFile(_ path: String, cb: ( SwiftError?, JSON? ) -> Void) {
-    readFile(path: path, cb: cb)
-  }
-  
-  public func readFileSync(_ p: String, throws t: Bool=true) throws -> JSON? {
-    return try readFileSync(path: p, throws: t)
-  }
-  public func readFileSync(_ path: String) -> JSON? {
-    return readFileSync(path: path)
-  }
-  
-  public func writeFile(_ p: String, _ oo: Any?, cb : ( SwiftError? ) -> Void) {
-    writeFile(path: p, oo, cb: cb)
-  }
-}
-#endif // Swift 3
