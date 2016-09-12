@@ -35,6 +35,12 @@ open class RequestOptions : ConnectOptions {
   public override init() {
     super.init()
   }
+
+  override open func appendToDescription(_ ms: inout String) {
+    super.appendToDescription(&ms)
+    
+    ms += " \(scheme) \(method) \"\(path)\""
+  }
 }
 
 public extension RequestOptions {

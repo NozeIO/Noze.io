@@ -40,7 +40,7 @@ public func connect(_ port: Int, _ host: String = "localhost",
   return Socket().connect(port: port, host: host, onConnect: onConnect)
 }
 
-open class ConnectOptions {
+open class ConnectOptions : CustomStringConvertible {
   public var hostname : String?     = "localhost"
   public var port     : Int         = 80
 
@@ -48,6 +48,23 @@ open class ConnectOptions {
   public var family   : sa_family_t = sa_family_t(xsys.AF_INET)
   
   public init() {}
+  
+  public var description: String {
+    var ms = "<\(type(of: self)):"
+    appendToDescription(&ms)
+    ms += ">"
+    return ms
+  }
+  
+  open func appendToDescription(_ ms: inout String) {
+    if let hostname = hostname {
+      ms += " \(hostname):\(port)"
+    }
+    else {
+      ms += " \(port)"
+    }
+  }
+  
 }
 
 @discardableResult
