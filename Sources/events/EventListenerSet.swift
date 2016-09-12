@@ -111,8 +111,20 @@ public class EventListenerSet<T> {
         }
         
         if entry.once {
+          // TODO: Sometimes this returns idx==0, but the array is actually
+          //       empty. No idea why, Swift bug? I don't think this can be
+          //       due to threading and we have no async here either?!
+          //       Note: sometimes hitting that on the MacBook (aka slow).
           if let idx = listeners.index(where: { $0 === entry }) {
-            listeners.remove(at: idx)
+            if idx != 0 || !listeners.isEmpty {
+              // assuming a bug in Swift returning 0 for empty arrays
+              listeners.remove(at: idx)
+            }
+            else {
+              print("WARN: got idx \(idx) but listeners are empty?!" +
+                    "      array: \(listeners)" +
+                    "      els:   \(self)")
+            }
           }
           else {
             print("WARN: listener race, already removed once-entry.")
