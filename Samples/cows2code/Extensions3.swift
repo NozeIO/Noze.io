@@ -15,11 +15,11 @@ extension Collection where Self.Iterator.Element : Equatable {
 
   /// This is like SequenceType.split, except it doesn't just split on a single
   /// element, but on another sequence.
-  public func split<ST: Collection where ItemType == ST.Iterator.Element,
-                                         Index == ST.Index>
-                (separator sep: ST,
-                 omittingEmptySubsequences: Bool = false)
-                -> [ [ ItemType ] ]
+  public func split<ST: Collection>(separator sep: ST,
+                                    omittingEmptySubsequences: Bool = false)
+              -> [ [ ItemType ] ]
+                    where ItemType == ST.Iterator.Element,
+                          Index == ST.Index
   {
     // TODO: make available as a core stream
     // TODO: can we avoid the Array<T>()? This doesn't work, right?:
