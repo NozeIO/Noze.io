@@ -24,7 +24,7 @@ public class Transform<WriteType, ReadType>
   
   public init(readHWM      : Int? = nil,
               writeHWM     : Int? = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool = false,
               transform    : @escaping TransformCB)
   {

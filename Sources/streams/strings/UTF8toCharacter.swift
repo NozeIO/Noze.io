@@ -14,7 +14,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   
   override init(readHWM      : Int? = nil,
                 writeHWM     : Int? = nil,
-                queue        : DispatchQueueType = core.Q,
+                queue        : DispatchQueue = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,

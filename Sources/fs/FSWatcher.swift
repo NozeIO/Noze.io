@@ -24,9 +24,9 @@ public class FSWatcher: ErrorEmitter {
   //      disadvantage: user has to read() instead of getting stuff pushed.
   
   let path       : String
-  let Q          : DispatchQueueType
+  let Q          : DispatchQueue
   var fd         : CInt?
-  var src        : DispatchSourceType? = nil
+  var src        : DispatchSourceProtocol? = nil
   var didRetainQ : Bool = false
   
   public init(_ filename : String,

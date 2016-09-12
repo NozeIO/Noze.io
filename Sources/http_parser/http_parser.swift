@@ -1176,22 +1176,15 @@ public extension http_parser {
 
                 limit = min(limit, HTTP_MAX_HEADER_SIZE);
 
-                // p_cr = (const char*) memchr(p, CR, limit);
-                // p_lf = (const char*) memchr(p, LF, limit);
-#if os(Linux)
-                let p_cr = UnsafePointer<CChar>(memchr(p!, Int32(CR), limit))
-                let p_lf = UnsafePointer<CChar>(memchr(p!, Int32(LF), limit))
-#else
                 let rCR = memchr(p!, Int32(CR), limit)
                 let rLF = memchr(p!, Int32(LF), limit)
-  
                 let p_cr = rCR != nil
                        ? UnsafePointer(rCR!.assumingMemoryBound(to: CChar.self))
                        : nil
                 let p_lf = rLF != nil
                        ? UnsafePointer(rLF!.assumingMemoryBound(to: CChar.self))
                        : nil
-#endif
+		       
                 if p_cr != nil {
                   if p_lf != nil && p_cr! >= p_lf! {
                     p = p_lf

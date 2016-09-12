@@ -48,7 +48,7 @@ class AsyncNumberGenerator : NumberGenerator, GReadableSourceType {
     super.init(max: max)
   }
   
-  func next(queue _: DispatchQueueType, count: Int = 1,
+  func next(queue _: DispatchQueue, count: Int = 1,
             yield: @escaping ( Error?, [Int]? )-> Void)
   {
     let log = self.log

@@ -54,7 +54,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   // MARK: - Init
   
   override public init(highWaterMark : Int? = 1,
-                       queue         : DispatchQueueType = core.Q,
+                       queue         : DispatchQueue = core.Q,
                        enableLogger  : Bool = false)
   {
     super.init(highWaterMark: highWaterMark, queue: queue,

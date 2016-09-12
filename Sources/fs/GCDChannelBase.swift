@@ -44,7 +44,7 @@ open class GCDChannelBase: CustomStringConvertible {
   // Note: This is not necessarily set! E.g. the FileSource directly creates
   //       a channel from a path.
   public var fd      : FileDescriptor  
-  public var channel : DispatchIOType! = nil
+  public var channel : DispatchIO! = nil
   
   let shouldClose    = true
 
@@ -117,11 +117,13 @@ open class GCDChannelBase: CustomStringConvertible {
      */
   }
   
-  public func createChannelIfMissing(Q q: DispatchQueueType) -> Error? {
+  public func createChannelIfMissing(Q q: DispatchQueue) -> Error? {
     guard fd.isValid     else { return POSIXErrorCode.EINVAL }
     guard channel == nil else { return nil }
     
-    channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
+    channel = DispatchIO(type: DispatchIO.StreamType.stream,
+                         fileDescriptor: fd.fd, queue: q,
+                         cleanupHandler: cleanupChannel)
     guard channel != nil else { return POSIXErrorCode(rawValue: xsys.errno) }
     
     // Essentially GCD channels already implement a buffer very similar to
@@ -177,7 +179,7 @@ open class GCDChannelBase: CustomStringConvertible {
   
   public var readsPending = 0
 
-  public func next(queue Q : DispatchQueueType, count: Int,
+  public func next(queue Q : DispatchQueue, count: Int,
                    yield   : @escaping ( Error?, [ SourceElement ]? ) -> Void)
   {
     let log = self.log
@@ -298,7 +300,7 @@ open class GCDChannelBase: CustomStringConvertible {
   
   public var writesPending = 0
 
-  public func writev(queue Q : DispatchQueueType,
+  public func writev(queue Q : DispatchQueue,
                      chunks  : [ ByteBucket ],
                      yield   : @escaping ( Error?, Int ) -> Void)
   {
@@ -323,18 +325,18 @@ open class GCDChannelBase: CustomStringConvertible {
     
     /* convert brigade into dispatch_data */
     
-    var data : DispatchDataType? = nil
+    var data : DispatchData? = nil
     for chunk in chunks {
       guard !chunk.isEmpty else { continue }
       
-      // TODO: copies data, could we just capture the chunks?
-      let chunkData = dispatch_data_create(chunk, chunk.count, Q,
-                                           DISPATCH_DATA_DESTRUCTOR_DEFAULT)
-      if let head = data {
-        data = dispatch_data_create_concat(head, chunkData)
-      }
-      else {
-        data = chunkData
+      chunk.withUnsafeBufferPointer { bp in
+        let chunkData = DispatchData(bytes: bp)
+        if data != nil {
+          data!.append(chunkData)
+        }
+        else {
+          data = chunkData
+        }
       }
     }
     

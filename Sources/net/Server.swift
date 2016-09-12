@@ -27,8 +27,8 @@ open class Server : ErrorEmitter, LameLogObjectType {
   public var isListening  : Bool { return backlog != nil }
   public var fd           : FileDescriptor?     = nil // fd can be invalid too
   public var address      : sockaddr_any?       = nil
-  public var listenSource : DispatchSourceType? = nil
-  public let Q            : DispatchQueueType
+  public var listenSource : DispatchSourceProtocol? = nil
+  public let Q            : DispatchQueue
   public var didRetainQ   : Bool = false // #linux-public
   
   public let allowHalfOpen  : Bool
@@ -36,7 +36,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   
   public init(allowHalfOpen  : Bool = false,
               pauseOnConnect : Bool = false,
-              queue          : DispatchQueueType = core.Q,
+              queue          : DispatchQueue = core.Q,
               enableLogger   : Bool = false)
   {
     self.Q   = queue

@@ -27,7 +27,7 @@ public protocol GReadableSourceType {
   /// The source can respond with less than count items, but it should not
   /// respond with more (otherwise the growth of the source buffer is out of
   /// control of the Readable).
-  mutating func next(queue q : DispatchQueueType,
+  mutating func next(queue q : DispatchQueue,
                      count   : Int,
                      yield   : @escaping ( Error?, [ Self.SourceElement ]? )
                                            -> Void)

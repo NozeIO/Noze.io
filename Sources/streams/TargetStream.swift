@@ -34,7 +34,7 @@ open class TargetStream<T : GWritableTargetType>
   // MARK: - Init
   
   init(target       : T, highWaterMark: Int? = nil,
-       queue        : DispatchQueueType = core.Q,
+       queue        : DispatchQueue = core.Q,
        enableLogger : Bool = false)
   {
     self.target = target

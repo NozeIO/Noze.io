@@ -60,7 +60,7 @@ public class NozeIOTestCase : XCTestCase {
   public func waitForExit(timeoutInMS to: Int =
                                  defaultWaitTimeoutInSecs * 1000)
   {
-    let timeout = xsys_dispatch_time(DISPATCH_TIME_NOW,
+    let timeout = xsys_dispatch_time(DispatchTime.now(),
                                 Int64(to) * Int64(NSEC_PER_MSEC))
 
     let rc = done.wait(timeout: timeout)

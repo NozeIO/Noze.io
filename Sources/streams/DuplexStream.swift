@@ -37,7 +37,7 @@ open class DuplexStream<ReadType, WriteType>
   
   public init(readHWM      : Int? = nil,
               writeHWM     : Int? = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool = false)
   {
     super.init(queue: queue, enableLogger: enableLogger)

@@ -25,7 +25,7 @@ public class UTF8ToLines: TransformStream<UInt8, String> {
   public init(removeCR     : Bool = true,
               readHWM      : Int? = nil,
               writeHWM     : Int? = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool = false)
   {
     self.removeCR = removeCR

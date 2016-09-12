@@ -14,7 +14,7 @@ public class NozeFS : NozeModule {
   
   // A queue which is used by all FS functions to do async operations (not
   // covered by GCD)
-  lazy var Q = xsys_get_default_global_queue()
+  lazy var Q = DispatchQueue.global()
 }
 public let module = NozeFS()
 

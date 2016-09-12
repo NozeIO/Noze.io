@@ -55,7 +55,7 @@ open class WritableStream<WriteType>
   // MARK: - Init
   
   public init(highWaterMark : Int?,
-              queue         : DispatchQueueType,
+              queue         : DispatchQueue,
               enableLogger  : Bool)
   {
     buffer = ListBuffer<WriteType>(highWaterMark: highWaterMark)

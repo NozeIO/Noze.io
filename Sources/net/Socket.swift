@@ -48,8 +48,8 @@ enum SocketConnectionState {
   case Connected
 }
 
-let connectQueue = dispatch_queue_create("io.noze.net.connect",
-                                         DISPATCH_QUEUE_CONCURRENT)
+let connectQueue = DispatchQueue(label:     "io.noze.net.connect",
+                                attributes: DispatchQueue.Attributes.concurrent)
 
 /// TODO: doc
 open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
@@ -66,7 +66,7 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   }
   
   public init(_ fd         : FileDescriptor   = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool             = false)
   {
     io = SocketSourceTarget(fd)

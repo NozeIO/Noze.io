@@ -19,7 +19,7 @@ class NumberPrinter : streams.SinkType, GWritableTargetType {
   
   static var defaultHighWaterMark : Int { return 2 }
   
-  func writev(queue q : DispatchQueueType,
+  func writev(queue q : DispatchQueue,
               chunks  : [ [ Int ] ],
               yield   : @escaping ( Error?, Int ) -> Void)
   {

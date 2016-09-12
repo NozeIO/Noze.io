@@ -47,14 +47,15 @@ public class FileSource: GCDChannelBase, GReadableSourceType {
   let mode      : mode_t = 0
   let openFlags = xsys.O_RDONLY
   
-  public override func createChannelIfMissing(Q q: DispatchQueueType)
+  public override func createChannelIfMissing(Q q: DispatchQueue)
                        -> Error?
   {
     guard channel == nil else { return nil }
     assert(!fd.isValid, "descriptor is valid, but channel is closed?")
     
-    channel = dispatch_io_create_with_path(xsys_DISPATCH_IO_STREAM, path,
-                                           openFlags, mode, q, cleanupChannel)
+    channel = DispatchIO(type: DispatchIO.StreamType.stream, path: path, 
+                         oflag: openFlags, mode: mode,
+                         queue: q, cleanupHandler: cleanupChannel)
     return channel != nil ? nil : POSIXErrorCode(rawValue: xsys.errno)
   }
   

@@ -26,7 +26,7 @@ public class ConcatTarget<ReadType> : GWritableTargetType {
     self.doneCB = doneCB
   }
   
-  public func writev(queue q : DispatchQueueType,
+  public func writev(queue q : DispatchQueue,
                      chunks  : [ [ TargetElement ] ],
                      yield   : @escaping ( Error?, Int ) -> Void)
   {

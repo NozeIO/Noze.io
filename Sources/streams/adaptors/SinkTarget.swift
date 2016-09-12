@@ -40,7 +40,7 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
     return count
   }
   
-  public mutating func writev(queue q : DispatchQueueType,
+  public mutating func writev(queue q : DispatchQueue,
                               chunks  : [ [ S.Element ] ],
                               yield   : @escaping ( Error?, Int ) -> Void)
   {
@@ -49,7 +49,7 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
   }
 }
 
-private func getDefaultWorkerQueue() -> DispatchQueueType {
+private func getDefaultWorkerQueue() -> DispatchQueue {
   /* Nope: Use a serial queue, w/o internal synchronization we would generate
            yields out of order.
   return dispatch_get_global_queue(QOS_CLASS_DEFAULT,
@@ -64,13 +64,13 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   public static var defaultHighWaterMark : Int { return 1 }
   
   var target              : S
-  let workerQueue         : DispatchQueueType
+  let workerQueue         : DispatchQueue
   let maxCountPerDispatch : Int
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
   public init(_ target            : S,
-              workerQueue         : DispatchQueueType = getDefaultWorkerQueue(),
+              workerQueue         : DispatchQueue = getDefaultWorkerQueue(),
               maxCountPerDispatch : Int = 16)
   {
     self.target              = target
@@ -86,7 +86,7 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   /// The number of generation attempts can be limited using the
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
-  public func writev(queue Q : DispatchQueueType,
+  public func writev(queue Q : DispatchQueue,
                      chunks  : [ [ S.Element ] ],
                      yield   : @escaping ( Error?, Int ) -> Void)
   {

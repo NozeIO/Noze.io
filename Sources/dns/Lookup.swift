@@ -12,8 +12,8 @@ import core
 
 public typealias LookupCB = ( Error?, sockaddr_any? ) -> Void
 
-let lookupQueue = dispatch_queue_create("io.noze.dns.lookup",
-                                        DISPATCH_QUEUE_CONCURRENT)
+let lookupQueue = DispatchQueue(label:      "io.noze.dns.lookup",
+                                attributes: DispatchQueue.Attributes.concurrent)
 
 /// Perform a DNS lookup using the system facilities.
 ///
