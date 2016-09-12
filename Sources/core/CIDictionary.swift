@@ -12,7 +12,7 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
   func lookupStoredKey(forCaseInsensitiveKey key: Key) -> Key? {
     let searchKey = ((key as? String) ?? String(describing: key)).lowercased()
     for k in self.keys {
-      let lowerK = ((key as? String) ?? String(describing: k)).lowercased()
+      let lowerK = ((k as? String) ?? String(describing: k)).lowercased()
       if searchKey == lowerK { return k }
     }
     return nil
