@@ -10,10 +10,11 @@ TARBALL="`ls swift-*.tar.gz`"
 echo "Tarball: $TARBALL"
 
 tar zx --strip 1 --file=$TARBALL
+pwd
 
-export PATH="$HOME/usr/bin:$PATH"
+export PATH="$PWD/usr/bin:$PATH"
 which swift
-find $HOME/usr/
+find $PWD/usr/
 
 if [ `which swift` ]; then
     echo "Installed Swift: `which swift`"
