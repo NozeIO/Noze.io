@@ -19,6 +19,7 @@ install:
     - ./xcconfig/install.sh
 
 script:
+    - export PATH="$HOME/usr/bin:$PATH"
     - export SWIFTENV_ROOT="$HOME/.swiftenv"
     - export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
     - git tag 0.3.1337

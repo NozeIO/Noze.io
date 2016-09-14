@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
+# our path is:
+#   /home/travis/build/NozeIO/Noze.io/
 
 # Install Swift
 
@@ -9,12 +10,14 @@ wget "${SWIFT_SNAPSHOT_NAME}"
 TARBALL="`ls swift-*.tar.gz`"
 echo "Tarball: $TARBALL"
 
-tar zx --strip 1 --file=$TARBALL
+TARPATH="$PWD/$TARBALL"
+
+cd $HOME # expand Swift tarball in $HOME
+tar zx --strip 1 --file=$TARPATH
 pwd
 
 export PATH="$PWD/usr/bin:$PATH"
 which swift
-find $PWD/usr/
 
 if [ `which swift` ]; then
     echo "Installed Swift: `which swift`"
