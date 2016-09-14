@@ -8,12 +8,12 @@ wget "${SWIFT_SNAPSHOT_NAME}"
 
 TARBALL="`ls swift-*.tar.gz`"
 echo "Tarball: $TARBALL"
-ls -la
 
 tar zx --strip 1 --file=$TARBALL
-ls -la
 
 export PATH="$HOME/usr/bin:$PATH"
+which swift
+find $HOME/usr/
 
 if [ `which swift` ]; then
     echo "Installed Swift: `which swift`"
