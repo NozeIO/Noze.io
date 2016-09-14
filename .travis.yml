@@ -7,7 +7,7 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0-GM-CANDIDATE/ubuntu1404/swift-3.0-GM-CANDIDATE/swift-3.0-GM-CANDIDATE-ubuntu14.04.tar.gz"
+          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0-release/ubuntu1404/swift-3.0-RELEASE/swift-3.0-RELEASE-ubuntu14.04.tar.gz"
           sudo: required
         - os:   osx
           osx_image: xcode8
