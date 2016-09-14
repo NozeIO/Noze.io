@@ -6,7 +6,7 @@
 
 wget "${SWIFT_SNAPSHOT_NAME}"
 
-tar zx --strip 1 --file=swift-*.tgz
+tar zx --strip 1 --file=swift-*.tar.gz
 export PATH="$HOME/usr/bin:$PATH"
 
 if [ `which swift` ]; then
