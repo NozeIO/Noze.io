@@ -1,20 +1,13 @@
 #!/bin/bash
 
-# URLS
-
-TT_SWIFTENV_URL="https://github.com/kylef/swiftenv.git"
-
-# swiftenv
-
-git clone --depth 1 ${TT_SWIFTENV_URL} ~/.swiftenv
-
-export SWIFTENV_ROOT="$HOME/.swiftenv"
-export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
-
+# export PATH="${SWIFTENV_ROOT}/bin:${SWIFTENV_ROOT}/shims:$PATH"
 
 # Install Swift
 
-swiftenv install ${SWIFT_SNAPSHOT_NAME}
+wget "${SWIFT_SNAPSHOT_NAME}"
+
+tar zx --strip 1 --file=swift-*.tgz
+export PATH="$HOME/usr/bin:$PATH"
 
 if [ `which swift` ]; then
     echo "Installed Swift: `which swift`"
@@ -27,6 +20,6 @@ swift --version
 
 # Environment
 
-TT_SWIFT_BINARY=`swiftenv which swift`
+TT_SWIFT_BINARY=`which swift`
 
 echo "${TT_SWIFT_BINARY}"
