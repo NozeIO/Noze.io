@@ -9,7 +9,7 @@
 import XCTest
 import core
 
-struct StdErrStream : OutputStream {
+struct StdErrStream : TextOutputStream {
   mutating func write(_ string: String) {
     fputs(string, stderr)
   }
@@ -60,8 +60,7 @@ public class NozeIOTestCase : XCTestCase {
   public func waitForExit(timeoutInMS to: Int =
                                  defaultWaitTimeoutInSecs * 1000)
   {
-    let timeout = xsys_dispatch_time(DispatchTime.now(),
-                                Int64(to) * Int64(NSEC_PER_MSEC))
+    let timeout = DispatchTime.now() + DispatchTimeInterval.milliseconds(to)
 
     let rc = done.wait(timeout: timeout)
     let didTimeout = rc == .timedOut
@@ -80,7 +79,7 @@ public class NozeIOTestCase : XCTestCase {
     }
   }
   
-  public func inRunloop(cb: @noescape (() -> Void) -> Void) {
+  public func inRunloop(cb: (@escaping () -> Void) -> Void) {
     enableRunLoop()
     cb( { self.exitIfDone() } )
     waitForExit()
