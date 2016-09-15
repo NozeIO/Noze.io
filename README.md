@@ -26,6 +26,11 @@ A focus is to keep the API similar to Node. Not always possible -
 Swift is not JavaScript - but pretty close.
 It comes with rechargeables included, **Noze.io** is self-contained and
 doesn't require any extra dependencies.
+It includes modules such as
+[cows](Sources/cows),
+[leftpad](Sources/leftpad),
+[express](Sources/express) or
+[redis](Sources/redis).
 
 **Noze.io** works in Cocoa environments as well as on Linux. Using Swift 3 GMc.
 Head over to our [Start](http://noze.io/start/) page for install instructions.
