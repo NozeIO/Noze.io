@@ -98,6 +98,9 @@
                <Test
                   Identifier = "NozeIOStdinTests">
                </Test>
+               <Test
+                  Identifier = "NozeIOTestCase">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
@@ -109,6 +112,11 @@
                BlueprintName = "NozeFSTests"
                ReferencedContainer = "container:Noze.io.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NozeIOTestCase">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -119,6 +127,11 @@
                BlueprintName = "NozeChildProcessTests"
                ReferencedContainer = "container:Noze.io.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NozeIOTestCase">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -154,6 +167,21 @@
                BlueprintName = "XSysTests"
                ReferencedContainer = "container:Noze.io.xcodeproj">
             </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8978F251D8A260D00ED4558"
+               BuildableName = "NozeCryptoTests.xctest"
+               BlueprintName = "NozeCryptoTests"
+               ReferencedContainer = "container:Noze.io.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NozeIOTestCase">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
