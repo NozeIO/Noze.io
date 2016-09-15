@@ -9,6 +9,7 @@ include $(PACKAGE_DIR)/xcconfig/config.make
 MODULES = \
 	http_parser 	\
 	Freddy  	\
+	CryptoSwift 	\
 	base64		\
 	mustache	\
 	xsys		\
@@ -16,6 +17,7 @@ MODULES = \
 	leftpad		\
 	events		\
 	streams		\
+	crypto		\
 	fs		\
 	json		\
 	dns		\
@@ -57,6 +59,7 @@ MODULE_BUILD_RESULTS = $(addprefix $(SWIFT_BUILD_DIR)/,$(MODULE_LIBS))
 all :
 	@$(MAKE) -C Sources/http_parser      all
 	@$(MAKE) -C Sources/Freddy           all
+	@$(MAKE) -C Sources/CryptoSwift      all
 	@$(MAKE) -C Sources/base64           all
 	@$(MAKE) -C Sources/mustache         all
 	@$(MAKE) -C Sources/xsys             all
@@ -64,6 +67,7 @@ all :
 	@$(MAKE) -C Sources/leftpad          all
 	@$(MAKE) -C Sources/events           all
 	@$(MAKE) -C Sources/streams          all
+	@$(MAKE) -C Sources/crypto           all
 	@$(MAKE) -C Sources/fs               all
 	@$(MAKE) -C Sources/json             all
 	@$(MAKE) -C Sources/dns              all

@@ -4,6 +4,7 @@ let package = Package(
   name:         "NozeIO",
   targets:      [
     Target(name: "Freddy"),
+    Target(name: "CryptoSwift"),
     Target(name: "http_parser"),
     Target(name: "base64"),
     Target(name: "mustache"),
@@ -17,11 +18,6 @@ let package = Package(
            dependencies: [
 	     .Target(name: "core")
 	   ]),
-    Target(name: "cows",
-           dependencies: [
-             .Target(name: "xsys"),
-             .Target(name: "core")
-           ]),
     Target(name: "events",
            dependencies: [
 	     .Target(name: "core")
@@ -45,6 +41,14 @@ let package = Package(
 	     .Target(name: "events"),
 	     .Target(name: "streams")
 	   ]),
+    Target(name: "crypto",
+           dependencies: [
+             .Target(name: "core"),
+             .Target(name: "xsys"),
+             .Target(name: "events"),
+             .Target(name: "streams"),
+             .Target(name: "CryptoSwift")
+           ]),
     Target(name: "dns",
            dependencies: [
 	     .Target(name: "core"),
@@ -102,7 +106,7 @@ let package = Package(
 	     .Target(name: "Freddy"),
 	     .Target(name: "json"),
 	     .Target(name: "leftpad")
-   ]),
+           ]),
     Target(name: "express",
            dependencies: [
 	     .Target(name: "core"),
@@ -121,6 +125,11 @@ let package = Package(
 	     .Target(name: "streams"),
 	     .Target(name: "net"),
 	     .Target(name: "console")
+	   ]),
+    Target(name: "cows",
+           dependencies: [
+	     .Target(name: "core"),
+	     .Target(name: "xsys")
 	   ])
   ],
   dependencies: []
