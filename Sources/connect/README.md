@@ -5,27 +5,25 @@ Connect is a Noze.io module modelled after the
 JavaScript framework from SenchaLabs.
 As usual in Noze.io the module is supposed to be as similar as possible.
 
-Connect builds on top of the Noze.io
-[http](https://github.com/NozeIO/Noze.io/tree/master/Sources/http)
-module.
+Connect builds on top of the Noze.io [http](../Sources/http/) module.
 It adds the concept of *middleware*. Middleware are just functions that can
 deal with HTTP requests. 
-hey take a request and response object as well as a 
-callback to signal whether they fully handled the request or whether Connect
-should run the next middleware.
+They take a request (`IncomingMessage`) and response (`ServerResponse`) object 
+as well as a  callback to signal whether they fully handled the request 
+or whether Connect should run the next middleware.
 That way you can stack middleware functions in a processing queue.
 Some middleware will just enhance the
 request object, like the cookie-parser, while some other middleware can deliver
 data, like the `serveStatic` middleware.
 
-*Express*: Connect adds the concept of middleware to the `http` module. Note
+**Express**: Connect adds the concept of middleware to the `http` module. Note
 that there is another module called
-[Express](https://github.com/NozeIO/Noze.io/tree/master/Sources/express)
+[Express](../express)
 which builds on top of Connect. Express provides even more advanced routing
 capabilities and other extras.
 
 Show us some code! This is the gist of the
-[connect-static](https://github.com/NozeIO/Noze.io/tree/master/Samples/connect-static/)
+[connect-static](../../Samples/connect-static/)
 example:
 
     import connect
@@ -41,7 +39,7 @@ example:
 It is a very basic HTTP server that serves all files living in the 'public'
 directory and logs the requests on stdout.
 Check out
-[connect-static](https://github.com/NozeIO/Noze.io/tree/master/Samples/connect-static/)
+[connect-static](../../Samples/connect-static/)
 for the full example.
 
 ## Examples
