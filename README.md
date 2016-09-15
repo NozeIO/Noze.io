@@ -26,12 +26,18 @@ A focus is to keep the API similar to Node. Not always possible -
 Swift is not JavaScript - but pretty close.
 It comes with rechargeables included, **Noze.io** is self-contained and
 doesn't require any extra dependencies.
+It includes modules such as
+[cows](https://github.com/NozeIO/Noze.io/tree/develop/Sources/cows),
+[leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad),
+[express](https://github.com/NozeIO/Noze.io/tree/develop/Sources/express) or
+[redis](https://github.com/NozeIO/Noze.io/tree/develop/Sources/redis).
 
-**Noze.io** works in Cocoa environments as well as on Linux,
-and it works with Swift 2.2/2.3 as well as the latest Swift 3 drop.
-In fact we suggest 2.2/2.3 until 
-[Swift 3](https://swift.org/blog/swift-3-0-release-process/)
-is actually released.
+**Noze.io** works in Cocoa environments as well as on Linux.
+The `master` branch is still setup for Swift 2 & Swift 3 Preview 4,
+if you are on Swift 3.0/Xcode 8, head over to the
+[develop](https://github.com/NozeIO/Noze.io/tree/develop)
+branch.
+
 Head over to our [Start](http://noze.io/start/) page for install instructions.
 
 *Is it a good idea?* You [tell us](http://noze.io/about/).
@@ -82,13 +88,15 @@ an email to tell us why this is crap (or not?).
 
 ### Supported Swift Versions
 
-| OS    | Swift | GCD     | Xcode                                                      | Make | SPM  |
-| ----- | ----- | ------- | ---------------------------------------------------------- | ---- | ---- |
-| macOS | 2.2.1 | builtin | [7.3.1](https://developer.apple.com/xcode/download/)       | 👍🏻  | 👎  |
-| macOS | 2.3   | builtin | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👎  |
-| macOS | 3p4   | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
-| tuxOS | 2.2.1 | [snapshot](https://github.com/helje5/swift-corelibs-libdispatch) |  | 👍🏻  | 👎  |
-| tuxOS | 3p4   | [upstream](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation) |  | 👍🏻  | 👍  |
+| OS    | Swift | Branch  | GCD     | Xcode                                                      | Make | SPM  |
+| ----- | ----- | ------- | ------- | ---------------------------------------------------------- | ---- | ---- |
+| macOS | 2.2.1 | master  | builtin | [7.3.1](https://developer.apple.com/xcode/download/)       | 👍🏻  | 👎  |
+| macOS | 2.3   | master  | builtin | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👎  |
+| macOS | 3p4   | master  | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
+| tuxOS | 2.2.1 | master  | [snapshot](https://github.com/helje5/swift-corelibs-libdispatch) |  | 👍🏻  | 👎  |
+| tuxOS | 3p4   | master  | [upstream](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation) |  | 👍🏻  | 👍  |
+| macOS | 3.0   | develop | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
+| tuxOS | 3.0   | develop | Objective-GCD |                                                            | 👍🏻  | 👍  |
 
 Noze.io supports Swift 2.2/2.3 in addition to the latest Swift 3 'preview'.
 Swift 2.2/2.3 is still the only stable Swift version.
