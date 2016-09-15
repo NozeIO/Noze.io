@@ -27,10 +27,10 @@ Swift is not JavaScript - but pretty close.
 It comes with rechargeables included, **Noze.io** is self-contained and
 doesn't require any extra dependencies.
 It includes modules such as
-[cows](https://github.com/NozeIO/Noze.io/tree/develop/Sources/cows),
-[leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad),
-[express](https://github.com/NozeIO/Noze.io/tree/develop/Sources/express) or
-[redis](https://github.com/NozeIO/Noze.io/tree/develop/Sources/redis).
+[cows](Sources/cows),
+[leftpad](Sources/leftpad),
+[express](Sources/express) or
+[redis](Sources/redis).
 
 **Noze.io** works in Cocoa environments as well as on Linux.
 The `master` branch is still setup for Swift 2 & Swift 3 Preview 4,
@@ -51,7 +51,7 @@ high performance statically typed and AOT-compiled language,
 #### Shows us some code!
 
 There is a reasonably large collection of simple, focused:
-[Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples)
+[Noze.io examples](Samples)
 But here you go, the "standard" Node example, a HelloWorld httpd:
 
     import http
@@ -73,7 +73,7 @@ An echo daemon, just piping the in-end of a socket into its own-out end:
     .listen(1337)
 
 More complex stuff including a Todo-MVC backend can be found in the
-[Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples).
+[Noze.io examples](Samples).
 Like what you see? Head over to our [Start page](http://noze.io/start/)
 to get started.
 
@@ -113,8 +113,8 @@ the usage of Noze.io smooth. Always a pain to use Swift 3 only projects ...
   Well kinda. It's pretty good already! 😉
 
 - It already has
-  [leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad).
-  As well as [cows 🐮](https://github.com/NozeIO/Noze.io/blob/master/Sources/cows/README.md)!
+  [leftpad](Sources/leftpad).
+  As well as [cows 🐮](Sources/cows/README.md)!
 
 - Implements primarily the happy path. Errors will error. Presumably this
   will improve over time.
@@ -123,7 +123,7 @@ the usage of Noze.io smooth. Always a pain to use Swift 3 only projects ...
   <a href="http://heathersfilm.tripod.com/script.txt" target="ext">myriad</a>s 
   of packages available for it.
   Or wait, is it? Well, at least we have
-  [leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad)
+  [leftpad](Sources/leftpad)
   included.
   And we hope that the [Swift package](https://swift.org/package-manager/)
   environment is going to grow as well.
