@@ -9,13 +9,15 @@ Express is a module based on top of
 [Connect](../connect).
 It is also based on middleware, but adds 
 additional routing features,
-support for templates (defaults to Mustache),
+support for templates (defaults to [Mustache](../mustache/)),
 and more fancy conveniences for JSON, etc ;-)
 
 Show us some code! Some code from the
 [express-simple](../../Samples/express-simple)
 example:
 
+    import express
+    
     let __dirname = process.cwd() // our modules have no __dirname
     
     let app = express()
