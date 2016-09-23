@@ -98,11 +98,17 @@ an email to tell us why this is crap (or not?).
 | macOS | 3.0   | develop | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
 | tuxOS | 3.0   | develop | Objective-GCD |                                                            | 👍🏻  | 👍  |
 
-Noze.io supports Swift 2.2/2.3 in addition to the latest Swift 3 'preview'.
-Swift 2.2/2.3 is still the only stable Swift version.
-Supporting both makes some code in Noze ugly, but it is still required to make 
+The Noze.io 
+[master](https://github.com/NozeIO/Noze.io/tree/master) branch
+supports Swift 2.2/2.3 in addition to Swift 3 Preview 4.
+Supporting both makes some code in Noze ugly, but was required to make 
 the usage of Noze.io smooth. Always a pain to use Swift 3 only projects ...
-(as you carefully need to select specific Swift 3 dumps as well as GCD).
+(as you carefully had to select specific Swift 3 dumps as well as GCD).
+
+The Noze.io
+[develop](https://github.com/NozeIO/Noze.io/tree/develop)
+supports the Swift 3.0 final release.
+
 
 ### Status
 
