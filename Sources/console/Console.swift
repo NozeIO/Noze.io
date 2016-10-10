@@ -32,28 +32,28 @@ public protocol ConsoleType {
   var logLevel : LogLevel { get }
   
   func primaryLog(_ logLevel: LogLevel, _ msgfunc: () -> String,
-                  _ values: [ Any ] )
+                  _ values: [ Any? ] )
 }
 
 public extension ConsoleType { // Actual logging funcs
   
-  public func error(_ msg: @autoclosure () -> String, _ values: Any...) {
+  public func error(_ msg: @autoclosure () -> String, _ values: Any?...) {
     primaryLog(.Error, msg, values)
   }
-  public func warn (_ msg: @autoclosure () -> String, _ values: Any...) {
+  public func warn (_ msg: @autoclosure () -> String, _ values: Any?...) {
     primaryLog(.Warn, msg, values)
   }
-  public func log  (_ msg: @autoclosure () -> String, _ values: Any...) {
+  public func log  (_ msg: @autoclosure () -> String, _ values: Any?...) {
     primaryLog(.Log, msg, values)
   }
-  public func info (_ msg: @autoclosure () -> String, _ values: Any...) {
+  public func info (_ msg: @autoclosure () -> String, _ values: Any?...) {
     primaryLog(.Info, msg, values)
   }
-  public func trace(_ msg: @autoclosure () -> String, _ values: Any...) {
+  public func trace(_ msg: @autoclosure () -> String, _ values: Any?...) {
     primaryLog(.Trace, msg, values)
   }
   
-  public func dir(_ obj: Any) {
+  public func dir(_ obj: Any?) {
     // TODO: implement more
     log("\(obj)")
   }
@@ -70,12 +70,12 @@ public class ConsoleBase : ConsoleType {
 
   public func primaryLog(_ logLevel: LogLevel,
                          _ msgfunc : () -> String,
-                         _ values : [ Any ] )
+                         _ values : [ Any? ] )
   {
   }
 }
 
-func writeValues<T: GWritableStreamType>(to t: T, _ values : [ Any ])
+func writeValues<T: GWritableStreamType>(to t: T, _ values : [ Any? ])
                  where T.WriteType == UInt8
 {
   for v in values {
@@ -115,7 +115,7 @@ public class Console<OutStreamType: GWritableStreamType> : ConsoleBase
   
   public override func primaryLog(_ logLevel : LogLevel,
                                   _ msgfunc  : () -> String,
-                                  _ values   : [ Any ] )
+                                  _ values   : [ Any? ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.
@@ -155,7 +155,7 @@ public class Console2<OutStreamType: GWritableStreamType,
   
   public override func primaryLog(_ logLevel : LogLevel,
                                   _ msgfunc  : () -> String,
-                                  _ values   : [ Any ] )
+                                  _ values   : [ Any? ] )
   {
     // Note: We just write and write and write, not waiting for the stream
     //       to actually drain the buffer.
