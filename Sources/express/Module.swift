@@ -14,7 +14,7 @@ public class NozeExpress : NozeModule {
 
 public var module = NozeExpress()
 
-public func express(middleware: @escaping Middleware...) -> Express {
+public func express(middleware: Middleware...) -> Express {
   let app = Express()
   
   for m in middleware {
