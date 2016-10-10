@@ -427,7 +427,7 @@ open class GCDChannelBase: CustomStringConvertible {
 }
 
 #if os(Linux)
-  import Glibc
+  import Glibc // TBD: for isprint?
 #endif
 
 func debugBucketAsString(bucket b: [ UInt8 ]) -> String {
