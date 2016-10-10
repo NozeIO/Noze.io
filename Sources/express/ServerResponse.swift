@@ -92,6 +92,11 @@ public extension ServerResponse {
     return getHeader(header)
   }
   public func set(_ header: String, _ value: Any?) {
-    return setHeader(header, value)
+    if let v = value {
+      setHeader(header, v)
+    }
+    else {
+      removeHeader(header)
+    }
   }
 }
