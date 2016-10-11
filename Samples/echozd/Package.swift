@@ -4,6 +4,6 @@ let package = Package(
   name: "echozd",
   dependencies: [
     .Package(url: "../..",
-             majorVersion: 0, minor: 3)
+             majorVersion: 0, minor: 5)
   ]
 )
