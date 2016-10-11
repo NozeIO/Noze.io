@@ -32,11 +32,8 @@ It includes modules such as
 [express](Sources/express) or
 [redis](Sources/redis).
 
-**Noze.io** works in Cocoa environments as well as on Linux.
-The `master` branch is still setup for Swift 2 & Swift 3 Preview 4,
-if you are on Swift 3.0/Xcode 8, head over to the
-[develop](https://github.com/NozeIO/Noze.io/tree/develop)
-branch.
+**Noze.io** works in Cocoa environments as well as on Linux. Use Xcode 8.0 on
+macOS and Swift 3.0.1 Preview 2 on Linux.
 
 Head over to our [Start](http://noze.io/start/) page for install instructions.
 
