@@ -7,10 +7,10 @@ matrix:
     include:
         - os:   Linux
           dist: trusty
-          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0-release/ubuntu1404/swift-3.0-RELEASE/swift-3.0-RELEASE-ubuntu14.04.tar.gz"
+          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0.1-preview-2/ubuntu1404/swift-3.0.1-PREVIEW-2/swift-3.0.1-PREVIEW-2-ubuntu14.04.tar.gz"
           sudo: required
-        - os:   osx
-          osx_image: xcode8
+#        - os:   osx
+#          osx_image: xcode8
 
 before_install:
     - ./xcconfig/before-install.sh
