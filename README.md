@@ -67,7 +67,9 @@ An echo daemon, just piping the in-end of a socket into its own-out end:
     }
     .listen(1337)
 
-More complex stuff including a Todo-MVC backend can be found in the
+More complex stuff including a 
+[Todo-MVC backend](https://github.com/NozeIO/Noze.io/blob/master/Samples/todo-mvc-redis/main.swift)
+can be found in the
 [Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples).
 Like what you see? Head over to our [Start page](http://noze.io/start/)
 to get started.
@@ -86,7 +88,7 @@ an email to tell us why this is crap (or not?).
 | OS    | Swift  | Xcode                                                      | Make | SPM  |
 | ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
 | macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
-| tuxOS | 3.0    |                                                            | 👍🏻  | 👍  |
+| tuxOS | [3.0.1 Preview 2](https://swift.org/download/#previews) | | 👍🏻  | 👍  |
 
 With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
 are still interested in using it with 2.x, the last release is still available
