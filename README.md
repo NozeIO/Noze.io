@@ -53,7 +53,7 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
 
     http.createServer { req, res in 
       res.writeHead(200, [ "Content-Type": "text/html" ])
-      res.end("\<h1\>Hello World\</h1\>")
+      res.end("<h1>Hello World</h1>")
     }
     .listen(1337)
 
