@@ -27,11 +27,7 @@ public func cwd() -> String {
   defer { free(rc) }
   guard rc != nil else { return "" }
   
-#if swift(>=3.0) // #swift3-cstr #swift3-ptr
   let s = String(validatingUTF8: rc!)
-#else
-  let s = String.fromCString(rc)
-#endif
   assert(s != nil, "could not convert cwd to String?!")
   return s!
 }

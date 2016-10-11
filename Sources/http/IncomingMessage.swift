@@ -32,7 +32,7 @@ public protocol IncomingMessageType : ReadableByteStreamType {
 /// This can be both, a Request or a Response - it is a Response when it got
 /// create by a client and it is a Request if it is coming from the Server.
 ///
-public class IncomingMessage: ReadableStream<UInt8>, IncomingMessageType {
+open class IncomingMessage: ReadableStream<UInt8>, IncomingMessageType {
   // Note: This has an own buffer. Beware of the difference between the HTTP
   //       protocol stream (consumed by the HTTP parser) with chunked encoding
   //       an all that - and the 'body' stream. In HTTP/1.0 this could have
@@ -75,7 +75,7 @@ public class IncomingMessage: ReadableStream<UInt8>, IncomingMessageType {
   
   // TODO: setTimeout(msecs,onTimeout)
   
-  public override var logStateInfo : String {
+  override open var logStateInfo : String {
     var s = ""
     
     if let ls = stream  {

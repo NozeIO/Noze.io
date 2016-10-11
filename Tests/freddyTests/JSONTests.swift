@@ -19,19 +19,11 @@ class JSONTests: XCTestCase {
         super.setUp()
         
 #if !SWIFT_PACKAGE // no bundles yet, need to load the files manually
-#if swift(>=3.0) // #swift3-fd
         let testBundle = NSBundle(for: JSONSubscriptingTests.self)
         guard let data = testBundle.urlForResource("sample", withExtension: "JSON").flatMap(NSData.init) else {
             XCTFail("Could not read sample data from test bundle")
             return
         }
-#else
-        let testBundle = NSBundle(forClass: JSONSubscriptingTests.self)
-        guard let data = testBundle.URLForResource("sample", withExtension: "JSON").flatMap(NSData.init) else {
-            XCTFail("Could not read sample data from test bundle")
-            return
-        }
-#endif
         sampleData = data
 #endif
     }

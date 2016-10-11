@@ -30,15 +30,9 @@ public extension JSON {
 
 public extension JSONParser {
 
-#if swift(>=3.0) // #swift3-1st-kwarg
   public static func createJSONFromData(_ data: NSData) throws -> JSON {
     return try JSON(data: data)
   }
-#else
-  public static func createJSONFromData(data: NSData) throws -> JSON {
-    return try JSON(data: data)
-  }
-#endif
 }
 
 public extension JSONParser {

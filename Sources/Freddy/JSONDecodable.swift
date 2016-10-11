@@ -113,7 +113,7 @@ internal extension JSON {
     /// - returns: An `Array` of `JSON` elements
     /// - throws: Any of the `JSON.Error` cases thrown by `decode(type:)`.
     /// - seealso: `JSON.decode(_:type:)`
-    static func getArray(json: JSON) throws -> [JSON] {
+    static func getArray(_ json: JSON) throws -> [JSON] {
         // Ideally should be expressed as a conditional protocol implementation on Swift.Array.
         guard case let .Array(array) = json else {
             throw Error.ValueNotConvertible(value: json, to: Swift.Array<JSON>)
@@ -125,10 +125,11 @@ internal extension JSON {
     /// - returns: An `Dictionary` of `String` mapping to `JSON` elements
     /// - throws: Any of the `JSON.Error` cases thrown by `decode(type:)`.
     /// - seealso: `JSON.decode(_:type:)`
-    static func getDictionary(json: JSON) throws -> [Swift.String: JSON] {
+    static func getDictionary(_ json: JSON) throws -> [Swift.String: JSON] {
         // Ideally should be expressed as a conditional protocol implementation on Swift.Dictionary.
         guard case let .Dictionary(dictionary) = json else {
-            throw Error.ValueNotConvertible(value: json, to: Swift.Dictionary<Swift.String, JSON>)
+            throw Error.ValueNotConvertible(value: json, 
+                                      to: Swift.Dictionary<Swift.String, JSON>)
         }
         return dictionary
     }
@@ -142,21 +143,11 @@ internal extension JSON {
     /// - throws: Any of the `JSON.Error` cases thrown by `decode(type:)`, as
     ///   well as any error that arises from decoding the contained values.
     /// - seealso: `JSON.decode(_:type:)`
-    static func getArrayOf<Decoded: JSONDecodable>(json: JSON) throws -> [Decoded] {
+    static func getArrayOf<Decoded: JSONDecodable>(_ json: JSON) throws 
+                -> [Decoded] 
+    {
         // Ideally should be expressed as a conditional protocol implementation on Swift.Dictionary.
         // This implementation also doesn't do the `type = Type.self` trick.
         return try getArray(json).map(Decoded.init)
     }
-    
-#if swift(>=3.0) // #swift3-1st-arg
-    static func getArray(_ json: JSON) throws -> [JSON] {
-      return try getArray(json: json)
-    }
-    static func getDictionary(_ json: JSON) throws -> [Swift.String: JSON] {
-      return try getDictionary(json: json)
-    }
-    static func getArrayOf<Decoded: JSONDecodable>(_ json: JSON) throws -> [Decoded] {
-      return try getArrayOf(json: json)
-    }
-#endif
 }

@@ -3,7 +3,7 @@
        align="right" />
 </h2>
 
-![Swift2n3](https://img.shields.io/badge/swift-2+3-blue.svg)
+![Swift3](https://img.shields.io/badge/swift-3-blue.svg)
 ![Mac OS X](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
@@ -58,7 +58,7 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
 
     http.createServer { req, res in 
       res.writeHead(200, [ "Content-Type": "text/html" ])
-      res.end("\<h1\>Hello World\</h1\>")
+      res.end("<h1>Hello World</h1>")
     }
     .listen(1337)
 
@@ -72,8 +72,10 @@ An echo daemon, just piping the in-end of a socket into its own-out end:
     }
     .listen(1337)
 
-More complex stuff including a Todo-MVC backend can be found in the
-[Noze.io examples](Samples).
+More complex stuff including a 
+[Todo-MVC backend](https://github.com/NozeIO/Noze.io/blob/master/Samples/todo-mvc-redis/main.swift)
+can be found in the
+[Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples).
 Like what you see? Head over to our [Start page](http://noze.io/start/)
 to get started.
 
@@ -88,33 +90,20 @@ an email to tell us why this is crap (or not?).
 
 ### Supported Swift Versions
 
-| OS    | Swift | Branch  | GCD     | Xcode                                                      | Make | SPM  |
-| ----- | ----- | ------- | ------- | ---------------------------------------------------------- | ---- | ---- |
-| macOS | 2.2.1 | master  | builtin | [7.3.1](https://developer.apple.com/xcode/download/)       | 👍🏻  | 👎  |
-| macOS | 2.3   | master  | builtin | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👎  |
-| macOS | 3p4   | master  | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
-| tuxOS | 2.2.1 | master  | [snapshot](https://github.com/helje5/swift-corelibs-libdispatch) |  | 👍🏻  | 👎  |
-| tuxOS | 3p4   | master  | [upstream](https://github.com/apple/swift-corelibs-libdispatch/tree/experimental/foundation) |  | 👍🏻  | 👍  |
-| macOS | 3.0   | develop | Objective-GCD | [8.0b](https://developer.apple.com/xcode/download/)        | 👍🏻  | 👍  |
-| tuxOS | 3.0   | develop | Objective-GCD |                                                            | 👍🏻  | 👍  |
+| OS    | Swift  | Xcode                                                      | Make | SPM  |
+| ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
+| macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
+| tuxOS | [3.0.1 Preview 2](https://swift.org/download/#previews) | | 👍🏻  | 👍  |
 
-The Noze.io 
-[master](https://github.com/NozeIO/Noze.io/tree/master) branch
-supports Swift 2.2/2.3 in addition to Swift 3 Preview 4.
-Supporting both makes some code in Noze ugly, but was required to make 
-the usage of Noze.io smooth. Always a pain to use Swift 3 only projects ...
-(as you carefully had to select specific Swift 3 dumps as well as GCD).
-
-The Noze.io
-[develop](https://github.com/NozeIO/Noze.io/tree/develop)
-supports the Swift 3.0 final release.
-
+With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
+are still interested in using it with 2.x, the last release is still available
+in the `legacy/swift23` branch on GitHub.
 
 ### Status
 
 - We chose the traditional Swift approach:
   Make something barely usable, though demoable,
-  and release it with a 2.0 version tag.
+  and release it with a 3.0 version tag.
   Then hope that the community kicks in and fills open spots.
   Well kinda. It's pretty good already! 😉
 

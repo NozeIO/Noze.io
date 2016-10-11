@@ -31,9 +31,11 @@ public enum sockaddr_any {
   public var len: __uint8_t {
 #if os(Linux)
     switch self {
-      case .AF_INET:  return __uint8_t(strideof(sockaddr_in.self))
-      case .AF_INET6: return __uint8_t(strideof(sockaddr_in6.self))
-      case .AF_LOCAL: return __uint8_t(strideof(sockaddr_un.self)) // TODO:wrong
+      case .AF_INET:  return __uint8_t(MemoryLayout<sockaddr_in>.stride)
+      case .AF_INET6: return __uint8_t(MemoryLayout<sockaddr_in6>.stride)
+      case .AF_LOCAL:
+        // TODO: just abort for now?
+        return __uint8_t(MemoryLayout<sockaddr_un>.stride) // TODO:wrong
     }
 #else
     switch self {
@@ -81,27 +83,15 @@ public enum sockaddr_any {
     // a little hacky ...
     switch T.domain {
       case xsys.AF_INET:
-#if swift(>=3.0)
         let lAddress = unsafeBitCast(address, to: xsys_sockaddr_in.self)
-#else
-        let lAddress = unsafeBitCast(address, xsys_sockaddr_in.self)
-#endif
         self = .AF_INET(lAddress)
       
       case xsys.AF_INET6:
-#if swift(>=3.0)
         let lAddress = unsafeBitCast(address, to: xsys_sockaddr_in6.self)
-#else
-        let lAddress = unsafeBitCast(address, xsys_sockaddr_in6.self)
-#endif
         self = .AF_INET6(lAddress)
       
       case xsys.AF_LOCAL: // TODO: this is likely wrong too (variable length!)
-#if swift(>=3.0)
         let lAddress = unsafeBitCast(address, to: xsys_sockaddr_un.self)
-#else
-        let lAddress = unsafeBitCast(address, xsys_sockaddr_un.self)
-#endif
         self = .AF_LOCAL(lAddress)
       
       default:

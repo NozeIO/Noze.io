@@ -36,7 +36,7 @@ import events
 /// - the buffer has a totalCount
 /// - hence an 'availableBufferSpace' which is HWM-totalCount
 ///
-public class ReadableStream<ReadType> : Stream, GReadableStreamType {
+open class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // FIXME: this has 'evolved' and needs a cleanup :-)
   // In the `Readable` subclass, <ReadType> is the ReadableSourceType.Element.
   
@@ -59,7 +59,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   // MARK: - Init
   
   public init(highWaterMark : Int?,
-              queue         : DispatchQueueType = core.Q,
+              queue         : DispatchQueue = core.Q,
               enableLogger  : Bool = false)
   {
     self.highWaterMark = highWaterMark ?? 1
@@ -79,7 +79,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   /// case a caller may need to check `hitEOF` to figure out whether `nil` was
   /// returned because of EOF.
   ///
-  public func read(count c: Int?) -> [ ReadType ]? {
+  open func read(count c: Int?) -> [ ReadType ]? {
     // This should only be called by the consumer, not internally.
     // If the consumer specifies a size, he needs to loop until nil and
     // check for a size.
@@ -154,7 +154,9 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     // TBD: in here or in push? or in both?
     // TBD: why is this even in here? It doesn't seem to make sense flow-wise?
     //      maybe to pick up an EOF?
-    maybeGenerateMore()
+    if !inGenerator { // TBD: this happens with pipes in the tests, debug why
+      maybeGenerateMore()
+    }
     
     // OK, so the buffer is empty and we hit EOF.
     if buffer.isEmpty && hitEOF {
@@ -266,7 +268,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   // MARK: - Pushing and Unshifting
   
-  public func push(bucket b: [ ReadType ]?) {
+  open func push(_ b: [ ReadType ]?) {
     // Pushing nil means EOF
     if let lBucket = b {
       assert(!hitEOF, "cannot push, already hit EOF")
@@ -293,7 +295,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     }
   }
   
-  public func unshift(bucket b: [ ReadType ]) {
+  open func unshift(_ b: [ ReadType ]) {
     // TBD: should unshift emit readable? The consumer just rejected the bucket
     //      and is probably waiting for more?
     /*
@@ -310,7 +312,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
                              shouldEmitReadable: Bool = true)
   {
     // called by push() and unshift()
-    buffer.enqueue(bucket: b, front: front)
+    buffer.enqueue(b, front: front)
     if shouldEmitReadable {
       emitReadable() // added something to read
     }
@@ -342,7 +344,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   public var scheduledReadable : Bool = false
   public var pendingReadable   : Int  = 0
   
-  public func emitReadable() {
+  open func emitReadable() {
     let log = self.log
     log.enter(); defer { log.leave() }
     
@@ -444,7 +446,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     }
   }
   
-  public func closeReadStream() { // subclasses can override this
+  open func closeReadStream() { // subclasses can override this
     if !didSendClose {
       didSendClose = true
       nextTick {
@@ -503,8 +505,8 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   // MARK: - Readable is a ReadableSource itself
   
-  public func next(queue q : DispatchQueueType, count: Int,
-                   yield   : ( Error?, [ ReadType ]? ) -> Void)
+  open func next(queue q : DispatchQueue, count: Int,
+                 yield   : @escaping ( Error?, [ ReadType ]? ) -> Void)
   {
     // dispatching yield on queue, though it should be the same (main) queue?
     
@@ -533,10 +535,10 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     }
   }
   
-  public func resume() {
+  open func resume() {
     _resume()
   }
-  public func pause() {
+  open func pause() {
     _pause()
   }
   
@@ -562,7 +564,8 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     }
   }
 
-  public func _installOnReadableHandler(handler cb: ReadableCB, once: Bool)
+  public func _installOnReadableHandler(handler cb: @escaping ReadableCB,
+                                        once: Bool)
               -> Self
   {
     readableListeners.add(handler: cb, once: once)
@@ -576,31 +579,38 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
     
     return self
   }
-  public func _installOnEndHandler(handler cb: ReadableCB, once: Bool) -> Self {
+  public func _installOnEndHandler(handler cb: @escaping ReadableCB,
+                                   once: Bool) -> Self
+  {
     endListeners.add(handler: cb, once: once)
     return self
   }
-  public func _installOnCloseHandler(handler cb: ReadableCB, once: Bool)
+  public func _installOnCloseHandler(handler cb: @escaping ReadableCB,
+                                     once: Bool)
               -> Self
   {
     closeListeners.add(handler: cb, once: once)
     return self
   }
   
-  public func onReadable(handler cb: ReadableCB) -> Self {
+  @discardableResult
+  public func onReadable(handler cb: @escaping ReadableCB) -> Self {
     log.enter(); defer { log.leave() }
     return _installOnReadableHandler(handler: cb, once: false)
   }
-  public func onceReadable(handler cb: ReadableCB) -> Self {
+  @discardableResult
+  public func onceReadable(handler cb: @escaping ReadableCB) -> Self {
     log.enter(); defer { log.leave() }
     return _installOnReadableHandler(handler: cb, once: true)
   }
   
-  public func onEnd(handler cb: EndCB) -> Self {
+  @discardableResult
+  public func onEnd(handler cb: @escaping EndCB) -> Self {
     log.enter(); defer { log.leave() }
     return _installOnEndHandler(handler: cb, once: false)
   }
-  public func onceEnd(handler cb: EndCB) -> Self {
+  @discardableResult
+  public func onceEnd(handler cb: @escaping EndCB) -> Self {
     log.enter(); defer { log.leave() }
     return _installOnEndHandler(handler: cb, once: true)
   }
@@ -608,7 +618,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   // MARK: - Logging
   
-  public override var logStateInfo : String {
+  override open var logStateInfo : String {
     var s = buffer.logStateInfo
     
     if availableBufferSpace < 1 { s += " FULL" }
@@ -636,7 +646,7 @@ public class ReadableStream<ReadType> : Stream, GReadableStreamType {
 // Don't raise the hwm > 128M items (Node.JS)
 let MAX_HWM = 0x800000;
 
-private func roundUpToNextPowerOfTwo(n: Int) -> Int {
+private func roundUpToNextPowerOfTwo(_ n: Int) -> Int {
   // Port of the Node pow2
   guard n < MAX_HWM else { return MAX_HWM }
 
@@ -651,8 +661,3 @@ private func roundUpToNextPowerOfTwo(n: Int) -> Int {
 
   return ln
 }
-#if swift(>=3.0) // #swift3-1st-kwarg
-private func roundUpToNextPowerOfTwo(_ n: Int) -> Int {
-  return roundUpToNextPowerOfTwo(n: n)
-}
-#endif

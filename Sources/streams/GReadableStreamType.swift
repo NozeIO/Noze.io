@@ -10,7 +10,6 @@
 public typealias ReadableCB = () -> Void
 public typealias EndCB      = () -> Void
 
-
 /// Primarily a marker interface which can be used as a *type* (which
 /// GReadableStreamType cannot (generic)).
 ///
@@ -25,25 +24,14 @@ public protocol ReadableStreamType : class, StreamType {
   func pause()
   func resume()
   
-#if swift(>=3.0) // #swift3-discardable-result
   /// This is emitted if a batch of `ReadType` items is available for reading,
   /// or - if EOF has been hit.
-  @discardableResult func onReadable  (handler cb: ReadableCB) -> Self
-  @discardableResult func onceReadable(handler cb: ReadableCB) -> Self
+  @discardableResult func onReadable  (handler cb: @escaping ReadableCB) -> Self
+  @discardableResult func onceReadable(handler cb: @escaping ReadableCB) -> Self
   
   /// This is emitted on EOF.
-  func onEnd       (handler cb: EndCB)      -> Self
-  func onceEnd     (handler cb: EndCB)      -> Self
-#else
-  /// This is emitted if a batch of `ReadType` items is available for reading,
-  /// or - if EOF has been hit.
-  func onReadable  (handler cb: ReadableCB) -> Self
-  func onceReadable(handler cb: ReadableCB) -> Self
-  
-  /// This is emitted on EOF.
-  func onEnd       (handler cb: EndCB)      -> Self
-  func onceEnd     (handler cb: EndCB)      -> Self
-#endif
+  func onEnd       (handler cb: @escaping EndCB)      -> Self
+  func onceEnd     (handler cb: @escaping EndCB)      -> Self
   
   /// Did the stream hit EOF? Useful to check when calling `read` with a size.
   /// Careful: That EOF has been hit, doesn't imply that the whole buffer has
@@ -100,12 +88,12 @@ public protocol GReadableStreamType : class, ReadableStreamType, StreamType {
   
   /// Push data (or EOF) to the stream buffer, this will result in an onReadable
   /// event eventually.
-  func push(bucket b: [ ReadType ]?)
+  func push(_ b: [ ReadType ]?)
   
   /// Like `push`, but this put the data into the front of the buffer. It is
   /// useful if a consuming stream could not handle all data, and wants to wait
   /// for more.
-  func unshift(bucket b: [ ReadType ])
+  func unshift(_ b: [ ReadType ])
 }
 
 public extension GReadableStreamType {
@@ -125,15 +113,3 @@ public extension GReadableStreamType {
   }
 
 }
-
-#if swift(>=3.0) // #swift3-1st-arg
-public extension GReadableStreamType {
-  func push   (_ bucket: [ ReadType ]?) { push   (bucket: bucket) }
-  func unshift(_ bucket: [ ReadType ])  { unshift(bucket: bucket) }
-}
-#else
-public extension GReadableStreamType {
-  func push   (bucket: [ ReadType ]?) { push   (bucket: bucket) }
-  func unshift(bucket: [ ReadType ])  { unshift(bucket: bucket) }
-}
-#endif

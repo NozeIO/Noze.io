@@ -62,7 +62,7 @@ public struct Route: MiddlewareObject {
   
   public func handle(request  req: IncomingMessage,
                      response res: ServerResponse,
-                     next     cb:  Next)
+                     next     cb:  @escaping Next)
   {
     guard matches(request: req) else { cb(); return }
     

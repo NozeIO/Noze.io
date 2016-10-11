@@ -13,11 +13,7 @@ public protocol SinkType { // 2beta4 has no SinkType anymore
   
   associatedtype Element
   
-#if swift(>=3.0)
   mutating func put(_ x: Self.Element)
-#else
-  mutating func put(x: Self.Element)
-#endif
 }
 
 public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
@@ -44,30 +40,22 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
     return count
   }
   
-  public mutating func writev(queue q : DispatchQueueType,
+  public mutating func writev(queue q : DispatchQueue,
                               chunks  : [ [ S.Element ] ],
-                              yield   : ( Error?, Int ) -> Void)
+                              yield   : @escaping ( Error?, Int ) -> Void)
   {
-#if swift(>=3.0) // #swift3-1st-kwarg
     let count = _writev(chunks: chunks)
-#else
-    let count = _writev(chunks)
-#endif
     yield(nil, count)
   }
 }
 
-private func getDefaultWorkerQueue() -> DispatchQueueType {
+private func getDefaultWorkerQueue() -> DispatchQueue {
   /* Nope: Use a serial queue, w/o internal synchronization we would generate
            yields out of order.
   return dispatch_get_global_queue(QOS_CLASS_DEFAULT,
                                    UInt(DISPATCH_QUEUE_PRIORITY_DEFAULT))
   */
-#if !swift(>=3.0) || !(os(OSX) || os(iOS) || os(watchOS) || os(tvOS))
-  return dispatch_queue_create("io.noze.target.sink.async", nil)
-#else
   return DispatchQueue(label: "io.noze.target.sink.async")
-#endif
 }
 
 public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
@@ -76,13 +64,13 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   public static var defaultHighWaterMark : Int { return 1 }
   
   var target              : S
-  let workerQueue         : DispatchQueueType
+  let workerQueue         : DispatchQueue
   let maxCountPerDispatch : Int
   
   // MARK: - Init from a GeneratorType or a SequenceType
   
   public init(_ target            : S,
-              workerQueue         : DispatchQueueType = getDefaultWorkerQueue(),
+              workerQueue         : DispatchQueue = getDefaultWorkerQueue(),
               maxCountPerDispatch : Int = 16)
   {
     self.target              = target
@@ -98,20 +86,16 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   /// The number of generation attempts can be limited using the
   /// maxCountPerDispatch property. I.e. that property presents an upper limit
   /// to the 'count' property which was passed in.
-  public func writev(queue Q : DispatchQueueType,
+  public func writev(queue Q : DispatchQueue,
                      chunks  : [ [ S.Element ] ],
-                     yield   : ( Error?, Int ) -> Void)
+                     yield   : @escaping ( Error?, Int ) -> Void)
   {
     // Note: we do capture self for the sink ...
     let maxCount = self.maxCountPerDispatch
     
     workerQueue.async {
-#if swift(>=3.0) // #swift3-1st-kwarg
       let count = self._writev(chunks: chunks, maxCount)
-#else
-      let count = self._writev(chunks, maxCount)
-#endif
-      
+            
       Q.async { yield(nil, count) }
     }
   }
@@ -121,12 +105,12 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
 
     for bucket in chunks {
       for value in bucket {
-	self.target.put(value)
-	count += 1
+      	self.target.put(value)
+      	count += 1
 
-	if count >= maxCount {
-	  break
-	}
+      	if count >= maxCount {
+      	  break
+      	}
       }
     }
     

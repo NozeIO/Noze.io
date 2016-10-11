@@ -14,7 +14,7 @@ public protocol MiddlewareObject {
   
   func handle(request  req: IncomingMessage,
               response res: ServerResponse,
-              next     cb:  Next)
+              next     cb:  @escaping Next)
   
 }
 

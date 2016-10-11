@@ -5,8 +5,7 @@
 //  Created by Robert Edwards on 1/27/16.
 //  Copyright © 2016 Big Nerd Ranch. All rights reserved.
 //
-#if swift(>=3.0) // #swift3-fd #swift3-1st-arg
-#else
+
 
 /// Struct for attempting to detect the Unicode encoding used with the data supplied to the JSONParser
 public struct JSONEncodingDetector {
@@ -58,7 +57,7 @@ public struct JSONEncodingDetector {
     ////
     //// - parameter header: The front Slice of data being read and evaluated.
     //// - returns: A tuple containing the detected Unicode encoding and the lenght of the byte order mark.
-    static func detectEncoding(header: Slice<UnsafeBufferPointer<UInt8>>) -> ByteStreamPrefixInformation {
+    static func detectEncoding(_ header: RandomAccessSlice<UnsafeBufferPointer<UInt8>>) -> ByteStreamPrefixInformation {
 
         guard let prefix = prefixFromHeader(header) else {
             return (.UTF8, 0)
@@ -84,7 +83,7 @@ public struct JSONEncodingDetector {
 
     private typealias EncodingBytePrefix = (UInt8, UInt8, UInt8?, UInt8?)
 
-    private static func prefixFromHeader(header: Slice<UnsafeBufferPointer<UInt8>>) -> EncodingBytePrefix? {
+    private static func prefixFromHeader(_ header: RandomAccessSlice<UnsafeBufferPointer<UInt8>>) -> EncodingBytePrefix? {
         if header.count >= 4 {
             return(header[0], header[1], header[2], header[3])
         } else if header.count >= 2 {
@@ -93,7 +92,7 @@ public struct JSONEncodingDetector {
         return nil
     }
 
-    private static func encodingFromBOM(prefix: EncodingBytePrefix) -> ByteStreamPrefixInformation? {
+    private static func encodingFromBOM(_ prefix: EncodingBytePrefix) -> ByteStreamPrefixInformation? {
         switch prefix {
         case(0xFE, 0xFF, _, _):
             return (.UTF16BE, 2)
@@ -109,18 +108,4 @@ public struct JSONEncodingDetector {
             return nil
         }
     }
-
-#if swift(>=3.0) // #swift3-1st-arg
-    static func detectEncoding(_ header: Slice<UnsafeBufferPointer<UInt8>>) -> ByteStreamPrefixInformation {
-      return detectEncoding(header: header)
-    }
-    private static func prefixFromHeader(_ header: Slice<UnsafeBufferPointer<UInt8>>) -> EncodingBytePrefix? {
-      return prefixFromHeader(header: header)
-    }
-    private static func encodingFromBOM(_ prefix: EncodingBytePrefix) -> ByteStreamPrefixInformation? {
-      return encodingFromBOM(prefix: prefix)
-    }
-#endif
 }
-
-#endif // Swift 2.2

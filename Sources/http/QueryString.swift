@@ -6,9 +6,7 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=3.0)
 import Foundation // for String.hasPrefix/hasSuffix
-#endif
 
 import core
 import console
@@ -19,7 +17,6 @@ public class QueryStringModule : NozeModule {
   // TODO: this is a little funky because URL parsing really happens at a byte
   //       level (% decoding etc)
   
-#if swift(>=3.0) // #swift3-1st-arg
   public func parse(_ string      : String,
                     separator     : Character = "&",
                     pairSeparator : Character = "=",
@@ -30,18 +27,6 @@ public class QueryStringModule : NozeModule {
                   separator: separator, pairSeparator: pairSeparator,
                   decodeURIComponent: decodeURIComponent)
   }
-#else
-  public func parse(string        : String,
-                    separator     : Character = "&",
-                    pairSeparator : Character = "=",
-                    decodeURIComponent : (( String ) -> String) = _unescape)
-              -> Dictionary<String, Any>
-  {
-    return _parse(string: string,
-                  separator: separator, pairSeparator: pairSeparator,
-                  decodeURIComponent: decodeURIComponent)
-  }
-#endif
 }
 public let querystring = QueryStringModule()
 
@@ -250,13 +235,6 @@ private func _unescape(string: String) -> String {
   
   newString.append(0) // zero terminate
   
-  return newString.withUnsafeBufferPointer { bp in
-    let p = UnsafePointer<CChar>(bp.baseAddress)
-#if swift(>=3.0) // #swift3-fd
-    return String(cString: p!)
-#else
-    return String.fromCString(p)!
-#endif
-  }
+  return String(cString: newString)
 }
 

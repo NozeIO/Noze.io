@@ -14,7 +14,7 @@ public class NozeFS : NozeModule {
   
   // A queue which is used by all FS functions to do async operations (not
   // covered by GCD)
-  lazy var Q = xsys_get_default_global_queue()
+  lazy var Q = DispatchQueue.global()
 }
 public let module = NozeFS()
 
@@ -26,9 +26,10 @@ public typealias StringCB = ( Error?, String?    ) -> Void
 public typealias ErrorCB  = ( Error?             ) -> Void
 
 
+#if !os(Linux) // 2016-09-12: Not yet available on Linux
 // MARK: - Watch Files or Directories. Get notified on changes.
 
-public func watch(filename   : String,
+public func watch(_ filename : String,
                   persistent : Bool = true,
                   recursive  : Bool = false,
                   listener   : FSWatcherCB? = nil) -> FSWatcher
@@ -40,14 +41,5 @@ public func watch(filename   : String,
   return FSWatcher(filename, persistent: persistent,
                    listener: listener)
 }
+#endif /* !Linux */
 
-#if swift(>=3.0) // #swift3-1st-kwarg
-public func watch(_ filename : String,
-                  persistent : Bool = true,
-                  recursive  : Bool = false,
-                  listener   : FSWatcherCB? = nil) -> FSWatcher
-{
-  return watch(filename: filename, persistent: persistent, recursive: recursive,
-               listener: listener)
-}
-#endif

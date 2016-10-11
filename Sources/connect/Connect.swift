@@ -13,7 +13,8 @@ import http
 public typealias Next       = (Any...) -> Void
 
 /// Supposed to call Next() when it is done.
-public typealias Middleware = (IncomingMessage, ServerResponse, Next) -> Void
+public typealias Middleware =
+                   ( IncomingMessage, ServerResponse, @escaping Next ) -> Void
 
 
 public class Connect {
@@ -23,12 +24,12 @@ public class Connect {
     let urlPrefix  : String?
     let middleware : Middleware
     
-    init(middleware: Middleware) {
+    init(middleware: @escaping Middleware) {
       self.middleware = middleware
       self.urlPrefix  = nil
     }
     
-    init(urlPrefix: String, middleware: Middleware) {
+    init(urlPrefix: String, middleware: @escaping Middleware) {
       self.urlPrefix  = urlPrefix
       self.middleware = middleware
     }
@@ -48,25 +49,16 @@ public class Connect {
   
   // MARK: - use()
   
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-  @discardableResult public func use(_ cb: Middleware) -> Self {
+  @discardableResult
+  public func use(_ cb: @escaping Middleware) -> Self {
     middlewarez.append(MiddlewareEntry(middleware: cb))
     return self
   }
-  @discardableResult public func use(_ p: String, _ cb: Middleware) -> Self {
+  @discardableResult
+  public func use(_ p: String, _ cb: @escaping Middleware) -> Self {
     middlewarez.append(MiddlewareEntry(urlPrefix: p, middleware: cb))
     return self
   }
-#else // Swift 2.2
-  public func use(cb: Middleware) -> Self {
-    middlewarez.append(MiddlewareEntry(middleware: cb))
-    return self
-  }
-  public func use(prefix: String, _ cb: Middleware) -> Self {
-    middlewarez.append(MiddlewareEntry(urlPrefix: prefix, middleware: cb))
-    return self
-  }
-#endif // Swift 2.2
   
   
   // MARK: - Closures to pass on
@@ -123,26 +115,17 @@ public class Connect {
 
 public extension Connect {
   
-  public func listen(port: Int? = nil, backlog: Int = 5,
+  @discardableResult
+  public func listen(_ port: Int?, backlog: Int = 5,
                      onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
     let server = http.createServer(onRequest: self.handle)
     _ = server.listen(port, backlog: backlog, onListening: cb)
     return self
   }
-  
-
-#if swift(>=3.0) // #swift3-1st-arg #swift3-discardable-result
-  @discardableResult
-  public func listen(_ port: Int?, backlog: Int = 5,
-                     onListening cb : (( net.Server ) -> Void)? = nil) -> Self
-  {
-    return listen(port: port, backlog: backlog, onListening: cb)
-  }
 
   func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
     doRequest(request: request, response)
   }
-#endif
   
 }

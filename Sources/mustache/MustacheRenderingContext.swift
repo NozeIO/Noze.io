@@ -47,7 +47,7 @@ public extension MustacheRenderingContext {
   }
 }
 
-public class MustacheDefaultRenderingContext : MustacheRenderingContext {
+open class MustacheDefaultRenderingContext : MustacheRenderingContext {
   
   public var string : String = ""
   public var stack  = [ Any? ]() // #linux-public
@@ -86,12 +86,8 @@ public class MustacheDefaultRenderingContext : MustacheRenderingContext {
   
   // MARK: - Value
   
-  public func value(forTag tag: String) -> Any? {
-    #if swift(>=3.0) // #swift3-fd
-      let check = stack.reversed()
-    #else
-      let check = stack.reverse()
-    #endif
+  open func value(forTag tag: String) -> Any? {
+    let check = stack.reversed()
     for c in check {
       if let v = KeyValueCoding.value(forKeyPath: tag, inObject: c) {
         return v
@@ -104,14 +100,14 @@ public class MustacheDefaultRenderingContext : MustacheRenderingContext {
   
   // MARK: - Lambda Context (same stack, empty String)
   
-  public func newLambdaContext() -> MustacheRenderingContext {
+  open func newLambdaContext() -> MustacheRenderingContext {
     return MustacheDefaultRenderingContext(context: self)
   }
 
   
   // MARK: - Partials
   
-  public func retrievePartial(name n: String) -> MustacheNode? {
+  open func retrievePartial(name n: String) -> MustacheNode? {
     return nil
   }
 }

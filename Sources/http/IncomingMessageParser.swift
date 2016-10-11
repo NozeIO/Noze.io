@@ -45,20 +45,20 @@ class IncomingMessageParser: http_parser_settings {
   var cbDone     : DoneCB?     = nil
   var cbData     : DataCB?     = nil
   
-  func onRequest(handler cb: RequestCB) -> Self {
+  func onRequest(handler cb: @escaping RequestCB) -> Self {
     cbRequest = cb
     return self
   }
-  func onResponse(handler cb: ResponseCB) -> Self {
+  func onResponse(handler cb: @escaping ResponseCB) -> Self {
     cbResponse = cb
     return self
   }
   /// HTTP message did complete (but Socket could be keep-alive!)
-  func onDone(handler cb: DoneCB) -> Self {
+  func onDone(handler cb: @escaping DoneCB) -> Self {
     cbDone = cb
     return self
   }
-  func onData(handler cb: DataCB) -> Self {
+  func onData(handler cb: @escaping DataCB) -> Self {
     cbData = cb
     return self
   }
@@ -81,8 +81,12 @@ class IncomingMessageParser: http_parser_settings {
     }
     
     let rc : xsys.size_t = b.withUnsafeBufferPointer { ptr in
-      let cp = UnsafePointer<CChar>(ptr.baseAddress)
-      return self.parser.execute(self, cp, b.count)
+      return ptr.baseAddress!.withMemoryRebound(to: CChar.self,
+                                                capacity: b.count)
+      {
+        cp in
+        return self.parser.execute(self, cp, b.count)
+      }
     }
     
     /* exit if parser failed */
@@ -153,10 +157,12 @@ class IncomingMessageParser: http_parser_settings {
               _ data: UnsafePointer<CChar>, _ len: size_t)
        -> Int
   {
+    // hm. should onBody be UInt8?
     // FIXME: do proper buckets. Should have a weak-bucket which copies only
     //        when it leaves the call stack.
     if heavyDebug { print("on-body: #\(len)") }
-    let cp     = UnsafePointer<UInt8>(data) // hm. should onBody be UInt8?
+    let rp     = UnsafeRawPointer(data)
+    let cp     = rp.assumingMemoryBound(to: UInt8.self)
     let buffer = UnsafeBufferPointer<UInt8>(start: cp, count:len)
     self.push(data: Array(buffer))
     return 0
@@ -180,7 +186,7 @@ class IncomingMessageParser: http_parser_settings {
     
     // fill request
     
-    let status = Int(parser.status_code ?? 0)
+    let status = Int(parser.status_code)
     let method = status == 0 ? parser.method.method : ""
     if heavyDebug { print("METHOD: \(method)") }
     let httpVersion : String

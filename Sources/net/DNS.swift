@@ -21,7 +21,7 @@ func gethoztbyname<T: SocketAddress>
   hints.ai_flags  = flags  // AI_CANONNAME, AI_NUMERICHOST, etc
   hints.ai_family = T.domain
   
-  var ptr = UnsafeMutablePointer<addrinfo>(nil)
+  var ptr : UnsafeMutablePointer<addrinfo>? = nil
   defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
   
   /* run lookup (synchronously, can be slow!) */
@@ -37,17 +37,10 @@ func gethoztbyname<T: SocketAddress>
   /* copy results - we just take the first match */
   var cn   : String? = nil
   var addr : T?      = nil
-#if swift(>=3.0) // #swift3-ptr
   if let ptr = ptr {
     cn   = ptr.pointee.canonicalName
     addr = ptr.pointee.address()
   }
-#else
-  if ptr != nil {
-    cn   = ptr.memory.canonicalName
-    addr = ptr.memory.address()
-  }
-#endif
   
   /* report results */
   cb(name, cn, addr)
@@ -79,7 +72,7 @@ func gethostzbyname<T: SocketAddress>
   hints.ai_flags  = flags  // AI_CANONNAME, AI_NUMERICHOST, etc
   hints.ai_family = T.domain
   
-  var ptr = UnsafeMutablePointer<addrinfo>(nil)
+  var ptr : UnsafeMutablePointer<addrinfo>? = nil
   defer { freeaddrinfo(ptr) } /* free OS resources (TBD: works with nil?) */
   
   /* run lookup (synchronously, can be slow!) */
@@ -97,17 +90,12 @@ func gethostzbyname<T: SocketAddress>
   
   if rc == 0 && ptr != nil {
     var pairs = Array<hapair>()
-#if swift(>=3.0)
+
     for info in ptr!.pointee {
       let pair : hapair = ( info.canonicalName, info.address() )
       pairs.append(pair)
     }
-#else
-    for info in ptr.memory {
-      let pair : hapair = ( info.canonicalName, info.address() )
-      pairs.append(pair)
-    }
-#endif
+
     results = pairs
   }
   

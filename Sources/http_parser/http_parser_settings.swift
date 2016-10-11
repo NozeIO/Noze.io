@@ -85,16 +85,36 @@ public struct http_parser_settings_cb : http_parser_settings {
   var cbChunkHeader     : http_cb? = nil
   var cbChunkComplete   : http_cb? = nil
 
-  public mutating func onMessageBegin   (cb: http_cb)      { cbMessageBegin    = cb }
-  public mutating func onURL            (cb: http_data_cb) { cbURL             = cb }
-  public mutating func onStatus         (cb: http_data_cb) { cbStatus          = cb }
-  public mutating func onHeaderField    (cb: http_data_cb) { cbHeaderField     = cb }
-  public mutating func onHeaderValue    (cb: http_data_cb) { cbHeaderValue     = cb }
-  public mutating func onHeadersComplete(cb: http_cb)      { cbHeadersComplete = cb }
-  public mutating func onBody           (cb: http_data_cb) { cbBody            = cb }
-  public mutating func onMessageComplete(cb: http_cb)      { cbMessageComplete = cb }
-  public mutating func onChunkHeader    (cb: http_cb)      { cbChunkHeader     = cb }
-  public mutating func onChunkComplete  (cb: http_cb)      { cbChunkComplete   = cb }
+  public mutating func onMessageBegin   (cb: @escaping http_cb)      {
+    cbMessageBegin    = cb
+  }
+  public mutating func onURL            (cb: @escaping http_data_cb) {
+    cbURL             = cb
+  }
+  public mutating func onStatus         (cb: @escaping http_data_cb) {
+    cbStatus          = cb
+  }
+  public mutating func onHeaderField    (cb: @escaping http_data_cb) {
+    cbHeaderField     = cb
+  }
+  public mutating func onHeaderValue    (cb: @escaping http_data_cb) {
+    cbHeaderValue     = cb
+  }
+  public mutating func onHeadersComplete(cb: @escaping http_cb)      {
+    cbHeadersComplete = cb
+  }
+  public mutating func onBody           (cb: @escaping http_data_cb) {
+    cbBody            = cb
+  }
+  public mutating func onMessageComplete(cb: @escaping http_cb)      {
+    cbMessageComplete = cb
+  }
+  public mutating func onChunkHeader    (cb: @escaping http_cb)      {
+    cbChunkHeader     = cb
+  }
+  public mutating func onChunkComplete  (cb: @escaping http_cb)      {
+    cbChunkComplete   = cb
+  }
 
   // MARK: - Protocol Implementation
   // don't confuse the names ;-)
@@ -104,7 +124,8 @@ public struct http_parser_settings_cb : http_parser_settings {
     return cb(p)
   }
   
-  public func onURL(parser p: http_parser, _ data: UnsafePointer<CChar>, _ len: size_t)
+  public func onURL(parser p: http_parser,
+                    _ data: UnsafePointer<CChar>, _ len: size_t)
               -> Int
   {
     guard let cb : http_data_cb = cbURL else { return 0 }

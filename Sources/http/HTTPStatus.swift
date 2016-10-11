@@ -43,15 +43,9 @@ public enum HTTPStatus : Equatable {
   case Extension(Int, String) // status, statusText
 }
 
-#if swift(>=3.0) // #swift3-fd
 extension HTTPStatus { // no more Boolean: SE-0109
   public var boolValue : Bool { return status >= 200 && status < 300 }
 }
-#else
-extension HTTPStatus : BooleanType {
-  public var boolValue : Bool { return status >= 200 && status < 300 }
-}
-#endif
 
 extension HTTPStatus : RawRepresentable {
   public init?(rawValue: Int) { self.init(rawValue) }

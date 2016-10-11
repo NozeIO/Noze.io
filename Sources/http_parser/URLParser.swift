@@ -104,7 +104,7 @@ public struct HTTPParserURL {
  * URL and non-URL states by looking for these.
  */
 
-func parse_url_char(s : ParserState, _ ch : CChar) -> ParserState {
+func parse_url_char(_ s: ParserState, _ ch: CChar) -> ParserState {
   if ch == cSPACE || ch == CR || ch == LF { return .s_dead }
   
   if HTTP_PARSER_STRICT {
@@ -191,8 +191,3 @@ func parse_url_char(s : ParserState, _ ch : CChar) -> ParserState {
   /* We should never fall out of the switch above unless there's an error */
   return .s_dead;
 }
-#if swift(>=3.0) // #swift3-fd
-func parse_url_char(_ s : ParserState, _ ch : CChar) -> ParserState {
-  return parse_url_char(s: s, ch)
-}
-#endif

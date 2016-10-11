@@ -10,9 +10,9 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
   // http://tinyurl.com/hazrvas
   
   func lookupStoredKey(forCaseInsensitiveKey key: Key) -> Key? {
-    let searchKey = String(key).lowercased()
+    let searchKey = ((key as? String) ?? String(describing: key)).lowercased()
     for k in self.keys {
-      let lowerK = String(k).lowercased()
+      let lowerK = ((k as? String) ?? String(describing: k)).lowercased()
       if searchKey == lowerK { return k }
     }
     return nil

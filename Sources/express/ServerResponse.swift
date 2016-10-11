@@ -21,14 +21,15 @@ public extension ServerResponse {
   ///
   ///     res.status(404).send("didn't find it")
   ///
-  public func status(code: Int) -> Self {
+  @discardableResult
+  public func status(_ code: Int) -> Self {
     statusCode = code
     return self
   }
   
   /// Set the HTTP status code and send the status description as the body.
   ///
-  public func sendStatus(code: Int) {
+  public func sendStatus(_ code: Int) {
     let status = HTTPStatus(code)
     statusCode = code
     send(status.statusText)
@@ -37,7 +38,7 @@ public extension ServerResponse {
   
   // MARK: - Sending Content
  
-  public func send(string: String) {
+  public func send(_ string: String) {
     if canAssignContentType {
       var ctype = string.hasPrefix("<html") ? "text/html" : "text/plain"
       ctype += "; charset=utf-8"
@@ -47,7 +48,7 @@ public extension ServerResponse {
     self.end(string)
   }
   
-  public func send(data: [UInt8]) {
+  public func send(_ data: [UInt8]) {
     if canAssignContentType {
       setHeader("Content-Type", "application/octet-stream")
     }
@@ -55,8 +56,8 @@ public extension ServerResponse {
     self.end(data)
   }
   
-  public func send(object: JSON)          { json(object) }
-  public func send(object: JSONEncodable) { json(object) }
+  public func send(_ object: JSON)          { json(object) }
+  public func send(_ object: JSONEncodable) { json(object) }
   
   var canAssignContentType : Bool {
     return !headersSent && getHeader("Content-Type") == nil
@@ -87,39 +88,15 @@ public extension ServerResponse {
   
   // MARK: - Header Accessor Renames
   
-  public func get(header: String) -> Any? {
+  public func get(_ header: String) -> Any? {
     return getHeader(header)
   }
-  public func set(header: String, _ value: Any?) {
-    return setHeader(header, value)
+  public func set(_ header: String, _ value: Any?) {
+    if let v = value {
+      setHeader(header, v)
+    }
+    else {
+      removeHeader(header)
+    }
   }
 }
-
-
-#if swift(>=3.0) // #swift3-1st-kwarg
-public extension ServerResponse {
-  
-  /// Set the HTTP status, returns self
-  ///
-  /// Example:
-  ///
-  ///     res.status(404).send("didn't find it")
-  ///
-  @discardableResult
-  public func status(_ code: Int) -> Self {
-    return status(code: code)
-  }
-  
-  /// Set the HTTP status code and send the status description as the body.
-  ///
-  public func sendStatus(_ code: Int) { sendStatus(code: code) }
-  
-  public func send(_ string: String)        { send(string: string) }
-  public func send(_ data:  [UInt8])        { send(data:   data)   }
-  public func send(_ object: JSON)          { send(object: object) }
-  public func send(_ object: JSONEncodable) { send(object: object) }
-
-  public func get(_ header: String)   -> Any?  { return get(header: header) }
-  public func set(_ header: String, _ v: Any?) { set(header: header, v) }
-}
-#endif // Swift 3

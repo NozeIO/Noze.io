@@ -14,7 +14,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   
   override init(readHWM      : Int? = nil,
                 writeHWM     : Int? = nil,
-                queue        : DispatchQueueType = core.Q,
+                queue        : DispatchQueue = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,
@@ -26,52 +26,44 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   
   var allData = Array<UInt8>() // super lame implementation
 
-  public override func _flush(done cb: ( Error?, [ Character ]? ) -> Void) {
-    
+  public override func _flush
+    (done cb: @escaping ( Error?, [ Character ]? ) -> Void)
+  {
     // copy, sigh
     if !allData.isEmpty {
       allData.append(0) // make it a cString
       let so : String? = allData.withUnsafeBufferPointer { ptr in
         // FIXME: throw conversion error
-#if swift(>=3.0) // #swift3-ptr
-        let cp = UnsafePointer<CChar>(ptr.baseAddress)
-        return String(validatingUTF8:cp!)
-#else
-        let cp = UnsafePointer<CChar>(ptr.baseAddress)
-        return String.fromCString(cp)
-#endif
+        return String(cString: ptr.baseAddress!)
       }
       
       allData.removeAll()
       
       // and yet another copy, dbl-sigh ;-)
       if let s = so {
-        push(bucket: Array(s.characters))
+        push(Array(s.characters))
       }
       else {
         catched(error: EncodingError.CouldNotDecodeCString)
       }
     }
     
-    push(bucket: nil) // EOF
+    push(nil) // EOF
     cb(nil, nil /* nil doesn't mean EOF here but don't push */) // done
   }
   
-  public override func _transform(bucket b : [ UInt8 ],
-                                  done     : ( Error?, [ Character ]? )
-                       -> Void)
+  public override func _transform(bucket b: [ UInt8 ],
+                                  done: @escaping
+                                        ( Error?, [ Character ]? ) -> Void)
   {
     // This is still lame, but at least we don't spool up for plain ASCII
     if allData.isEmpty {
-#if swift(>=3.0) // #swift3-fd
       let idxOrNot = b.index(where: { ((highBit & $0) == highBit) })
-#else
-      let idxOrNot = b.indexOf({ ((highBit & $0) == highBit) })
-#endif
       if let idx = idxOrNot {
         // found a high byte
         if idx > 0 {
-          push(bucket: b[0..<idx].map { Character(UnicodeScalar(Int($0)))})
+          // TODO: this should be a func: Array<UInt8>.asASCIICharacters
+          push(b[0..<idx].map { Character(UnicodeScalar(Int($0))!)})
           allData.append(contentsOf: b[idx..<b.count])
         }
         else {
@@ -80,7 +72,7 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
         done(nil, nil)
       }
       else { // whole bucket was ASCII
-        done(nil, b.map { Character(UnicodeScalar(Int($0))) })
+        done(nil, b.map { Character(UnicodeScalar(Int($0))!) })
       }
     }
     else { // already spooled up stuff

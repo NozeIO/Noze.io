@@ -118,7 +118,7 @@ extension Array: JSONEncodable {
         return jsonValue.toJSON()
       }
       else { // hm, hm
-        return String(v).toJSON()
+        return String(describing: v).toJSON()
       }
     }
     return .Array(arrayOfJSON)
@@ -131,13 +131,13 @@ extension Dictionary: JSONEncodable { // hh
     var jsonDictionary = [String: JSON]()
     
     for (k, v) in self {
-      let key = String(k)
+      let key = (k as? String) ?? String(describing: k)
       
       if let jsonValue = (v as? JSONEncodable) {
         jsonDictionary[key] = jsonValue.toJSON()
       }
       else {
-        jsonDictionary[key] = String(v).toJSON()
+        jsonDictionary[key] = String(describing: v).toJSON()
       }
     }
     

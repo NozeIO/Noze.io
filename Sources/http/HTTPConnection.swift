@@ -120,13 +120,13 @@ class HTTPConnection {
       self.cbMessage?(self, self.message)
     }
     _ = p.onDone { [unowned self] in // TBD: is this onFinish? or onEnd?
-      self.message.push(bucket: nil) // EOF - notifies the client that the read is done
+      self.message.push(nil) // EOF - notifies the client that the read is done
       // TODO: this should disassociate the message from the Socket and reset
       //       parsing/
       // self.emitDone()
     }
     _ = p.onData { [unowned self] data in
-      self.message.push(bucket: data)
+      self.message.push(data)
     }
   }
   

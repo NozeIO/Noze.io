@@ -22,10 +22,9 @@ import events
 /// Internally this class just uses the `ReadableStream` and `WritableStream`
 /// implementations (and have them deal with events and buffers).
 ///
-public class DuplexStream<ReadType, WriteType>
+open class DuplexStream<ReadType, WriteType>
            : Stream, GReadableStreamType, GWritableStreamType, PipeEmitTarget
-{
-  
+{  
   // NOTE: TODO: those are NOT really optionals, the streams need to be setup
   //             after init() returns, so that people can hook up event handlers
   //       TODO: does this imply the DuplexStream should be a Source/Target?
@@ -38,7 +37,7 @@ public class DuplexStream<ReadType, WriteType>
   
   public init(readHWM      : Int? = nil,
               writeHWM     : Int? = nil,
-              queue        : DispatchQueueType = core.Q,
+              queue        : DispatchQueue = core.Q,
               enableLogger : Bool = false)
   {
     super.init(queue: queue, enableLogger: enableLogger)
@@ -60,7 +59,7 @@ public class DuplexStream<ReadType, WriteType>
   }
   
   public func _primaryWriteV(buckets chunks : [ [ WriteType ] ],
-                             done   : ( Error?, Int ) -> Void)
+                             done           : @escaping ( Error?, Int ) -> Void)
   { // #linux-public
     log.enter(); defer { log.leave() }
     fatalError("subclass must override _primaryWriteV")
@@ -101,41 +100,37 @@ public class DuplexStream<ReadType, WriteType>
   public func pause () { readStream.pause()  }
   public func resume() { readStream.resume() }
   
-#if swift(>=3.0) // #swift3-discardable-result This-is-so-depressing
-  @discardableResult public func onReadable(handler cb: ReadableCB) -> Self {
+  @discardableResult
+  public func onReadable(handler cb: @escaping () -> Void) -> Self {
     _ = readStream.onReadable(handler: cb);   return self
   }
-  @discardableResult public func onceReadable(handler cb: ReadableCB) -> Self {
-    _ = readStream.onceReadable(handler: cb); return self
-  }
-  @discardableResult public func onEnd(handler cb: EndCB) -> Self {
-    _ = readStream.onEnd(handler: cb);   return self
-  }
-  @discardableResult public func onceEnd(handler cb: EndCB) -> Self {
-    _ = readStream.onceEnd(handler: cb); return self
-  }
-#else
-  public func onReadable(handler cb: ReadableCB) -> Self {
-    _ = readStream.onReadable(handler: cb);   return self
-  }
-  public func onceReadable(handler cb: ReadableCB) -> Self {
-    _ = readStream.onceReadable(handler: cb); return self
-  }
-  public func onEnd(handler cb: EndCB) -> Self {
-    _ = readStream.onEnd(handler: cb);   return self
-  }
-  public func onceEnd(handler cb: EndCB) -> Self {
-    _ = readStream.onceEnd(handler: cb); return self
-  }
-#endif
   
-  public var hitEOF : Bool { return readStream.hitEOF ?? true }
+  @discardableResult
+  public func onceReadable(handler cb: @escaping () -> Void) -> Self {
+    _ = readStream.onceReadable(handler: cb); return self
+  }
+  
+  @discardableResult
+  public func onEnd(handler cb: @escaping () -> Void) -> Self {
+    _ = readStream.onEnd(handler: cb);   return self
+  }
+  
+  @discardableResult
+  public func onceEnd(handler cb: @escaping () -> Void) -> Self {
+    _ = readStream.onceEnd(handler: cb); return self
+  }
+  
+  public var hitEOF : Bool {
+    guard let readStream = readStream else { return true }
+    return readStream.hitEOF
+  }
   
   
   // MARK: - WritableStream
   
   public func writev(buckets chunks: [ [ WriteType ] ], done: DoneCB?) -> Bool {
-    return writeStream.writev(buckets: chunks, done: done) ?? false
+    guard let writeStream = writeStream else { return false }
+    return writeStream.writev(buckets: chunks, done: done)
   }
   
   public func end() {
@@ -145,63 +140,41 @@ public class DuplexStream<ReadType, WriteType>
   
   // MARK: - WritableStream Events
   
-#if swift(>=3.0) // #swift3-discardable-result This-is-so-depressing
-  @discardableResult public func onDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onDrain(handler cb: @escaping DrainCB) -> Self {
     _ = writeStream.onDrain(handler: cb);    return self
   }
-  @discardableResult public func onceDrain(handler cb: DrainCB) -> Self {
+  @discardableResult
+  public func onceDrain(handler cb: @escaping DrainCB) -> Self {
     _ = writeStream.onceDrain(handler: cb);  return self
   }
   
-  @discardableResult public func onFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onFinish(handler cb: @escaping FinishCB) -> Self {
     _ = writeStream.onFinish(handler: cb);   return self
   }
-  @discardableResult public func onceFinish(handler cb: FinishCB) -> Self {
+  @discardableResult
+  public func onceFinish(handler cb: @escaping FinishCB) -> Self {
     _ = writeStream.onceFinish(handler: cb); return self
   }
   
-  @discardableResult public func onPipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onPipe(handler cb: @escaping PipeCB) -> Self {
     _ = writeStream.onPipe(handler: cb);     return self
   }
-  @discardableResult public func oncePipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func oncePipe(handler cb: @escaping PipeCB) -> Self {
     _ = writeStream.oncePipe(handler: cb);   return self
   }
   
-  @discardableResult public func onUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onUnpipe(handler cb: @escaping PipeCB) -> Self {
     _ = writeStream.onUnpipe(handler: cb);   return self
   }
-  @discardableResult public func onceUnpipe(handler cb: PipeCB) -> Self {
+  @discardableResult
+  public func onceUnpipe(handler cb: @escaping PipeCB) -> Self {
     _ = writeStream.onceUnpipe(handler: cb); return self
   }
-#else
-  public func onDrain(handler cb: DrainCB) -> Self {
-    _ = writeStream.onDrain(handler: cb);    return self
-  }
-  public func onceDrain(handler cb: DrainCB) -> Self {
-    _ = writeStream.onceDrain(handler: cb);  return self
-  }
-  
-  public func onFinish(handler cb: FinishCB) -> Self {
-    _ = writeStream.onFinish(handler: cb);   return self
-  }
-  public func onceFinish(handler cb: FinishCB) -> Self {
-    _ = writeStream.onceFinish(handler: cb); return self
-  }
-  
-  public func onPipe(handler cb: PipeCB) -> Self {
-    _ = writeStream.onPipe(handler: cb);     return self
-  }
-  public func oncePipe(handler cb: PipeCB) -> Self {
-    _ = writeStream.oncePipe(handler: cb);   return self
-  }
-  
-  public func onUnpipe(handler cb: PipeCB) -> Self {
-    _ = writeStream.onUnpipe(handler: cb);   return self
-  }
-  public func onceUnpipe(handler cb: PipeCB) -> Self {
-    _ = writeStream.onceUnpipe(handler: cb); return self
-  }
-#endif
   
   public func emit(pipe   src: ReadableStreamType) {
     _ = writeStream.emit(pipe: src)
@@ -213,7 +186,10 @@ public class DuplexStream<ReadType, WriteType>
   
   // MARK: - Corking
   
-  public var isCorked : Bool { return writeStream.isCorked ?? false }
+  public var isCorked : Bool {
+    guard let writeStream = writeStream else { return false }
+    return writeStream.isCorked
+  }
   public func cork()   { writeStream.cork()   }
   public func uncork() { writeStream.uncork() }
   
@@ -223,7 +199,10 @@ public class DuplexStream<ReadType, WriteType>
   // TBD: should remove, doesn't belong here. It depends on a concrete
   //      implementation
   public var highWaterMark : Int {
-    get { return readStream.highWaterMark ?? -1 }
+    get {
+      guard let readStream = readStream else { return -1 }
+      return readStream.highWaterMark
+    }
     set {
       readStream.highWaterMark = newValue
     }
@@ -232,11 +211,11 @@ public class DuplexStream<ReadType, WriteType>
   
   // MARK: - ReadableStream intern
   
-  public func push(bucket b: [ ReadType ]?) {
-    readStream.push(bucket: b)
+  public func push(_ b: [ ReadType ]?) {
+    readStream.push(b)
   }
-  public func unshift(bucket b: [ ReadType ]) {
-    readStream.unshift(bucket: b)
+  public func unshift(_ b: [ ReadType ]) {
+    readStream.unshift(b)
   }
   
   public func maybeGenerateMore() { // not really public
@@ -245,7 +224,7 @@ public class DuplexStream<ReadType, WriteType>
 
   // MARK: - Logging
   
-  override public var logStateInfo : String {
+  override open var logStateInfo : String {
     return super.logStateInfo + " in=\(readStream) out=\(writeStream)"
   }
 }
@@ -285,8 +264,8 @@ private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
                queue: parent.Q, enableLogger: parent.log.enabled)
   }
   
-  override func _primaryWriteV(buckets c : [ [ TO ] ],
-                               done      : ( Error?, Int ) -> Void)
+  override func _primaryWriteV(buckets c: [ [ TO ] ], 
+                               done: @escaping ( Error?, Int ) -> Void)
   {
     parent._primaryWriteV(buckets: c, done: done)
   }

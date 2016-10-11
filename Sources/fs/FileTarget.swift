@@ -48,15 +48,18 @@ public class FileTarget: GCDChannelBase, GWritableTargetType {
     super.init(nil) // all stored class properties must be init'ed? why?
   }
   
-  public override func createChannelIfMissing(Q q: DispatchQueueType) -> Error? {
+  public override func createChannelIfMissing(Q q: DispatchQueue) -> Error? {
     guard channel == nil else { return nil } // ignore double-call
     
     if fd.isValid { // we already have a file-descriptor, but no channel
-      channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
+      channel = DispatchIO(type: DispatchIO.StreamType.stream,
+                           fileDescriptor: fd.fd, queue: q,
+                           cleanupHandler: cleanupChannel)
     }
     else {
-      channel = dispatch_io_create_with_path(xsys_DISPATCH_IO_STREAM, path,
-                                             flags, mode, q, cleanupChannel)
+      channel = DispatchIO(type: DispatchIO.StreamType.stream, path: path, 
+                           oflag: flags, mode: mode,
+                           queue: q, cleanupHandler: cleanupChannel)
     }
     
     // Essentially GCD channels already implement a buffer very similar to

@@ -30,14 +30,16 @@ public class Writable<WriteType> : WritableStream<WriteType> {
   // MARK: - Init
   
   override public init(highWaterMark : Int? = 1,
-                       queue         : DispatchQueueType = core.Q,
+                       queue         : DispatchQueue = core.Q,
                        enableLogger  : Bool = false)
   {
     super.init(highWaterMark: highWaterMark, queue: queue,
                enableLogger: enableLogger)
   }
   
-  public convenience init(cb: ([ WriteType ], ( Error? ) -> Void) -> Void) {
+  public convenience init
+    (cb: @escaping ([ WriteType ], @escaping ( Error? ) -> Void) -> Void)
+  {
     self.init()
     self._write(cb: cb)
   }
@@ -52,15 +54,15 @@ public class Writable<WriteType> : WritableStream<WriteType> {
     cb = .JustChunk(lcb)
   }
   */
-  func _write(cb lcb: ([ WriteType ], ( Error? ) -> Void) -> Void) {
-    cb = .ChunkAndError(lcb)
+  func _write(cb: @escaping ([WriteType], @escaping (Error?) -> Void) -> Void) {
+    self.cb = .ChunkAndError(cb)
   }
   
   
   // MARK: - Writable Overrides
   
-  override func _primaryWriteV(buckets c: Brigade,
-                               done: ( Error?, Int ) -> Void)
+  override open func _primaryWriteV(buckets c: Brigade,
+                                    done: @escaping ( Error?, Int ) -> Void)
   {
     log.enter(); defer { log.leave() }
     
@@ -82,9 +84,10 @@ public class Writable<WriteType> : WritableStream<WriteType> {
 }
 
 enum WritableWriteCB<WriteType> {
+
   case None
-  case JustChunk    (([ WriteType ], ( )          -> Void) -> Void)
-  case ChunkAndError(([ WriteType ], (Error?) -> Void) -> Void)
+  case JustChunk    (([ WriteType ], @escaping ( ) -> Void) -> Void)
+  case ChunkAndError(([ WriteType ], @escaping (Error?)->Void) ->Void)
 }
 
 // lame, but gets the job done for now

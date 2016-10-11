@@ -16,34 +16,12 @@ SHARED_LIBRARY_PREFIX=lib
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Darwin)
-  # Swift version to use
-
-  # use latest by default
-  #SWIFT3_SNAPSHOT=DEVELOPMENT-SNAPSHOT-2016-05-31-a
-  #SWIFT2_SNAPSHOT=swift-2.2.1-SNAPSHOT-2016-04-23-a
-  ifeq ($(swiftv),3)
-    SWIFT_SNAPSHOT=$(SWIFT3_SNAPSHOT)
-  else
-    SWIFT_SNAPSHOT=$(SWIFT2_SNAPSHOT)
-  endif
-
   # lookup toolchain
 
   SWIFT_TOOLCHAIN_BASEDIR=/Library/Developer/Toolchains
-  ifneq ($(SWIFT_SNAPSHOT),)
-    SWIFT_TOOLCHAIN=$(SWIFT_TOOLCHAIN_BASEDIR)/$(SWIFT_SNAPSHOT).xctoolchain/usr/bin
-
-    ifeq ("$(wildcard $(SWIFT_TOOLCHAIN))","")
-      $(warning "Specified snapshot does not exist: $(SWIFT_TOOLCHAIN)")
-      SWIFT_SNAPSHOT=
-    endif
-  endif
-  ifeq ($(SWIFT_SNAPSHOT),)
-    SWIFT_TOOLCHAIN=$(SWIFT_TOOLCHAIN_BASEDIR)/swift-latest.xctoolchain/usr/bin
-    ifeq ("$(wildcard $(SWIFT_TOOLCHAIN))","")
-      SWIFT_TOOLCHAIN=$(shell dirname $(shell xcrun --toolchain swift-latest -f swiftc))
-    endif
-
+  SWIFT_TOOLCHAIN=$(SWIFT_TOOLCHAIN_BASEDIR)/swift-latest.xctoolchain/usr/bin
+  ifeq ("$(wildcard $(SWIFT_TOOLCHAIN))","")
+    SWIFT_TOOLCHAIN=$(shell dirname $(shell xcrun --toolchain swift-latest -f swiftc))
   endif
 
   # platform settings
@@ -58,15 +36,7 @@ else
   OS=$(shell lsb_release -si | tr A-Z a-z)
   VER=$(shell lsb_release -sr)
 
-  #SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-05-31-a-$(OS)$(VER)
-  SWIFT_SNAPSHOT=
-
-  ifneq ($(SWIFT_SNAPSHOT),)
-    SWIFT_TOOLCHAIN_BASEDIR=$(HOME)/swift-not-so-much
-    SWIFT_TOOLCHAIN=$(SWIFT_TOOLCHAIN_BASEDIR)/$(SWIFT_SNAPSHOT)/usr/bin
-  endif
   SHARED_LIBRARY_SUFFIX=.so
-  SWIFT_INTERNAL_BUILD_FLAGS  += -Xcc -fblocks -Xlinker -ldispatch
 endif
 
 

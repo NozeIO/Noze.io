@@ -121,11 +121,7 @@ public class ChildProcess : ErrorEmitter {
     
     if didRetainCore { core.module.release(); didRetainCore = false }
     
-#if swift(>=3.0) // #swift3-fd
     let myIdx = activeChildProcesses.index(where: { $0 === self })
-#else
-    let myIdx = activeChildProcesses.indexOf { $0 === self }
-#endif
     if let idx = myIdx {
       activeChildProcesses.remove(at: idx)
     }
@@ -155,11 +151,11 @@ public class ChildProcess : ErrorEmitter {
   
   public var exitListeners = EventListenerSet<(Int?,Int?)>()
   
-  public func onExit(cb: ExitCB) -> Self {
+  public func onExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb)
     return self
   }
-  public func onceExit(cb: ExitCB) -> Self {
+  public func onceExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb, once: true)
     return self
   }

@@ -94,7 +94,7 @@ class Session {
           channel.sendMessage(source: nick, message: message)
         }
         else {
-          send(source: serverID, command: 401, nick ?? "<unknown>", target,
+          send(source: serverID, command: 401, nick, target,
                "No such nick/channel")
         }
       
@@ -115,15 +115,9 @@ class Session {
         for channelName in channels {
           if let channel = nameToChannel[channelName] {
             channel.part(session: self)
-#if swift(>=3.0) // #swift3-fd
             if let idx = channelsJoined.index(where: { $0 === channel }) {
               channelsJoined.remove(at: idx)
             }
-#else
-            if let idx = channelsJoined.indexOf({ $0 === channel }) {
-              channelsJoined.remove(at: idx)
-            }
-#endif
           }
         }
       

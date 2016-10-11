@@ -23,7 +23,7 @@ func nextSessionID(msg: IncomingMessage) -> String {
 
 public func session(store s : SessionStore = InMemorySessionStore(),
                     cookie  : Cookie       = sessionIdCookie,
-                    genid   : SessionIdGenerator = nextSessionID)
+                    genid   : @escaping SessionIdGenerator = nextSessionID)
             -> Middleware
 {
   return { req, res, next in
@@ -83,7 +83,7 @@ class SessionContext {
   
   init(request: IncomingMessage, response: ServerResponse,
        store: SessionStore, templateCookie: Cookie,
-       genid: SessionIdGenerator)
+       genid: @escaping SessionIdGenerator)
   {
     self.req       = request
     self.res       = response

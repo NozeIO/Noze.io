@@ -34,28 +34,19 @@ private let debugClose = false
 /// FIXME: The byte buffer implementation seems to be a major performance bug in
 ///        this implementation.
 ///
-public class GCDChannelBase: CustomStringConvertible {
+open class GCDChannelBase: CustomStringConvertible {
   
   public typealias SourceElement = UInt8
   public typealias TargetElement = UInt8
   
-  public let log = Logger(enabled: false)
+  public let log     = Logger(enabled: false)
   
   // Note: This is not necessarily set! E.g. the FileSource directly creates
   //       a channel from a path.
-  public var fd  : FileDescriptor
+  public var fd      : FileDescriptor  
+  public var channel : DispatchIO! = nil
   
-#if os(Linux) // yeah, that is a little weird.
-#if swift(>=3.0) // #swift3-fd
-  public var channel : dispatch_io_t! = nil
-#else
-  public var channel : dispatch_io_t = nil
-#endif
-#else
-  public var channel : DispatchIOType! = nil
-#endif
-  
-  let shouldClose = true
+  let shouldClose    = true
 
   
   // MARK: - init & teardown
@@ -126,11 +117,13 @@ public class GCDChannelBase: CustomStringConvertible {
      */
   }
   
-  public func createChannelIfMissing(Q q: DispatchQueueType) -> Error? {
+  public func createChannelIfMissing(Q q: DispatchQueue) -> Error? {
     guard fd.isValid     else { return POSIXErrorCode.EINVAL }
     guard channel == nil else { return nil }
     
-    channel = dispatch_io_create(xsys_DISPATCH_IO_STREAM, fd.fd, q, cleanupChannel)
+    channel = DispatchIO(type: DispatchIO.StreamType.stream,
+                         fileDescriptor: fd.fd, queue: q,
+                         cleanupHandler: cleanupChannel)
     guard channel != nil else { return POSIXErrorCode(rawValue: xsys.errno) }
     
     // Essentially GCD channels already implement a buffer very similar to
@@ -145,15 +138,15 @@ public class GCDChannelBase: CustomStringConvertible {
   
   // MARK: - Closing
   
-  public func closeSource() {
+  open func closeSource() {
     if debugClose { print("CLOSE SOURCE (BOTH): \(self)") }
     closeBoth()
   }
-  public func closeTarget() {
+  open func closeTarget() {
     if debugClose { print("CLOSE TARGET (BOTH): \(self)") }
     closeBoth()
   }
-  public func closeBoth() {
+  open func closeBoth() {
     if debugClose { print("CLOSE BOTH: \(self)") }
     teardown()
   }
@@ -186,8 +179,8 @@ public class GCDChannelBase: CustomStringConvertible {
   
   public var readsPending = 0
 
-  public func next(queue Q : DispatchQueueType, count: Int,
-                   yield   : ( Error?, [ SourceElement ]? )-> Void)
+  public func next(queue Q : DispatchQueue, count: Int,
+                   yield   : @escaping ( Error?, [ SourceElement ]? ) -> Void)
   {
     let log = self.log
     log.enter(function: "GCDChannelSource::\(#function)");
@@ -230,22 +223,17 @@ public class GCDChannelBase: CustomStringConvertible {
       // NOTE: EOF is data == dispatch_data_empty, NOT nil
       
       if pdata != nil {
-#if os(Linux)
-#if swift(>=3.0) // #swift3-fd
         let data = pdata!
-#else
-        let data = pdata!
-#endif
-	let hitEOF : Bool
-	if error == 0 && done {
-	  hitEOF = data.isEmpty
-	}
-	else {
-	  hitEOF = false
-	}
+#if os(Linux) // TBD
+      	let hitEOF : Bool
+      	if error == 0 && done {
+      	  hitEOF = data.isEmpty
+      	}
+      	else {
+      	  hitEOF = false
+      	}
 #else // OSX
-        let data = pdata!
-	let hitEOF = data.isEmpty && error == 0 && done
+      	let hitEOF = data.isEmpty && error == 0 && done
 #endif // OSX
 
         if hitEOF {
@@ -264,16 +252,11 @@ public class GCDChannelBase: CustomStringConvertible {
           defer { log.leave() }
           
           // FIXME: HACK. ugly copying
-#if swift(>=3.0) // #swift3-fd
           var array = ByteBucket(repeating: 0, count: len)
 #if os(Linux)
           _ = memcpy(&array, bptr.baseAddress!, len)
 #else
           _ = memcpy(&array, bptr.baseAddress, len)
-#endif
-#else
-          var array = ByteBucket(count: len, repeatedValue: 0)
-          memcpy(&array, bptr.baseAddress, len)
 #endif
           
           yield(nil, array)
@@ -317,9 +300,9 @@ public class GCDChannelBase: CustomStringConvertible {
   
   public var writesPending = 0
 
-  public func writev(queue Q : DispatchQueueType,
+  public func writev(queue Q : DispatchQueue,
                      chunks  : [ ByteBucket ],
-                     yield   : ( Error?, Int ) -> Void)
+                     yield   : @escaping ( Error?, Int ) -> Void)
   {
     let log = self.log
     log.enter(function: "GCDChannelTarget::\(#function)");
@@ -342,18 +325,18 @@ public class GCDChannelBase: CustomStringConvertible {
     
     /* convert brigade into dispatch_data */
     
-    var data : DispatchDataType? = nil
+    var data : DispatchData? = nil
     for chunk in chunks {
       guard !chunk.isEmpty else { continue }
       
-      // TODO: copies data, could we just capture the chunks?
-      let chunkData = dispatch_data_create(chunk, chunk.count, Q,
-                                           DISPATCH_DATA_DESTRUCTOR_DEFAULT)
-      if let head = data {
-        data = dispatch_data_create_concat(head, chunkData)
-      }
-      else {
-        data = chunkData
+      chunk.withUnsafeBufferPointer { bp in
+        let chunkData = DispatchData(bytes: bp)
+        if data != nil {
+          data!.append(chunkData)
+        }
+        else {
+          data = chunkData
+        }
       }
     }
     
@@ -432,7 +415,8 @@ public class GCDChannelBase: CustomStringConvertible {
   }
   
   public var description : String {
-    return "<\(self.dynamicType):\(descriptionAttributes())>"
+    let t = type(of: self)
+    return "<\(t):\(descriptionAttributes())>"
   }
   
   // must live in the main-class as 'declarations in extensions cannot be
@@ -443,7 +427,7 @@ public class GCDChannelBase: CustomStringConvertible {
 }
 
 #if os(Linux)
-  import Glibc
+  import Glibc // TBD: for isprint?
 #endif
 
 func debugBucketAsString(bucket b: [ UInt8 ]) -> String {

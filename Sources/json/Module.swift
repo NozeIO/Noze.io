@@ -22,18 +22,12 @@ public typealias JSON = Freddy.JSON
 
 public extension JSON {
   
-  public static func parse(string: Swift.String) -> JSON? {
+  public static func parse(_ string: Swift.String) -> JSON? {
     guard !string.isEmpty else { return nil }
     
     do {
-      let codePoints = string.nulTerminatedUTF8
-      let obj : JSON = try codePoints.withUnsafeBufferPointer { np in
-        // don't want to include the nul termination in the buffer - trim it off
-        let p = UnsafeBufferPointer(start: np.baseAddress, count: np.count - 1)
-        var parser = JSONParser(buffer: p, owner: codePoints)
-        return try parser.parse()
-      }
-      return obj
+      var parser = JSONParser(string: string)
+      return try parser.parse()
     }
     catch let error {
       // Not using console.error to avoid the (big) dependency.
@@ -42,7 +36,7 @@ public extension JSON {
     }
   }
   
-  public static func parse(utf8: [ UInt8 ]) -> JSON? {
+  public static func parse(_ utf8: [ UInt8 ]) -> JSON? {
     // this is a little weird, but yes, some people send GET requests with a
     // content-type: application/json ...
     guard !utf8.isEmpty else { return nil }
@@ -60,13 +54,4 @@ public extension JSON {
       return nil
     }
   }
-  
-#if swift(>=3.0) // #swift3-1st-arg
-  public static func parse(_ s: Swift.String) -> JSON? {
-    return parse(string: s)
-  }
-  public static func parse(_ utf8: [ UInt8 ]) -> JSON? {
-    return parse(utf8: utf8)
-  }
-#endif
 }

@@ -27,12 +27,12 @@ public protocol ReadableByteStreamType : ReadableStreamType
   
   /// push data (or EOF) to the stream buffer, this will result in an onReadable
   /// event eventually.
-  func push   (bucket b: [ UInt8 ]?)
+  func push   (_ b: [ UInt8 ]?)
   
   /// Like `push`, but this put the data into the front of the buffer. It is
   /// useful if a consuming stream could not handle all data, and wants to wait
   /// for more.
-  func unshift(bucket b: [ UInt8 ])
+  func unshift(_ b: [ UInt8 ])
 }
 
 
@@ -42,23 +42,13 @@ public protocol ReadableByteStreamType : ReadableStreamType
 public extension GReadableStreamType where ReadType == UInt8 {
   // TODO: UTF8View should be a BucketType ...
   
-  public func push(chunk: String, done: DoneCB? = nil) {
-    let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    push(bucket: bucket)
-  }
-  public func unshift(chunk: String, done: DoneCB? = nil) {
-    let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    unshift(bucket: bucket)
-  }
-  
-#if swift(>=3.0) // #swift3-1st-arg
   public func push(_ chunk: String, done: DoneCB? = nil) {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    push(bucket: bucket)
+    push(bucket)
   }
   public func unshift(_ chunk: String, done: DoneCB? = nil) {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
-    unshift(bucket: bucket)
+    unshift(bucket)
   }
-#endif
+  
 }

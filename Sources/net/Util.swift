@@ -23,10 +23,12 @@ func getasockname<T: SocketAddress>(fd: Int32, _ nfn: GetNameFN) -> T? {
   
   // Note: we are not interested in the length here, would be relevant
   //       for AF_UNIX sockets
-  let rc = withUnsafeMutablePointer(&baddr) {
+  let rc = withUnsafeMutablePointer(to: &baddr) {
     ptr -> Int32 in
-    let bptr = UnsafeMutablePointer<xsys_sockaddr>(ptr) // cast
-    return nfn(fd, bptr, &baddrlen)
+    // TODO: is this right, or is there a better way?
+    return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) { bptr in
+      return nfn(fd, bptr, &baddrlen)
+    }
   }
   
   guard rc == 0 else { // TODO: make this a proper error

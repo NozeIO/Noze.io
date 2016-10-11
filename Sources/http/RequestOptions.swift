@@ -9,7 +9,7 @@
 import streams
 import net
 
-public class RequestOptions : ConnectOptions {
+open class RequestOptions : ConnectOptions {
   // In a 'regular' framework this would be called 'Request' ... In Node the
   // request is the thing which is already queued on the socket.
   
@@ -35,9 +35,15 @@ public class RequestOptions : ConnectOptions {
   public override init() {
     super.init()
   }
+
+  override open func appendToDescription(_ ms: inout String) {
+    super.appendToDescription(&ms)
+    
+    ms += " \(scheme) \(method) \"\(path)\""
+  }
 }
 
-extension RequestOptions {
+public extension RequestOptions {
   
   func getAgent() -> Agent {
     switch agent {

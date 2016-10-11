@@ -9,15 +9,9 @@
 #if !os(Linux)
   import Darwin
 
-#if swift(>=3.0) // #swift3-fd
 private func makeArray<T: ExpressibleByIntegerLiteral>(count c: Int) -> [ T ] {
   return Array<T>(repeating: 0, count: c)
 }
-#else // Swift 2.x
-private func makeArray<T: IntegerLiteralConvertible>(count c: Int) -> [ T ] {
-  return Array<T>(count: c, repeatedValue: 0)
-}
-#endif
 
 /// Hm, `uuid_t` is a tuple and can't be extended. Also, you can't really work
 /// with that tuple in the C API.
@@ -90,12 +84,7 @@ public struct xsys_uuid {
     var uuid = arrayValue
     
     uuid_unparse_lower(&uuid, &cs)
-    
-    #if swift(>=3.0) // #swift3-fd
-      return String(cString: &cs)
-    #else
-      return String.fromCString(&cs)!
-    #endif
+    return String(cString: &cs)
   }
   
   public func uppercased() -> String {
@@ -103,12 +92,7 @@ public struct xsys_uuid {
     var uuid = arrayValue
     
     uuid_unparse_upper(&uuid, &cs)
-    
-    #if swift(>=3.0) // #swift3-fd
-      return String(cString: &cs)
-    #else
-      return String.fromCString(&cs)!
-    #endif
+    return String(cString: &cs)
   }
   
   public var stringValue : String {
@@ -116,12 +100,7 @@ public struct xsys_uuid {
     var uuid = arrayValue
     
     uuid_unparse(&uuid, &cs)
-    
-    #if swift(>=3.0) // #swift3-fd
-      return String(cString: &cs)
-    #else
-      return String.fromCString(&cs)!
-    #endif
+    return String(cString: &cs)
   }
 }
 

@@ -9,7 +9,7 @@
 import Dispatch
 import core
 
-extension DispatchQueueType {
+extension DispatchQueue {
   // Move to core? Not sure about that.
   
   /// Evaluate the given function with the given argument on the queue. Once
@@ -21,7 +21,9 @@ extension DispatchQueueType {
   ///      module.Q.evalAsync(readdirSync, path, cb)
   ///    }
   ///
-  func evalAsync<ArgT, RT>(f: (ArgT) -> RT, _ arg: ArgT, _ cb: ( RT ) -> Void) {
+  func evalAsync<ArgT, RT>(_ f  : @escaping (ArgT) -> RT, _ arg: ArgT,
+                           _ cb : @escaping ( RT ) -> Void)
+  {
     core.module.retain()
     
     module.Q.async {
@@ -35,8 +37,8 @@ extension DispatchQueueType {
     }
   }
 
-  func evalAsync<ArgT>(f: (ArgT) throws -> Void, _ arg: ArgT,
-                       _ cb: ( Error? ) -> Void)
+  func evalAsync<ArgT>(_ f  : @escaping (ArgT) throws -> Void, _ arg: ArgT,
+                       _ cb : @escaping ( Error? ) -> Void)
   {
     core.module.retain()
     
@@ -58,9 +60,9 @@ extension DispatchQueueType {
     }
   }
   
-  func evalAsync<ArgT, RT>(f: (ArgT) throws -> RT,
-                           _ arg: ArgT,
-                           _ cb: ( Error?, RT? ) -> Void)
+  func evalAsync<ArgT, RT>(_ f   : @escaping ( ArgT ) throws -> RT,
+                           _ arg : ArgT,
+                           _ cb  : @escaping ( Error?, RT? ) -> Void)
   {
     core.module.retain()
     
@@ -84,20 +86,4 @@ extension DispatchQueueType {
     }
   }
 
-#if swift(>=3.0) // #swift3-1st-arg
-  func evalAsync<ArgT, RT>(_ f: (ArgT) -> RT, _ arg: ArgT, _ cb: ( RT ) -> Void) {
-    evalAsync(f: f, arg, cb)
-  }
-  func evalAsync<ArgT>(_ f: (ArgT) throws -> Void, _ arg: ArgT,
-                       _ cb: ( Error? ) -> Void)
-  {
-    evalAsync(f: f, arg, cb)
-  }
-  func evalAsync<ArgT, RT>(_ f: (ArgT) throws -> RT,
-                           _ arg: ArgT,
-                           _ cb: ( Error?, RT? ) -> Void)
-  {
-    evalAsync(f: f, arg, cb)
-  }
-#endif
 }

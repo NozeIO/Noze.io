@@ -30,7 +30,7 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
   
   override init(readHWM      : Int? = nil,
                 writeHWM     : Int? = nil,
-                queue        : DispatchQueueType = core.Q,
+                queue        : DispatchQueue = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,
@@ -110,8 +110,8 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
     }
   }
   
-  override func _transform(bucket b : [ WriteType ],
-                           done     : ( Error?, [ ReadType ]? ) -> Void)
+  override func _transform(bucket b: [ UInt8 ],
+                           done: @escaping ( Error?, [ RedisValue ]? ) -> Void)
   {
     guard !b.isEmpty else {
       assert(!b.isEmpty, "transform bucket is empty?")

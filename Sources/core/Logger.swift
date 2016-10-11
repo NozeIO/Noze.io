@@ -68,7 +68,6 @@ public class Logger : LoggerType {
     }
   }
 
-#if swift(>=3.0) // #swift3-autoclosure
   public func log<T>(message: @autoclosure () -> T,
                      filename: String? = #file, line: Int? = #line,
                      function: String? = #function)
@@ -93,32 +92,6 @@ public class Logger : LoggerType {
   {
     log(message, filename: filename, line: line, function: function)
   }
-#else
-  public func log<T>(@autoclosure message: () -> T,
-                     filename: String? = #file, line: Int? = #line,
-                     function: String? = #function)
-  {
-    guard enabled else { return }
-    
-    let msg = message()
-      // what is more expensive, passing around closures, or calculating
-      // messages even if unnecessary?
-
-    if let cb = onBeforeLog { cb(self) }
-
-    indent()
-    print(msg)
-
-    if let cb = onAfterLog { cb(self) }
-  }
-  
-  public func debug<T>(@autoclosure message: () -> T,
-                       filename: String? = #file, line: Int? = #line,
-                       function: String? = #function)
-  {
-    log(message, filename: filename, line: line, function: function)
-  }
-#endif
 }
 
 public protocol LoggerType {
@@ -139,20 +112,13 @@ public protocol LoggerType {
   func enter(filename: String?, line: Int?, function: String?)
   func leave(filename: String?, line: Int?, function: String?)
   
-#if swift(>=3.0) // #swift3-autoclosure
   func log  <T>(message: @autoclosure () -> T,
                 filename: String?, line: Int?, function: String?)
   func debug<T>(message: @autoclosure () -> T,
                 filename: String?, line: Int?, function: String?)
-#else
-  func log  <T>(@autoclosure message: () -> T,
-                filename: String?, line: Int?, function: String?)
-  func debug<T>(@autoclosure message: () -> T,
-                filename: String?, line: Int?, function: String?)
-#endif
 }
 
-#if swift(>=3.0) // this is for the wildcard 1st arg
+// this is for the wildcard 1st arg
 public extension LoggerType {
   
   func enter(_ filename: String? = #file, line: Int? = #line,
@@ -179,7 +145,6 @@ public extension LoggerType {
     debug(message: message, filename: filename, line: line, function: function)
   }
 }
-#endif // Swift 3
 
 public protocol LameLogObjectType : CustomStringConvertible {
 
@@ -197,6 +162,7 @@ public extension LameLogObjectType {
   }
   
   public var description : String {
-    return "<\(self.dynamicType):\(logStateInfo)>"
+    let t = type(of: self)
+    return "<\(t):\(logStateInfo)>"
   }
 }

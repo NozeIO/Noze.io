@@ -14,7 +14,7 @@ class CharacterToUTF8: TransformStream<Character, UInt8> {
   
   override init(readHWM      : Int? = nil,
                 writeHWM     : Int? = nil,
-                queue        : DispatchQueueType = core.Q,
+                queue        : DispatchQueue = core.Q,
                 enableLogger : Bool = false)
   {
     super.init(readHWM: readHWM, writeHWM: writeHWM, queue: queue,
@@ -24,8 +24,8 @@ class CharacterToUTF8: TransformStream<Character, UInt8> {
   
   // MARK: - Transform
   
-  override func _transform(bucket b : [ Character ],
-                           done     : ( Error?, [ UInt8 ]? ) -> Void)
+  override func _transform(bucket b: [ Character ],
+                           done: @escaping ( Error?, [ UInt8 ]? ) -> Void)
   {
     guard !b.isEmpty else { done(nil, []); return }
     
