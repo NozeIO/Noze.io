@@ -106,7 +106,7 @@ class NozeIOHttpClientTests: NozeIOTestCase {
       }
       .listen(17234)
     
-    let req = get("http://localhost:17234/hello") {
+    let req = get("http://127.0.0.1:17234/hello") {
       print("C: GOT RESPONSE: \($0)")
       self.exitIfDone()
     }
