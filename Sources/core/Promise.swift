@@ -125,6 +125,41 @@ public class Promise<T> : LiarType {
         return p
     }
   }
+  public func then<U>(run cb: @escaping ( T ) throws -> U) -> Promise<U> {
+    switch state {
+      case .Fulfilled(let v):
+        do {
+          let value = try cb(v)           // immediately execute
+          return Promise<U>(value: value) // return already resolved promise
+        }
+        catch {
+          return Promise<U>(error: error)
+        }
+      
+      case .Rejected (let e):
+        return Promise<U>(error: e)
+      
+      case .Initial:
+        // Note: we capture `cb` and the returned promise
+        let p = Promise<U> { ok, fail in
+          self.onStateChange { state in
+            switch state {
+              case .Fulfilled(let v):
+                do {
+                  let v = try cb(v)
+                  ok(v)
+                }
+                catch {
+                  fail(error)
+                }
+              case .Rejected (let e): fail(e)
+              default: assert(false, "cannot change to this state ...")
+            }
+          }
+        }
+        return p
+    }
+  }
   
   public func error(run cb: @escaping ( Error ) -> Void) {
     // `catch` is used already in Swift
