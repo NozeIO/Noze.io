@@ -97,7 +97,7 @@ class NozeIOHttpClientTests: NozeIOTestCase {
     XCTAssert(didGetOnSocket)
   }
   
-  func XtestSimpleSelfHostedGET() {
+  func testSimpleSelfHostedGET() {
     enableRunLoop()
     
     let myServer = http.createServer { req, res in
