@@ -18,7 +18,7 @@ class BasicAuthTests: NozeIOTestCase {
         print("S: GOT REQUEST: \(req)")
         
         do {
-          let crd = try auth(req: req)
+          let crd = try basicAuth.auth(req: req)
           
           guard crd.username == "test", crd.password == "abc123" else {
             res.statusCode = 401
@@ -30,7 +30,7 @@ class BasicAuthTests: NozeIOTestCase {
           res.statusCode = 200
           res.end()
         }
-        catch let err as BasicAuthError {
+        catch let err as BasicAuth.Error {
           switch err {
             case .MissingAuthorizationHeader:
               res.statusCode = 401
