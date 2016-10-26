@@ -24,13 +24,13 @@ public func auth(req: IncomingMessage) throws -> BasicAuthCredentials {
     throw BasicAuthError.MissingAuthorizationHeader
   }
   
-  guard let base64 = parseAuthorizationValue(matching: "Basic", value: authorization) 
-    else 
-  {
+  guard let base64 = parseAuthorizationValue(matching : "Basic",
+                                             value    : authorization)
+   else {
     throw BasicAuthError.InvalidBasicAuthorizationHeader
   }
     
-  // split the result at the : (ascii 58). Split only once
+  // Split the result at the ':' (ASCII 58). Split only once.
   let split = Base64.decode(string: base64).split(separator: 58, maxSplits: 1)
   guard split.count == 2 else {
     throw BasicAuthError.InvalidBasicAuthorizationHeader
@@ -46,29 +46,24 @@ public func auth(req: IncomingMessage) throws -> BasicAuthCredentials {
   return BasicAuthCredentials(username: username, password: password)
 }
 
-public func parseAuthorizationValue(
-  matching schema: String, ignoringCase: Bool = true, value: String) 
-  -> String? 
+public func parseAuthorizationValue(matching schema : String,
+                                    ignoringCase    : Bool = true,
+                                    value           : String)
+       -> String?
 {
   let parts = value
     .utf8
     .split(omittingEmptySubsequences: true) { $0 == 32 || $0 == 9 }
-    .map(String.init)
+    .map { String.init($0)! }
   
-  guard parts.count == 2 else {
-    return nil
-  }
+  guard parts.count == 2 else { return nil }
   
   if ignoringCase {
-    guard schema.lowercased() == parts[0]!.lowercased() else {
-      return nil
-    }
+    guard schema.lowercased() == parts[0].lowercased() else { return nil }
   }
   else {
-    guard schema == parts[0]! else {
-      return nil
-    }
+    guard schema == parts[0] else { return nil }
   }
   
-  return parts[1]!
+  return parts[1]
 }
