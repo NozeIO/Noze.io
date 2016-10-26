@@ -67,6 +67,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4915989E1DC10E0600DB1C88 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4915989D1DC10E0600DB1C88 /* EventTests.swift */; };
 		E807E4141CF676C200AE317B /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E80A97E51CF9ADE10088F560 /* libhttp.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276341CF49F7D004A6A34 /* libhttp.dylib */; };
 		E80A97ED1CF9AE0A0088F560 /* HttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F351CF3382600CA5517 /* HttpClientTests.swift */; };
@@ -1679,6 +1680,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4915989D1DC10E0600DB1C88 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		E80448851CD110B200447204 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/child_process/Module.swift; sourceTree = SOURCE_ROOT; };
 		E80448871CD110BE00447204 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/console/Module.swift; sourceTree = SOURCE_ROOT; };
 		E80448A61CD113AB00447204 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/child_process/README.md; sourceTree = SOURCE_ROOT; };
@@ -3263,6 +3265,7 @@
 				E8C15F441CF3382600CA5517 /* NumberPrinter.swift */,
 				E8C15F461CF3382600CA5517 /* StringDecoderTests.swift */,
 				E8C15F471CF3382600CA5517 /* TransformTests.swift */,
+				4915989D1DC10E0600DB1C88 /* EventTests.swift */,
 			);
 			name = streams;
 			path = Tests/streamsTests;
@@ -5031,6 +5034,7 @@
 				E8C15F5B1CF3382600CA5517 /* StringDecoderTests.swift in Sources */,
 				E8EA87CD1CF73A7E00406C27 /* Base64Tests.swift in Sources */,
 				E86BC6F61CF3AEA200A397BE /* DNSTests.swift in Sources */,
+				4915989E1DC10E0600DB1C88 /* EventTests.swift in Sources */,
 				E8C15F531CF3382600CA5517 /* ServerTests.swift in Sources */,
 				E8C15F541CF3382600CA5517 /* SocketTests.swift in Sources */,
 				E8C15F581CF3382600CA5517 /* NumberGenerator.swift in Sources */,
