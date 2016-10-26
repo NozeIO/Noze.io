@@ -81,9 +81,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "NozeIOBasicAsyncTests/testAsyncNumberGenerator()">
-               </Test>
-               <Test
                   Identifier = "NozeIOBasicTests/testStringCharacterGenerator()">
                </Test>
                <Test

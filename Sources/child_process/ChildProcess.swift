@@ -64,8 +64,11 @@ public class ChildProcess : ErrorEmitter {
   private final func configureControlPipe() {
     if let cp = self.controlPipe {
       _ = cp.onceReadable {
-        print("WARN: ChildProcess control pipe got readable?: \(self)")
-        assert(false, "onReadable on control pipe")
+        guard nil == cp.read() else {
+          print("WARN: ChildProcess control pipe got readable?: \(self)")
+          assert(false, "onReadable on control pipe, should only emit at end")
+          return
+        }
       }
       _ = cp.onceError { error in
         print("ERROR: ChildProcess control pipe has an error: \(error) \(self)")
