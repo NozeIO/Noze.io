@@ -14,27 +14,13 @@ public class NozeExpress : NozeModule {
 
 public var module = NozeExpress()
 
-// See https://bugs.swift.org/browse/SR-2907, this is really an:
-// #if swift(>=3.0.1) (which doesn't work :-).
-// Once Xcode 8.0.1 is out, we can drop this.
-#if os(Linux)
-  public func express(middleware: Middleware...) -> Express {
-    let app = Express()
-    
-    for m in middleware {
-      _ = app.use(m)
-    }
-    
-    return app
+// Note: @escaping for 3.0.0 compat, not intended as per SR-2907
+public func express(middleware: @escaping Middleware...) -> Express {
+  let app = Express()
+  
+  for m in middleware {
+    _ = app.use(m)
   }
-#else
-  public func express(middleware: @escaping Middleware...) -> Express {
-    let app = Express()
-    
-    for m in middleware {
-      _ = app.use(m)
-    }
-    
-    return app
-  }
-#endif
+  
+  return app
+}
