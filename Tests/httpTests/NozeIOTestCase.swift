@@ -45,11 +45,7 @@ public class NozeIOTestCase : XCTestCase {
   
   // MARK: - Global Helper Funcs
   
-#if os(Linux)
-  var done = dispatch_semaphore_create(0)! // is this still correct?
-#else
   var done = DispatchSemaphore(value: 0)
-#endif
   
   public func enableRunLoop() {
     self.wantsRunloop += 1
@@ -88,6 +84,10 @@ public class NozeIOTestCase : XCTestCase {
 
 // MARK: - Global Helper Funcs
 // Note: those are not part of the class to avoid 'self' capture warnings.
+
+#if os(Linux) || os(Android) || os(FreeBSD)
+  import Glibc
+#endif
 
 // 'flush' print
 public func fprint<T>(_ value: T) {
