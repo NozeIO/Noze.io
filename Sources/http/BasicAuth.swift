@@ -13,8 +13,8 @@ public let basicAuth = BasicAuth.self
 public class BasicAuth : NozeModule {
 
   public struct Credentials {
-    public let username : String
-    public let password : String
+    public let name : String
+    public let pass : String
   }
 
   public enum Error : Swift.Error {
@@ -52,6 +52,6 @@ public class BasicAuth : NozeModule {
       throw Error.InvalidBasicAuthorizationHeader
     }
     
-    return Credentials(username: username, password: password)
+    return Credentials(name: username, pass: password)
   }
 }
