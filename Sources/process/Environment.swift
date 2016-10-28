@@ -11,6 +11,6 @@ public let argv = CommandLine.arguments
 import class Foundation.ProcessInfo
   // extern char **environ; doesn't seem to be exposed
 
-public var environ : [ String : String ] {
+public var env : [ String : String ] {
   return ProcessInfo.processInfo.environment
 }
