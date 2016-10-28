@@ -22,7 +22,7 @@ public class BasicAuth : NozeModule {
     case InvalidBasicAuthorizationHeader
   }
 
-  public static func auth(req: IncomingMessage) throws -> Credentials {
+  public static func auth(_ req: IncomingMessage) throws -> Credentials {
     
     guard let authorization = req.headers[ci: "Authorization"] as? String else {
       throw Error.MissingAuthorizationHeader
