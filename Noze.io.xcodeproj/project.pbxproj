@@ -67,6 +67,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4915989E1DC10E0600DB1C88 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4915989D1DC10E0600DB1C88 /* EventTests.swift */; };
+		491598991DC1061A00DB1C88 /* BasicAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491598971DC1061A00DB1C88 /* BasicAuth.swift */; };
+		4915989A1DC1061A00DB1C88 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491598981DC1061A00DB1C88 /* Extensions.swift */; };
+		4915989C1DC1067C00DB1C88 /* BasicAuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4915989B1DC1067C00DB1C88 /* BasicAuthTests.swift */; };
 		E807E4141CF676C200AE317B /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E80A97E51CF9ADE10088F560 /* libhttp.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276341CF49F7D004A6A34 /* libhttp.dylib */; };
 		E80A97ED1CF9AE0A0088F560 /* HttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F351CF3382600CA5517 /* HttpClientTests.swift */; };
@@ -1679,6 +1683,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4915989D1DC10E0600DB1C88 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
+		491598971DC1061A00DB1C88 /* BasicAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicAuth.swift; path = Sources/http/BasicAuth.swift; sourceTree = SOURCE_ROOT; };
+		491598981DC1061A00DB1C88 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Sources/http/Extensions.swift; sourceTree = SOURCE_ROOT; };
+		4915989B1DC1067C00DB1C88 /* BasicAuthTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicAuthTests.swift; sourceTree = "<group>"; };
 		E80448851CD110B200447204 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/child_process/Module.swift; sourceTree = SOURCE_ROOT; };
 		E80448871CD110BE00447204 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Module.swift; path = Sources/console/Module.swift; sourceTree = SOURCE_ROOT; };
 		E80448A61CD113AB00447204 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Sources/child_process/README.md; sourceTree = SOURCE_ROOT; };
@@ -3221,6 +3229,7 @@
 			children = (
 				E8C15F351CF3382600CA5517 /* HttpClientTests.swift */,
 				E8C15F361CF3382600CA5517 /* URLTests.swift */,
+				4915989B1DC1067C00DB1C88 /* BasicAuthTests.swift */,
 			);
 			name = http;
 			path = Tests/httpTests;
@@ -3263,6 +3272,7 @@
 				E8C15F441CF3382600CA5517 /* NumberPrinter.swift */,
 				E8C15F461CF3382600CA5517 /* StringDecoderTests.swift */,
 				E8C15F471CF3382600CA5517 /* TransformTests.swift */,
+				4915989D1DC10E0600DB1C88 /* EventTests.swift */,
 			);
 			name = streams;
 			path = Tests/streamsTests;
@@ -3372,6 +3382,8 @@
 				E8FF78801CDA3657000256E2 /* URL.swift */,
 				E89EC01E1CEB2C4500BCFD77 /* QueryString.swift */,
 				E874EC981D119C0E00FA0606 /* Cookies.swift */,
+				491598971DC1061A00DB1C88 /* BasicAuth.swift */,
+				491598981DC1061A00DB1C88 /* Extensions.swift */,
 			);
 			path = http;
 			sourceTree = "<group>";
@@ -5021,6 +5033,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4915989C1DC1067C00DB1C88 /* BasicAuthTests.swift in Sources */,
 				E8C15F5C1CF3382600CA5517 /* TransformTests.swift in Sources */,
 				E8C15F571CF3382600CA5517 /* BasicTests.swift in Sources */,
 				E8C15F591CF3382600CA5517 /* NumberPrinter.swift in Sources */,
@@ -5031,6 +5044,7 @@
 				E8C15F5B1CF3382600CA5517 /* StringDecoderTests.swift in Sources */,
 				E8EA87CD1CF73A7E00406C27 /* Base64Tests.swift in Sources */,
 				E86BC6F61CF3AEA200A397BE /* DNSTests.swift in Sources */,
+				4915989E1DC10E0600DB1C88 /* EventTests.swift in Sources */,
 				E8C15F531CF3382600CA5517 /* ServerTests.swift in Sources */,
 				E8C15F541CF3382600CA5517 /* SocketTests.swift in Sources */,
 				E8C15F581CF3382600CA5517 /* NumberGenerator.swift in Sources */,
@@ -5465,6 +5479,8 @@
 				E8E2763B1CF49F85004A6A34 /* Server.swift in Sources */,
 				E8E276411CF49F85004A6A34 /* ClientRequest.swift in Sources */,
 				E8E2763A1CF49F85004A6A34 /* Module.swift in Sources */,
+				4915989A1DC1061A00DB1C88 /* Extensions.swift in Sources */,
+				491598991DC1061A00DB1C88 /* BasicAuth.swift in Sources */,
 				E84C6CCD1D09866100B1945D /* HTTPStatus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

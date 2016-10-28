@@ -282,7 +282,15 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
       hitEOF = true
       
       if buffer.isEmpty {
-        _endReadable()
+        // if we hit the end of the stream we need to emit a readable one last 
+        // time to indicate that the stream has finished.
+        // to ensure that readable is triggered before end, we put the
+        // endReadable into the next tick
+        
+        emitReadable()
+        nextTick { [unowned self] in
+          self._endReadable()
+        }
       }
       else {
         //print("ReadableStream: FILLED, READABLE: \(self)")
