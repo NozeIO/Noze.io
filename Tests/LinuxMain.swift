@@ -5,11 +5,11 @@ let testFS      = true
 let testDNS     = true
 let testHTTP    = true
 
-@testable import streamsTestSuite
-@testable import leftpadTestSuite
-@testable import fsTestSuite
-@testable import dnsTestSuite
-@testable import httpTestSuite
+@testable import streamsTests
+@testable import leftpadTests
+@testable import fsTests
+@testable import dnsTests
+@testable import httpTests
 
 var tests = [ // leftpad
   testCase(NozeIOLeftPadTests.allTests),

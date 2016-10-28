@@ -8,6 +8,10 @@
 
 import XCTest
 
+#if os(Linux) || os(Android) || os(FreeBSD)
+  import Glibc
+#endif
+
 import xsys
 import streams
 @testable import child_process

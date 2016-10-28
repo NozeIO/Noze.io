@@ -6,6 +6,10 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+#if os(Linux) || os(Android) || os(FreeBSD)
+  import Glibc
+#endif
+
 import XCTest
 @testable import http_parser
 
