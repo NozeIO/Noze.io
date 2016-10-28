@@ -18,9 +18,9 @@ class BasicAuthTests: NozeIOTestCase {
         print("S: GOT REQUEST: \(req)")
         
         do {
-          let crd = try basicAuth.auth(req: req)
+          let crd = try basicAuth.auth(req)
           
-          guard crd.username == "test", crd.password == "abc123" else {
+          guard crd.name == "test", crd.pass == "abc123" else {
             res.statusCode = 401
             res.setHeader("WWW-Authenticate", "Basic realm=\"Cows Heaven\"")
             res.end()

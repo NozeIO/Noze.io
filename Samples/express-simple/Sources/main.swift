@@ -60,7 +60,7 @@ app.post("/form") { req, res, _ in
   let options : [ String : Any ] = [
     "user"      : user,
     "nouser"    : user.isEmpty,
-    "viewCount" : req.session["viewCount"]
+    "viewCount" : req.session["viewCount"] ?? 0
   ]
   res.render("form", options)
 }
@@ -96,7 +96,7 @@ app.get("/") { req, res, _ in
   
   let values : [ String : Any ] = [
     "tagline"     : taglines[Int(tagline)],
-    "viewCount"   : req.session["viewCount"],
+    "viewCount"   : req.session["viewCount"] ?? 0,
     "cowOfTheDay" : cows.vaca()
   ]
   res.render("index", values)

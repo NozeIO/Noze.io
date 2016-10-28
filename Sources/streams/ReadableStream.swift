@@ -288,7 +288,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
         // endReadable into the next tick
         
         emitReadable()
-        nextTick { [unowned self] in
+        nextTick {
           self._endReadable()
         }
       }

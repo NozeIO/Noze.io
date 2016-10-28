@@ -13,8 +13,8 @@ public let basicAuth = BasicAuth.self
 public class BasicAuth : NozeModule {
 
   public struct Credentials {
-    public let username : String
-    public let password : String
+    public let name : String
+    public let pass : String
   }
 
   public enum Error : Swift.Error {
@@ -22,7 +22,7 @@ public class BasicAuth : NozeModule {
     case InvalidBasicAuthorizationHeader
   }
 
-  public static func auth(req: IncomingMessage) throws -> Credentials {
+  public static func auth(_ req: IncomingMessage) throws -> Credentials {
     
     guard let authorization = req.headers[ci: "Authorization"] as? String else {
       throw Error.MissingAuthorizationHeader
@@ -52,6 +52,6 @@ public class BasicAuth : NozeModule {
       throw Error.InvalidBasicAuthorizationHeader
     }
     
-    return Credentials(username: username, password: password)
+    return Credentials(name: username, pass: password)
   }
 }

@@ -70,7 +70,7 @@ public func spawn(_ command: String, _ args: [ String ],
   
   /* setup environment */
   // TBD: apparently it is not to easy to grab our own environment ...
-  let environ = prepare(environment: env ?? process.environ)
+  let environ = prepare(environment: env ?? process.env)
   defer { for case let arg in environ { free(arg) } }
   
   /* setup arguments */
