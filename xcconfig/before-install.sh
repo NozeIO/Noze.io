@@ -11,3 +11,8 @@ if [[ "$TRAVIS_OS_NAME" == "Linux" ]]; then
        systemtap-sdt-dev \
        libbsd-dev libbsd0 libbsd0-dbg
 fi
+
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  # Clean test output
+    gem install xcpretty xcpretty-travis-formatter
+fi

@@ -25,4 +25,4 @@ script:
     - git tag 0.3.1337
     - make all
     - make samples
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then xcodebuild test -project Noze.io.xcodeproj -scheme "Working Tests" -destination 'platform=OS X,arch=x86_64'; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then xcodebuild test -project Noze.io.xcodeproj -scheme "Working Tests" -destination 'platform=OS X,arch=x86_64' | xcpretty -f `xcpretty-travis-formatter` && exit ${PIPESTATUS[0]}; fi
