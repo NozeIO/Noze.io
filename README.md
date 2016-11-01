@@ -4,9 +4,9 @@
 </h2>
 
 ![Swift3](https://img.shields.io/badge/swift-3-blue.svg)
-![Mac OS X](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
-![Linux](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
+![tuxOS](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
 ![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=develop&style=flat)
 
 "Das Haus das Verrückte macht."
@@ -50,7 +50,7 @@ There is a reasonably large collection of simple, focused:
 But here you go, the "standard" Node example, a HelloWorld httpd:
 
     import http
-
+    
     http.createServer { req, res in 
       res.writeHead(200, [ "Content-Type": "text/html" ])
       res.end("<h1>Hello World</h1>")
@@ -60,7 +60,7 @@ But here you go, the "standard" Node example, a HelloWorld httpd:
 An echo daemon, just piping the in-end of a socket into its own-out end:
 
     import net
-
+    
     net.createServer { sock in
       sock.write("Welcome to Noze.io!\r\n")
       sock | sock
@@ -88,7 +88,7 @@ an email to tell us why this is crap (or not?).
 | OS    | Swift  | Xcode                                                      | Make | SPM  |
 | ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
 | macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
-| tuxOS | [3.0.1 Preview 2](https://swift.org/download/#previews) | | 👍🏻  | 👍  |
+| tuxOS | [3.0.1 GMc](https://swift.org/download/#previews) | | 👍🏻  | 👍  |
 
 With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
 are still interested in using it with 2.x, the last release is still available
