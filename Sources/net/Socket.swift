@@ -168,11 +168,12 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   func _setupSocket(domain d: Int32, type: Int32 = xsys.SOCK_STREAM) -> Int32 {
     assert(io.fd == nil)
     
-    let lfd = socket(d, type, 0)
+    let lfd   = socket(d, type, 0)
+    let errno = xsys.errno
     log.debug("setup socket: \(lfd)")
     guard lfd != -1 else {
-      log.debug("  failed: \(xsys.errno)")
-      return xsys.errno
+      log.debug("  failed: \(errno)")
+      return errno
     }
     
     io.fd = FileDescriptor(lfd)
