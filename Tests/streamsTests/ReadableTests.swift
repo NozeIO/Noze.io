@@ -15,6 +15,8 @@ class ReadableTests: NozeIOTestCase {
   func testReadablePipe() {
     enableRunLoop()
     
+    var done = false
+    
     let readable = Readable<String>()
     let writeable = Writable<String>() { chunk, done in
       console.dir(chunk)
@@ -22,10 +24,14 @@ class ReadableTests: NozeIOTestCase {
     }
     
     readable | writeable .onFinish {
+      XCTAssert(done)
       self.exitIfDone()
     }
     
     readable.push(["Hi dude"])
+    
+    done = true
+    readable.push(nil)
     
     waitForExit()
   }
