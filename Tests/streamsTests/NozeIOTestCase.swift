@@ -17,13 +17,11 @@ struct StdErrStream : TextOutputStream {
 
 var nzStdErr = StdErrStream()
 
-public class NozeIOTestCase : XCTestCase {
+private class NozeTestSharedState {
   
-  private var wantsRunloop = 0
+  fileprivate final var wantsRunloop = 0
   
-  public override func setUp() {
-    super.setUp()
-    
+  init() {
     // the test is running on the main-queue, so we need to run Noze on a
     // secondary queue.
     core.Q = DispatchQueue(label: "de.zeezide.noze.testqueue")
@@ -37,17 +35,20 @@ public class NozeIOTestCase : XCTestCase {
       }
     }
   }
+}
+private var sharedState = NozeTestSharedState()
+
+public class NozeIOTestCase : XCTestCase {
   
-  public override func tearDown() {
-    super.tearDown()
-  }
-  
+  private final var wantsRunloop = 0
+  private var state = sharedState
   
   // MARK: - Global Helper Funcs
   
   var done = DispatchSemaphore(value: 0)
   
   public func enableRunLoop() {
+    self.state.wantsRunloop += 1
     self.wantsRunloop += 1
   }
   
@@ -68,6 +69,7 @@ public class NozeIOTestCase : XCTestCase {
   
   public func exitIfDone(code: Int32 = 42) {
     wantsRunloop -= 1
+    self.state.wantsRunloop -= 1
     if wantsRunloop < 1 {
       //exit(code)
       done.signal()
