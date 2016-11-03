@@ -18,15 +18,16 @@ class ReadableTests: NozeIOTestCase {
     var done = false
     
     let readable = Readable<String>()
-    let writeable = Writable<String>() { chunk, done in
+    let writeable = Writable<String>() { chunk, next in
       console.dir(chunk)
-      done(nil)
+      next(nil)
     }
     
-    readable | writeable .onFinish {
-      XCTAssert(done)
-      self.exitIfDone()
-    }
+    readable | writeable 
+      .onFinish {
+        XCTAssert(done)
+        self.exitIfDone()
+      }
     
     readable.push(["Hi dude"])
     
@@ -48,9 +49,10 @@ class ReadableTests: NozeIOTestCase {
     readable.push(["Hi dude"])
     readable.push(nil)
     
-    readable | writeable .onFinish {
-      self.exitIfDone()
-    }
+    readable | writeable 
+      .onFinish {
+        self.exitIfDone()
+      }
     
     waitForExit()
   }
