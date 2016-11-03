@@ -92,9 +92,10 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     
     switch cb {
       case .None:
-        if !hitEOF {
-          push(nil) // right?
-        }
+        // If we do not have a callback, this is a proactive read attempt by
+        // the consumer, which can be ignored. 
+        // Pushing nil would close the stream what is not we want (by sending 
+        // EOF). Pushing an empty array is a waste of time.
         break
       
       case .NoArgs(let cb): cb()
