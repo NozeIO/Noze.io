@@ -92,8 +92,13 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     
     switch cb {
       case .None:
+        // Since this method might get called, even though we might not have 
+        // something to push, we must return an empty array.
+        // Pushing `nil` would cause the streams to close, which is not what we
+        // intend here.
+        
         if !hitEOF {
-          push(nil) // right?
+          push([])
         }
         break
       
@@ -102,6 +107,8 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     }
     
     if hitEOF { // release the closure
+      // TBD: If the stream is piped, this is not called. Do we leak in this 
+      //      case?  
       cb = .None
     }
   }
