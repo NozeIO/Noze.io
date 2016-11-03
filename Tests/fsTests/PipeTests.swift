@@ -25,8 +25,13 @@ class NozeIOPipeTests: NozeIOTestCase {
   }
   
   func testPipeEtcPasswdToDevNull() {
-    impTestPipe(fs.createReadStream("/etc/passwd"),
-                fs.createWriteStream("/dev/null"))
+    // TODO: revert when done
+    print("PIPE TEST pwd-to-null")
+    let pwd     = fs.createReadStream("/etc/passwd")
+    let devNull = fs.createWriteStream("/dev/null")
+    print("  target: \(devNull)")
+    impTestPipe(pwd,
+                devNull)
   }
   
   private func impTestPipe<TI: GReadableStreamType, TO: GWritableStreamType>
@@ -35,18 +40,22 @@ class NozeIOPipeTests: NozeIOTestCase {
   {
     enableRunLoop()
     
+    print("PIPE: \(src) to \(dest)")
     _ = src.pipe(dest)
     
     _ = dest.onFinish {
       // Note: I don't think this is called for stdout. That is the issue
+      print("  on dest finish")
       self.exitIfDone()
     }
     _ = src.onEnd {
       // This is not quite right, but a workaround for onFinish not being
       // called ...
+      print("  on src end")
       self.exitIfDone()
     }
     
+    print("WAIT")
     waitForExit()
   }
 
