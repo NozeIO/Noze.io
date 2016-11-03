@@ -92,14 +92,10 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     
     switch cb {
       case .None:
-        // Since this method might get called, even though we might not have 
-        // something to push, we must return an empty array.
-        // Pushing `nil` would cause the streams to close, which is not what we
-        // intend here.
-        
-        if !hitEOF {
-          push([])
-        }
+        // If we do not have a callback, this is a proactive read attempt by
+        // the consumer, which can be ignored. 
+        // Pushing nil would close the stream which is not we want (by sending 
+        // EOF). Pushing an empty array is a waste of time.
         break
       
       case .NoArgs(let cb): cb()
@@ -107,8 +103,6 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     }
     
     if hitEOF { // release the closure
-      // TBD: If the stream is piped, this is not called. Do we leak in this 
-      //      case?  
       cb = .None
     }
   }

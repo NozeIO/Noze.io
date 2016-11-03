@@ -12,7 +12,7 @@ import console
 
 class ReadableTests: NozeIOTestCase {
 
-  func testReadablePipe() {
+  func testReadablePipeThenPush() {
     enableRunLoop()
     
     var done = false
@@ -32,6 +32,25 @@ class ReadableTests: NozeIOTestCase {
     
     done = true
     readable.push(nil)
+    
+    waitForExit()
+  }
+  
+  func testReadablePushFirstThenPipe() {
+    enableRunLoop()
+    
+    let readable = Readable<String>()
+    let writeable = Writable<String>() { chunk, done in
+      console.dir(chunk)
+      done(nil)
+    }
+    
+    readable.push(["Hi dude"])
+    readable.push(nil)
+    
+    readable | writeable .onFinish {
+      self.exitIfDone()
+    }
     
     waitForExit()
   }
