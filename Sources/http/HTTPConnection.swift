@@ -37,12 +37,28 @@ class HTTPConnection {
       self.log.leave()
     }
     
+    _ = stream.onFinish { [unowned self] in
+      // In the server this is coming BEFORE the end (the client has been 
+      // written into our server AKA we have read)
+      
+      // print("SOCKET DID FINISH \(self) \(self.stream)")
+    }
     _ = stream.onceEnd { [unowned self] in
-      self.log.enter(); defer { self.log.leave() }
+      // In the server this coming AFTER finish (the client has been potentially
+      // read our response AKA we have written)
+      
+      // Since we emitDone at the end of this block, what should trigger the 
+      // server/client to release this connection, we need to capture self, 
+      // to make sure we deinit after having left the log.
+      let strongSelf = self
+      self.log.enter(); defer { strongSelf.log.leave() }
+      
+      // Since we use the connection for both sides, we can only be sure at the
+      // end to release the parser (End of readstream).
+      
       // send EOF to parser
       self.parser?.end() // Note: this can still generate events!!!
       self.parser = nil // done parsing. TBD: this looks dangerous, because ^
-      // print("SOCKET DID END \(self) \(self.stream)")
       
       // If a SERVER gets EOF while receiving the request, this just means that
       // the client is done with it. Can't be kept-alive though.
@@ -51,20 +67,22 @@ class HTTPConnection {
       // whole socket.
       // TBD: well, not really. EOF is fine as long as the parser *did* end as
       //      well? The server can close the input
-    }
-    _ = stream.onFinish { [unowned self] in
-      // In the server this is coming after the end (the request has been read)
-      // In the client this is coming BEFORE the end (the request has been sent,
-      // but we still wait for the response).
-      self.log.enter(); defer { self.log.leave() }
-      //print("SOCKET DID FINISH \(self) \(self.stream)")
+      // print("SOCKET DID END \(self) \(self.stream)")
+      
       self.emitDone()
     }
     
-    if let socket = stream as? Socket {
-      _ = socket.onceTimeout(handler: self.onTimeout)
+    if let socket = stream as? Socket { 
+      _ = socket.onceTimeout { [unowned self] socket in
+        self.onTimeout(socket: socket)
+      }
     }
-    _ = stream.onReadable { [unowned self] in self.doRead() }
+    _ = stream.onReadable { [unowned self] in
+      self.doRead() 
+    }
+  }
+  deinit {
+    // print("CONNECTION DEALLOC \(self)")
   }
   
   func emitDone() {
