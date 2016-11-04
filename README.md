@@ -32,9 +32,7 @@ It includes modules such as
 [express](Sources/express) or
 [redis](Sources/redis).
 
-**Noze.io** works in Cocoa environments as well as on Linux. Use Xcode 8 on
-macOS and Swift 3.0.1 GMc on Linux.
-
+**Noze.io** works in Cocoa environments as well as on Linux.
 Head over to our [Start](http://noze.io/start/) page for install instructions.
 
 *Is it a good idea?* You [tell us](http://noze.io/about/).
@@ -90,7 +88,7 @@ an email to tell us why this is crap (or not?).
 | OS    | Swift  | Xcode                                                      | Make | SPM  |
 | ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
 | macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
-| tuxOS | [3.0.1 GMc](https://swift.org/download/#previews) | | 👍🏻  | 👍  |
+| tuxOS | [3.0.1](https://swift.org/download/#releases) | | 👍🏻  | 👍  |
 
 With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
 are still interested in using it with 2.x, the last release is still available
