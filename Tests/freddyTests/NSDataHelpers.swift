@@ -6,10 +6,13 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+#if os(macOS) // TODO: port to Linux
+
 import Freddy
 import class Foundation.NSData
 
 public extension JSON {
+
   
   // TODO: remove me, just for testing
   public init(data inData: NSData) throws {
@@ -25,7 +28,7 @@ public extension JSON {
   public init<T>(data inData: NSData, usingParser dummy: T) throws {
     try self.init(data: inData)
   }
-  
+
 }
 
 public extension JSONParser {
@@ -49,3 +52,4 @@ public extension JSONParser {
 
 }
 
+#endif

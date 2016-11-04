@@ -15,9 +15,9 @@ import core
 /// Example:
 ///
 ///     let ws = Writable<UInt8>()
-///     ws._write { chunk, done in
+///     ws._write { chunk, next in
 ///       console.dir(chunk)
-///       done()
+///       next()
 ///     }
 ///
 ///     "hello world" | ws
@@ -37,26 +37,38 @@ public class Writable<WriteType> : WritableStream<WriteType> {
                enableLogger: enableLogger)
   }
   
-  public convenience init
-    (cb: @escaping ([ WriteType ], @escaping ( Error? ) -> Void) -> Void)
+  public convenience init(cb: @escaping ([ WriteType ],
+                          @escaping ( Error? ) -> Void) -> Void)
   {
     self.init()
     self._write(cb: cb)
   }
   
-  
   // MARK: - The Callback
 
   var cb : WritableWriteCB<WriteType> = .None
   
-  /* cannot do this, will make the untyped cb ambigiuos
-  func _write(cb lcb: ([ WriteType ], ( ) -> Void) -> Void) {
-    cb = .JustChunk(lcb)
-  }
-  */
   func _write(cb: @escaping ([WriteType], @escaping (Error?) -> Void) -> Void) {
     self.cb = .ChunkAndError(cb)
   }
+  
+  
+  // MARK: - Callback Overload
+  
+  #if SWIFT_SUPPORTS_REALLY_CLEVER_TYPE_LOOKUP
+    // Cannot do this, will make the untyped cb ambigiuos (even though the
+    // compiler could derive the type from the call).
+    public convenience init(cb: @escaping ([ WriteType ],
+                            @escaping ( ) -> Void) -> Void)
+    {
+      self.init()
+      self.cb = .JustChunk(cb)
+    }
+  
+    func _write(cb lcb: ([ WriteType ], ( ) -> Void) -> Void) {
+      cb = .JustChunk(lcb)
+    }
+  #endif
   
   
   // MARK: - Writable Overrides
