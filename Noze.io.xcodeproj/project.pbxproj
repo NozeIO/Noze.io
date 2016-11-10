@@ -8541,6 +8541,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 			};
 			name = AppKitDebug;
 		};
@@ -8550,6 +8551,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 			};
 			name = UIKitDebug;
 		};
@@ -8559,6 +8561,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 			};
 			name = AppKitRelease;
 		};
@@ -8568,6 +8571,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 			};
 			name = UIKitRelease;
 		};
@@ -9630,6 +9634,7 @@
 				E8978EDD1D8A18DE00ED4558 /* UIKitRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
 		};
 		E8978F051D8A1F8700ED4558 /* Build configuration list for PBXNativeTarget "crypto" */ = {
 			isa = XCConfigurationList;
@@ -9640,6 +9645,7 @@
 				E8978F091D8A1F8700ED4558 /* UIKitRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
 		};
 		E8978F2E1D8A260D00ED4558 /* Build configuration list for PBXNativeTarget "NozeCryptoTests" */ = {
 			isa = XCConfigurationList;
@@ -9650,6 +9656,7 @@
 				E8978F321D8A260D00ED4558 /* UIKitRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
 		};
 		E89872341CFF7DB200466E86 /* Build configuration list for PBXNativeTarget "todo-mvc" */ = {
 			isa = XCConfigurationList;
