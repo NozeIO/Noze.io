@@ -220,7 +220,7 @@ public extension http_parser {
   // FIXME: the error codes are wrong
   
   /// Run the notify callback FOR, returning ER if it fails
-  @inline(__always) // crashed Swift3p4 - looks fine with Xcode 8.1
+  //@inline(__always) // crashes Swift3p4
   internal mutating func CALLBACK_NOTIFY_(_ cbe           : Callback,
                                           _ CURRENT_STATE : inout ParserState,
                                           _ settings : http_parser_settings,
