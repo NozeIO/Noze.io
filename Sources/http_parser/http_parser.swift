@@ -220,7 +220,7 @@ public extension http_parser {
   // FIXME: the error codes are wrong
   
   /// Run the notify callback FOR, returning ER if it fails
-  //@inline(__always) // crashes Swift3p4
+  //@inline(__always) // crashes Swift 3.0.1 on Linux
   internal mutating func CALLBACK_NOTIFY_(_ cbe           : Callback,
                                           _ CURRENT_STATE : inout ParserState,
                                           _ settings : http_parser_settings,
