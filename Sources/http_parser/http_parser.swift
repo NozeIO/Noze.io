@@ -449,7 +449,7 @@ public extension http_parser {
       return V
     }
     
-    @inline(__always)
+    // @inline(__always) - this results in linker errors in Release builds ...
     func UPDATE_STATE(_ state: ParserState) {
       if debugOn { print("  UPDATE_STATE \(CURRENT_STATE) => \(state)") }
       CURRENT_STATE = state
