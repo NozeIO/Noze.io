@@ -38,21 +38,21 @@ class HTTPConnection {
   init(_ stream: DuplexByteStreamType, _ log: Logger) {
     self.stream   = stream
     self.log      = log
+
+    #if false
+      log.enter(); log.log("socket: \(socket)")
+      defer { log.log("socket: \(socket)"); log.leave() }
+    #endif
+
+    // TODO: Those are weak, but I think we should rather get the flow right.
     
-    log.enter();
-    log.log("socket: \(socket)")
-    defer {
-      log.log("socket: \(socket)")
-      log.leave()
-    }
-    
-    _ = stream.onceFinish { [unowned self] in
+    _ = stream.onceFinish { [weak self] in
       log.enter(); defer { log.leave() }
       
       // we are done writing to the socket
-      self.emitDone()
+      self?.emitDone()
     }
-    _ = stream.onceEnd { [unowned self] in
+    _ = stream.onceEnd { [weak self] in
       log.enter(); defer { log.leave() }
       
       // The stream did end - aka the Socket read end got closed. Aka EOF.
@@ -67,7 +67,7 @@ class HTTPConnection {
       // end to release the parser (End of readstream).
       
       // send EOF to parser
-      if let parser = self.parser {
+      if let parser = self?.parser {
         parser.end()
           // Note: this can still generate events!!!
           // we are NOT resetting 'self.parser' here. The parser is reused for
@@ -75,7 +75,7 @@ class HTTPConnection {
       }
       else {
         // got an EOF w/o a parser?
-        self.emitDone()
+        self?.emitDone()
       }
       
       // If a SERVER gets EOF while receiving the request, this just means that
@@ -88,9 +88,16 @@ class HTTPConnection {
     }
     
     if let socket = stream as? Socket {
-      _ = socket.onceTimeout { [unowned self] in self.onTimeout(socket: $0) }
+      _ = socket.onceTimeout { [weak self] in self?.onTimeout(socket: $0) }
     }
-    _ = stream.onReadable { [unowned self] in self.doRead() }
+    _ = stream.onReadable { [weak self] in self?.doRead() }
+  }
+  deinit {
+    if let s = stream { // seems to happen, TODO: debug
+      s.closeReadStream()
+      s.closeWriteStream()
+      self.stream = nil
+    }
   }
   
   func emitDone() {
