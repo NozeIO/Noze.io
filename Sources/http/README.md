@@ -1,4 +1,4 @@
-# Noze.io `http` module
+# Noze.io http module
 
 An HTTP module modelled after the builtin Node
 [http module](https://nodejs.org/dist/latest-v7.x/docs/api/http.html).
@@ -10,12 +10,12 @@ In Noze.io the `http` module also contains a set of other 'modules':
 - `cookies`     for dealing with HTTP cookies
 - `basicAuth`   for parsing HTTP Basic authentication headers
 
-## Core `http` module
+## Core http module
 
 The Noze.io HTTP module supports both ends, it can work as an HTTP client as
 well as an HTTP server.
 
-### `http` server
+### http server
 
 Example:
 
@@ -27,7 +27,7 @@ Example:
     }
     .listen(1337)
 
-### `http` client
+### http client
 
 Example:
 
@@ -39,7 +39,9 @@ Example:
       }
     }
 
-## `url`
+## Embedded Modules
+
+### url
 
 This is similar to the Node
 [url module](https://nodejs.org/dist/latest-v7.x/docs/api/url.html).
@@ -53,7 +55,7 @@ Note: In Swift you have also access to the `URL` (aka `NSURL`) class as well as
       `URLComponents`. Depending on your needs that might be the preferred
       class.
 
-## `querystring`
+### querystring
 
 Example:
 
@@ -61,7 +63,7 @@ Example:
     let aValues = parsed["a"] // [ '5', '8' ]
     let cValue  = parsed["c"] as! String // 'Hello World'
 
-## `cookies`
+### cookies
 
 Example:
 
@@ -72,7 +74,7 @@ Example:
 An example server can be found here: 
 [httpd-cookies](https://github.com/NozeIO/Noze.io/blob/master/Samples/httpd-cookies/main.swift).
 
-## `basicAuth`
+### basicAuth
 
 This is a very basic module, one should rather use a middleware dealing with
 authentication.
@@ -86,9 +88,10 @@ Example:
        else {
         res.statusCode = 401
         res.setHeader("WWW-Authenticate", 
-        "Basic realm=\"Cows Heaven\"")
+                      "Basic realm=\"Cows Heaven\"")
         return res.end()
       }
 
       res.end("Welcome to the forbidden zone!")
     }
+
