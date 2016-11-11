@@ -173,7 +173,15 @@ public struct http_parser {
     }
   }
   
-  public var shouldKeepAlive : Bool = false // TODO: http_should_keep_alive
+  public var shouldKeepAlive : Bool {
+    if http_major > 0 && http_minor > 0 { // HTTP/1.1 (default: keep)
+      if flags.contains(.F_CONNECTION_CLOSE) { return false }
+    }
+    else { // HTTP/1.0 and before (default: close, keep-alive header)
+      if flags.contains(.F_CONNECTION_KEEP_ALIVE) { return true }
+    }
+    return !messageNeedsEOF
+  }
   
   var NEW_MESSAGE : ParserState {
     if HTTP_PARSER_STRICT {
