@@ -79,7 +79,7 @@ public struct Route: MiddlewareObject {
     
     // loop over route middleware
     let stack = self.middleware
-    var next  : Next = { _ in } // cannot be let as it's self-referencing
+    var next  : Next? = { _ in } // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
@@ -91,11 +91,13 @@ public struct Route: MiddlewareObject {
       
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext'
-      middleware(req, res, (i == stack.count) ? endNext : next)
+      let isLast = i == stack.count
+      middleware(req, res, isLast ? endNext : next)
+      if isLast { next = nil }
     }
     
     // inititate the traversal
-    next()
+    next!()
   }
   
   
