@@ -58,6 +58,8 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   // TBD: We could make Socket a generic type on the SocketAddress, like in
   //      SwiftSockets. But the Node Socket is more dynamic and does stuff like
   //      lookup etc.
+  // TODO: this doesn't flush all event handler queues, e.g. timeout when the
+  //       underlying socket is closed.
   
   let io : SocketSourceTarget
   
@@ -212,14 +214,14 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     // TODO: how to assign to remoteAddress
     log.debug("  connected: \(a)")
     
-    self.connectionState = .Connected
+    connectionState = .Connected
     
-    self.log.debug("did connect to \(a)")
-    self.connectListeners.emit(self)
+    log.debug("did connect to \(a)")
+    connectListeners.emit(self)
     
     // resume streams, start IO on socket
-    self.resume()
-    self.uncork()
+    resume()
+    uncork()
   }
   
   public func connect<AT: SocketAddress>(_ address: AT) {
@@ -273,10 +275,8 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
 
   // MARK: - Event Handlers
   
-  var lookupListeners  = EventListenerSet<(Error?, sockaddr_any?)>(
-                           queueLength: 1, coalesce: true)
-  var connectListeners = EventListenerSet<Socket>(
-                           queueLength: 1, coalesce: true)
+  var lookupListeners  = EventOnceListenerSet<(Error?, sockaddr_any?)>()
+  var connectListeners = EventOnceListenerSet<Socket>()
   var timeoutListeners = EventListenerSet<Socket>(
                            queueLength: 1, coalesce: true)
 

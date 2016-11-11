@@ -72,8 +72,7 @@ open class Stream : ErrorEmitter, StreamType, LameLogObjectType {
   
   // MARK: - Close Events
   
-  public var closeListeners =
-               EventListenerSet<Void>(queueLength: 1, coalesce: true)
+  public var closeListeners = EventOnceListenerSet<Void>()
   
   @discardableResult
   public func onClose(handler cb: @escaping CloseCB) -> Self {
