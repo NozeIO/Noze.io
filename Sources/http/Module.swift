@@ -42,21 +42,44 @@ public func createServer(enableLogger el: Bool = false,
 
 let globalAgent = Agent()
 
-public func request(options    opts : RequestOptions,
-                    onResponse cb   : (( IncomingMessage ) -> Void)?)
+/**
+ * Example:
+ *
+ *     let req = request(options) { res in
+ *       print("Response status: \(res.statusCode)")"
+ *       res | utf8 | concat { data in
+ *         result = String(data) // convert characters into String
+ *         print("Response body: \(result)")
+ *       }
+ *     }
+ */
+@discardableResult
+public func request(_ options     : RequestOptions,
+                    onResponse cb : (( IncomingMessage ) -> Void)?)
             -> ClientRequest
 {
-  let req = ClientRequest(options: opts)
+  let req = ClientRequest(options: options)
   if let c = cb { _ = req.onResponse(handler: c) }
   return req
 }
 
-
-public func request(url        s : String,
+/**
+ * Example:
+ *
+ *     let req = request("http://www.zeezide.de/") { res in
+ *       print("Response status: \(res.statusCode)")"
+ *       res | utf8 | concat { data in
+ *         result = String(data) // convert characters into String
+ *         print("Response body: \(result)")
+ *       }
+ *     }
+ */
+@discardableResult
+public func request(_ url         : String,
                     onResponse cb : (( IncomingMessage ) -> Void)?)
             -> ClientRequest
 {
-  let lurl = url.parse(s)
+  let lurl = http.url.parse(url)
   
   let options = RequestOptions()
   options.scheme   = lurl.scheme ?? options.scheme
@@ -64,39 +87,26 @@ public func request(url        s : String,
   options.port     = lurl.port   ?? options.port
   options.path     = lurl.path   ?? options.path
   
-  return request(options: options, onResponse: cb)
+  return request(options, onResponse: cb)
 }
 
-public func get(url s : String, onResponse cb : (( IncomingMessage ) -> Void)?)
-            -> ClientRequest
-{
-  let req = request(url: s, onResponse: cb)
-  req.end()
-  return req
-}
-
-public func get(options    o  : RequestOptions,
-                onResponse cb : (( IncomingMessage ) -> Void)?)
-            -> ClientRequest
-{
-  let req = request(options: o, onResponse: cb)
-  req.end()
-  return req
-}
-
-
-@discardableResult
-public func request(_ s : String,
-                    onResponse cb : (( IncomingMessage ) -> Void)?)
-            -> ClientRequest
-{
-  return request(url: s, onResponse: cb)
-}
 @discardableResult
 public func get(_ s : String, onResponse cb : (( IncomingMessage ) -> Void)?)
             -> ClientRequest
 {
-  return get(url: s, onResponse: cb)
+  let req = request(s, onResponse: cb)
+  req.end()
+  return req
+}
+
+@discardableResult
+public func get(_          o  : RequestOptions,
+                onResponse cb : (( IncomingMessage ) -> Void)?)
+            -> ClientRequest
+{
+  let req = request(o, onResponse: cb)
+  req.end()
+  return req
 }
 
 

@@ -173,7 +173,15 @@ public struct http_parser {
     }
   }
   
-  var shouldKeepAlive : Bool = false // TODO: http_should_keep_alive
+  public var shouldKeepAlive : Bool {
+    if http_major > 0 && http_minor > 0 { // HTTP/1.1 (default: keep)
+      if flags.contains(.F_CONNECTION_CLOSE) { return false }
+    }
+    else { // HTTP/1.0 and before (default: close, keep-alive header)
+      if flags.contains(.F_CONNECTION_KEEP_ALIVE) { return true }
+    }
+    return !messageNeedsEOF
+  }
   
   var NEW_MESSAGE : ParserState {
     if HTTP_PARSER_STRICT {
@@ -220,7 +228,7 @@ public extension http_parser {
   // FIXME: the error codes are wrong
   
   /// Run the notify callback FOR, returning ER if it fails
-  //@inline(__always) // crashes Swift3p4
+  //@inline(__always) // crashes Swift 3.0.1 on Linux
   internal mutating func CALLBACK_NOTIFY_(_ cbe           : Callback,
                                           _ CURRENT_STATE : inout ParserState,
                                           _ settings : http_parser_settings,
@@ -449,7 +457,7 @@ public extension http_parser {
       return V
     }
     
-    @inline(__always)
+    // @inline(__always) - this results in linker errors in Release builds ...
     func UPDATE_STATE(_ state: ParserState) {
       if debugOn { print("  UPDATE_STATE \(CURRENT_STATE) => \(state)") }
       CURRENT_STATE = state

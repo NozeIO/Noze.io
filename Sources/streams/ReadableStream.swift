@@ -426,7 +426,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
   public var didSendEnd   : Bool = false
   public var didSendClose : Bool = false
   
-  public func _endReadable() {
+  open func _endReadable() {
     // called by read() -> nil or push(nil)
     let log = self.log
     log.enter(); defer { log.leave() }
@@ -555,8 +555,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
   
   public var readableListeners =
                EventListenerSet<Void>(queueLength: 1, coalesce: true)
-  public var endListeners      =
-               EventListenerSet<Void>(queueLength: 1, coalesce: true)
+  public var endListeners      = EventOnceListenerSet<Void>()
   
   public var didResumeOnFirst = false // #linux-public
   public func _resumeOnFirstReadableListener() {

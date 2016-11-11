@@ -25,7 +25,7 @@ open class Router: MiddlewareObject {
                      next     endNext : @escaping Next)
   {
     let routes = self.routes // make a copy to protect against modifications
-    var next : Next = { _ in } // cannot be let as it's self-referencing
+    var next : Next? = { _ in } // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
@@ -37,12 +37,13 @@ open class Router: MiddlewareObject {
       
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext'
-      route.handle(request: req, response: res,
-                   next: (i == routes.count) ? endNext : next)
+      let isLast = i == routes.count
+      route.handle(request: req, response: res, next: isLast ? endNext : next!)
+      if isLast { next = nil }
     }
     
     // inititate the traversal
-    next()
+    next!()
   }
   
 }

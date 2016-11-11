@@ -9,7 +9,8 @@
 import streams
 import net
 
-public class Agent {
+open class Agent {
+  // TODO: implement actual pooling :-)
 
   let keepAlive      : Bool
   let keepAliveMsecs : Int
@@ -28,15 +29,15 @@ public class Agent {
   // TODO: connection pool of HTTP client sockets
   
   
-  public func createConnection(options o: RequestOptions)
-              -> DuplexByteStreamType
+  open func createConnection(options o: RequestOptions)
+            -> DuplexByteStreamType
   {
     // TODO: reuse connections, pool on: (unc
     //         hostname + port
     return net.connect(options: o)
   }
   
-  public func pool(connection c: DuplexByteStreamType) {
+  open func pool(connection c: DuplexByteStreamType) {
     // TODO: reuse connections
     c.closeReadStream()
     c.closeWriteStream()
