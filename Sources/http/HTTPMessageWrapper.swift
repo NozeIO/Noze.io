@@ -13,9 +13,10 @@ import net
 
 /// Base class for `ServerResponse` and `ClientRequest`, which are very similar.
 ///
-public class HTTPMessageWrapper : WritableByteStreamWrapper {
+open class HTTPMessageWrapper : WritableByteStreamWrapper {
   // TODO: trailers
   // TODO: setTimeout(msecs, cb)
+  // TODO: support for chunked
   
   public var extra = [ String : Any ]()
   

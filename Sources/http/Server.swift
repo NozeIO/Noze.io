@@ -15,9 +15,29 @@ import class net.Socket
 public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
 public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
 
+/**
+ * http.Server
+ *
+ * Represents a HTTP server. That is, a TCP listening server handling HTTP
+ * protocol messages.
+ *
+ * You don't usually create those objects directly, but rather using the
+ * `http.createServer` global function, like so:
+ *
+ *     http.createServer { req, res in
+ *       res.writeHead(200, [ "Content-Type": "text/html" ])
+ *       res.end("<h1>Hello World</h1>")
+ *     }
+ *     .listen(1337)
+ *
+ * Supported events:
+ *
+ *   onRequest (req, res)
+ *   - req: `http.IncomingMessage`
+ *   - res: `http.ServerResponse`
+ */
 open class Server: net.Server {
   
-  // TODO
   var httpConnections = [ HTTPConnection ]()
   
   public init(enableLogger: Bool = false) {
@@ -31,13 +51,17 @@ open class Server: net.Server {
   }
   
   public func _httpAccept(socket s: Socket) {
+    // The superclass accepted a TCP connection. We wrap the accepted `Socket`
+    // in a `HTTPConnection` object which hooks up the HTTP parser.
     log.enter(); defer { log.leave() }
     
     let con = HTTPConnection(s, log)
     
     // TODO: Explain why `unowned` is used. The callbacks should be reset (and
     //       hence the retain-cycle broken) when the connection's socket is
-    //       done.
+    //       done?
+    // Well: The server owns this object, it is stored in the `httpConnections`
+    //       array.
     con.cbDone    = { [unowned self] c in
       self._connectionIsDone(c: c)
     }
@@ -47,6 +71,7 @@ open class Server: net.Server {
     
     httpConnections.append(con)
     
+    // The
     assert(self.pauseOnConnect)
     s.resume()
   }
