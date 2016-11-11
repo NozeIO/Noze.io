@@ -19,6 +19,7 @@ public class EventListenerSet<T> {
   //      Also: do we really need multiple listeners? That mostly sounds useful
   //            for debugging queue state?
   // 2016-05-08: changed back to class from struct
+  //             TBD: why?
   
   public typealias EventHandler = ( T ) -> Void
   
@@ -164,6 +165,81 @@ public class EventListenerSet<T> {
     return
   }
   */
+}
+
+/// An array of event handlers `T` with some extra metadata.
+///
+/// This implementation is for events which can only ever happen once in the
+/// livetime of the owning object. For example 'finish' and 'end' on a socket.
+///
+public class EventOnceListenerSet<T> {
+  
+  public typealias EventHandler = ( T ) -> Void
+  
+  var listeners  = [ ListenerEntry<T> ]()
+  var queuedItem : T?
+  var didFire    = false
+  
+  public var count   : Int  { return listeners.count   }
+  public var isEmpty : Bool { return listeners.isEmpty }
+  
+  public init() {
+  }
+
+  public func removeAllListeners() {
+    listeners.removeAll()
+  }
+  
+  public func add(handler listener: @escaping EventHandler) {
+    add(handler: listener, once: true)
+  }
+  public func add(handler listener: @escaping EventHandler, once: Bool) {
+    guard !didFire else {
+      print("WARN: adding event handler to once-event which did already fire!")
+      // TODO: Is this behaviour desirable? Should we trigger the event again?
+      //       But to do so, we would need to cache the queuedItem which is
+      //       highly undesirable.
+      return
+    }
+    
+    listeners.append( ListenerEntry(cb: listener, once: once) )
+    
+    // Emit queued events. Note: this can stop, e.g. when a once listener got
+    // added.
+    if let value = queuedItem {
+      queuedItem = nil
+      emit(value)
+    }
+  }
+  
+  func _queueValue(value v: T) {
+    assert(queuedItem == nil, "once-event issued more than once?!")
+    queuedItem = v
+  }
+  
+  public func emit(_ v: T) {
+    if listeners.isEmpty {
+      // have no listeners yet, queue event for later delivery
+      _queueValue(value: v)
+      return
+    }
+    
+    // listeners in theory could add new listeners (and make this loop)
+    while !listeners.isEmpty {
+      let listenersCopy = listeners
+      listeners.removeAll() // empty that
+      
+      for entry in listenersCopy {
+        entry.cb(v)
+      }
+      
+      if !listeners.isEmpty {
+        print("WARN: once-listeners queued new listeners!")
+      }
+    }
+    
+    didFire = true
+  }
 }
 
 class ListenerEntry<T> { // class to support isEmitting

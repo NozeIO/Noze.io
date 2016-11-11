@@ -110,7 +110,7 @@ public class FSWatcher: ErrorEmitter {
 
   // MARK: - Events
 
-  public var closeListeners  = EventListenerSet<FSWatcher>()
+  public var closeListeners  = EventOnceListenerSet<FSWatcher>()
   public var changeListeners = EventListenerSet<FSWatcherEvent>()
   
   public func onClose(cb: @escaping ( FSWatcher ) -> Void) -> Self {

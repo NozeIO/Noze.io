@@ -344,7 +344,7 @@ open class WritableStream<WriteType>
   // MARK: - Event Handlers
 
   var drainListeners  = EventListenerSet<Void>(queueLength: 1, coalesce: true)
-  var finishListeners = EventListenerSet<Void>(queueLength: 1, coalesce: true)
+  var finishListeners = EventOnceListenerSet<Void>()
   var pipeListeners   = EventListenerSet<ReadableStreamType>()
   var unpipeListeners = EventListenerSet<ReadableStreamType>()
   

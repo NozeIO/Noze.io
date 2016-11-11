@@ -89,7 +89,7 @@ public class Connect {
       response.writeHead(404)
       response.end()
     }
-    var next    : Next = { _ in } // cannot be let as it's self-referencing
+    var next    : Next? = { _ in } // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     next = {
@@ -101,11 +101,15 @@ public class Connect {
       
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext' which won't do anything.
-      middleware(request, response,
-                 (i == matchingMiddleware.count) ? endNext : next)
+      let isLast = i == matchingMiddleware.count
+      middleware(request, response, isLast ? endNext : next!)
+      
+      if isLast {
+        next = nil // break cycle?
+      }
     }
     
-    next()
+    next!()
   }
   
 }

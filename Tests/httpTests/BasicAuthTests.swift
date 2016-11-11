@@ -13,6 +13,8 @@ import base64
 
 class BasicAuthTests: NozeIOTestCase {
   
+  let testPort = 17235
+  
   func testBasicAuth() {
     let myServer = http.createServer { req, res in
         print("S: GOT REQUEST: \(req)")
@@ -45,7 +47,7 @@ class BasicAuthTests: NozeIOTestCase {
           res.end()
         }
       }
-      .listen(17234)
+      .listen(testPort)
     
     let tests: [(String, Int)] = [
       ("Basic "        + b64("test:abc123") , 200),
@@ -62,11 +64,11 @@ class BasicAuthTests: NozeIOTestCase {
       let opt = RequestOptions()
       opt.scheme   = "http"
       opt.hostname = "127.0.0.1"
-      opt.port     = 17234
+      opt.port     = testPort
       opt.method   = .GET
       opt.headers["Authorization"] = auth
       
-      let req = request(options: opt) { res in
+      let req = request(opt) { res in
         print("C: GOT RESPONSE: \(res)")
         XCTAssert(res.statusCode == status)
       

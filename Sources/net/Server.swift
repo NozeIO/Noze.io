@@ -332,7 +332,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   
   // MARK: - Events
 
-  public var closeListeners      = EventListenerSet<Server>()
+  public var closeListeners      = EventOnceListenerSet<Server>()
   public var connectionListeners = EventListenerSet<Socket>()
   public var listeningListeners  = EventListenerSet<Server>()
   
