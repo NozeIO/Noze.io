@@ -35,6 +35,9 @@ open class Server: net.Server {
     
     let con = HTTPConnection(s, log)
     
+    // TODO: Explain why `unowned` is used. The callbacks should be reset (and
+    //       hence the retain-cycle broken) when the connection's socket is
+    //       done.
     con.cbDone    = { [unowned self] c in
       self._connectionIsDone(c: c)
     }

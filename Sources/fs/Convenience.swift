@@ -26,7 +26,7 @@ public func readFile(_ path: String, _ encoding: String,
 {
   // Note: The encoding does not default to utf-8 because otherwise we need to 
   //       explicitly type the closure on the caller site - which happens to be
-  //       inconvenient, which is something we do not appreciated.
+  //       inconvenient, which is something we do not appreciate.
   //       (otherwise there is ambiguity between readFile ByteBucket and String.
   // TODO: support open-flags (r+, a, etc)
   let enc = encoding.lowercased()
