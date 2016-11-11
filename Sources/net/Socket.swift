@@ -89,7 +89,7 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     }
   }
   deinit {
-    print("dealloc socket \(self)")
+    // print("dealloc socket \(self)")
   }
   
   
