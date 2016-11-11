@@ -92,7 +92,7 @@ public struct Route: MiddlewareObject {
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext'
       let isLast = i == stack.count
-      middleware(req, res, isLast ? endNext : next)
+      middleware(req, res, isLast ? endNext : next!)
       if isLast { next = nil }
     }
     

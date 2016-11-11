@@ -38,12 +38,12 @@ open class Router: MiddlewareObject {
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext'
       let isLast = i == routes.count
-      route.handle(request: req, response: res, next: isLast ? endNext : next)
+      route.handle(request: req, response: res, next: isLast ? endNext : next!)
       if isLast { next = nil }
     }
     
     // inititate the traversal
-    next()
+    next!()
   }
   
 }
