@@ -19,8 +19,24 @@ public typealias ExpectEventCB   = (( IncomingMessage, ServerResponse )) -> Void
 public typealias ConnectEventCB  = (( ServerResponse, Socket, [UInt8] )) -> Void
 public typealias SocketEventCB   = ( Socket ) -> Void
 
-
-public class ClientRequest : HTTPMessageWrapper {
+/**
+ * http.ClientRequest
+ *
+ * Represents a request being sent to an HTTP server. You don't usually
+ * instantiate such directly, but rather use the global `http.request` function.
+ *
+ * Example:
+ *
+ *     let req = request("http://www.zeezide.de/") { res in
+ *       print("Response status: \(res.statusCode)")"
+ *       res | utf8 | concat { data in
+ *         result = String(data) // convert characters into String
+ *         print("Response body: \(result)")
+ *       }
+ *     }
+ *
+ */
+open class ClientRequest : HTTPMessageWrapper {
   
   public let method : HTTPMethod
   public let path   : String

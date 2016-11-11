@@ -68,7 +68,7 @@ class BasicAuthTests: NozeIOTestCase {
       opt.method   = .GET
       opt.headers["Authorization"] = auth
       
-      let req = request(options: opt) { res in
+      let req = request(opt) { res in
         print("C: GOT RESPONSE: \(res)")
         XCTAssert(res.statusCode == status)
       
