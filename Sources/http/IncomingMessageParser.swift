@@ -43,6 +43,8 @@ class IncomingMessageParser: http_parser_settings {
   var cbRequest  : RequestCB?  = nil
   var cbResponse : ResponseCB? = nil
   var cbDone     : DoneCB?     = nil
+    // This is invoked once one message has been fully consumed. (that is,
+    // header and body are fully read.
   var cbData     : DataCB?     = nil
   
   func onRequest(handler cb: @escaping RequestCB) -> Self {
