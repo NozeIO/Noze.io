@@ -162,8 +162,10 @@ open class ClientRequest : HTTPMessageWrapper {
       self.responseListeners.emit(msg)
     }
     
-    _ = p.onDone { // response body has finished
-      self.doneParsing()
+    _ = p.onDone { keepAlive in // response body has finished
+      // A client should close the connection when keepAlive is false. If it is
+      // true, it should pool.
+      self.doneParsing(keepAlive)
     }
     
     _ = p.onData { data in
@@ -186,7 +188,8 @@ open class ClientRequest : HTTPMessageWrapper {
     }
   }
   
-  func doneParsing() {
+  func doneParsing(_ keepAlive: Bool) {
+    // TODO: pooling and such.
     self.message?.push(nil) // EOF - notifies the client that the read is done
     
     // TBD: self.message = nil

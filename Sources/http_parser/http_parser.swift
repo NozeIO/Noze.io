@@ -173,7 +173,7 @@ public struct http_parser {
     }
   }
   
-  var shouldKeepAlive : Bool = false // TODO: http_should_keep_alive
+  public var shouldKeepAlive : Bool = false // TODO: http_should_keep_alive
   
   var NEW_MESSAGE : ParserState {
     if HTTP_PARSER_STRICT {
