@@ -20,7 +20,8 @@ private let debugTraffic = false
 
 /// Uses the low-level parser to construct an IncomingMessage
 class IncomingMessageParser: http_parser_settings {
-  // TBD: should this be a Transform stream? (too much overhead?)
+  // TBD:  should this be a Transform stream? (too much overhead?)
+  // TODO: this should not use closures but a delegate for performance etc.
   
   var parser    = http_parser() // this is per-socket
   
@@ -37,7 +38,7 @@ class IncomingMessageParser: http_parser_settings {
   
   typealias RequestCB  = ( String, String, String, [String : Any] ) -> Void
   typealias ResponseCB = ( Int,    String, [String : Any] ) -> Void
-  typealias DoneCB     = () -> Void
+  typealias DoneCB     = ( Bool ) -> Void
   typealias DataCB     = ( [UInt8] ) -> Void
   
   var cbRequest  : RequestCB?  = nil
@@ -127,7 +128,7 @@ class IncomingMessageParser: http_parser_settings {
   }
   func onMessageComplete(parser p: http_parser ) -> Int {
     if heavyDebug { print("on-msg complete") }
-    self.cbDone?()
+    self.cbDone?(p.shouldKeepAlive)
     return 0
   }
   func onStatus(parser p: http_parser, _ data: UnsafePointer<CChar>, _ len: size_t)

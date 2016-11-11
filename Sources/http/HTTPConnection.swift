@@ -14,51 +14,69 @@ import enum http_parser.HTTPError
 
 class HTTPConnection {
   // TODO: this should do proper backpressure management
+  // Note: An important thing to remember is that the messages AND THE STREAMs
+  //       of the messages are decoupled from the socket.
+  //       When an IncomingMessage ends or a ServerResponse finishes, that
+  //       doesn't have to affect the lifetime of the TCP connection. It can and
+  //       usually is persistent after all.
   
   let log       : Logger
   var stream    : DuplexByteStreamType?
   
+  // TBD: should those be a delegate? Probably.
   var cbDone    : (( HTTPConnection ) -> Void)? = nil
   var cbMessage : (( HTTPConnection, IncomingMessage ) -> Void)? = nil
+    // Invoked when a message has been parsed. This is sent to the Server 
+    // object which then creates a `ServerResponse` object and emits the
+    // `onRequest` event.
   
   // FIXME: One connection can handle multiple messages. We need to re-setup
   //        those objects.
-  var message   : IncomingMessage! = nil
+  var message   : IncomingMessage? = nil
   var parser    : IncomingMessageParser! = nil // this is per-socket
   
   init(_ stream: DuplexByteStreamType, _ log: Logger) {
     self.stream   = stream
     self.log      = log
     
-    self.log.enter();
-    self.log.log("socket: \(socket)")
+    log.enter();
+    log.log("socket: \(socket)")
     defer {
-      self.log.log("socket: \(socket)")
-      self.log.leave()
+      log.log("socket: \(socket)")
+      log.leave()
     }
     
-    _ = stream.onFinish { [unowned self] in
-      // In the server this is coming BEFORE the end (the client has been 
-      // written into our server AKA we have read)
+    _ = stream.onceFinish { [unowned self] in
+      log.enter(); defer { log.leave() }
       
-      // print("SOCKET DID FINISH \(self) \(self.stream)")
+      // we are done writing to the socket
+      self.emitDone()
     }
     _ = stream.onceEnd { [unowned self] in
-      // In the server this coming AFTER finish (the client has been potentially
-      // read our response AKA we have written)
+      log.enter(); defer { log.leave() }
       
-      // Since we emitDone at the end of this block, what should trigger the 
-      // server/client to release this connection, we need to capture self, 
-      // to make sure we deinit after having left the log.
-      let strongSelf = self
-      self.log.enter(); defer { strongSelf.log.leave() }
+      // The stream did end - aka the Socket read end got closed. Aka EOF.
+      // On the server this can arrive at various times. E.g. a client can close
+      // its write end of the connection before the server delivered the
+      // response. In this case the end comes in before finsh. However, HTTP/1.1
+      // uses persistent connections by default, so the client wouldn't usually
+      // close it yet in case another request is going to be sent on the same
+      // connection.
       
       // Since we use the connection for both sides, we can only be sure at the
       // end to release the parser (End of readstream).
       
       // send EOF to parser
-      self.parser?.end() // Note: this can still generate events!!!
-      self.parser = nil // done parsing. TBD: this looks dangerous, because ^
+      if let parser = self.parser {
+        parser.end()
+          // Note: this can still generate events!!!
+          // we are NOT resetting 'self.parser' here. The parser is reused for
+          // the whole lifetime of the socket connection.
+      }
+      else {
+        // got an EOF w/o a parser?
+        self.emitDone()
+      }
       
       // If a SERVER gets EOF while receiving the request, this just means that
       // the client is done with it. Can't be kept-alive though.
@@ -67,22 +85,12 @@ class HTTPConnection {
       // whole socket.
       // TBD: well, not really. EOF is fine as long as the parser *did* end as
       //      well? The server can close the input
-      // print("SOCKET DID END \(self) \(self.stream)")
-      
-      self.emitDone()
     }
     
-    if let socket = stream as? Socket { 
-      _ = socket.onceTimeout { [unowned self] socket in
-        self.onTimeout(socket: socket)
-      }
+    if let socket = stream as? Socket {
+      _ = socket.onceTimeout { [unowned self] in self.onTimeout(socket: $0) }
     }
-    _ = stream.onReadable { [unowned self] in
-      self.doRead() 
-    }
-  }
-  deinit {
-    // print("CONNECTION DEALLOC \(self)")
+    _ = stream.onReadable { [unowned self] in self.doRead() }
   }
   
   func emitDone() {
@@ -109,17 +117,15 @@ class HTTPConnection {
     emitDone()
   }
   
-  
-  let buffer   = RawByteBuffer(capacity: 100)
-  var lastName : String? = nil
+  var lastMessage = true // we don't do persistent yet, always set to true
   
   final func _setupParser() {
     log.enter(); defer { log.leave() }
     
-    // Oh well, all those inline callbacks are an'bad stylz
+    // TODO: Oh well, all those inline callbacks are an'bad stylz
     let p = IncomingMessageParser()
     self.parser = p
-    
+        
     _ = p.onRequest { [unowned self] m, p, v, h in
       let msg = IncomingMessage(self.stream!)
       msg.method      = m
@@ -127,7 +133,7 @@ class HTTPConnection {
       msg.httpVersion = v
       msg.headers     = h
       self.message = msg
-      self.cbMessage?(self, self.message)
+      self.cbMessage?(self, msg)
     }
     _ = p.onResponse { [unowned self] s, v, h in
       let msg = IncomingMessage(self.stream!)
@@ -135,16 +141,27 @@ class HTTPConnection {
       msg.httpVersion = v
       msg.headers     = h
       self.message = msg
-      self.cbMessage?(self, self.message)
+      self.cbMessage?(self, msg)
     }
-    _ = p.onDone { [unowned self] in // TBD: is this onFinish? or onEnd?
-      self.message.push(nil) // EOF - notifies the client that the read is done
-      // TODO: this should disassociate the message from the Socket and reset
-      //       parsing/
-      // self.emitDone()
+    
+    _ = p.onDone { [unowned self] keepAlive in
+      // onDone is invoked if a full HTTP message, header AND body have been
+      // processed/read.
+      // NOTE: The connection can still receive additional messages!!!
+      let doneMessage = self.message
+      self.message = nil // this message is DONE. More can arrive
+      
+      doneMessage?.push(nil) // EOF - notifies the client that the read is done
+      
+      // Continue reading the next, or not. This depends on the 'Keep-Alive'
+      // headers etc and is determined by the parser!
+      if !keepAlive {
+        self.lastMessage = true
+      }
     }
     _ = p.onData { [unowned self] data in
-      self.message.push(data)
+      assert(self.message != nil, "data callback but no message available?")
+      self.message?.push(data)
     }
   }
   
@@ -168,8 +185,8 @@ class HTTPConnection {
     parser.write(bucket: bucket)
   }
   
-  func onTimeout(socket: Socket) {
-    // TODO
-    print("TIMEOUT: \(socket)")
+  func onTimeout(socket: Socket) { // read OR write!
+    log.log(message: "socket did timeout \(socket)")
+    emitDone() // what else? Do we have such on IncomingMessage/ServerResponse?
   }
 }
