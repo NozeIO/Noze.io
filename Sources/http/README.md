@@ -2,6 +2,7 @@
 
 An HTTP module modelled after the builtin Node
 [http module](https://nodejs.org/dist/latest-v7.x/docs/api/http.html).
+In applications you probably want to use the Connect or Express module instead.
 
 In Noze.io the `http` module also contains a set of other 'modules':
 
@@ -15,7 +16,7 @@ In Noze.io the `http` module also contains a set of other 'modules':
 The Noze.io HTTP module supports both ends, it can work as an HTTP client as
 well as an HTTP server.
 
-### http server
+### HTTP server
 
 Example:
 
@@ -27,7 +28,7 @@ Example:
     }
     .listen(1337)
 
-### http client
+### HTTP client
 
 Example:
 
