@@ -13,7 +13,7 @@ import xsys
 
 private let heavyLog = false
 
-class NozeIOTransformTests: NozeIOTestCase {
+class TransformTests: NozeIOTestCase {
   
   private static func strlen(s: String) -> Int {
     return s.characters.count
@@ -138,19 +138,21 @@ class NozeIOTransformTests: NozeIOTestCase {
     XCTAssertNotNil(concatData)
     XCTAssertEqual(concatData!.count, fix.characters.count * 2)
   }
+}
 
 #if os(Linux)
+extension TransformTests {
   static var allTests = {
     return [
       ( "testSimpleNoopTransformSpecializeByType",
-         testSimpleNoopTransformSpecializeByType  ),
+        testSimpleNoopTransformSpecializeByType  ),
       ( "testSimpleUpperTransformSpecializeByType",
-         testSimpleUpperTransformSpecializeByType ),
+        testSimpleUpperTransformSpecializeByType ),
       ( "testSimpleTransformConcat",
-         testSimpleTransformConcat ),
+        testSimpleTransformConcat ),
       ( "testSimpleTransformDoubleConcat",
-         testSimpleTransformDoubleConcat ),
+        testSimpleTransformDoubleConcat ),
     ]
   }()
-#endif
 }
+#endif

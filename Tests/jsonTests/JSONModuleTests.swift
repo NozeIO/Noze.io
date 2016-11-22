@@ -11,7 +11,7 @@ import XCTest
 @testable import streams
 @testable import json
 
-class NozeJSONTests: NozeIOTestCase {
+class JSONModuleTests: NozeIOTestCase {
   
   let fixJson1 = "{ \"name\": \"John Doe\", \"age\": 42 }"
   let fixObj1  : [ String : Any ] = [ "name": "John Doe", "age": 42 ]
@@ -43,3 +43,15 @@ class NozeJSONTests: NozeIOTestCase {
     XCTAssertEqual(obj, fixObj1.toJSON())
   }
 }
+
+#if os(Linux)
+extension JSONModuleTests {
+  static var allTests = {
+    return [
+      ( "testSimpleDictStringParse", testSimpleDictStringParse ),
+      ( "testStringifyNull",         testStringifyNull         ),
+      ( "testStringifyDict",         testStringifyDict         )  
+    ]
+  }()
+}  
+#endif

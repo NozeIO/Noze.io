@@ -11,7 +11,7 @@ import XCTest
 import streams
 @testable import fs
 
-class NozeIOFileSourceTests: NozeIOTestCase {
+class FileSourceTests: NozeIOTestCase {
 
   func testFileSource() throws {
     let fn = "/etc/passwd"
@@ -42,13 +42,14 @@ class NozeIOFileSourceTests: NozeIOTestCase {
     enableRunLoop()
     waitForExit()
   }
-
+}
 
 #if os(Linux)
+extension FileSourceTests {
   static var allTests = {
     return [
       ( "testFileSource", testFileSource ),
     ]
   }()
-#endif
 }
+#endif

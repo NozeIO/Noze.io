@@ -12,7 +12,7 @@ import XCTest
 @testable import fs
 @testable import process
 
-class NozeIOPipeTests: NozeIOTestCase {
+class PipeTests: NozeIOTestCase {
 
   // TODO: this sometimes fails/hangs. Maybe Xcode stdout issue?
   func testPipeEtcPasswdToStdout() throws {
@@ -49,14 +49,15 @@ class NozeIOPipeTests: NozeIOTestCase {
     
     waitForExit()
   }
-
+}
 
 #if os(Linux)
+extension PipeTests {
   static var allTests = {
     return [
       ( "testPipeEtcPasswdToStdout",  testPipeEtcPasswdToStdout  ),
       ( "testPipeEtcPasswdToDevNull", testPipeEtcPasswdToDevNull ),
     ]
   }()
-#endif
 }
+#endif

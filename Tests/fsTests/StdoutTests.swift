@@ -12,7 +12,7 @@ import XCTest
 @testable import streams
 @testable import process
 
-class NozeIOStdoutTests: NozeIOTestCase {
+class StdoutTests: NozeIOTestCase {
 
   func testStdoutTest() throws {
     enableRunLoop()
@@ -53,13 +53,14 @@ class NozeIOStdoutTests: NozeIOTestCase {
     
     waitForExit()
   }
-
+}
 
 #if os(Linux)
+extension StdoutTests {
   static var allTests = {
     return [
       ( "testStdoutTest", testStdoutTest )
     ]
   }()
-#endif
 }
+#endif

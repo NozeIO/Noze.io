@@ -10,7 +10,7 @@ import XCTest
 
 @testable import base64
 
-class NozeBase64Tests: XCTestCase {
+class Base64Tests: XCTestCase {
   
   let hello_text = "Hello World"
   let hello_b64  = "SGVsbG8gV29ybGQ="
@@ -25,3 +25,14 @@ class NozeBase64Tests: XCTestCase {
   }
   
 }
+
+#if os(Linux)
+extension Base64Tests {
+  static var allTests = {
+    return [
+      ( "testEncoding", testEncoding ),
+      ( "testDecoding", testDecoding )
+    ]
+  }()
+}
+#endif

@@ -11,7 +11,7 @@ import XCTest
 import xsys
 @testable import process
 
-class NozeIOStdinTests: NozeIOTestCase {
+class StdinTests: NozeIOTestCase {
   
   func XtestStdin() throws { // this is interactive ...
     enableRunLoop()
@@ -49,5 +49,14 @@ class NozeIOStdinTests: NozeIOTestCase {
     
     waitForExit()
   }
-  
 }
+
+#if os(Linux)
+extension StdinTests {
+  static var allTests = {
+    return [
+      /*( "XtestStdin", XtestStdin )*/
+    ]
+  }()
+}
+#endif

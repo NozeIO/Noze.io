@@ -127,6 +127,17 @@ class HTTPParserTests: XCTestCase {
   )
 }
 
+#if os(Linux)
+extension HTTPParserTests {
+  static var allTests = {
+    return [
+      ( "testSimpleGETParsing",  testSimpleGETParsing  ),
+      ( "testSimplePOSTParsing", testSimplePOSTParsing )
+    ]
+  }()
+}
+#endif
+
 
 // MARK: - Helpers
 

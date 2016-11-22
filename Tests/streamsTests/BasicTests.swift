@@ -11,7 +11,7 @@ import XCTest
 @testable import core
 @testable import streams
 
-class NozeIOBasicTests: XCTestCase {
+class BasicTests: XCTestCase {
   
   // MARK: - Simple Tests which need no run loop
   
@@ -87,8 +87,10 @@ class NozeIOBasicTests: XCTestCase {
     }
   }
   */
+}
 
 #if os(Linux)
+extension BasicTests {
   static var allTests = {
     return [
       ( "testNumberPrinter",            testNumberPrinter            ),
@@ -97,5 +99,5 @@ class NozeIOBasicTests: XCTestCase {
       ( "testStringCharacterGenerator", testStringCharacterGenerator ),
     ]
   }()
-#endif
 }
+#endif

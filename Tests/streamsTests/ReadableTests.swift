@@ -56,5 +56,15 @@ class ReadableTests: NozeIOTestCase {
     
     waitForExit()
   }
-  
 }
+
+#if os(Linux)
+extension ReadableTests {
+  static var allTests = {
+    return [
+      ( "testReadablePipeThenPush",       testReadablePipeThenPush      ),
+      ( "testReadablePushFirstThenPipe" , testReadablePushFirstThenPipe ),
+    ]
+  }()
+}
+#endif

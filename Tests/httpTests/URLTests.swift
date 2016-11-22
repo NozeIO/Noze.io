@@ -10,7 +10,7 @@ import XCTest
 
 @testable import http
 
-class NozeIOURLTests: NozeIOTestCase {
+class URLTests: NozeIOTestCase {
   
   func testComplexURLParse() throws {
     let fix = "https://joe:user@apple.com:443/path/elements#red?a=10&b=20"
@@ -87,8 +87,10 @@ class NozeIOURLTests: NozeIOTestCase {
     let c = parsed["c"] as! [String]
     XCTAssertEqual(c, ["Hello", "World"])
   }
+}
 
 #if os(Linux)
+extension URLTests {
   static var allTests = {
     return [
       ( "testComplexURLParse",        testComplexURLParse ),
@@ -98,5 +100,5 @@ class NozeIOURLTests: NozeIOTestCase {
       ( "testQueryStringZFormat",     testQueryStringZFormat ),
     ]
   }()
+}  
 #endif
-}

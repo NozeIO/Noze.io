@@ -1,5 +1,5 @@
 //
-//  NozeIODNSTests.swift
+//  DNSTests.swift
 //  NozeIO
 //
 //  Created by Helge Hess on 11/04/16.
@@ -11,7 +11,7 @@ import XCTest
 @testable import xsys
 @testable import dns
 
-class NozeIODNSTests: NozeIOTestCase {
+class DNSTests: NozeIOTestCase {
   
   func testLookup() throws {
     enableRunLoop()
@@ -30,12 +30,14 @@ class NozeIODNSTests: NozeIOTestCase {
     
     waitForExit()
   }
-  
+}
+
 #if os(Linux)
+extension DNSTests {
   static var allTests = {
     return [
       ( "testLookup", testLookup )
     ]
   }()
-#endif
 }
+#endif

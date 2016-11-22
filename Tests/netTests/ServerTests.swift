@@ -1,5 +1,5 @@
 //
-//  NozeIOServerTests.swift
+//  ServerTests.swift
 //  NozeIO
 //
 //  Created by Helge Hess on 19/04/16.
@@ -12,7 +12,7 @@ import core
 import xsys
 @testable import net
 
-class NozeIOServerTests: NozeIOTestCase {
+class ServerTests: NozeIOTestCase {
   
   func testServerSetup() {
     let server = net.createServer { sock in
@@ -119,3 +119,16 @@ class NozeIOServerTests: NozeIOTestCase {
     waitForExit()
   }
 }
+
+#if os(Linux)
+extension ServerTests {
+  static var allTests = {
+    return [
+      ( "testServerSetup",            testServerSetup            ),
+      ( "testServerListenOnWildcard", testServerListenOnWildcard ),
+      ( "testServerListenOnPort",     testServerListenOnPort     ),
+      ( "testServerConnect",          testServerConnect          )
+    ]
+  }()
+}
+#endif

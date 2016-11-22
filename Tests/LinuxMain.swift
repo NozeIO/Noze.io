@@ -1,42 +1,74 @@
 import XCTest
 
-let testStreams = true
-let testFS      = true
-let testDNS     = true
-let testHTTP    = true
 
-@testable import streamsTests
-@testable import leftpadTests
-@testable import fsTests
+@testable import base64Tests
+@testable import child_processTests
+@testable import cryptoTests
 @testable import dnsTests
+@testable import fsTests
+@testable import http_parserTests
 @testable import httpTests
+@testable import jsonTests
+@testable import leftpadTests
+@testable import mustacheTests
+@testable import netTests
+@testable import streamsTests
+@testable import xsysTests
 
-var tests = [ // leftpad
-  testCase(NozeIOLeftPadTests.allTests),
+
+let tests = [
+  // base64
+  testCase(Base64Tests.allTests),
+
+  // childProcess
+  testCase(ChildProcessTests.allTests),
+
+  // crypto
+  testCase(MD5Tests.allTests),
+
+  // dns
+  testCase(DNSTests.allTests),
+
+  // fs
+  testCase(FileSourceTests.allTests),
+  testCase(FileSystemTests.allTests),
+  testCase(PipeTests.allTests),
+  testCase(ReadDirTests.allTests),
+  // testCase(StdinTests.allTests),
+  testCase(StdoutTests.allTests),
+
+  // httpParser
+  testCase(HTTPParserTests.allTests),
+
+  // http
+  testCase(BasicAuthTests.allTests),
+  testCase(HttpClientTests.allTests),
+  testCase(URLTests.allTests),
+
+  // json
+  testCase(JSONModuleTests.allTests),
+
+  // leftpad
+  testCase(LeftPadTests.allTests),
+
+  // mustache
+  testCase(MustacheTests.allTests),
+
+  // net
+  testCase(ServerTests.allTests),
+  testCase(SocketTests.allTests),
+
+  // streams
+  testCase(BasicAsyncTests.allTests),
+  testCase(BasicTests.allTests),
+  testCase(EventsTests.allTests),
+  testCase(ReadableTests.allTests),
+  testCase(StringDecoderTests.allTests),
+  testCase(TransformTests.allTests),
+
+  // xsys
+  testCase(XSysTests.allTests),
 ]
-
-tests += testStreams ? [ // streams
-  testCase(NozeIOBasicTests.allTests),
-  testCase(NozeIOStringDecoderTests.allTests),
-  testCase(NozeIOTransformTests.allTests),
-] : []
-
-tests += testFS ? [ // fs
-  testCase(NozeIOFileSourceTests.allTests),
-  testCase(NozeIOFileSystemTests.allTests),
-  testCase(NozeIOPipeTests.allTests),
-  testCase(NozeReaddirTests.allTests),
-  testCase(NozeIOStdoutTests.allTests),
-] : []
-
-tests += testDNS ? [ // dns
-  testCase(NozeIODNSTests.allTests),
-] : []
-
-tests += testHTTP ? [ // http
-  testCase(NozeIOURLTests.allTests),
-  testCase(NozeIOHttpClientTests.allTests),
-] : []
 
 XCTMain(tests)
 

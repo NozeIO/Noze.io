@@ -12,7 +12,7 @@ import xsys
 @testable import streams
 @testable import fs
 
-class NozeIOFileSystemTests: NozeIOTestCase {
+class FileSystemTests: NozeIOTestCase {
 
   // MARK: - Directory
   
@@ -319,9 +319,10 @@ class NozeIOFileSystemTests: NozeIOTestCase {
       }
     }
   }
-
+}
 
 #if os(Linux)
+extension FileSystemTests {
   static var allTests = {
     return [
       ( "testSyncReaddir",           testSyncReaddir           ),
@@ -349,5 +350,5 @@ class NozeIOFileSystemTests: NozeIOTestCase {
       ( "testStat",           testStat           ),
     ]
   }()
-#endif
 }
+#endif

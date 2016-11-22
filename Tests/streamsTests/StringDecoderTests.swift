@@ -10,7 +10,7 @@ import XCTest
 
 @testable import streams
 
-class NozeIOStringDecoderTests: NozeIOTestCase {
+class StringDecoderTests: NozeIOTestCase {
   
   func testSimpleDecode() throws {
     enableRunLoop() // pipes need runloops, that's why.
@@ -118,8 +118,10 @@ class NozeIOStringDecoderTests: NozeIOTestCase {
     
     waitForExit()
   }
+}
 
 #if os(Linux)
+extension StringDecoderTests {
   static var allTests = {
     return [
       ( "testSimpleDecode",                testSimpleDecode                ),
@@ -136,8 +138,7 @@ class NozeIOStringDecoderTests: NozeIOTestCase {
       ( "testTrailingReadLinesExtraCR",    testTrailingReadLinesExtraCR    ),
       ( "testTrailingReadLinesTrailingCR", testTrailingReadLinesTrailingCR ),
       ( "testUnique",                      testUnique ),
-    ]
+      ]
   }()
-#endif
-
 }
+#endif

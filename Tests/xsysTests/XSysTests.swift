@@ -56,16 +56,20 @@ class XSysTests: XCTestCase {
   }
 #endif
   
+}
+
 #if os(Linux)
+extension XSysTests {
+  
   static var allTests = {
     return [
       /* Not on Linux
-      ( "testUUIDEqual", testUUIDEqual ),
-      ( "testUUIDGen",   testUUIDGen   ),
-      ( "testUUIDParse", testUUIDParse ),
+       ( "testUUIDEqual", testUUIDEqual ),
+       ( "testUUIDGen",   testUUIDGen   ),
+       ( "testUUIDParse", testUUIDParse ),
        */
       ( "testNow",       testNow       )
     ]
   }()
-#endif
 }
+#endif

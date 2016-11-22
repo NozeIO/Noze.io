@@ -89,3 +89,13 @@ class BasicAuthTests: NozeIOTestCase {
     return Base64.encode(data: Array(string.utf8))
   }
 }
+
+#if os(Linux)
+extension BasicAuthTests {
+  static var allTests = {
+    return [
+      ( "testBasicAuth", testBasicAuth )
+    ]
+  }()
+}
+#endif

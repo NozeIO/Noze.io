@@ -16,7 +16,7 @@ import xsys
 import streams
 @testable import child_process
 
-class NozeIOChildProcessTests: NozeIOTestCase {
+class ChildProcessTests: NozeIOTestCase {
   
   func testLsPipeToConcat() {
     enableRunLoop()
@@ -116,4 +116,17 @@ class NozeIOChildProcessTests: NozeIOTestCase {
     
     waitForExit()
   }
+}
+
+extension ChildProcessTests {
+  static var allTests = {
+    return [
+      ( "testLsPipeToConcat", testLsPipeToConcat ),
+      ( "testMissingBinary",  testMissingBinary  ),
+      ( "testNonZeroExit",    testNonZeroExit    ),
+      ( "testMany",           testMany           ),
+      ( "testBase64",         testBase64         ),
+      ( "testArrayToWC",      testArrayToWC      )
+    ]
+  }()
 }

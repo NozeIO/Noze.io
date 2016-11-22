@@ -118,3 +118,15 @@ class EventsTests: NozeIOTestCase {
     sock.write("\r\n") // end() would immediately close socket
   }
 }
+
+#if os(Linux)
+extension EventsTests {
+  static var allTests = {
+    return [
+      ( "testCollection", testCollection ),
+      ( "testFileStream", testFileStream ),
+      ( "testSocket",     testSocket     ),
+    ]
+  }()
+}
+#endif

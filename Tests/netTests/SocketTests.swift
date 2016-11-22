@@ -1,5 +1,5 @@
 //
-//  NozeIOSocketTests.swift
+//  SocketTests.swift
 //  NozeIO
 //
 //  Created by Helge Heß on 4/10/16.
@@ -11,7 +11,7 @@ import XCTest
 import core
 @testable import net
 
-class NozeIOSocketTests: NozeIOTestCase {
+class SocketTests: NozeIOTestCase {
   
   func testSocketInit() {
     let sock = net.Socket()
@@ -135,3 +135,18 @@ func byteBucketToString(_ bucket: Array<UInt8>) -> String? {
   padded.append(0) // zero terminate
   return String(cString: padded)
 }
+
+#if os(Linux)
+extension SocketTests {
+  static var allTests = {
+    return [
+      ( "testSocketInit",    testSocketInit    ),
+      ( "testSocketConnect", testSocketConnect ),
+      ( "testSocketBasicHTTPWriteRightAway", 
+          testSocketBasicHTTPWriteRightAway ),
+      ( "testSocketBasicHTTPWriteOnConnect", 
+          testSocketBasicHTTPWriteOnConnect )
+    ]
+  }()
+}
+#endif

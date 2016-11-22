@@ -10,7 +10,7 @@ import XCTest
 
 @testable import http
 
-class NozeIOHttpClientTests: NozeIOTestCase {
+class HttpClientTests: NozeIOTestCase {
   
   func testSimpleGetZZ() throws {
     enableRunLoop()
@@ -117,15 +117,18 @@ class NozeIOHttpClientTests: NozeIOTestCase {
     
     myServer.close()
   }
-  
+}
+
 
 #if os(Linux)
+extension HttpClientTests {
   static var allTests = {
     return [
-      ( "testSimpleGetZZ",      testSimpleGetZZ ),
-      ( "testSimplePipedGetZZ", testSimplePipedGetZZ ),
-      ( "testRawGetZZ",         testRawGetZZ ),
+      ( "testSimpleGetZZ",         testSimpleGetZZ         ),
+      ( "testSimplePipedGetZZ",    testSimplePipedGetZZ    ),
+      ( "testRawGetZZ",            testRawGetZZ            ),
+      ( "testSimpleSelfHostedGET", testSimpleSelfHostedGET )
     ]
   }()
-#endif
 }
+#endif

@@ -11,7 +11,7 @@ import XCTest
 @testable import streams
 @testable import fs
 
-class NozeReaddirTests: XCTestCase {
+class ReadDirTests: XCTestCase {
 
   func testSyncReaddir() throws {
     let entries = fs.readdirSync("/bin")
@@ -21,13 +21,14 @@ class NozeReaddirTests: XCTestCase {
     XCTAssertTrue(!entries!.contains(".."))
     XCTAssertTrue(!entries!.contains("."))
   }
-  
+}
 
 #if os(Linux)
+extension ReadDirTests {
   static var allTests = {
     return [
       ( "testSyncReaddir", testSyncReaddir )
     ]
   }()
-#endif
 }
+#endif

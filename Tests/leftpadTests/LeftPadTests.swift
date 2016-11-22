@@ -10,7 +10,7 @@ import XCTest
 
 @testable import leftpad
 
-class NozeIOLeftPadTests: XCTestCase {
+class LeftPadTests: XCTestCase {
   
   let str = "Hello"
   
@@ -33,8 +33,10 @@ class NozeIOLeftPadTests: XCTestCase {
     let a = str.leftpad(10, c: "#")
     XCTAssertEqual(a, "#####Hello")
   }
-  
+}
+
 #if os(Linux)
+extension LeftPadTests {
   static var allTests = {
     return [
       ( "testLeftPadLongerString", testLeftPadLongerString ),
@@ -43,5 +45,5 @@ class NozeIOLeftPadTests: XCTestCase {
       ( "testLeftPadCustom",       testLeftPadCustom       )
     ]
   }()
-#endif
 }
+#endif

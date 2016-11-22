@@ -12,7 +12,7 @@ import XCTest
 @testable import streams
 @testable import console
 
-class NozeIOBasicAsyncTests: NozeIOTestCase {
+class BasicAsyncTests: NozeIOTestCase {
   
   // MARK: - Runloop Tests
   
@@ -206,3 +206,18 @@ class NozeIOBasicAsyncTests: NozeIOTestCase {
     waitForExit()
   }
 }
+
+#if os(Linux)
+extension BasicAsyncTests {
+  static var allTests = {
+    return [
+      ( "testAsyncNumberGenerator", testAsyncNumberGenerator ),
+      ( "testNumberPrinterStream",  testNumberPrinterStream  ),
+      ( "testConcat",               testConcat               ),
+      ( "testBasicStream",          testBasicStream          ),
+      ( "testBasicPullStream",      testBasicPullStream      ),
+      ( "testBasicWriteStream",     testBasicWriteStream     ),
+    ]
+  }()
+}
+#endif

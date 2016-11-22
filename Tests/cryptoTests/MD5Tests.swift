@@ -11,7 +11,7 @@ import XCTest
 import streams
 @testable import crypto
 
-class NozeMD5Tests: NozeIOTestCase {
+class MD5Tests: NozeIOTestCase {
   
   let hello_text = "Hello World"
   let hello_md5  = "b10a8db164e0754105b7a99be72e3fe5"
@@ -49,13 +49,15 @@ class NozeMD5Tests: NozeIOTestCase {
     
     waitForExit()
   }
+}
 
 #if os(Linux)
+extension MD5Tests {
   static var allTests = {
     return [
       ( "testDirectAccess", testDirectAccess ),
       ( "testStream",       testStream       )
     ]
   }()
-#endif
 }
+#endif
