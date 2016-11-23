@@ -10,9 +10,10 @@ matrix:
 #          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0.1-GM-CANDIDATE/ubuntu1404/swift-3.0.1-GM-CANDIDATE/swift-3.0.1-GM-CANDIDATE-ubuntu14.04.tar.gz"
 #          sudo: required
         - os:   osx
-          osx_image: xcode8.1
+          osx_image: xcode8
 
 before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head; fi
     - ./xcconfig/before-install.sh
 
 install:
