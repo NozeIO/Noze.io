@@ -13,7 +13,6 @@ matrix:
           osx_image: xcode8.1
 
 before_install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get head; fi
     - ./xcconfig/before-install.sh
 
 install:
