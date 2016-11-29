@@ -11,9 +11,9 @@ import core
 public struct PipeSourceError : Error {
   
   public let error  : Error
-  public let stream : ReadableStreamType
+  public let stream : ReadableStreamType?
   
-  init(error: Error, stream: ReadableStreamType) {
+  init(error: Error, stream: ReadableStreamType?) {
     self.error  = error
     self.stream = stream
   }
