@@ -70,7 +70,8 @@ public extension GReadableStreamType {
     //   self.highWaterMark = 1 // with 0 it stalls
     
     let state = StreamPipeState(self, outStream,
-                                endOnFinish: endOnFinish, passErrors: passErrors)
+                                endOnFinish : endOnFinish,
+                                passErrors  : passErrors)
     
     // TODO: Node.JS tracks the pipes in the source streams. I don't think this
     //       is necessary, but might be useful for debugging.
@@ -79,6 +80,21 @@ public extension GReadableStreamType {
       emitTarget.emit(pipe: self)
     }
     
+    // This creates a reference cycle between the pipe (StreamPipeState) and
+    // the input and output streams.
+    //
+    //   THIS IS INTENTIONAL. (I think :-)
+    //
+    // It allows you to setup a pipe which is decoupled from everything else,
+    // say:
+    //
+    //   fs.createReadStream("from.txt") | fs.createWriteStream("to.txt")
+    //
+    // no reference is taken, the read and write objects are solely connected
+    // and kept alive by the pipe.
+    //
+    // So when is the cycle broken? This is supposed to happen when the streams
+    // finish (either regularily via end/finish or due to an error).
     _ = self.onError       { error in state.onSourceError(error) }
     _ = outStream.onError  { error in state.onTargetError(error) }
     _ = self.onEnd         { state.onEnd()    }
@@ -109,9 +125,9 @@ public extension GReadableStreamType {
 private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
               where TI.ReadType == TO.WriteType
 {
-  let src         : TI
-  let dest        : TO
-  let endOnFinish : Bool
+  var src         : TI?
+  var dest        : TO?
+  let endOnFinish : Bool // call outStream 'end' on EOF?
   let passErrors  : Bool
   
   init(_ src: TI, _ dest: TO, endOnFinish: Bool, passErrors: Bool) {
@@ -121,57 +137,94 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
     self.dest = dest
   }
   
+  private final func heavyPipeLog(_ s : String) {
+    heavyLog("  <<[DO pipe: \(s)]>>  ")
+  }
+
   
   // MARK: - onReadable
   
-  final func onPipeSourceReadable() {
-    let inStream  = src
-    let outStream = dest
+  final func handleSourceEnd() {
+    if let emitTarget = dest as? PipeEmitTarget, let src = src {
+      // TBD: tick this?
+      emitTarget.emit(unpipe: src)
+    }
     
-    func heavyPipeLog(_ s : String) { heavyLog("  <<[DO pipe: \(s)]>>  ") }
-    
-    heavyPipeLog("before read \(inStream)")
-    let bucketOrEOF = inStream.read()
-    heavyPipeLog(" after read \(inStream)")
-    
-    guard let bucket = bucketOrEOF else {
-      heavyPipeLog("\nCCC hit ********** EOF ***********. \(inStream)")
-      // FIXME: hitEOF apparently not set on sockets?
-      //assert(inStream.hitEOF)
-      if endOnFinish {
+    if endOnFinish {
+      if let outStream = dest {
         heavyPipeLog("closing out")
         outStream.end()
       }
-      else {
-        heavyPipeLog("keeping out open")
+    }
+    else {
+      heavyLog("Keeping open \(dest)")
+    }
+    
+    // Important: this resets all closures in the inStream which may be
+    //            retaining our pipe.
+    src = nil // we finished reading
+    
+    // OK, this is a little tricky and error prone. When the read-end has
+    // finished, the pipe is essentially 'done'.
+    //
+    // BUT: The write-end may not have finished writing yet! Yet the pipe itself
+    //      may be the only object retaining the target-stream.
+    // Summary: it is important that the output streams keeps itself alive while
+    //          it is writing! (this should be automagic by Target based streams
+    //          as the write-closure is going to hold a reference).
+    dest = nil // we are done piping
+  }
+  
+  
+  final func onPipeEOF() {
+    heavyPipeLog("\nCCC hit ********** EOF ***********. \(src)")
+    // FIXME: hitEOF apparently not set on sockets?
+    //assert(inStream.hitEOF)
+
+    handleSourceEnd()
+  }
+  
+  final func onSigPipe() { // target stream is gone
+    // TBD: Should we issue a SIGPIPE error on the error-handler of the
+    //      input stream? Or only if requested?
+    assert(dest == nil, "sigpipe but there is a target stream??")
+    src = nil
+  }
+  
+  final func onPipeSourceReadable() {
+    guard let inStream  = src else {
+      // readable event but no inStream? (can happen after SIGPIPE)
+      if dest != nil { // this should not happen?
+        onPipeEOF() // treat like EOF (which detaches dest)
       }
       return
     }
     
-    heavyPipeLog("  got bucket size #\(bucket.count), " +
-                 "write it .. \(inStream)")
-    if bucket.count < 20 {
-      heavyPipeLog("BUCKET: \(bucket)")
-    }
+    /* issue read call, may hit EOF */
+    guard let bucket = inStream.read() else { return onPipeEOF() }
+    
+    /* grab target stream */
+    guard let outStream = dest else { return onSigPipe() }
+    
+    /* write data to target */
     
     // NOTE: Even if this returns false, the outStream still caches the
-    //       buckets. I think it is a hint that the inStream should pause.
+    //       buckets. It is a hint that the outStream buffer is full and the
+    //       inStream should pause.
     let couldWriteEverything = outStream.write(bucket)
-    //let couldWriteEverything = true
-    
-    heavyPipeLog(couldWriteEverything
-                 ? "  wrote-all: #\(bucket.count) \(outStream)"
-                 : "  buffer overflow: \(outStream)")
-    
     
     if couldWriteEverything {
-      heavyPipeLog("  install onceReadable ...: \(inStream)")
+      // re-register for next readable event.
+      // Note: You may think that the source gets filled in between. But no,
+      //       this can't really happen as we run in a single thread. Async-IO
+      //       handlers will only run in the next tick.
+      //  BUT: Of course a side-effect of the `outStream.write` could push data
+      //       into in-stream. TBD: not sure whether this is an actual issue.
+      // TODO: not quite sure why the `tick` is necessary except to avoid greedy
+      //       pipe processing (not giving other handlers a chance).
       _ = inStream.onceReadable {
-        heavyPipeLog("    got onceReadable, " +
-                     "call doPipeStuff \(inStream)")
         if tickPipe {
           nextTick { self.onPipeSourceReadable() }
-            // recurse // this makes us hit EOF
         }
         else {
           self.onPipeSourceReadable() // recurse
@@ -179,19 +232,10 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
       }
     }
     else {
-      heavyPipeLog("    PAUSing because we could not write everything:\n" +
-                   "      in=\(inStream)\n" +
-                   "     out=\(outStream)")
       inStream.pause()
       
-      heavyPipeLog("C: install drain handler ...")
       _ = outStream.onceDrain {
-        heavyPipeLog("\nC: got ************** drain ************ ...\n" +
-                     "      in=\(inStream)\n" +
-                     "     out=\(outStream)")
-        
         _ = inStream.onceReadable {
-          heavyPipeLog("\n*** running onceReadable")
           if tickPipe {
             nextTick { self.onPipeSourceReadable() }
               // recurse // this makes us hit EOF
@@ -253,7 +297,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
     }
     
     // an error ends the target
-    onEnd()
+    handleSourceEnd()
   }
   
   final func onTargetError(_ error: Error) {
@@ -273,18 +317,9 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
   }
   
   final func onEnd() {
-    if let emitTarget = dest as? PipeEmitTarget {
-      heavyLog("EMIT UNPIPE: \(src) \(dest)")
-      emitTarget.emit(unpipe: src)
-      heavyLog("DID  UNPIPE: \(src) \(dest)")
-    }
-    if endOnFinish {
-      heavyLog("Closing \(dest)")
-      dest.end()
-    }
-    else {
-      heavyLog("Keeping open \(dest)")
-    }
+    // This probably doesn't have to do anything. Quite likely we already
+    // processed the EOF and closed the pipe from there.
+    handleSourceEnd()
   }
   
   final func onFinish() {
