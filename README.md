@@ -104,7 +104,7 @@ in the `legacy/swift23` branch on GitHub.
 
 - It already has
   [leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad).
-  As well as [cows 🐮](https://github.com/NozeIO/Noze.io/blob/master/Sources/cows/README.md)!
+  As well as [cows 🐮](https://github.com/NozeIO/Noze.io/blob/master/Sources/cows)!
 
 - Implements primarily the happy path. Errors will error. Presumably this
   will improve over time.
