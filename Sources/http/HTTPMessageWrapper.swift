@@ -30,11 +30,11 @@ open class HTTPMessageWrapper : WritableByteStreamWrapper {
   public var headersSent   = false
   public var sendDate      = true
   
-  func _primaryWriteIntro() {
+  open func _primaryWriteIntro() {
     fatalError("subclasses need to override _primaryWriteIntro ...")
   }
   
-  func _primaryWriteHTTPMessageHead() {
+  open func _primaryWriteHTTPMessageHead() {
     assert(!headersSent)
     headersSent = true
     
@@ -50,7 +50,7 @@ open class HTTPMessageWrapper : WritableByteStreamWrapper {
     _ = self.writev(buckets: eolBrigade, done: nil)
   }
   
-  public func writeContinue() {
+  open func writeContinue() {
     // could/should be converted to a static brigade
     _ = self.write("HTTP/1.1 100 Continue\r\n\r\n")
   }
