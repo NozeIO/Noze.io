@@ -71,7 +71,7 @@ class NozeIOHttpClientTests: NozeIOTestCase {
     options.port     = 80
     options.path     = "/"
     
-    let req = request(options: options) { res in
+    let req = request(options) { res in
       print("C: \(res)")
       XCTAssert(res.statusCode == 200)
       

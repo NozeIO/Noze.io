@@ -19,8 +19,24 @@ public typealias ExpectEventCB   = (( IncomingMessage, ServerResponse )) -> Void
 public typealias ConnectEventCB  = (( ServerResponse, Socket, [UInt8] )) -> Void
 public typealias SocketEventCB   = ( Socket ) -> Void
 
-
-public class ClientRequest : HTTPMessageWrapper {
+/**
+ * http.ClientRequest
+ *
+ * Represents a request being sent to an HTTP server. You don't usually
+ * instantiate such directly, but rather use the global `http.request` function.
+ *
+ * Example:
+ *
+ *     let req = request("http://www.zeezide.de/") { res in
+ *       print("Response status: \(res.statusCode)")"
+ *       res | utf8 | concat { data in
+ *         result = String(data) // convert characters into String
+ *         print("Response body: \(result)")
+ *       }
+ *     }
+ *
+ */
+open class ClientRequest : HTTPMessageWrapper {
   
   public let method : HTTPMethod
   public let path   : String
@@ -146,8 +162,10 @@ public class ClientRequest : HTTPMessageWrapper {
       self.responseListeners.emit(msg)
     }
     
-    _ = p.onDone { // response body has finished
-      self.doneParsing()
+    _ = p.onDone { keepAlive in // response body has finished
+      // A client should close the connection when keepAlive is false. If it is
+      // true, it should pool.
+      self.doneParsing(keepAlive)
     }
     
     _ = p.onData { data in
@@ -170,7 +188,8 @@ public class ClientRequest : HTTPMessageWrapper {
     }
   }
   
-  func doneParsing() {
+  func doneParsing(_ keepAlive: Bool) {
+    // TODO: pooling and such.
     self.message?.push(nil) // EOF - notifies the client that the read is done
     
     // TBD: self.message = nil
@@ -199,7 +218,7 @@ public class ClientRequest : HTTPMessageWrapper {
   
   // MARK: - Write Method Head
   
-  override func _primaryWriteIntro() {
+  override open func _primaryWriteIntro() {
     if parser == nil { setupParser() }
     _ = self.write("\(method.method) \(path) HTTP/1.1\r\n")
   }

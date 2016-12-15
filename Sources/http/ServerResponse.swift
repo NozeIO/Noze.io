@@ -45,7 +45,7 @@ public class ServerResponse : HTTPMessageWrapper {
     writeHead(statusCode, nil, h)
   }
   
-  override func _primaryWriteIntro() {
+  override open func _primaryWriteIntro() {
     if statusCode == nil { statusCode = 200 }
     let msg = statusMessage ?? HTTPStatus.text(forStatus: statusCode!)
     
