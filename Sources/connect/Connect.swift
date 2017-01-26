@@ -78,7 +78,7 @@ public class Connect {
   
   // MARK: - run middleware
   
-  func doRequest(request: IncomingMessage, _ response: ServerResponse) {
+  func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
     // first lookup all middleware matching the request (i.e. the URL prefix
     // matches)
     // TODO: would be nice to have this as a lazy filter.
@@ -126,10 +126,6 @@ public extension Connect {
     let server = http.createServer(onRequest: self.handle)
     _ = server.listen(port, backlog: backlog, onListening: cb)
     return self
-  }
-
-  func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
-    doRequest(request: request, response)
   }
   
 }
