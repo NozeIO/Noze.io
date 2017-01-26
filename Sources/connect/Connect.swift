@@ -10,7 +10,7 @@ import net
 import http
 
 /// TODO: document, what are the varargs in Next?
-public typealias Next       = (Any...) -> Void
+public typealias Next = (Any...) -> Void
 
 /// Supposed to call Next() when it is done.
 public typealias Middleware =
