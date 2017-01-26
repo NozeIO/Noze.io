@@ -2,7 +2,7 @@
 
 Logging, call it like that:
 
-    console.error("Something failed: ", err)
+    console.error("Something failed:", err)
     console.warn ("This may be a problem!")
     console.log  ("Just drank some beer.")
     console.info ("Know what? WebObjects was pretty awesome!")
