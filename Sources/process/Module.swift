@@ -83,9 +83,9 @@ public let nextTick = core.nextTick
 // TODO: uptime
 
 #if os(Linux)
-let platform = "linux"
+public let platform = "linux"
 #else
-let platform = "darwin"
+public let platform = "darwin"
 #endif
 
 // TODO: arch

@@ -10,7 +10,7 @@ import net
 import http
 
 /// TODO: document, what are the varargs in Next?
-public typealias Next       = (Any...) -> Void
+public typealias Next = (Any...) -> Void
 
 /// Supposed to call Next() when it is done.
 public typealias Middleware =
@@ -78,7 +78,7 @@ public class Connect {
   
   // MARK: - run middleware
   
-  func doRequest(request: IncomingMessage, _ response: ServerResponse) {
+  func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
     // first lookup all middleware matching the request (i.e. the URL prefix
     // matches)
     // TODO: would be nice to have this as a lazy filter.
@@ -120,16 +120,12 @@ public class Connect {
 public extension Connect {
   
   @discardableResult
-  public func listen(_ port: Int?, backlog: Int = 5,
+  public func listen(_ port: Int?, backlog: Int = 512,
                      onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
     let server = http.createServer(onRequest: self.handle)
     _ = server.listen(port, backlog: backlog, onListening: cb)
     return self
-  }
-
-  func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
-    doRequest(request: request, response)
   }
   
 }
