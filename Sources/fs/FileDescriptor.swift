@@ -18,7 +18,9 @@ import core
 
 /// This essentially wraps the Integer representing a file descriptor in a
 /// struct for the whole reason to attach methods to it.
-public struct FileDescriptor: ExpressibleByIntegerLiteral, ExpressibleByNilLiteral {
+public struct FileDescriptor:
+                ExpressibleByIntegerLiteral, ExpressibleByNilLiteral
+{
 
   public static let stdin  = FileDescriptor(xsys.STDIN_FILENO)
   public static let stdout = FileDescriptor(xsys.STDOUT_FILENO)

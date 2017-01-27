@@ -218,7 +218,7 @@ open class ClientRequest : HTTPMessageWrapper {
   
   // MARK: - Write Method Head
   
-  override func _primaryWriteIntro() {
+  override open func _primaryWriteIntro() {
     if parser == nil { setupParser() }
     _ = self.write("\(method.method) \(path) HTTP/1.1\r\n")
   }

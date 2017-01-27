@@ -125,7 +125,7 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
 public extension Express {
   
   @discardableResult
-  public func listen(_ port: Int? = nil, backlog: Int = 5,
+  public func listen(_ port: Int? = nil, backlog: Int = 512,
                      onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
     let mo     = self as! MiddlewareObject // not sure why this is necessary
