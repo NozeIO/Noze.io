@@ -64,7 +64,8 @@ public struct Route: MiddlewareObject {
                      response res: ServerResponse,
                      next     cb:  @escaping Next)
   {
-    guard matches(request: req) else { cb(); return }
+    guard matches(request: req)    else { return cb() }
+    guard !self.middleware.isEmpty else { return cb() }
     
     // push route state
     let oldParams = req.params
