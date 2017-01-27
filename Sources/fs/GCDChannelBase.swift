@@ -270,7 +270,7 @@ open class GCDChannelBase: CustomStringConvertible {
           // a Socket is closed.
           
           // TBD: maybe this is not sufficient and a plain bug. Who knows.
-          log.debug("EOF on shutodwn.")
+          log.debug("EOF on shutdown.")
           self.hitEOF = true
           yield(nil, nil) // send EOF
           releaseRead = true

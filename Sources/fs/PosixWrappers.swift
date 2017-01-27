@@ -31,7 +31,7 @@ public func access(_ path: String, _ mode: Int = F_OK, cb: @escaping ErrorCB) {
 
 public func stat(_ path: String,
                  cb: @escaping ( Error?, xsys.stat_struct? ) -> Void)
-  {
+{
   module.Q.evalAsync(statSync, path, cb)
 }
 public func lstat(_ path: String,

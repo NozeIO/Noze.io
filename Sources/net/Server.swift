@@ -64,7 +64,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   
   @discardableResult
   open func listen(_ port      : Int? = nil,
-                   backlog     : Int  = 5,
+                   backlog     : Int  = 512,
                    onListening : ServerEventCB? = nil) -> Self
   {
     if let cb = onListening { _ = self.onListening(handler: cb) }
@@ -77,7 +77,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   }
   
   @discardableResult
-  public func listen(_ address: sockaddr_any, backlog: Int = 5) -> Self {
+  public func listen(_ address: sockaddr_any, backlog: Int = 512) -> Self {
     switch address {
       case .AF_INET (let addr): return listen(addr, backlog: backlog)
       case .AF_INET6(let addr): return listen(addr, backlog: backlog)
@@ -86,7 +86,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   }
   
   @discardableResult
-  public func listen<AT: SocketAddress>(_ address: AT, backlog: Int = 5,
+  public func listen<AT: SocketAddress>(_ address: AT, backlog: Int = 512,
                                         exclusive: Bool = false) -> Self
   {
     // Note: Everything here runs synchronously, which I guess is fine in this
