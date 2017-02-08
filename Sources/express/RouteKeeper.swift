@@ -68,3 +68,55 @@ public extension RouteKeeper {
     return self
   }
 }
+
+public extension RouteKeeper {
+  // Directly attach MiddlewareObject's as Middleware. That is:
+  //   let app   = express()
+  //   let admin = express()
+  //   app.use("/admin", admin)
+  
+  @discardableResult
+  public func use(_ middleware: MiddlewareObject) -> Self {
+    return use(middleware.middleware)
+  }
+  
+  @discardableResult
+  public func use(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return use(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func all(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return all(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func get(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return get(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func post(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return post(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func head(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return head(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func put(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return put(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func del(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return del(p, middleware.middleware)
+  }
+  
+  @discardableResult
+  public func patch(_ p: String, _ middleware: MiddlewareObject) -> Self {
+    return patch(p, middleware.middleware)
+  }
+}
