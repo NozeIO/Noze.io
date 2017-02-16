@@ -24,6 +24,8 @@ open class Router: MiddlewareObject {
                      response res     : ServerResponse,
                      next     endNext : @escaping Next)
   {
+    guard !self.routes.isEmpty else { return endNext() }
+    
     let routes = self.routes // make a copy to protect against modifications
     var next : Next? = { _ in } // cannot be let as it's self-referencing
     
