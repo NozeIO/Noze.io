@@ -234,7 +234,7 @@ open class DuplexStream<ReadType, WriteType>
 
 private class _DuplexReadStream<TI, TO> : ReadableStream<TI> {
   
-  unowned let parent : DuplexStream<TI, TO>
+  private var parent : DuplexStream<TI, TO>?
   
   init(_ parent : DuplexStream<TI, TO>, highWaterMark : Int? = nil) {
     self.parent = parent
@@ -243,20 +243,21 @@ private class _DuplexReadStream<TI, TO> : ReadableStream<TI> {
   }
   
   override func _primaryRead(count howMuchToRead: Int) {
-    parent._primaryRead(count: howMuchToRead)
+    parent!._primaryRead(count: howMuchToRead)
   }
   override func _primaryPause() {
-    parent._primaryPause()
+    parent!._primaryPause()
   }
   
-  override func closeReadStream() { // subclasses can override this
-    parent.closeReadStream()
+  override func closeReadStream() {
+    parent!.closeReadStream()
+    parent = nil // Release parent. Break Retain Cycle.
   }
 }
 
 private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
   
-  unowned let parent : DuplexStream<TI, TO>
+  private var parent : DuplexStream<TI, TO>?
   
   init(_ parent : DuplexStream<TI, TO>, highWaterMark : Int? = nil) {
     self.parent = parent
@@ -267,11 +268,12 @@ private class _DuplexWriteStream<TI, TO> : WritableStream<TO> {
   override func _primaryWriteV(buckets c: [ [ TO ] ], 
                                done: @escaping ( Error?, Int ) -> Void)
   {
-    parent._primaryWriteV(buckets: c, done: done)
+    parent!._primaryWriteV(buckets: c, done: done)
   }
   
-  override func closeWriteStream() { // subclasses can override this
-    parent.closeWriteStream()
+  override func closeWriteStream() {
+    parent!.closeWriteStream()
+    parent = nil // Release parent. Break Retain Cycle.
   }
 }
 
