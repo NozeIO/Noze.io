@@ -89,7 +89,10 @@ public class Connect {
       response.writeHead(404)
       response.end()
     }
-    var next    : Next? = { _ in } // cannot be let as it's self-referencing
+    
+    guard !matchingMiddleware.isEmpty else { return endNext() }
+    
+    var next : Next? = { _ in } // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     next = {

@@ -6,8 +6,8 @@
 ![Swift3](https://img.shields.io/badge/swift-3-blue.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![iOS](https://img.shields.io/badge/os-iOS-green.svg?style=flat)
-![tuxOS](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
-![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=develop&style=flat)
+![Linux](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
+![Travis](https://api.travis-ci.org/NozeIO/Noze.io.svg?branch=master&style=flat)
 
 "Das Haus das Verrückte macht."
 
@@ -46,7 +46,7 @@ high performance statically typed and AOT-compiled language,
 #### Shows us some code!
 
 There is a reasonably large collection of simple, focused:
-[Noze.io examples](https://github.com/NozeIO/Noze.io/tree/master/Samples)
+[Noze.io examples](Samples)
 But here you go, the "standard" Node example, a HelloWorld httpd:
 
     import http
@@ -88,7 +88,7 @@ an email to tell us why this is crap (or not?).
 | OS    | Swift  | Xcode                                                      | Make | SPM  |
 | ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
 | macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
-| tuxOS | [3.0.1](https://swift.org/download/#releases) | | 👍🏻  | 👍  |
+| tuxOS | [3.0.2](https://swift.org/download/#releases) | | 👍🏻  | 👍  |
 
 With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
 are still interested in using it with 2.x, the last release is still available
@@ -103,8 +103,8 @@ in the `legacy/swift23` branch on GitHub.
   Well kinda. It's pretty good already! 😉
 
 - It already has
-  [leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad).
-  As well as [cows 🐮](https://github.com/NozeIO/Noze.io/blob/master/Sources/cows/README.md)!
+  [leftpad](Sources/leftpad).
+  As well as [cows 🐮](Sources/cows/README.md)!
 
 - Implements primarily the happy path. Errors will error. Presumably this
   will improve over time.
@@ -113,7 +113,7 @@ in the `legacy/swift23` branch on GitHub.
   <a href="http://heathersfilm.tripod.com/script.txt" target="ext">myriad</a>s 
   of packages available for it.
   Or wait, is it? Well, at least we have
-  [leftpad](https://github.com/NozeIO/Noze.io/tree/develop/Sources/leftpad)
+  [leftpad](Sources/leftpad)
   included.
   And we hope that the [Swift package](https://swift.org/package-manager/)
   environment is going to grow as well.
