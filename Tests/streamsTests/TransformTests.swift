@@ -9,6 +9,7 @@
 import XCTest
 
 import xsys
+import core
 @testable import streams
 
 private let heavyLog = false
@@ -137,6 +138,55 @@ class NozeIOTransformTests: NozeIOTestCase {
     if heavyLog { print("TT22: got data \(concatData)") }
     XCTAssertNotNil(concatData)
     XCTAssertEqual(concatData!.count, fix.characters.count * 2)
+  }
+
+  func testExportingOnlyReadableStreamOfDuplex() {
+    enableRunLoop() // pipe requires async
+
+    // Situation that we try to reproduce:
+    // 1. We have some Instance that produces data as a ReadStream 
+    //    (e.g. Database Connection)
+    // 2. We want to transform this data before we send it to the consumer
+    //    with a TransformStream
+    // 3. The userfacing interface shall hide the transform stream. Only the
+    //    readable end of the duplex shall be exposed.
+
+    class Connection {
+
+      var stream: ReadableStream<String>? = nil
+
+      func query() -> ReadableStream<String> {
+        self.stream = Readable<String>()
+        let handOver = Transform<String, String>() { (items, _, done) in
+          done(nil, items)
+        }
+        return ( self.stream! | handOver ).readStream
+      }
+
+      func generate() {
+        self.stream!.push(["Hello"])
+        self.stream!.push(["World"])
+        self.stream!.push(nil)
+        self.stream = nil
+      }
+    }
+
+    nextTick {
+      let con = Connection()
+      let readable = con.query()
+      readable | Writable() { (items, done) in
+        items.forEach() {print($0)}
+        done(nil)
+      }
+      .onceFinish {
+        self.exitIfDone()
+      }
+
+      con.generate()
+    }
+
+    // EOF
+    waitForExit()
   }
 
 #if os(Linux)
