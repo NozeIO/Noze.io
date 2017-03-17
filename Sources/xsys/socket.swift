@@ -38,6 +38,7 @@
   public let PF_UNSPEC    = Glibc.PF_UNSPEC
   public let SOL_SOCKET   = Glibc.SOL_SOCKET
   public let SO_REUSEADDR = Glibc.SO_REUSEADDR
+  public let SO_REUSEPORT = Glibc.SO_REUSEPORT
 
   // using an exact alias gives issues with sizeof()
   public typealias xsys_sockaddr     = Glibc.sockaddr
@@ -79,6 +80,7 @@
   public let PF_UNSPEC    = Darwin.PF_UNSPEC
   public let SOL_SOCKET   = Darwin.SOL_SOCKET
   public let SO_REUSEADDR = Darwin.SO_REUSEADDR
+  public let SO_REUSEPORT = Darwin.SO_REUSEPORT
 
   // using an exact alias gives issues with sizeof()
   public typealias xsys_sockaddr     = Darwin.sockaddr

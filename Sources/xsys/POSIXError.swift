@@ -55,6 +55,7 @@
     case EPIPE   = 32
     case EDOM    = 33
     case ERANGE  = 34
+    case EADDRINUSE  = 98
 
     // extra
     case ECANCELED = 125

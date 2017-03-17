@@ -11,7 +11,7 @@ all : copy-nozeio-testcase-master
 	@make -C $(PACKAGE_DIR) $@
 
 copy-nozeio-testcase-master :
-	for i in child_processTests dnsTests fsTests httpTests jsonTests netTests cryptoTests; do \
+	for i in child_processTests dnsTests dgramTests fsTests httpTests jsonTests netTests cryptoTests; do \
 	  cp streamsTests/NozeIOTestCase.swift $$i; \
 	done
 
