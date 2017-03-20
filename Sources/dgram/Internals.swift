@@ -1,12 +1,16 @@
-import fs
-import net
-import xsys
+//
+//  Module.swift
+//  Noze.io
+//
+//  Created by https://github.com/lichtblau
+//
 
-public func recvfrom<AT: SocketAddress>(
-  _ fd: FileDescriptor,
-  likeAddress ignored: AT?,
-  count: Int = 65535)
-  -> ( Error?, [ UInt8 ]?, AT?)
+import xsys
+import fs
+
+func recvfrom<AT: SocketAddress>(_ fd: FileDescriptor,
+                                 count: Int = 65535)
+     -> ( Error?, [ UInt8 ]?, AT?)
 {
   // TODO: inefficient init. Also: reuse buffers.
   var buf = [ UInt8 ](repeating: 0, count: count)
@@ -16,13 +20,11 @@ public func recvfrom<AT: SocketAddress>(
   var address = AT()
   var addrlen = socklen_t(address.len)
   let readCount = withUnsafeMutablePointer(to: &address) { ptr in
-    ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
-      bptr in
-      return xsys.recvfrom(fd.fd, &buf, count, 0,
-                           bptr, &addrlen)
+    ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) { bptr in
+      return xsys.recvfrom(fd.fd, &buf, count, 0, bptr, &addrlen)
     }
   }
-
+  
   guard readCount >= 0 else {
     return ( POSIXErrorCode(rawValue: xsys.errno)!, nil, nil )
   }
@@ -32,17 +34,12 @@ public func recvfrom<AT: SocketAddress>(
   return ( nil, buf, address )
 }
 
-public func sendto(
-  _ fd: FileDescriptor,
-  data: [UInt8],
-  to toAddress: SocketAddress)
-  -> Error?
-{
+func sendto(_ fd: FileDescriptor, data: [UInt8], to: SocketAddress) -> Error? {
   // synchronous
 
-  var data = data
-  var toAddress = toAddress
-  let addrlen = socklen_t(toAddress.len)
+  var data      = data
+  var toAddress = to
+  let addrlen   = socklen_t(toAddress.len)
   let writtenCount = withUnsafePointer(to: &toAddress) { ptr in
     ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
       bptr in

@@ -3,7 +3,8 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 4/17/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Changed by https://github.com/lichtblau
+//  Copyright © 2016 ZeeZide GmbH and Contributors. All rights reserved.
 //
 
 import Dispatch
@@ -14,12 +15,20 @@ import fs
 import net
 
 public typealias Datagram = ( data: [UInt8], peer: SocketAddress )
+  // TBD(hh): sockaddr_any may be easier to work with?
 
-public typealias MessageCB = ( Datagram ) -> Void
-public typealias SocketEventCB = ( Socket ) -> Void
+public typealias MessageCB     = ( Datagram ) -> Void
+public typealias SocketEventCB = ( Socket   ) -> Void
 
 /// TODO: doc
 open class Socket : ErrorEmitter, LameLogObjectType {
+  
+  // TODO(hh): This should be a: DuplexStream<Datagram, [UInt8]>
+  
+  enum Error : Swift.Error {
+    case UnexpectedError
+  }
+  
   public let log          : Logger
   public var fd           : FileDescriptor?     = nil // fd can be invalid too
   public var address      : sockaddr_any?       = nil
@@ -27,8 +36,8 @@ open class Socket : ErrorEmitter, LameLogObjectType {
   public let Q            : DispatchQueue
   public var didRetainQ   : Bool = false // #linux-public
 
-  public init(queue          : DispatchQueue = core.Q,
-              enableLogger   : Bool = false)
+  public init(queue        : DispatchQueue = core.Q,
+              enableLogger : Bool = false)
   {
     self.Q   = queue
     self.log = Logger(enabled: enableLogger)
@@ -65,18 +74,19 @@ open class Socket : ErrorEmitter, LameLogObjectType {
   }
 
   @discardableResult
-  public func bind(_ address: sockaddr_any,
-                   exclusive: Bool = false) -> Self {
+  public func bind(_ address : sockaddr_any,
+                   exclusive : Bool = false) -> Self
+  {
     switch address {
-    case .AF_INET (let addr): return bind(addr, exclusive: exclusive)
-    case .AF_INET6(let addr): return bind(addr, exclusive: exclusive)
-    case .AF_LOCAL(let addr): return bind(addr, exclusive: exclusive)
+      case .AF_INET (let addr): return bind(addr, exclusive: exclusive)
+      case .AF_INET6(let addr): return bind(addr, exclusive: exclusive)
+      case .AF_LOCAL(let addr): return bind(addr, exclusive: exclusive)
     }
   }
 
   @discardableResult
-  public func bind<AT: SocketAddress>(_ address: AT,
-                                      exclusive: Bool = false) -> Self
+  public func bind<AT: SocketAddress>(_ address : AT,
+                                      exclusive : Bool = false) -> Self
   {
     // Note: Everything here runs synchronously, which I guess is fine in this
     //       specific case?
@@ -145,26 +155,32 @@ open class Socket : ErrorEmitter, LameLogObjectType {
     return self
   }
 
-  // MARK: - Accepting
+  
+  // MARK: - Receiving
 
   public func _onMessage<AT: SocketAddress>(address localAddress: AT?) {
     // #linux-public
     // This is cheating a little, we pass in the localAddress to capture the
-    // generic socket type (which matches the one returned by accept().
+    // generic socket type (which matches the one returned by recvfrom()).
     log.enter(); defer { log.leave() }
 
-    let (err, buf, peer) = recvfrom(self.fd!, likeAddress: localAddress)
+    let ( err, buf, peer ) : ( Swift.Error?, [ UInt8 ]?, AT? )
+                           = recvfrom(self.fd!)
     if let err = err {
-      self.caught(error: err)
-    } else {
-      self.messageListeners.emit((buf!, peer!))
+      caught(error: err)
+    }
+    else if let buf = buf, let peer = peer {
+      messageListeners.emit( (buf, peer) )
+    }
+    else {
+      caught(error: Error.UnexpectedError)
     }
   }
 
   // MARK: - Binding
 
-  public func _bind<AT: SocketAddress>(address a: AT) -> Int32 { // #linux-public
-    var address = a
+  public func _bind<AT: SocketAddress>(address: AT) -> Int32 { // #linux-public
+    var address = address
     return withUnsafePointer(to: &address) { ptr -> Int32 in
       return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
         bptr in
@@ -176,7 +192,7 @@ open class Socket : ErrorEmitter, LameLogObjectType {
 
   // MARK: - sending
 
-  // TODO: node's completion callback -- not sure how important it is for
+  // TODO: Node's completion callback -- not sure how important it is for
   // a transport without delivery guarantee, but would be nice to have
   public func send(_ data: [UInt8], to peer: SocketAddress) {
     if let err = sendto(self.fd!, data: data, to: peer) {
@@ -186,10 +202,15 @@ open class Socket : ErrorEmitter, LameLogObjectType {
       //
       // But suppose the write source issue was solvable -- would we
       // really want to buffer outgoing UDP packets?
+      // hh: Yes, I think we would want that. UDP is often used in contexts
+      //     where it may fail, but usually doesn't (say NFS).
+      //     Queuing a lot of packets can make sense. Maybe make it
+      //     configurable?
       if err.isWouldBlockError {
         log.enter(); defer { log.leave() }
         log.debug("sendto(2): \(err)")
-      } else {
+      }
+      else {
         self.caught(error: err)
       }
     }
@@ -197,8 +218,9 @@ open class Socket : ErrorEmitter, LameLogObjectType {
 
   // MARK: - Reuse server socket
 
-  public func _makeNonExclusive(fd lfd: FileDescriptor) -> Int32 { // #linux-public
-    var buf    = Int32(1)
+  public func _makeNonExclusive(fd lfd: FileDescriptor) -> Int32 {
+    // #linux-public
+    var buf    : Int32 = 1
     let buflen = socklen_t(MemoryLayout<Int32>.stride)
     var rc     = xsys.setsockopt(lfd.fd, xsys.SOL_SOCKET, xsys.SO_REUSEADDR,
                                  &buf, buflen)
@@ -249,12 +271,12 @@ open class Socket : ErrorEmitter, LameLogObjectType {
 
   // MARK: - Create socket
 
-  public func _setupSocket(domain d: Int32, type: Int32 = xsys.SOCK_DGRAM)
-    -> Int32 // #linux-public
+  public func _setupSocket(domain: Int32, type: Int32 = xsys.SOCK_DGRAM)
+              -> Int32 // #linux-public
   {
     assert(fd == nil)
 
-    let sockfd = xsys.socket(d, type, 0)
+    let sockfd = xsys.socket(domain, type, 0)
     log.debug("setup socket: \(sockfd)")
     guard sockfd != -1 else {
       log.debug("  failed: \(xsys.errno)")
@@ -304,7 +326,7 @@ open class Socket : ErrorEmitter, LameLogObjectType {
 
   // MARK: - ErrorEmitter
 
-  public func caught(error e: Error) { // #linux-public
+  public func caught(error e: Swift.Error) { // #linux-public
     log.enter(); defer { log.leave() }
     self.errorListeners.emit(e)
   }
