@@ -48,7 +48,7 @@ high performance statically typed and AOT-compiled language,
 There is a reasonably large collection of simple, focused:
 [Noze.io examples](Samples)
 But here you go, the "standard" Node example, a HelloWorld httpd:
-```js
+```swift
 import http
 
 http.createServer { req, res in 
@@ -58,7 +58,7 @@ http.createServer { req, res in
 .listen(1337)
 ```
 An echo daemon, just piping the in-end of a socket into its own-out end:
-```js
+```swift
 import net
 
 net.createServer { sock in
