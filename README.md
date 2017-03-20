@@ -48,25 +48,25 @@ high performance statically typed and AOT-compiled language,
 There is a reasonably large collection of simple, focused:
 [Noze.io examples](Samples)
 But here you go, the "standard" Node example, a HelloWorld httpd:
+```swift
+import http
 
-    import http
-    
-    http.createServer { req, res in 
-      res.writeHead(200, [ "Content-Type": "text/html" ])
-      res.end("<h1>Hello World</h1>")
-    }
-    .listen(1337)
-
+http.createServer { req, res in 
+  res.writeHead(200, [ "Content-Type": "text/html" ])
+  res.end("<h1>Hello World</h1>")
+}
+.listen(1337)
+```
 An echo daemon, just piping the in-end of a socket into its own-out end:
+```swift
+import net
 
-    import net
-    
-    net.createServer { sock in
-      sock.write("Welcome to Noze.io!\r\n")
-      sock | sock
-    }
-    .listen(1337)
-
+net.createServer { sock in
+  sock.write("Welcome to Noze.io!\r\n")
+  sock | sock
+}
+.listen(1337)
+```
 More complex stuff including a 
 [Todo-MVC backend](https://github.com/NozeIO/Noze.io/blob/master/Samples/todo-mvc-redis/main.swift)
 can be found in the
