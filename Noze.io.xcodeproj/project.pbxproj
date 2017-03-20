@@ -268,6 +268,7 @@
 		E8AF01C81E80070E0074266E /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
 		E8AF01C91E8007120074266E /* libevents.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275811CF49E5F004A6A34 /* libevents.dylib */; };
 		E8AF01CA1E80071E0074266E /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
+		E8AF01CB1E80168F0074266E /* libconsole.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275EC1CF49F0C004A6A34 /* libconsole.dylib */; };
 		E8B33EE41CFB487400091806 /* libchild_process.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275F81CF49F29004A6A34 /* libchild_process.dylib */; };
 		E8B33EF51CFB48A200091806 /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
 		E8B33EFD1CFB490200091806 /* ChildProcessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F2D1CF3382600CA5517 /* ChildProcessTests.swift */; };
@@ -1127,6 +1128,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E8E276121CF49F52004A6A34;
 			remoteInfo = net;
+		};
+		E8AF01CC1E8016930074266E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8E275EB1CF49F0C004A6A34;
+			remoteInfo = console;
 		};
 		E8B33EE51CFB487400091806 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2411,6 +2419,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8AF01CB1E80168F0074266E /* libconsole.dylib in Frameworks */,
 				E8AF01B21E8005EE0074266E /* libcore.dylib in Frameworks */,
 				E8AF01B31E8005EE0074266E /* libdgram.dylib in Frameworks */,
 				E8AF01B41E8005EE0074266E /* libnet.dylib in Frameworks */,
@@ -4331,6 +4340,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E8AF01CD1E8016930074266E /* PBXTargetDependency */,
 				E8AF01AB1E8005D70074266E /* PBXTargetDependency */,
 				E8AF01AD1E8005D70074266E /* PBXTargetDependency */,
 				E8AF01AF1E8005D70074266E /* PBXTargetDependency */,
@@ -6239,6 +6249,11 @@
 			isa = PBXTargetDependency;
 			target = E8E276121CF49F52004A6A34 /* net */;
 			targetProxy = E8AF01BC1E80063A0074266E /* PBXContainerItemProxy */;
+		};
+		E8AF01CD1E8016930074266E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8E275EB1CF49F0C004A6A34 /* console */;
+			targetProxy = E8AF01CC1E8016930074266E /* PBXContainerItemProxy */;
 		};
 		E8B33EE61CFB487400091806 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
