@@ -13,10 +13,10 @@ matrix:
           osx_image: xcode8.2
 
 before_install:
-    - ./xcconfig/before-install.sh
+    - ./.travis.d/before-install.sh
 
 install:
-    - ./xcconfig/install.sh
+    - ./.travis.d/install.sh
 
 script:
     - export PATH="$HOME/usr/bin:$PATH"
