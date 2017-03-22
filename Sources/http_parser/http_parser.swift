@@ -927,7 +927,7 @@ public extension http_parser {
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
 
           self.http_minor *= 10
-          self.http_minor += ch - c0
+          self.http_minor += Int16(ch - c0)
 
           guard self.http_minor < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -1122,7 +1122,7 @@ public extension http_parser {
 
             case .h_content_length:
               guard IS_NUM(ch) else { return .Error(.INVALID_CONTENT_LENGTH) }
-              self.content_length = ch - c0;
+              self.content_length = Int(ch - c0)
 
             case .h_connection:
               /* looking for 'Connection: keep-alive' */
