@@ -74,7 +74,7 @@ public struct FileDescriptor:
     buf = Array(buf[0..<readCount]) // TODO: slice to array, lame
     return ( nil, buf )
   }
-  
+
   public func write<T>(buffer: [ T ], count: Int = -1)
                 -> ( Error?, Int )
   {

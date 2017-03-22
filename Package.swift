@@ -63,6 +63,10 @@ let package = Package(
 	     .Target(name: "fs"),
              .Target(name: "dns")
 	   ]),
+    Target(name: "dgram",
+           dependencies: [
+	     .Target(name: "net"),
+	   ]),
     Target(name: "process",
            dependencies: [
 	     .Target(name: "core"),
