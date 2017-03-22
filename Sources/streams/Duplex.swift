@@ -16,8 +16,8 @@ import core
 open class Duplex<TSource: GReadableSourceType, TTarget: GWritableTargetType>
            : DuplexStream<TSource.SourceElement, TTarget.TargetElement>
 {
-  typealias ReadType  = TSource.SourceElement
-  typealias WriteType = TTarget.TargetElement
+  public typealias ReadType  = TSource.SourceElement
+  public typealias WriteType = TTarget.TargetElement
   public var source : TSource
   public var target : TTarget
 
