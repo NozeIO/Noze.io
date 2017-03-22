@@ -1820,7 +1820,7 @@ func debugChar(_ ch: CChar) -> String {
     case LF:   p = "NL"
     case CR:   p = "CR"
     case cTAB: p = "TAB"
-    default:   p = "'\(UnicodeScalar(Int(ch)))'"
+    default:   p = "'\(UnicodeScalar(Int(ch)) as Optional)'"
   }
   return "\(ch) \(p)"
 }

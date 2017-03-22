@@ -165,5 +165,5 @@ open class WritableByteStreamWrapper
   // MARK: - Logging
   
   public var log : Logger
-  public var logStateInfo : String { return "s=\(stream)" }
+  public var logStateInfo : String { return "s=\(stream as Optional)" }
 }

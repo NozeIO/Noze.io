@@ -206,7 +206,7 @@ class RedisParser : TransformStream<UInt8, RedisValue> {
                 else if let ctx = context {
                   if countValue > 0 {
                     context = ParseContext(ctx, countValue)
-                    if heavyDebug { print("! started new context: \(context)") }
+                    if heavyDebug { print("! started new context: \(context as Optional)") }
                   }
                   else {
                     // push an empty array
