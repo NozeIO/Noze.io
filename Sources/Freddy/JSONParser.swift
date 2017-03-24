@@ -831,6 +831,16 @@ public extension JSONParser {
     /// Creates a `JSONParser` from the code units represented by the `string`.
     ///
     /// The synthesized string is lifetime-extended for the duration of parsing.
+    /// TODO(hzp): withUnsafeBufferPointer etc. are documented with the caveat
+    /// that "The pointer argument is valid only for the duration of the
+    /// closure’s execution."  We are ignoring that condition, raising two
+    /// questions:
+    ///   1. When is our code safe or unsafe?  I'm guessing that we are safe
+    ///      until something mutates the string and triggers copy-or-write.
+    ///      If that is the only problem, it might be worth documenting that
+    ///      assumption.
+    ///   2. Can't we put the burden of calling withUnsafeBufferPointer on our
+    ///      call site?  Then things would be correct and safe.
     init(string: String) {
         let codePoints = string.utf8CString
       
@@ -839,12 +849,14 @@ public extension JSONParser {
           
             // TODO(hh): Trouble ahead. I guess this is fine, but I'm not
             //           quite sure. What is a proper simple cast?
-            let cs = // TODO: Ouch!
-              unsafeBitCast(nulTerminatedBuffer.baseAddress!,
-                            to: UnsafePointer<UInt8>.self)
-          
-            // don't want to include the nul termination in the buffer - trim it off
-            return UnsafeBufferPointer(start: cs, count: nulTerminatedBuffer.count - 1)
+            // TODO: Ouch!
+            let n = nulTerminatedBuffer.count
+            return nulTerminatedBuffer
+              .baseAddress!
+              .withMemoryRebound(to: UInt8.self, capacity: n) { cs in
+                // don't want to include the nul termination in the buffer - trim it off
+                return UnsafeBufferPointer(start: cs, count: n - 1)
+            }
         }
         self.init(buffer: buffer, owner: codePoints)
     }
