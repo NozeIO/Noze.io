@@ -15,7 +15,7 @@ typealias GetNameFN = ( Int32, UnsafeMutablePointer<xsys_sockaddr>,
                         UnsafeMutablePointer<socklen_t>) -> Int32
 
 // TBD:
-func getasockname<T: SocketAddress>(fd: Int32, _ nfn: GetNameFN) -> T? {
+public func getasockname<T: SocketAddress>(fd: Int32, _ nfn: GetNameFN) -> T? {
   // FIXME: tried to encapsulate this in a sockaddrbuf which does all the
   //        ptr handling, but it ain't work (autoreleasepool issue?)
   var baddr    = T()
