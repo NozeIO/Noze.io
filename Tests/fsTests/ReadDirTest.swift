@@ -14,7 +14,7 @@ import XCTest
 class NozeReaddirTests: XCTestCase {
 
   func testSyncReaddir() throws {
-    let entries = fs.readdirSync("/bin")
+    let entries = try? fs.readdirSync("/bin")
     XCTAssertNotNil(entries)
     XCTAssertTrue(entries!.contains("ls"))
     XCTAssertTrue(entries!.contains("pwd"))

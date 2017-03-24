@@ -9,14 +9,14 @@ import Dispatch
 import xsys
 import core
 
-public func readdir(_ path: String, cb: @escaping ( [ String ]? ) -> Void) {
+public func readdir(_ path: String, cb: @escaping ( Error?, [ String ]? ) -> Void) {
   module.Q.evalAsync(readdirSync, path, cb)
 }
 
 // TBD: should that be a stream? Maybe, but it may not be worth it
-public func readdirSync(_ path: String) -> [ String ]? {
+public func readdirSync(_ path: String) throws -> [ String ] {
   guard let dir = xsys.opendir(path) else {
-      return nil
+      throw POSIXErrorCode(rawValue: xsys.errno)!
   }
   defer { _ = xsys.closedir(dir) }
   
@@ -30,7 +30,7 @@ public func readdirSync(_ path: String) -> [ String ]? {
       // On Linux, only EBADF is documented.  macOS lists EFAULT, which
       // is equally implausible.  But it also mentions EIO, which might
       // just be possible enough to consider it.
-      return nil
+      throw POSIXErrorCode(rawValue: xsys.errno)!
     }
     
     var s : String? = nil
