@@ -1,29 +1,37 @@
 # Noze.io UDP / Datagram module
 
-An UDP/Datagram Sockets module modelled after the builtin Node
+An UDP/datagram socket module modelled after the builtin Node
 [dgram module](https://nodejs.org/api/dgram.html).
 
 ### Example
 
-```Swift
-import Foundation // for String/Data
-import dgram
-import console
+Small UDP server which echos back packets it receives:
 
-let sock = dgram.createSocket()
+```Swift
+import dgram
+
+sock = dgram.createSocket()
 sock
-  .onListening { address in console.info ("dgram: bound to:", address) }
-  .onError     { err     in console.error("error:", err) }
   .onMessage   { (msg, from) in
-    sock.send(msg, to: from) // Echo back
+    sock.send(msg, to: from) // echo back
   }
-  .bind(10000)
+  .bind(1337)
 ```
+
+You can test that on Linux using
+
+    nc.openbsd -u localhost 1337
+
+and on macOS via
+
+    nc -vu4 localhost 1337
+
 
 ### TODO
 
-- [ ] make the Datagram socket a proper stream (e.g. Duplex<Datagram,Datagram>)
-- [ ] sends are blocking and are not enqueued
+- [ ] make the Datagram socket a proper stream (e.g. a
+      `Duplex<Datagram,Datagram>`)
+- [ ] sends are blocking and not queued
 
 ### Who
 
