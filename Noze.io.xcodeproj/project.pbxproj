@@ -2173,6 +2173,7 @@
 		E8F2ACEE1CF64C19000B8CD1 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONParser.swift; path = Sources/freddy/JSONParser.swift; sourceTree = "<group>"; };
 		E8F2ACF11CF656F6000B8CD1 /* JSONSubscripting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONSubscripting.swift; path = Sources/freddy/JSONSubscripting.swift; sourceTree = "<group>"; };
 		E8F2ACF41CF658A7000B8CD1 /* JSONEncodingDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetector.swift; path = Sources/freddy/JSONEncodingDetector.swift; sourceTree = "<group>"; };
+		E8F398F61E85353700204096 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = http_parser_settings.swift; path = Sources/http_parser/http_parser_settings.swift; sourceTree = SOURCE_ROOT; };
 		E8FF78801CDA3657000256E2 /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Sources/http/URL.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -3273,6 +3274,7 @@
 		E8AF01C11E8006850074266E /* dgram */ = {
 			isa = PBXGroup;
 			children = (
+				E8F398F61E85353700204096 /* README.md */,
 				E8AF01C31E8006850074266E /* Module.swift */,
 				E8AF01C21E8006850074266E /* Internals.swift */,
 				E8AF01C41E8006850074266E /* Socket.swift */,
