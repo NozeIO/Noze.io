@@ -157,7 +157,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
       }
     }
     else {
-      heavyLog("Keeping open \(dest)")
+      heavyLog("Keeping open \(dest as Optional)")
     }
     
     // Important: this resets all closures in the inStream which may be
@@ -177,7 +177,7 @@ private class StreamPipeState<TI: GReadableStreamType, TO: GWritableStreamType>
   
   
   final func onPipeEOF() {
-    heavyPipeLog("\nCCC hit ********** EOF ***********. \(src)")
+    heavyPipeLog("\nCCC hit ********** EOF ***********. \(src as Optional)")
     // FIXME: hitEOF apparently not set on sockets?
     //assert(inStream.hitEOF)
 

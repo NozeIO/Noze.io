@@ -46,7 +46,7 @@ public class NozeCore : NozeModule {
     workCount += 1
     
     if debugRetain {
-      let hash = "\(filename)"
+      let hash = "\(filename as Optional)"
       let old = retainDebugMap[hash] ?? 0
       retainDebugMap[hash] = old + 1
       
@@ -63,7 +63,7 @@ public class NozeCore : NozeModule {
                             function: String? = #function)
   {
     if debugRetain {
-      let hash = "\(filename)"
+      let hash = "\(filename as Optional)"
       let old = retainDebugMap[hash] ?? 0
       assert(old > 0)
       if old == 1 {
@@ -79,7 +79,7 @@ public class NozeCore : NozeModule {
     workCount -= 1
     if workCount == 0 {
       if debugRetain {
-        print("TERMINATE[\(workCount): \(filename):\(line) \(function)")
+        print("TERMINATE[\(workCount): \(filename as Optional):\(line as Optional) \(function as Optional)")
       }
       maybeTerminate()
     }

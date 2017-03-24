@@ -13,7 +13,7 @@ public class NozeStreams : NozeModule, EventEmitterType {
   
   lazy var newReadableListeners : EventListenerSet<ReadableStreamType> =
                                     EventListenerSet(queueLength: 0)
-  lazy var newWritableListeners : EventListenerSet<WritableStreamType>=
+  lazy var newWritableListeners : EventListenerSet<WritableStreamType> =
                                     EventListenerSet(queueLength: 0)
   
   public func onNewReadable(cb: @escaping ( ReadableStreamType ) -> Void)

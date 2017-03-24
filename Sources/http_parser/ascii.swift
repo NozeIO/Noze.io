@@ -110,7 +110,8 @@ let c9 : CChar = 57 // 9
 // UnsafePointer. Subscripting still works with that.
 internal func copyArrayToBuffer<T>(array a: [ T ]) -> UnsafePointer<T> {
   let res  = UnsafeMutablePointer<T>.allocate(capacity: a.count)
-  res.initialize(from: a)
+  a.withUnsafeBufferPointer { res.initialize(
+                                from: $0.baseAddress!, count: a.count) }
   return UnsafePointer<T>(res)
 }
 
