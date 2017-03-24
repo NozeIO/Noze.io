@@ -63,14 +63,20 @@
 
   extension POSIXErrorCode : Error {}
 
-  public var errno : Int32 { return Glibc.errno }
+  public var errno : Int32 {
+      get { return Glibc.errno }
+      set { Glibc.errno = newValue }
+  }
   
 #else // MacOS
   import Darwin
 
   public let EWOULDBLOCK = Darwin.EWOULDBLOCK
 
-  public var errno : Int32 { return Darwin.errno }
+  public var errno : Int32 {
+      get { return Darwin.errno }
+      set { Darwin.errno = newValue }
+  }
 
   // this doesn't seem to work though
   import Foundation // this is for POSIXError : Error
