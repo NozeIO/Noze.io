@@ -828,46 +828,32 @@ private struct NumberParser {
 
 public extension JSONParser {
 
-    /// Creates a `JSONParser` from the code units represented by the `string`.
+    /// Parses a `JSON` from the code units represented by the `string`.
     ///
-    /// The synthesized string is lifetime-extended for the duration of parsing.
-    /// TODO(hzp): withUnsafeBufferPointer etc. are documented with the caveat
-    /// that "The pointer argument is valid only for the duration of the
-    /// closure’s execution."  We are ignoring that condition, raising two
-    /// questions:
-    ///   1. When is our code safe or unsafe?  I'm guessing that we are safe
-    ///      until something mutates the string and triggers copy-or-write.
-    ///      If that is the only problem, it might be worth documenting that
-    ///      assumption.
-    ///   2. Can't we put the burden of calling withUnsafeBufferPointer on our
-    ///      call site?  Then things would be correct and safe.
-    init(string: String) {
+    static func parse(string: String) throws -> JSON? {
         let codePoints = string.utf8CString
       
-        let buffer = codePoints.withUnsafeBufferPointer {
-            ( nulTerminatedBuffer ) -> UnsafeBufferPointer<UInt8> in
+        return try codePoints.withUnsafeBufferPointer {
+            ( nulTerminatedBuffer ) in
           
-            // TODO(hh): Trouble ahead. I guess this is fine, but I'm not
-            //           quite sure. What is a proper simple cast?
-            // TODO: Ouch!
             let n = nulTerminatedBuffer.count
-            return nulTerminatedBuffer
+            return try nulTerminatedBuffer
               .baseAddress!
               .withMemoryRebound(to: UInt8.self, capacity: n) { cs in
                 // don't want to include the nul termination in the buffer - trim it off
-                return UnsafeBufferPointer(start: cs, count: n - 1)
+                let buffer = UnsafeBufferPointer(start: cs, count: n - 1)
+                var parser = JSONParser(buffer: buffer, owner: codePoints)
+                return try parser.parse()
             }
         }
-        self.init(buffer: buffer, owner: codePoints)
     }
 
 }
   
 public extension JSON {
   
-    public init(jsonString: Swift.String) throws {
-        var parser = JSONParser(string: jsonString)
-        self = try parser.parse()
+    static func parse(jsonString: Swift.String) throws -> JSON? {
+        return try JSONParser.parse(string: jsonString)
     }
   
 }

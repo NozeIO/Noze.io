@@ -45,8 +45,7 @@ private func ==(lhs: JSONParser.Error, rhs: JSONParser.Error) -> Bool {
 class JSONParserTests: XCTestCase {
 
     private func JSONFromString(_ s: String) throws -> JSON {
-        var parser = JSONParser(string: s)
-        return try parser.parse()
+        return try JSONParser.parse(string: s)!
     }
 
     func testThatParserThrowsAnErrorForAnEmptyNSData() {
