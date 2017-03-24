@@ -523,14 +523,14 @@ public extension http_parser {
           self.content_length = Int.max // was: ULLONG_MAX
           
           if ch == 72 /* 'H' */ {
-            UPDATE_STATE(.s_res_or_resp_H);
+            UPDATE_STATE(.s_res_or_resp_H)
             
             let len = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, settings,
                                       p, data)
             if let len = len { return .CallbackDone(len) }
           }
           else {
-            self.type = .Request;
+            self.type = .Request
             UPDATE_STATE(.s_start_req)
             return .Reexecute
           }
@@ -554,7 +554,7 @@ public extension http_parser {
           self.content_length = Int.max // was: ULLONG_MAX
 
           switch (ch) {
-            case 72 /* 'H' */: UPDATE_STATE(.s_res_H);
+            case 72 /* 'H' */: UPDATE_STATE(.s_res_H)
             case CR: break
             case LF: break
             default: return .Error(.INVALID_CONSTANT)
@@ -579,7 +579,7 @@ public extension http_parser {
         case .s_res_HTTP:
           guard STRICT_CHECK(ch != cSLASH) else { return .Error(.STRICT) }
           UPDATE_STATE(.s_res_first_http_major)
-          break;
+          break
 
         case .s_res_first_http_major:
           guard ch >= c0 && ch <= c9 else { return .Error(.INVALID_VERSION) }
@@ -590,7 +590,7 @@ public extension http_parser {
         /* major HTTP version or dot */
         case .s_res_http_major:
           if ch == cDOT {
-            UPDATE_STATE(.s_res_first_http_minor);
+            UPDATE_STATE(.s_res_first_http_minor)
             break
           }
           
@@ -606,12 +606,12 @@ public extension http_parser {
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
           
           self.http_minor = Int16(ch - c0)
-          UPDATE_STATE(.s_res_http_minor);
+          UPDATE_STATE(.s_res_http_minor)
 
         /* minor HTTP version or end of request line */
         case .s_res_http_minor:
           if ch == cSPACE {
-            UPDATE_STATE(.s_res_first_status_code);
+            UPDATE_STATE(.s_res_first_status_code)
             break
           }
           
@@ -629,13 +629,13 @@ public extension http_parser {
             return .Error(.INVALID_STATUS)
           }
           self.status_code = Int16(ch - 48 /* '0' */)
-          UPDATE_STATE(.s_res_status_code);
+          UPDATE_STATE(.s_res_status_code)
 
         case .s_res_status_code:
           if !IS_NUM(ch) {
             switch (ch) {
-              case cSPACE: UPDATE_STATE(.s_res_status_start);
-              case CR:     UPDATE_STATE(.s_res_line_almost_done);
+              case cSPACE: UPDATE_STATE(.s_res_status_start)
+              case CR:     UPDATE_STATE(.s_res_line_almost_done)
               case LF:     UPDATE_STATE(.s_header_field_start)
               default:     return .Error(.INVALID_STATUS)
             }
@@ -651,8 +651,8 @@ public extension http_parser {
           if ch == CR { UPDATE_STATE(.s_res_line_almost_done); break }
           if ch == LF { UPDATE_STATE(.s_header_field_start);   break }
           MARK(.Status)
-          UPDATE_STATE(.s_res_status);
-          self.index = 0;
+          UPDATE_STATE(.s_res_status)
+          self.index = 0
 
         case .s_res_status:
           if ch == CR {
@@ -685,7 +685,7 @@ public extension http_parser {
           guard IS_ALPHA(ch) else { return .Error(.INVALID_METHOD) }
           
           self.method = .GET
-          self.index  = 1;
+          self.index  = 1
           switch ch {
             case cA: self.method = .ACL
             case cB: self.method = .BIND
@@ -709,7 +709,7 @@ public extension http_parser {
             default:
               return .Error(.INVALID_METHOD)
           }
-          UPDATE_STATE(.s_req_method);
+          UPDATE_STATE(.s_req_method)
           
           // CALLBACK_NOTIFY(message_begin);
           let rc = CALLBACK_NOTIFY(.MessageBegin, &CURRENT_STATE, settings,
@@ -718,7 +718,7 @@ public extension http_parser {
           
           if debugOn { print("  METHOD: \(self.method)") }
           
-          break;
+          break
 
         case .s_req_method:
           guard ch != 0 else { return .Error(.INVALID_METHOD) }
@@ -728,40 +728,40 @@ public extension http_parser {
           
           
           if (ch == cSPACE && matcher[self.index] == 0) {
-            UPDATE_STATE(.s_req_spaces_before_url);
+            UPDATE_STATE(.s_req_spaces_before_url)
           } else if (ch == matcher[self.index]) {
             /* nada */
           } else if (self.method == .CONNECT) {
             if (self.index == 1 && ch == cH) {
-              self.method = .CHECKOUT;
+              self.method = .CHECKOUT
             } else if (self.index == 2  && ch == cP) {
-              self.method = .COPY;
+              self.method = .COPY
             } else {
               return .Error(.INVALID_METHOD)
             }
           } else if (self.method == .MKCOL) {
             if (self.index == 1 && ch == cO) {
-              self.method = .MOVE;
+              self.method = .MOVE
             } else if (self.index == 1 && ch == cE) {
-              self.method = .MERGE;
+              self.method = .MERGE
             } else if (self.index == 1 && ch == cDASH) {
-              self.method = .MSEARCH;
+              self.method = .MSEARCH
             } else if (self.index == 2 && ch == cA) {
-              self.method = .MKACTIVITY;
+              self.method = .MKACTIVITY
             } else if (self.index == 3 && ch == cA) {
-              self.method = .MKCALENDAR;
+              self.method = .MKCALENDAR
             } else {
               return .Error(.INVALID_METHOD)
             }
           } else if (self.method == .SUBSCRIBE) {
             if (self.index == 1 && ch == cE) {
-              self.method = .SEARCH;
+              self.method = .SEARCH
             } else {
               return .Error(.INVALID_METHOD)
             }
           } else if (self.method == .REPORT) {
               if (self.index == 2 && ch == cB) {
-                self.method = .REBIND;
+                self.method = .REBIND
               } else {
                 return .Error(.INVALID_METHOD)
               }
@@ -772,13 +772,13 @@ public extension http_parser {
               } else if (ch == cU) {
                 self.method = .PUT; /* or HTTP_PURGE */
               } else if (ch == cA) {
-                self.method = .PATCH;
+                self.method = .PATCH
               } else {
                 return .Error(.INVALID_METHOD)
               }
             } else if (self.method == .LOCK) {
               if (ch == cI) {
-                self.method = .LINK;
+                self.method = .LINK
               } else {
                 return .Error(.INVALID_METHOD)
               }
@@ -786,15 +786,15 @@ public extension http_parser {
           } else if (self.index == 2) {
             if (self.method == .PUT) {
               if (ch == cR) {
-                self.method = .PURGE;
+                self.method = .PURGE
               } else {
                 return .Error(.INVALID_METHOD)
               }
             } else if (self.method == .UNLOCK) {
               if (ch == cS) {
-                self.method = .UNSUBSCRIBE;
+                self.method = .UNSUBSCRIBE
               } else if(ch == cB) {
-                self.method = .UNBIND;
+                self.method = .UNBIND
               } else {
                 return .Error(.INVALID_METHOD)
               }
@@ -802,9 +802,9 @@ public extension http_parser {
               return .Error(.INVALID_METHOD)
             }
           } else if (self.index == 4 && self.method == .PROPFIND && ch == cP) {
-            self.method = .PROPPATCH;
+            self.method = .PROPPATCH
           } else if (self.index == 3 && self.method == .UNLOCK && ch == cI) {
-            self.method = .UNLINK;
+            self.method = .UNLINK
           } else {
             return .Error(.INVALID_METHOD)
           }
@@ -817,7 +817,7 @@ public extension http_parser {
           
           MARK(.URL)
           if (self.method == .CONNECT) {
-            UPDATE_STATE(.s_req_server_start);
+            UPDATE_STATE(.s_req_server_start)
           }
           
           UPDATE_STATE(parse_url_char(CURRENT_STATE, ch))
@@ -902,12 +902,12 @@ public extension http_parser {
         case .s_req_http_major:
           if ch == cDOT {
             UPDATE_STATE(.s_req_first_http_minor)
-            break;
+            break
           }
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
           
-          self.http_major *= 10;
-          self.http_major += Int16(ch - c0);
+          self.http_major *= 10
+          self.http_major += Int16(ch - c0)
           
           guard self.http_major < 1000 else { return .Error(.INVALID_VERSION) }
 
@@ -927,14 +927,14 @@ public extension http_parser {
           guard IS_NUM(ch) else { return .Error(.INVALID_VERSION) }
 
           self.http_minor *= 10
-          self.http_minor += ch - c0
+          self.http_minor += Int16(ch - c0)
 
           guard self.http_minor < 1000 else { return .Error(.INVALID_VERSION) }
 
         /* end of request line */
         case .s_req_line_almost_done:
           guard ch == LF else { return .Error(.LF_EXPECTED) }
-          UPDATE_STATE(.s_header_field_start);
+          UPDATE_STATE(.s_header_field_start)
 
         case .s_header_field_start:
           if ch == CR { UPDATE_STATE(.s_headers_almost_done); break }
@@ -950,9 +950,9 @@ public extension http_parser {
           guard c != 0 else { return .Error(.INVALID_HEADER_TOKEN) }
 
 
-          MARK(.HeaderField);
+          MARK(.HeaderField)
 
-          self.index = 0;
+          self.index = 0
           UPDATE_STATE(.s_header_field)
 
           switch c {
@@ -996,11 +996,11 @@ public extension http_parser {
               case .h_matching_connection:
                 self.index += 1
                 if self.index > lCONNECTION || c != CONNECTION[self.index] {
-                  self.header_state = .h_general;
+                  self.header_state = .h_general
                 } else if self.index == lCONNECTION - 1 {
-                  self.header_state = .h_connection;
+                  self.header_state = .h_connection
                 }
-                break;
+                break
 
               /* proxy-connection */
 
@@ -1008,9 +1008,9 @@ public extension http_parser {
                 self.index += 1
                 if (self.index > lPROXY_CONNECTION
                     || c != PROXY_CONNECTION[self.index]) {
-                  self.header_state = .h_general;
+                  self.header_state = .h_general
                 } else if self.index == lPROXY_CONNECTION-1 {
-                  self.header_state = .h_connection;
+                  self.header_state = .h_connection
                 }
 
               /* content-length */
@@ -1019,9 +1019,9 @@ public extension http_parser {
                 self.index += 1
                 if (self.index > lCONTENT_LENGTH
                     || c != CONTENT_LENGTH[self.index]) {
-                  self.header_state = .h_general;
+                  self.header_state = .h_general
                 } else if self.index == lCONTENT_LENGTH-1 {
-                  self.header_state = .h_content_length;
+                  self.header_state = .h_content_length
                 }
 
               /* transfer-encoding */
@@ -1030,9 +1030,9 @@ public extension http_parser {
                 self.index += 1
                 if (self.index > lTRANSFER_ENCODING
                     || c != TRANSFER_ENCODING[self.index]) {
-                  self.header_state = .h_general;
+                  self.header_state = .h_general
                 } else if self.index == lTRANSFER_ENCODING-1 {
-                  self.header_state = .h_transfer_encoding;
+                  self.header_state = .h_transfer_encoding
                 }
 
               /* upgrade */
@@ -1041,9 +1041,9 @@ public extension http_parser {
                 self.index += 1
                 
                 if self.index > lUPGRADE || c != UPGRADE[self.index] {
-                  self.header_state = .h_general;
+                  self.header_state = .h_general
                 } else if self.index == lUPGRADE-1 {
-                  self.header_state = .h_upgrade;
+                  self.header_state = .h_upgrade
                 }
 
               case .h_connection, .h_content_length, .h_transfer_encoding,
@@ -1073,7 +1073,7 @@ public extension http_parser {
           }
 
           if ch == cCOLON {
-            UPDATE_STATE(.s_header_value_discard_ws);
+            UPDATE_STATE(.s_header_value_discard_ws)
             
             // CALLBACK_DATA(header_field);
             let rc = CALLBACK_DATA(.HeaderField, &header_field_mark,
@@ -1110,7 +1110,7 @@ public extension http_parser {
           switch self.header_state {
             case .h_upgrade:
               _ = self.flags.insert(.F_UPGRADE)
-              self.header_state = .h_general;
+              self.header_state = .h_general
 
             case .h_transfer_encoding:
               /* looking for 'Transfer-Encoding: chunked' */
@@ -1122,19 +1122,19 @@ public extension http_parser {
 
             case .h_content_length:
               guard IS_NUM(ch) else { return .Error(.INVALID_CONTENT_LENGTH) }
-              self.content_length = ch - c0;
+              self.content_length = Int(ch - c0)
 
             case .h_connection:
               /* looking for 'Connection: keep-alive' */
               if (c == ck) {
-                self.header_state = .h_matching_connection_keep_alive;
+                self.header_state = .h_matching_connection_keep_alive
               /* looking for 'Connection: close' */
               } else if (c == cc) {
-                self.header_state = .h_matching_connection_close;
+                self.header_state = .h_matching_connection_close
               } else if (c == cu) {
-                self.header_state = .h_matching_connection_upgrade;
+                self.header_state = .h_matching_connection_upgrade
               } else {
-                self.header_state = .h_matching_connection_token;
+                self.header_state = .h_matching_connection_token
               }
 
             /* Multi-value `Connection` header */
@@ -1151,8 +1151,8 @@ public extension http_parser {
             let ch = p!.pointee
             
             if ch == CR {
-              UPDATE_STATE(.s_header_almost_done);
-              self.header_state = h_state;
+              UPDATE_STATE(.s_header_almost_done)
+              self.header_state = h_state
               // CALLBACK_DATA(header_value);
               let rc = CALLBACK_DATA(.HeaderValue, &header_value_mark,
                                      &CURRENT_STATE, settings, p, data)
@@ -1161,11 +1161,11 @@ public extension http_parser {
             }
 
             if ch == LF {
-              UPDATE_STATE(.s_header_almost_done);
+              UPDATE_STATE(.s_header_almost_done)
               guard COUNT_HEADER_SIZE(p! - start!) else {
                 return .Error(.HEADER_OVERFLOW)
               }
-              self.header_state = h_state;
+              self.header_state = h_state
               // CALLBACK_DATA_NOADVANCE(header_value);
               let rc = CALLBACK_DATA_NOADVANCE(.HeaderValue,
                                                &header_value_mark,
@@ -1180,9 +1180,9 @@ public extension http_parser {
 
             switch h_state {
               case .h_general:
-                var limit : size_t = data! + len - p!;
+                var limit : size_t = data! + len - p!
 
-                limit = min(limit, HTTP_MAX_HEADER_SIZE);
+                limit = min(limit, HTTP_MAX_HEADER_SIZE)
 
                 let rCR = memchr(p!, Int32(CR), limit)
                 let rLF = memchr(p!, Int32(LF), limit)
@@ -1202,7 +1202,7 @@ public extension http_parser {
                 } else if p_lf != nil {
                   p = p_lf
                 } else {
-                  p = data! + len;
+                  p = data! + len
                 }
                 p! -= 1
 
@@ -1214,7 +1214,7 @@ public extension http_parser {
                 if ch == cSPACE { break }
 
                 guard IS_NUM(ch) else {
-                  self.header_state = h_state;
+                  self.header_state = h_state
                   return .Error(.INVALID_CONTENT_LENGTH)
                 }
 
@@ -1225,7 +1225,7 @@ public extension http_parser {
                 /* Overflow? Test against a conservative limit for simplicity. */
                 // HH: was ULLONG_MAX
                 if (Int.max - 10) / 10 < self.content_length {
-                  self.header_state = h_state;
+                  self.header_state = h_state
                   return .Error(.INVALID_CONTENT_LENGTH)
                 }
 
@@ -1259,7 +1259,7 @@ public extension http_parser {
 
               /* looking for 'Connection: keep-alive' */
               case .h_matching_connection_keep_alive:
-                self.index += 1;
+                self.index += 1
                 if self.index > lKEEP_ALIVE || c != KEEP_ALIVE[self.index] {
                   h_state = .h_matching_connection_token
                 } else if self.index == lKEEP_ALIVE-1 {
@@ -1305,7 +1305,7 @@ public extension http_parser {
                     _ = self.flags.insert(.F_CONNECTION_UPGRADE)
                   }
                   h_state = .h_matching_connection_token_start
-                  self.index = 0;
+                  self.index = 0
                 } else if ch != cSPACE {
                   h_state = .h_matching_connection_token
                 }
@@ -1317,7 +1317,7 @@ public extension http_parser {
             
             p! += 1
           }
-          self.header_state = h_state;
+          self.header_state = h_state
 
           guard COUNT_HEADER_SIZE(p! - start!) else {
             return .Error(.HEADER_OVERFLOW)
@@ -1347,7 +1347,7 @@ public extension http_parser {
               _ = self.flags.insert(.F_CHUNKED)
             case .h_connection_upgrade:
               _ = self.flags.insert(.F_CONNECTION_UPGRADE)
-            default: break;
+            default: break
           }
 
           UPDATE_STATE(.s_header_field_start)
@@ -1376,7 +1376,7 @@ public extension http_parser {
 
             /* header value was empty */
             MARK(.HeaderValue)
-            UPDATE_STATE(.s_header_field_start);
+            UPDATE_STATE(.s_header_field_start)
             
             let rc = CALLBACK_DATA_NOADVANCE(.HeaderValue,
                                              &header_value_mark,
@@ -1391,7 +1391,7 @@ public extension http_parser {
 
           if self.flags.contains(.F_TRAILING) {
             /* End of a chunked request */
-            UPDATE_STATE(.s_message_done);
+            UPDATE_STATE(.s_message_done)
             let rc = CALLBACK_NOTIFY_NOADVANCE(.ChunkComplete, &CURRENT_STATE,
                                                settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
@@ -1399,7 +1399,7 @@ public extension http_parser {
             return .Reexecute
           }
 
-          UPDATE_STATE(.s_headers_done);
+          UPDATE_STATE(.s_headers_done)
 
           /* Set this here so that on_headers_complete() callbacks can see it */
           self.upgrade =
@@ -1418,11 +1418,11 @@ public extension http_parser {
            */
           switch settings.onHeadersComplete(parser: self) {
             case 0:
-              break;
+              break
 
             case 1:
               _ = self.flags.insert(.F_SKIPBODY)
-              break;
+              break
 
             default:
               error = .CB_headers_complete
@@ -1446,7 +1446,7 @@ public extension http_parser {
                                    || !hasBody))
           {
             /* Exit, the rest of the message is in a different protocol. */
-            UPDATE_STATE(NEW_MESSAGE);
+            UPDATE_STATE(NEW_MESSAGE)
             // CALLBACK_NOTIFY(message_complete);
             let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
                                      settings, p, data)
@@ -1455,18 +1455,18 @@ public extension http_parser {
           }
 
           if self.flags.contains(.F_SKIPBODY) {
-            UPDATE_STATE(NEW_MESSAGE);
+            UPDATE_STATE(NEW_MESSAGE)
             // CALLBACK_NOTIFY(message_complete);
             let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
                                      settings, p, data)
             if let rc = rc { return .CallbackDone(rc) }
           } else if self.flags.contains(.F_CHUNKED) {
             /* chunked encoding - ignore Content-Length header */
-            UPDATE_STATE(.s_chunk_size_start);
+            UPDATE_STATE(.s_chunk_size_start)
           } else {
             if self.content_length == 0 {
               /* Content-Length header given but zero: Content-Length: 0\r\n */
-              UPDATE_STATE(NEW_MESSAGE);
+              UPDATE_STATE(NEW_MESSAGE)
               // CALLBACK_NOTIFY(message_complete);
               let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
                                        settings, p, data)
@@ -1477,7 +1477,7 @@ public extension http_parser {
             } else {
               if (!messageNeedsEOF) {
                 /* Assume content-length 0 - read the next */
-                UPDATE_STATE(NEW_MESSAGE);
+                UPDATE_STATE(NEW_MESSAGE)
                 // CALLBACK_NOTIFY(message_complete);
                 let rc = CALLBACK_NOTIFY(.MessageComplete, &CURRENT_STATE,
                                          settings, p, data)
@@ -1491,10 +1491,10 @@ public extension http_parser {
 
         case .s_body_identity:
           let to_read : Int /* uint64_t */ = min(self.content_length,
-                                       ((data! + len) - p!));
+                                       ((data! + len) - p!))
 
           assert(self.content_length != 0
-              && self.content_length != Int.max /* ULLONG_MAX */);
+              && self.content_length != Int.max /* ULLONG_MAX */)
 
           /* The difference between advancing content_length and p is because
            * the latter will automaticaly advance on the next loop iteration.
@@ -1503,11 +1503,11 @@ public extension http_parser {
            */
           MARK(.Body)
 
-          self.content_length -= to_read;
-          p! += to_read - 1;
+          self.content_length -= to_read
+          p! += to_read - 1
 
           if (self.content_length == 0) {
-            UPDATE_STATE(.s_message_done);
+            UPDATE_STATE(.s_message_done)
 
             /* Mimic CALLBACK_DATA_NOADVANCE() but with one extra byte.
              *
@@ -1529,7 +1529,7 @@ public extension http_parser {
         /* read until EOF */
         case .s_body_identity_eof:
           MARK(.Body)
-          p = data! + len - 1;
+          p = data! + len - 1
         
         case .s_message_done:
           UPDATE_STATE(NEW_MESSAGE)
@@ -1545,7 +1545,7 @@ public extension http_parser {
           }
 
         case .s_chunk_size_start:
-          assert(self.nread == 1);
+          assert(self.nread == 1)
           assert(self.flags.contains(.F_CHUNKED))
 
           let unhex_val = unhex[Int(ch)]; // (unsigned char)
@@ -1554,7 +1554,7 @@ public extension http_parser {
           }
 
           self.content_length = Int(unhex_val)
-          UPDATE_STATE(.s_chunk_size);
+          UPDATE_STATE(.s_chunk_size)
 
         case .s_chunk_size:
           assert(self.flags.contains(.F_CHUNKED))
@@ -1565,7 +1565,7 @@ public extension http_parser {
 
           if unhex_val == -1 {
             if ch == cSEMICOLON || ch == cSPACE {
-              UPDATE_STATE(.s_chunk_parameters);
+              UPDATE_STATE(.s_chunk_parameters)
               break
             }
 
@@ -1581,20 +1581,20 @@ public extension http_parser {
             return .Error(.INVALID_CONTENT_LENGTH)
           }
           
-          self.content_length = t;
+          self.content_length = t
 
         case .s_chunk_parameters:
           assert(self.flags.contains(.F_CHUNKED))
           /* just ignore this shit. TODO check for overflow */
           if ch == CR {
-            UPDATE_STATE(.s_chunk_size_almost_done);
+            UPDATE_STATE(.s_chunk_size_almost_done)
           }
 
         case .s_chunk_size_almost_done:
           assert(self.flags.contains(.F_CHUNKED))
           guard STRICT_CHECK(ch != LF) else { return .Error(.STRICT) }
 
-          self.nread = 0;
+          self.nread = 0
 
           if (self.content_length == 0) {
             _ = self.flags.insert(.F_TRAILING)
@@ -1619,18 +1619,18 @@ public extension http_parser {
            * length and data pointers are managed this way.
            */
           MARK(.Body)
-          self.content_length -= to_read;
-          p! += to_read - 1;
+          self.content_length -= to_read
+          p! += to_read - 1
 
           if self.content_length == 0 {
-            UPDATE_STATE(.s_chunk_data_almost_done);
+            UPDATE_STATE(.s_chunk_data_almost_done)
           }
         
         case .s_chunk_data_almost_done:
           assert(self.flags.contains(.F_CHUNKED))
           assert(self.content_length == 0)
           guard STRICT_CHECK(ch != CR) else { return .Error(.STRICT) }
-          UPDATE_STATE(.s_chunk_data_done);
+          UPDATE_STATE(.s_chunk_data_done)
           
           // CALLBACK_DATA(body);
           let rc = CALLBACK_DATA_(.Body, &body_mark, &CURRENT_STATE, settings,
@@ -1641,7 +1641,7 @@ public extension http_parser {
           assert(self.flags.contains(.F_CHUNKED))
           guard STRICT_CHECK(ch != LF) else { return .Error(.STRICT) }
           self.nread = 0
-          UPDATE_STATE(.s_chunk_size_start);
+          UPDATE_STATE(.s_chunk_size_start)
           
           // CALLBACK_NOTIFY(chunk_complete);
           let rc = CALLBACK_NOTIFY(.ChunkComplete, &CURRENT_STATE, settings,
@@ -1820,7 +1820,7 @@ func debugChar(_ ch: CChar) -> String {
     case LF:   p = "NL"
     case CR:   p = "CR"
     case cTAB: p = "TAB"
-    default:   p = "'\(UnicodeScalar(Int(ch)))'"
+    default:   p = "'\(UnicodeScalar(Int(ch)) as Optional)'"
   }
   return "\(ch) \(p)"
 }

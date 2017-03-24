@@ -92,7 +92,7 @@ public class ChildProcess : ErrorEmitter {
     if rc == -1 {
       // TODO
       let error = POSIXErrorCode(rawValue: xsys.errno)
-      print("ERROR: waitpid error: \(error)")
+      print("ERROR: waitpid error: \(error as Optional)")
       
       if error?.rawValue == ECHILD {
         print("  child gone already?")

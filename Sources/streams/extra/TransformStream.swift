@@ -105,7 +105,7 @@ open class TransformStream<WriteType, ReadType>
     let bigChunk = Array(c.joined())
     
     _transform(bucket: bigChunk) { error, data in
-      log.debug("done: \(error) \(data)")
+      log.debug("done: \(error as Optional) \(data as Optional)")
       // Note: invoking done(nil, nil) doesn't do EOF! It just doesn't push
       //       anything.
       if let data = data { self.push(data) }
