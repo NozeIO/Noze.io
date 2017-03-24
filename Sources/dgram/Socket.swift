@@ -284,7 +284,7 @@ open class Socket : ErrorEmitter, LameLogObjectType {
     }
 
     fd = FileDescriptor(sockfd)
-    log.debug("  FD: \(fd)")
+    log.debug("  FD: \(fd as Optional)")
     return 0
   }
 
