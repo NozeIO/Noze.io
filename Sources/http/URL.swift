@@ -338,7 +338,7 @@ func parse_url(_ us: String) -> URL {
       url.host = s[s.startIndex..<idx]
       let portS = s[s.index(after:idx)..<s.endIndex]
       let portO = Int(portS)
-      debugPrint("ports \(portS) is \(portO)")
+      debugPrint("ports \(portS) is \(portO as Optional)")
       if let port = portO {
         url.port = port
       }

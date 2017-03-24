@@ -325,7 +325,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
     }
     
     fd = FileDescriptor(lfd)
-    log.debug("  FD: \(fd)")
+    log.debug("  FD: \(fd as Optional)")
     return 0
   }
   

@@ -106,7 +106,7 @@ public class MustacheParser {
       
       case .SectionEnd(let s):
         if !s.isEmpty && s != se {
-          print("section tags not balanced: \(s) expected \(se)")
+          print("section tags not balanced: \(s) expected \(se as Optional)")
         }
         return nil
     }

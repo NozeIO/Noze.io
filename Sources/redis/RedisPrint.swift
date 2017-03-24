@@ -66,7 +66,7 @@ public func print(error err: Error?, values: [RedisValue]?) {
       let prefix = "  [\(i)]: "
       switch values[i] {
         case .Array(let values):
-          print("\(prefix)\(values)")
+          print("\(prefix)\(values as Optional)")
         
         case .Error(let error):
           print("\(prefix)ERROR \(error)")

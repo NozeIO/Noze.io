@@ -200,7 +200,7 @@ open class WritableStream<WriteType>
     
     _primaryWriteV(buckets: brigade) { error, writeCount in // Q: main
       log.enter(function: "writeNextBlock - handler"); defer { log.leave() }
-      log.debug("wrote #\(writeCount) brigade #\(brigadeCount) \(error)")
+      log.debug("wrote #\(writeCount) brigade #\(brigadeCount) \(error as Optional)")
       
       assert(writeCount <= brigadeCount)
       assert(error != nil || writeCount > 0) // right?

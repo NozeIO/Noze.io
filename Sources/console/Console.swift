@@ -55,7 +55,7 @@ public extension ConsoleType { // Actual logging funcs
   
   public func dir(_ obj: Any?) {
     // TODO: implement more
-    log("\(obj)")
+    log("\(obj as Optional)")
   }
 }
 
@@ -88,7 +88,7 @@ func writeValues<T: GWritableStreamType>(to t: T, _ values : [ Any? ])
       _ = t.write(v)
     }
     else {
-      _ = t.write("\(v)")
+      _ = t.write("\(v as Optional)")
     }
   }
 }

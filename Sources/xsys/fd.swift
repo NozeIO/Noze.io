@@ -15,6 +15,8 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let close     = Glibc.close
   public let read      = Glibc.read
   public let write     = Glibc.write
+  public let recvfrom  = Glibc.recvfrom
+  public let sendto    = Glibc.sendto
   
   public let access    = Glibc.access
   public let F_OK      = Glibc.F_OK
@@ -43,6 +45,8 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let close     = Darwin.close
   public let read      = Darwin.read
   public let write     = Darwin.write
+  public let recvfrom  = Darwin.recvfrom
+  public let sendto    = Darwin.sendto
   
   public let access    = Darwin.access
   public let F_OK      = Darwin.F_OK

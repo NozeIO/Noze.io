@@ -9,14 +9,18 @@ matrix:
           dist: trusty
           env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.0.2-release/ubuntu1404/swift-3.0.2-RELEASE/swift-3.0.2-RELEASE-ubuntu14.04.tar.gz"
           sudo: required
+        - os:   Linux
+          dist: trusty
+          env:  SWIFT_SNAPSHOT_NAME="https://swift.org/builds/swift-3.1-branch/ubuntu1404/swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-23-a/swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-23-a-ubuntu14.04.tar.gz"
+          sudo: required
         - os:   osx
           osx_image: xcode8.2
 
 before_install:
-    - ./xcconfig/before-install.sh
+    - ./.travis.d/before-install.sh
 
 install:
-    - ./xcconfig/install.sh
+    - ./.travis.d/install.sh
 
 script:
     - export PATH="$HOME/usr/bin:$PATH"

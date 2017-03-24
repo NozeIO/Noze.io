@@ -128,7 +128,11 @@ public extension Express {
   public func listen(_ port: Int? = nil, backlog: Int = 512,
                      onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
+#if swift(>=3.1)
+    let mo     = self
+#else
     let mo     = self as! MiddlewareObject // not sure why this is necessary
+#endif
     let server = http.createServer(onRequest: mo.requestHandler)
     _ = server.listen(port, backlog: backlog, onListening: cb)
     return self
