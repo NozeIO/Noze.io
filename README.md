@@ -88,7 +88,9 @@ an email to tell us why this is crap (or not?).
 | OS    | Swift  | Xcode                                                      | Make | SPM  |
 | ----- | ------ |  --------------------------------------------------------- | ---- | ---- |
 | macOS | 3.0    | [Xcode 8](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
+| macOS | 3.1    | [Xcode 8.3](https://developer.apple.com/xcode/download/)     | 👍🏻  | 👍  |
 | tuxOS | [3.0.2](https://swift.org/download/#releases) | | 👍🏻  | 👍  |
+| tuxOS | [3.1](https://swift.org/download/#releases) | | 👍🏻  | 👍  |
 
 With the release of Swift 3 Noze.io drops support for Swift 2.x. If you
 are still interested in using it with 2.x, the last release is still available
