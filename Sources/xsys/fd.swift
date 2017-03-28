@@ -30,7 +30,6 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let opendir   = Glibc.opendir
   public let closedir  = Glibc.closedir
   public let readdir   = Glibc.readdir
-  public let readdir_r = Glibc.readdir_r
 
   public typealias dirent      = Glibc.dirent
   public typealias stat_struct = Glibc.stat
@@ -60,7 +59,6 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let opendir   = Darwin.opendir
   public let closedir  = Darwin.closedir
   public let readdir   = Darwin.readdir
-  public let readdir_r = Darwin.readdir_r
   
   public typealias dirent      = Darwin.dirent
   public typealias stat_struct = Darwin.stat
