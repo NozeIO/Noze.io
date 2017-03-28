@@ -45,7 +45,7 @@ class JSONTests: XCTestCase {
     func DoNotRuntestInitializingFromEmptyData() {
         
         do {
-            _ = try JSON(data: NSData())
+            _ = try JSON.parse(data: NSData())
         } catch {
             XCTFail("Could not parse empty data: \(error)")
             return
@@ -58,7 +58,7 @@ class JSONTests: XCTestCase {
         let jsonString = "{ \"slashers\": [\"Jason\",\"Freddy\"] }"
         
         do {
-            _ = try JSON(jsonString: jsonString)
+            _ = try JSON.parse(jsonString: jsonString)
         } catch {
             XCTFail("Could not parse JSON from string: \(error)")
             return
@@ -69,7 +69,7 @@ class JSONTests: XCTestCase {
     func DoNotRuntestInitializingFromEmptyString() {
         
         do {
-            _ = try JSON(jsonString: "")
+            _ = try JSON.parse(jsonString: "")
         } catch {
             XCTFail("Could not parse JSON from string: \(error)")
             return
