@@ -9,33 +9,29 @@ import Dispatch
 import xsys
 import core
 
-public func readdir(_ path: String, cb: @escaping ( [ String ]? ) -> Void) {
+public func readdir(_ path: String, cb: @escaping ( Error?, [ String ]? ) -> Void) {
   module.Q.evalAsync(readdirSync, path, cb)
 }
 
 // TBD: should that be a stream? Maybe, but it may not be worth it
-public func readdirSync(_ path: String) -> [ String ]? {
-#if os(Linux)
-  let lDir = xsys.opendir(path)
-  guard let dir = lDir else { return nil }
-#else
-  let dir = xsys.opendir(path)
-  guard dir != nil else { return nil }
-#endif
+public func readdirSync(_ path: String) throws -> [ String ] {
+  guard let dir = xsys.opendir(path) else {
+      throw POSIXErrorCode(rawValue: xsys.errno)!
+  }
   defer { _ = xsys.closedir(dir) }
   
   var entries = [ String ]()
   repeat {
-    var lEntry : UnsafeMutablePointer<xsys.dirent>? = nil
-    var buffer = xsys.dirent()
-    let rc     = xsys.readdir_r(dir, &buffer, &lEntry)
-    
-    guard rc == 0 else {
-      // TODO: error handling. Hm. Do we care? Do we really want try abc?
-      return nil
+    xsys.errno = 0
+    guard let entry = xsys.readdir(dir) else {
+      if xsys.errno == 0 {
+        break
+      }
+      // On Linux, only EBADF is documented.  macOS lists EFAULT, which
+      // is equally implausible.  But it also mentions EIO, which might
+      // just be possible enough to consider it.
+      throw POSIXErrorCode(rawValue: xsys.errno)!
     }
-    
-    guard let entry = lEntry else { break }  // done
     
     var s : String? = nil
     if entry.pointee.d_name.0 == 46 /* . */ {

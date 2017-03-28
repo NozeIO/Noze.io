@@ -17,7 +17,7 @@ class NozeIOFileSystemTests: NozeIOTestCase {
   // MARK: - Directory
   
   func testSyncReaddir() throws {
-    let entries = fs.readdirSync("/bin")
+    let entries = try? fs.readdirSync("/bin")
     XCTAssertNotNil(entries)
     XCTAssertTrue(entries!.contains("ls"))
     XCTAssertTrue(entries!.contains("pwd"))
@@ -27,7 +27,8 @@ class NozeIOFileSystemTests: NozeIOTestCase {
 
   func testAsyncReaddir() {
     inRunloop { done in
-      fs.readdir("/bin") { entries in
+      fs.readdir("/bin") { (error, entries) in
+        XCTAssertNil(error)
         XCTAssertNotNil(entries)
         XCTAssertTrue(entries!.contains("ls"))
         XCTAssertTrue(entries!.contains("pwd"))

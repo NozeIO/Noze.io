@@ -26,8 +26,7 @@ public extension JSON {
     guard !string.isEmpty else { return nil }
     
     do {
-      var parser = JSONParser(string: string)
-      return try parser.parse()
+      return try JSONParser.parse(string: string)
     }
     catch let error {
       // Not using console.error to avoid the (big) dependency.

@@ -11,8 +11,8 @@ import xsys
 
 // Common code for getsockname()/getpeername()
 
-typealias GetNameFN = ( Int32, UnsafeMutablePointer<xsys_sockaddr>,
-                        UnsafeMutablePointer<socklen_t>) -> Int32
+public typealias GetNameFN = ( Int32, UnsafeMutablePointer<xsys_sockaddr>,
+                               UnsafeMutablePointer<socklen_t>) -> Int32
 
 // TBD:
 public func getasockname<T: SocketAddress>(fd: Int32, _ nfn: GetNameFN) -> T? {
