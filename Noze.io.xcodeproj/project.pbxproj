@@ -121,9 +121,9 @@
 		E85EF89E1CFFA76200BDA997 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 		E85EF89F1CFFA77000BDA997 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D4DFA21CFC67D000921230 /* Foundation.framework */; };
 		E85EF8A11CFFA97B00BDA997 /* Render.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A01CFFA97B00BDA997 /* Render.swift */; };
-		E85EF8A31D00DE9000BDA997 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */; };
-		E85EF8A51D00E17B00BDA997 /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A41D00E17A00BDA997 /* IncomingMessage.swift */; };
-		E85EF8A91D00EB5400BDA997 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A81D00EB5400BDA997 /* JSON.swift */; };
+		E85EF8A31D00DE9000BDA997 /* ExpressServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A21D00DE9000BDA997 /* ExpressServerResponse.swift */; };
+		E85EF8A51D00E17B00BDA997 /* ExpressIncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A41D00E17A00BDA997 /* ExpressIncomingMessage.swift */; };
+		E85EF8A91D00EB5400BDA997 /* ExpressJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8A81D00EB5400BDA997 /* ExpressJSON.swift */; };
 		E85EF8AA1D00F41D00BDA997 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E85EF8AB1D00F5D700BDA997 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E85EF8AC1D00FAC800BDA997 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
@@ -247,7 +247,7 @@
 		E89CDF581D006421008861AF /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
 		E89CDF5A1D0066DF008861AF /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
 		E89CDF5B1D006734008861AF /* libmustache.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8C90BE41CFE6FFE00F85436 /* libmustache.dylib */; };
-		E89CDF5D1D006747008861AF /* Mustache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89CDF5C1D006747008861AF /* Mustache.swift */; };
+		E89CDF5D1D006747008861AF /* ExpressMustache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89CDF5C1D006747008861AF /* ExpressMustache.swift */; };
 		E89CDF5F1D006E77008861AF /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
 		E89CDF601D0073E3008861AF /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E8A249DF1D20BB1A0060346B /* UniqueRandomArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A249DE1D20BB1A0060346B /* UniqueRandomArray.swift */; };
@@ -1868,9 +1868,9 @@
 		E85EB6F21D43C2BC0012FE11 /* XSysTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XSysTests.swift; path = Tests/xsysTests/XSysTests.swift; sourceTree = SOURCE_ROOT; };
 		E85EF89C1CFF9CA300BDA997 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Route.swift; path = Sources/express/Route.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A01CFFA97B00BDA997 /* Render.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Render.swift; path = Sources/express/Render.swift; sourceTree = SOURCE_ROOT; };
-		E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerResponse.swift; path = Sources/express/ServerResponse.swift; sourceTree = SOURCE_ROOT; };
-		E85EF8A41D00E17A00BDA997 /* IncomingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IncomingMessage.swift; path = Sources/express/IncomingMessage.swift; sourceTree = SOURCE_ROOT; };
-		E85EF8A81D00EB5400BDA997 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSON.swift; path = Sources/express/JSON.swift; sourceTree = SOURCE_ROOT; };
+		E85EF8A21D00DE9000BDA997 /* ExpressServerResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpressServerResponse.swift; path = Sources/express/ExpressServerResponse.swift; sourceTree = SOURCE_ROOT; };
+		E85EF8A41D00E17A00BDA997 /* ExpressIncomingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpressIncomingMessage.swift; path = Sources/express/ExpressIncomingMessage.swift; sourceTree = SOURCE_ROOT; };
+		E85EF8A81D00EB5400BDA997 /* ExpressJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpressJSON.swift; path = Sources/express/ExpressJSON.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8AE1D00FC2600BDA997 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = "Samples/todo-mvc/Model.swift"; sourceTree = "<group>"; };
 		E860C6471CCD54C700E9F479 /* CreateNewBuiltinModule.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CreateNewBuiltinModule.md; path = Documentation/CreateNewBuiltinModule.md; sourceTree = "<group>"; };
 		E860C6481CCD54C700E9F479 /* FlowOfAWritableStream.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = FlowOfAWritableStream.md; path = Documentation/FlowOfAWritableStream.md; sourceTree = "<group>"; };
@@ -1954,7 +1954,7 @@
 		E89CDF511D00634F008861AF /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = "Samples/express-simple/Sources/main.swift"; sourceTree = SOURCE_ROOT; };
 		E89CDF571D0063B7008861AF /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = "Samples/express-simple/public"; sourceTree = SOURCE_ROOT; };
 		E89CDF591D0064A3008861AF /* views */ = {isa = PBXFileReference; lastKnownFileType = folder; name = views; path = "Samples/express-simple/views"; sourceTree = SOURCE_ROOT; };
-		E89CDF5C1D006747008861AF /* Mustache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Mustache.swift; path = Sources/express/Mustache.swift; sourceTree = SOURCE_ROOT; };
+		E89CDF5C1D006747008861AF /* ExpressMustache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpressMustache.swift; path = Sources/express/ExpressMustache.swift; sourceTree = SOURCE_ROOT; };
 		E89EBFF21CE7E64600BCFD77 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Transform.swift; path = Sources/streams/callback/Transform.swift; sourceTree = SOURCE_ROOT; };
 		E89EBFF41CE7E65B00BCFD77 /* Readable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Readable.swift; path = Sources/streams/callback/Readable.swift; sourceTree = SOURCE_ROOT; };
 		E89EBFF61CE7E66700BCFD77 /* Writable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Writable.swift; path = Sources/streams/callback/Writable.swift; sourceTree = SOURCE_ROOT; };
@@ -3365,10 +3365,10 @@
 				E85EF8A01CFFA97B00BDA997 /* Render.swift */,
 				E89CDF3A1D005A0C008861AF /* Settings.swift */,
 				E89CDF4E1D005D6C008861AF /* MiddlewareObject.swift */,
-				E89CDF5C1D006747008861AF /* Mustache.swift */,
-				E85EF8A41D00E17A00BDA997 /* IncomingMessage.swift */,
-				E85EF8A21D00DE9000BDA997 /* ServerResponse.swift */,
-				E85EF8A81D00EB5400BDA997 /* JSON.swift */,
+				E89CDF5C1D006747008861AF /* ExpressMustache.swift */,
+				E85EF8A41D00E17A00BDA997 /* ExpressIncomingMessage.swift */,
+				E85EF8A21D00DE9000BDA997 /* ExpressServerResponse.swift */,
+				E85EF8A81D00EB5400BDA997 /* ExpressJSON.swift */,
 			);
 			path = express;
 			sourceTree = "<group>";
@@ -5770,17 +5770,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				E898DB181CFF9632000DED0B /* Express.swift in Sources */,
-				E85EF8A91D00EB5400BDA997 /* JSON.swift in Sources */,
+				E85EF8A91D00EB5400BDA997 /* ExpressJSON.swift in Sources */,
 				E898DB1A1CFF963E000DED0B /* Router.swift in Sources */,
-				E85EF8A51D00E17B00BDA997 /* IncomingMessage.swift in Sources */,
+				E85EF8A51D00E17B00BDA997 /* ExpressIncomingMessage.swift in Sources */,
 				E8E2766A1CF49FBF004A6A34 /* Module.swift in Sources */,
 				E85EF89D1CFF9CA300BDA997 /* Route.swift in Sources */,
 				E89CDF3B1D005A0C008861AF /* Settings.swift in Sources */,
 				E898DB1F1CFF9A44000DED0B /* RouteKeeper.swift in Sources */,
 				E89CDF4F1D005D6C008861AF /* MiddlewareObject.swift in Sources */,
 				E85EF8A11CFFA97B00BDA997 /* Render.swift in Sources */,
-				E89CDF5D1D006747008861AF /* Mustache.swift in Sources */,
-				E85EF8A31D00DE9000BDA997 /* ServerResponse.swift in Sources */,
+				E89CDF5D1D006747008861AF /* ExpressMustache.swift in Sources */,
+				E85EF8A31D00DE9000BDA997 /* ExpressServerResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
