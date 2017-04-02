@@ -6,6 +6,10 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+import class http.IncomingMessage
+import class http.ServerResponse
+import process
+
 open class Express: SettingsHolder, MountableMiddlewareObject, RouteKeeper,
                     CustomStringConvertible
 {

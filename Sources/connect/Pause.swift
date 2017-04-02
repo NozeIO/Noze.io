@@ -21,10 +21,10 @@ public func pause(_ timeout: Int, _ error: Error? = nil) -> Middleware {
   return { req, res, next in
     setTimeout(timeout) {
       if let error = error {
-        next(error)
+        try next(error)
       }
       else {
-        next()
+        try next()
       }
     }
   }

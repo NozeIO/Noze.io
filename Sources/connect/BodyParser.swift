@@ -154,14 +154,14 @@ public extension bodyParser {
   public static func json(options opts: Options = Options()) -> Middleware {
     
     return { req, res, next in
-      guard typeIs(req, [ "json" ]) != nil else { next(); return }
+      guard typeIs(req, [ "json" ]) != nil else { return try next() }
       
       // lame, should be streaming
       _ = req | concat { bytes in
         let result = BodyParserJSON.parse(bytes)
         // TODO: error?
         req.body = result != nil ? .JSON(result!) : .NoBody
-        next()
+        try next()
       }
     }
     

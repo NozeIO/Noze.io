@@ -25,7 +25,7 @@ public func cookieParser() -> Middleware {
       let cookies = Cookies(req, res)
       req.extra[requestKey] = cookies.cookies // grab all
     }
-    next()
+    try next()
   }
 }
 

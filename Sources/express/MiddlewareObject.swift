@@ -6,6 +6,9 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
+import class http.IncomingMessage
+import class http.ServerResponse
+
 /**
  * MiddlewareObject is the 'object variant' of a Middleware callback.
  *

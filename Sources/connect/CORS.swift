@@ -33,7 +33,7 @@ public func cors(allowOrigin  origin  : String,
       res.end()
     }
     else {
-      next()
+      return try next()
     }
   }
 }

@@ -383,6 +383,8 @@ open class Route: MiddlewareObject, RouteKeeper, CustomStringConvertible {
 private let routeKey   = "io.noze.express.route"
 private let baseURLKey = "io.noze.express.baseurl"
 
+import class http.IncomingMessage
+
 public extension IncomingMessage {
   
   public var baseURL : String? {

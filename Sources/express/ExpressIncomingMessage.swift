@@ -1,10 +1,12 @@
 //
-//  IncomingMessage.swift
+//  ExpressIncomingMessage.swift
 //  Noze.io
 //
 //  Created by Helge Heß on 6/2/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
+
+import class http.IncomingMessage
 
 public extension IncomingMessage {
   

@@ -68,7 +68,7 @@ public func logger(_ format: String = "default") -> Middleware {
     }
     
     _ = res.onFinish { printLog() }
-    next()
+    try next()
   }
 }
 

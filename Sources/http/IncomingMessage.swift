@@ -103,3 +103,15 @@ open class IncomingMessage: ReadableStream<UInt8>, IncomingMessageType {
     return s
   }
 }
+
+public extension IncomingMessage {
+  public func setHeader(_ name: String, _ value: Any) {
+    headers[ci: name] = value
+  }
+  public func removeHeader(_ name: String) {
+    _ = headers.removeValue(forCIKey: name)
+  }
+  public func getHeader(_ name: String) -> Any? {
+    return headers[ci: name]
+  }
+}

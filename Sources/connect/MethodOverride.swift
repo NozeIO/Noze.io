@@ -15,17 +15,16 @@ public func methodOverride(header  : String = "X-HTTP-Method-Override",
   return { req, res, next in
     // TODO: support query values
     
-    guard methods.contains(req.method)     else { next(); return }
-    guard let hv = req.headers[ci: header] else { next(); return }
+    guard methods.contains(req.method)     else { return try next() }
+    guard let hv = req.headers[ci: header] else { return try next() }
     
     guard let hvs = (hv as? String) else {
       console.error("Override \(header) is not a string?: \(hv)")
-      next()
-      return
+      return try next()
     }
     
     // patch method and continue
     req.method = hvs
-    next()
+    return try next()
   }
 }

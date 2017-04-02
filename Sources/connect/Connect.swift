@@ -10,11 +10,15 @@ import net
 import http
 
 /// TODO: document, what are the varargs in Next?
-public typealias Next = (Any...) -> Void
+public typealias Next = (Any...) throws -> Void
 
 /// Supposed to call Next() when it is done.
 public typealias Middleware =
-                   ( IncomingMessage, ServerResponse, @escaping Next ) -> Void
+                   ( IncomingMessage, ServerResponse, @escaping Next )
+                   throws -> Void
+public typealias ErrorMiddleware =
+                   ( Error, IncomingMessage, ServerResponse, @escaping Next )
+                   throws -> Void
 
 
 public class Connect {
@@ -71,14 +75,16 @@ public class Connect {
   public var middleware : Middleware {
     return { req, res, cb in
       self.doRequest(req, res) // THIS IS WRONG, need to call cb() only on last
-      cb()
+      try cb()
     }
   }
   
   
   // MARK: - run middleware
   
-  func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
+  func doRequest(_ request: IncomingMessage,
+                 _ response: ServerResponse) throws
+  {
     // first lookup all middleware matching the request (i.e. the URL prefix
     // matches)
     // TODO: would be nice to have this as a lazy filter.
@@ -90,7 +96,7 @@ public class Connect {
       response.end()
     }
     
-    guard !matchingMiddleware.isEmpty else { return endNext() }
+    guard !matchingMiddleware.isEmpty else { return try endNext() }
     
     var next : Next? = { _ in } // cannot be let as it's self-referencing
     
@@ -105,7 +111,7 @@ public class Connect {
       // call the middleware - which gets the handle to go to the 'next'
       // middleware. the latter can be the 'endNext' which won't do anything.
       let isLast = i == matchingMiddleware.count
-      middleware(request, response, isLast ? endNext : next!)
+      try middleware(request, response, isLast ? endNext : next!)
       
       if isLast {
         next = nil // break cycle?

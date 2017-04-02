@@ -13,7 +13,8 @@ import class net.Server
 import class net.Socket
 
 public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
-public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
+public typealias RequestEventCB =
+                   (( IncomingMessage, ServerResponse )) throws -> Void
 
 /**
  * http.Server
