@@ -6,8 +6,6 @@
 //  Copyright © 2016 ZeeZide GmbH. All rights reserved.
 //
 
-import http
-
 public extension IncomingMessage {
   
   // TODO: baseUrl, originalUrl, path
@@ -15,7 +13,7 @@ public extension IncomingMessage {
   
   public func accepts(_ s: String) -> String? {
     // TODO: allow array values
-    guard let acceptHeader = (self.headers[ci: "accept"] as? String) else {
+    guard let acceptHeader = (self.getHeader("accept") as? String) else {
       return nil
     }
     
@@ -31,7 +29,7 @@ public extension IncomingMessage {
  
   
   public var xhr : Bool {
-    guard let h = (headers[ci: "X-Requested-With"] as? String) else {
+    guard let h = (getHeader("X-Requested-With") as? String) else {
       return false
     }
     return h.contains("XMLHttpRequest")
