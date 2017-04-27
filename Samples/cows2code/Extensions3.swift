@@ -11,7 +11,7 @@ extension Collection where Self.Iterator.Element : Equatable {
   // the sequences to collections ... So the user should rather do this
   // explicitly.
   
-  typealias ItemType = Self.Iterator.Element
+  public typealias ItemType = Self.Iterator.Element
 
   /// This is like SequenceType.split, except it doesn't just split on a single
   /// element, but on another sequence.
