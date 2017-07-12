@@ -102,6 +102,11 @@ public class FSWatcher: ErrorEmitter {
       self.src = nil
     }
     
+    if let fd = self.fd {
+      _ = xsys.close(fd)
+      self.fd = nil
+    }
+
     if didRetainQ {
       didRetainQ = false
       core.module.release()
