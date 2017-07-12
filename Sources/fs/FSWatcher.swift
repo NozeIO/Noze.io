@@ -49,7 +49,8 @@ public class FSWatcher: ErrorEmitter {
       // TBD: is the `else if` right? Or could it contain multiple? Probably!
       let flags : DispatchSource.FileSystemEvent = [ .write, .rename, .delete ]
   
-      src = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: flags,queue: Q)
+      src = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd,
+                                                      eventMask: flags,queue: Q)
       src!.setEventHandler {
         // TODO
         // MultiCrap dispatches `cb` on main queue
@@ -68,10 +69,10 @@ public class FSWatcher: ErrorEmitter {
         }
       }      
 
-      src!.setCancelHandler { [unowned self] in
-        if let fd = self.fd {
+      src!.setCancelHandler { [weak self] in
+        if let fd = self?.fd {
           _ = xsys.close(fd)
-          self.fd = nil
+          self?.fd = nil
         }
       }
       
