@@ -10,7 +10,7 @@
 /// used by WritableStream<T>
 public class ListBuffer<T> {
 
-  typealias DoneCB  = ( Void ) -> Void
+  typealias DoneCB  = ( ) -> Void
   typealias Bucket  = [ T ]
   typealias Brigade = [ Bucket ]
   
@@ -109,7 +109,7 @@ class BufferNode<T> {
   //       good to have for writev
   
   typealias Bucket = [ T ]
-  typealias DoneCB = ( Void ) -> Void
+  typealias DoneCB = ( ) -> Void
   
   var next       : BufferNode<T>?
   let chunks     : [ Bucket ]

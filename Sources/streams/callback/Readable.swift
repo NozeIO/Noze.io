@@ -60,7 +60,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
     super.init(highWaterMark: highWaterMark, queue: queue,
                enableLogger: enableLogger)
   }
-  public convenience init(cb: @escaping ( Void ) -> Void) {
+  public convenience init(cb: @escaping ( ) -> Void) {
     self.init()
     self._read(cb: cb)
   }
@@ -73,7 +73,7 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
   /// A `read` callback producing values. It is called if a consumer desires
   /// values.
   /// This has a leading underscore just for Node compat.
-  func _read(cb lcb: @escaping ( Void ) -> Void) {
+  func _read(cb lcb: @escaping ( ) -> Void) {
     cb = ReadableReadCB.NoArgs(lcb)
   }
   
@@ -110,6 +110,6 @@ public class Readable<ReadType> : ReadableStream<ReadType> {
 
 enum ReadableReadCB {
   case None
-  case NoArgs(( Void ) -> Void)
+  case NoArgs((      ) -> Void)
   case Amount(( Int  ) -> Void)
 }

@@ -12,8 +12,8 @@ import events
 import net
 import base64
 
-public typealias AbortEventCB    = ( Void            ) -> Void
-public typealias ContinueEventCB = ( Void            ) -> Void
+public typealias AbortEventCB    = (                 ) -> Void
+public typealias ContinueEventCB = (                 ) -> Void
 public typealias ResponseEventCB = ( IncomingMessage ) -> Void
 public typealias ExpectEventCB   = (( IncomingMessage, ServerResponse )) -> Void
 public typealias ConnectEventCB  = (( ServerResponse, Socket, [UInt8] )) -> Void
