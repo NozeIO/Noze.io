@@ -83,7 +83,7 @@ public extension RedisCommandTarget {
       }
     }
   }
-  public func del(_ keys: String..., _ cb: @escaping RedisReplyCB) {
+  public func del(_ keys: String..., cb: @escaping RedisReplyCB) {
     del(keys: keys, cb)
   }
   public func del(_ keys: String...) {
@@ -149,7 +149,7 @@ public extension RedisCommandTarget {
     enqueue(command: cmd)
   }
   public func hmget(_ hashKey: String, _ k: String...,
-                    _ cb: @escaping RedisOHashReplyCB)
+                    cb: @escaping RedisOHashReplyCB)
   {
     _hmget(hashKey: hashKey, keys: k, cb)
   }
