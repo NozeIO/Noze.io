@@ -113,3 +113,15 @@ apidox :
 	jazzy --module child_process --output apidox/child_process all
 	jazzy --module connect       --output apidox/connect
 	jazzy --module express       --output apidox/express
+
+docker-build:
+	mkdir -p .docker.build .docker.Packages
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker.build:/src/.build	\
+		-v $(PWD)/.docker.Packages:/src/Packages\
+		swift:3.1 \
+		bash -c "cd /src && swift build"
+
+docker-clean:
+	rm -rf .build-docker

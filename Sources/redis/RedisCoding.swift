@@ -79,19 +79,20 @@ extension String : RedisDecodable {
         guard let ba = v else { return nil }
         guard let s  = String.decode(utf8: ba) else {
           throw RedisDecodingError.ByteStringNotConvertible(value: v,
-                                                            to: Swift.String)
+                                                          to: Swift.String.self)
         }
         self = s
       
       case .SimpleString(let v):
         guard let s  = String.decode(utf8: v) else {
           throw RedisDecodingError.ByteStringNotConvertible(value: v,
-                                                            to: Swift.String)
+                                                          to: Swift.String.self)
         }
         self = s
 
       default:
-        throw RedisDecodingError.ValueNotConvertible(value: v, to: Swift.String)
+        throw RedisDecodingError.ValueNotConvertible(value: v,
+                                                     to: Swift.String.self)
     }
   }
 }
@@ -105,31 +106,37 @@ extension Int : RedisDecodable {
       
       case .BulkString(let byteArray):
         guard let iv = try? Int.from(byteStringArray: byteArray) else {
-          throw RedisDecodingError.ValueNotConvertible(value: v, to: Swift.Int)
+          throw RedisDecodingError.ValueNotConvertible(value: v,
+                                                       to: Swift.Int.self)
         }
         self = iv
       
       case .SimpleString(let byteArray):
         guard let iv = try? Int.from(byteStringArray: byteArray) else {
-          throw RedisDecodingError.ValueNotConvertible(value: v, to: Swift.Int)
+          throw RedisDecodingError.ValueNotConvertible(value: v,
+                                                       to: Swift.Int.self)
         }
         self = iv
 
       default:
-        throw RedisDecodingError.ValueNotConvertible(value: v, to: Swift.Int)
+        throw RedisDecodingError.ValueNotConvertible(value: v,
+                                                     to: Swift.Int.self)
     }
   }
   
   private static func from(byteStringArray v: [UInt8]?) throws -> Int {
     guard let ba = v else {
-      throw RedisDecodingError.ByteStringNotConvertible(value: v, to: Swift.Int)
+      throw RedisDecodingError.ByteStringNotConvertible(value: v,
+                                                        to: Swift.Int.self)
     }
     guard let s = String.decode(utf8: ba) else {
-      throw RedisDecodingError.ByteStringNotConvertible(value: v, to: Swift.Int)
+      throw RedisDecodingError.ByteStringNotConvertible(value: v,
+                                                        to: Swift.Int.self)
     }
     
     guard let iv = Int(s) else {
-      throw RedisDecodingError.ByteStringNotConvertible(value: v, to: Swift.Int)
+      throw RedisDecodingError.ByteStringNotConvertible(value: v,
+                                                        to: Swift.Int.self)
     }
     return iv
   }

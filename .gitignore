@@ -14,4 +14,7 @@ Packages
 build
 apidox
 .LSOverride
+.docker.build
+.docker.Packages
+Package.pins
 

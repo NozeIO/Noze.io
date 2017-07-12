@@ -35,6 +35,7 @@
   public let AF_INET      = Glibc.AF_INET
   public let AF_INET6     = Glibc.AF_INET6
   public let AF_LOCAL     = Glibc.AF_LOCAL
+  public let IPPROTO_TCP  = Glibc.IPPROTO_TCP
   public let PF_UNSPEC    = Glibc.PF_UNSPEC
   public let SOL_SOCKET   = Glibc.SOL_SOCKET
   public let SO_REUSEADDR = Glibc.SO_REUSEADDR
@@ -77,6 +78,7 @@
   public let AF_INET      = Darwin.AF_INET
   public let AF_INET6     = Darwin.AF_INET6
   public let AF_LOCAL     = Darwin.AF_LOCAL
+  public let IPPROTO_TCP  = Darwin.IPPROTO_TCP
   public let PF_UNSPEC    = Darwin.PF_UNSPEC
   public let SOL_SOCKET   = Darwin.SOL_SOCKET
   public let SO_REUSEADDR = Darwin.SO_REUSEADDR

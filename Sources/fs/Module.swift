@@ -29,6 +29,7 @@ public typealias ErrorCB  = ( Error?             ) -> Void
 #if !os(Linux) // 2016-09-12: Not yet available on Linux
 // MARK: - Watch Files or Directories. Get notified on changes.
 
+@discardableResult
 public func watch(_ filename : String,
                   persistent : Bool = true,
                   recursive  : Bool = false,

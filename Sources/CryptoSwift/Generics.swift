@@ -20,7 +20,7 @@ extension UInt32:Initiable {}
 extension UInt64:Initiable {}
 
 /** build bit pattern from array of bits */
-@_specialize(UInt8)
+// @_specialize(UInt8)
 func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 {
     var bitPattern:T = 0
@@ -56,14 +56,14 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
 // MARK: - shiftLeft
 
 // helper to be able to make shift operation on T
-@_specialize(Int)
+//@_specialize(Int)
 func << <T:SignedInteger>(lhs: T, rhs: Int) -> Int {
     let a = lhs as! Int
     let b = rhs
     return a << b
 }
 
-@_specialize(UInt)
+//@_specialize(UInt)
 func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
     let a = lhs as! UInt
     let b = rhs
@@ -72,7 +72,7 @@ func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
 
 // Generic function itself
 // FIXME: this generic function is not as generic as I would. It crashes for smaller types
-@_specialize(Int)
+//@_specialize(Int)
 func csShiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Initiable {
     if (value == 0) {
         return 0;
@@ -95,7 +95,7 @@ func csShiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Init
     }
     return shiftedValue
 }
-@_specialize(Int)
+//@_specialize(Int)
 func shiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Initiable {
   return csShiftLeft(value, by: count)
 }

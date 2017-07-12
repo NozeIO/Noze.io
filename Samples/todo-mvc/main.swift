@@ -81,7 +81,7 @@ app.patch("/todos/:id") { req, res, _ in
 
 app.get("/todos/:id") { req, res, _ in
   guard let id = req.params[int: "id"] else { res.sendStatus(404); return }
-  guard var todo = todos.get(id: id)   else { res.sendStatus(404); return }
+  guard let todo = todos.get(id: id)   else { res.sendStatus(404); return }
   res.json(todo)
 }
 

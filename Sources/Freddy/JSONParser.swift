@@ -463,9 +463,9 @@ public struct JSONParser {
         throw Error.EndOfStreamUnexpected
     }
 
-    private mutating func decodeIntegralValue(_ parser: NumberParser) throws -> JSON {
+    private mutating func decodeIntegralValue(_ _parser: NumberParser) throws -> JSON {
         var sign = Sign.Positive
-        var parser = parser
+        var parser = _parser
         var value = 0
 
         // This would be more natural as `while true { ... }` with a meaningful .Done case,
@@ -480,6 +480,7 @@ public struct JSONParser {
                 parser.parseLeadingZero()
 
             case .PreDecimalDigits:
+                // FIXME(hh): triggers Swift 3.2 warning wrt overlapping access
                 try parser.parsePreDecimalDigits { c in
                     guard case let (exponent, false) = Int.multiplyWithOverflow(10, value) else {
                         throw InternalError.NumberOverflow(offset: parser.start)
@@ -828,34 +829,32 @@ private struct NumberParser {
 
 public extension JSONParser {
 
-    /// Creates a `JSONParser` from the code units represented by the `string`.
+    /// Parses a `JSON` from the code units represented by the `string`.
     ///
-    /// The synthesized string is lifetime-extended for the duration of parsing.
-    init(string: String) {
+    static func parse(string: String) throws -> JSON? {
         let codePoints = string.utf8CString
       
-        let buffer = codePoints.withUnsafeBufferPointer {
-            ( nulTerminatedBuffer ) -> UnsafeBufferPointer<UInt8> in
+        return try codePoints.withUnsafeBufferPointer {
+            ( nulTerminatedBuffer ) in
           
-            // TODO(hh): Trouble ahead. I guess this is fine, but I'm not
-            //           quite sure. What is a proper simple cast?
-            let cs = // TODO: Ouch!
-              unsafeBitCast(nulTerminatedBuffer.baseAddress!,
-                            to: UnsafePointer<UInt8>.self)
-          
-            // don't want to include the nul termination in the buffer - trim it off
-            return UnsafeBufferPointer(start: cs, count: nulTerminatedBuffer.count - 1)
+            let n = nulTerminatedBuffer.count
+            return try nulTerminatedBuffer
+              .baseAddress!
+              .withMemoryRebound(to: UInt8.self, capacity: n) { cs in
+                // don't want to include the nul termination in the buffer - trim it off
+                let buffer = UnsafeBufferPointer(start: cs, count: n - 1)
+                var parser = JSONParser(buffer: buffer, owner: codePoints)
+                return try parser.parse()
+            }
         }
-        self.init(buffer: buffer, owner: codePoints)
     }
 
 }
   
 public extension JSON {
   
-    public init(jsonString: Swift.String) throws {
-        var parser = JSONParser(string: jsonString)
-        self = try parser.parse()
+    static func parse(jsonString: Swift.String) throws -> JSON? {
+        return try JSONParser.parse(string: jsonString)
     }
   
 }

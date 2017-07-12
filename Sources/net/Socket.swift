@@ -341,6 +341,10 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     get { return getSocket(option: SO_DEBUG) }
     set { _ = setSocket(option: SO_DEBUG, value: newValue) }
   }
+  public var noDelay: Bool {
+    get { return getTcp(option: TCP_NODELAY) }
+    set { _ = setTcp(option: TCP_NODELAY, value: newValue) }
+  }
   
   public var sendBufferSize: Int32 {
     get { return getSocket(option: SO_SNDBUF) ?? -42    }
@@ -355,10 +359,18 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   }
 
   public func setSocket(option o: Int32, value: Int32) -> Bool {
+    return set(protocol: xsys.SOL_SOCKET, option: o, value: value)
+  }
+
+  public func setTcp(option o: Int32, value: Int32) -> Bool {
+    return set(protocol: Int32(xsys.IPPROTO_TCP), option: o, value: value)
+  }
+
+  public func set(protocol p: Int32, option o: Int32, value: Int32) -> Bool {
     guard io.fd.isValid else { return false }
     
     var buf = value
-    let rc  = xsys.setsockopt(io.fd.fd, xsys.SOL_SOCKET, o,
+    let rc  = xsys.setsockopt(io.fd.fd, p, o,
                               &buf, socklen_t(MemoryLayout<Int32>.stride))
     
     if rc != 0 { // ps: Great Error Handling
@@ -370,12 +382,20 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   // TBD: Can't overload optionals in a useful way?
   // func getSocket(option: option: Int32) -> Int32
   public func getSocket(option o: Int32) -> Int32? {
+    return get(protocol: xsys.SOL_SOCKET, option: o)
+  }
+
+  public func getTcp(option o: Int32) -> Int32? {
+    return get(protocol: Int32(xsys.IPPROTO_TCP), option: o)
+  }
+
+  public func get(protocol p: Int32, option o: Int32) -> Int32? {
     guard io.fd.isValid else { return nil }
     
     var buf    = Int32(0)
     var buflen = socklen_t(MemoryLayout<Int32>.stride)
     
-    let rc = getsockopt(io.fd.fd, xsys.SOL_SOCKET, o, &buf, &buflen)
+    let rc = getsockopt(io.fd.fd, p, o, &buf, &buflen)
     guard rc == 0 else { // ps: Great Error Handling
       print("Could not get option \(o) from socket \(self)")
       return nil
@@ -386,8 +406,15 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
   public func setSocket(option o: Int32, value: Bool) -> Bool {
     return setSocket(option: o, value: value ? 1 : 0)
   }
+  public func setTcp(option o: Int32, value: Bool) -> Bool {
+    return setTcp(option: o, value: value ? 1 : 0)
+  }
   public func getSocket(option o: Int32) -> Bool {
     let v: Int32? = getSocket(option: o)
+    return v != nil ? (v! == 0 ? false : true) : false
+  }
+  public func getTcp(option o: Int32) -> Bool {
+    let v: Int32? = getTcp(option: o)
     return v != nil ? (v! == 0 ? false : true) : false
   }
   
