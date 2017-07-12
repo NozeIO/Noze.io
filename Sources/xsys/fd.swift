@@ -53,7 +53,25 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let W_OK      = Darwin.W_OK
   public let X_OK      = Darwin.X_OK
 
-  public let stat      = Darwin.stat
+  #if swift(>=3.2) // Swift 3.2 maps Darwin.stat to the struct
+    public func stat(_ p: UnsafePointer<Int8>!,
+                     _ r: UnsafeMutablePointer<stat>!) -> Int32
+    {
+      // FIXME: We cannot call `Darwin.stat` here since that resolves to the
+      //        `struct stat` in Swift 3.2, not the `stat` function.
+      //        A potential workaround is creating two separate files, one
+      //        doing:
+      //          import struct Darwin.stat
+      //          typealias xsys_struct_stat = Darwin.stat
+      //        and the other one doing
+      //          import func Darwin.stat
+      //          let xsys_func_stat = Darwin.stat
+      //        ... but well.
+      return Darwin.lstat(p, r)
+    }
+  #else
+    public let stat = Darwin.stat
+  #endif
   public let lstat     = Darwin.lstat
   
   public let opendir   = Darwin.opendir
