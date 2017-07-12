@@ -463,9 +463,9 @@ public struct JSONParser {
         throw Error.EndOfStreamUnexpected
     }
 
-    private mutating func decodeIntegralValue(_ parser: NumberParser) throws -> JSON {
+    private mutating func decodeIntegralValue(_ _parser: NumberParser) throws -> JSON {
         var sign = Sign.Positive
-        var parser = parser
+        var parser = _parser
         var value = 0
 
         // This would be more natural as `while true { ... }` with a meaningful .Done case,
@@ -480,6 +480,7 @@ public struct JSONParser {
                 parser.parseLeadingZero()
 
             case .PreDecimalDigits:
+                // FIXME(hh): triggers Swift 3.2 warning wrt overlapping access
                 try parser.parsePreDecimalDigits { c in
                     guard case let (exponent, false) = Int.multiplyWithOverflow(10, value) else {
                         throw InternalError.NumberOverflow(offset: parser.start)
