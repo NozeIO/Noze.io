@@ -117,7 +117,7 @@ app.get("/todos/:id") { req, res, _ in
   guard let id = req.params[int: "id"] else { res.sendStatus(404); return }
   
   todos.get(id: id) { todo in
-    guard var todo = todo else { res.sendStatus(404); return }
+    guard let todo = todo else { res.sendStatus(404); return }
     res.json(todo)
   }
 }
