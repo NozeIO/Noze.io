@@ -65,7 +65,7 @@ public protocol ReadableStreamType : class, StreamType {
 ///       which then makes the consumer call read(), and only then the EOF
 ///       condition will be evaluated.
 ///
-public protocol GReadableStreamType : class, ReadableStreamType, StreamType {
+public protocol GReadableStreamType : class, ReadableStreamType {
   
   associatedtype ReadType
   
