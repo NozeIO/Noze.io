@@ -35,12 +35,20 @@ public func watch(_ filename : String,
                   recursive  : Bool = false,
                   listener   : FSWatcherCB? = nil) -> FSWatcher
 {
-  assert(recursive == false, "unsupported")
-    // need a special recursive watcher which traverses the filesystem and
-    // subscribes each node
+  let dirWatch : Bool = {
+    guard let finfo = try? fs.statSync(filename) else { return false }
+    return finfo.isDirectory()
+  }()
   
-  return FSWatcher(filename, persistent: persistent,
-                   listener: listener)
+  if dirWatch {
+    return FSDirWatcher(filename, persistent: persistent,
+                        recursive: recursive,
+                        listener: listener)
+  }
+  
+  // TBD: throw an error if recursive is true?
+  return FSRawWatcher(filename, persistent: persistent,
+                      listener: listener)
 }
 #endif /* !Linux */
 
