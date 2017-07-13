@@ -3116,7 +3116,6 @@
 			isa = PBXGroup;
 			children = (
 				E87BE9411CF5104D00C20AE7 /* README.md */,
-				E8F7CD1C1F17026200CBE2C5 /* swiftmon/s */,
 				E87BE8B41CF50C9000C20AE7 /* echod */,
 				E87BE8D11CF50D8700C20AE7 /* echozd */,
 				E87BE8D61CF50DB400C20AE7 /* sleep */,
@@ -3130,6 +3129,7 @@
 				E8B8BAF91CFBBEF600BA30D3 /* connect-static */,
 				E87BE8D31CF50D9700C20AE7 /* connect-git */,
 				E89CDF411D005B99008861AF /* express-simple */,
+				E8F7CD1C1F17026200CBE2C5 /* swiftmon/s */,
 				E89872351CFF7DBD00466E86 /* todo-mvc */,
 				E8E8FF0A1D44100D002663CD /* todo-mvc-redis */,
 			);
