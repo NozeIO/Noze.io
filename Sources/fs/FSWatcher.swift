@@ -171,8 +171,8 @@ public class FSDirWatcher: FSWatcher {
     super.init(fn, persistent: persistent, listener: listener)
     
     dirWatcher = DirectoryContentsWatcher(path: fn, recursive: recursive) {
-      [weak self] event in
-      self?.changeListeners.emit(event)
+      event in // self is NOT weak, object stays awake until closed
+      self.changeListeners.emit(event)
     }
   }
   
