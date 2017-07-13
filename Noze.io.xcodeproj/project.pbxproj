@@ -3858,9 +3858,9 @@
 			isa = PBXGroup;
 			children = (
 				E8F7CD231F17029000CBE2C5 /* README.md */,
-				E8F7CD1D1F17028200CBE2C5 /* colors.swift */,
-				E8F7CD1E1F17028200CBE2C5 /* Daemon.swift */,
 				E8F7CD1F1F17028200CBE2C5 /* main.swift */,
+				E8F7CD1E1F17028200CBE2C5 /* Daemon.swift */,
+				E8F7CD1D1F17028200CBE2C5 /* colors.swift */,
 			);
 			name = swiftmon/s;
 			sourceTree = "<group>";
