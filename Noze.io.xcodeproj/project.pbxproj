@@ -62,6 +62,7 @@
 				E89CDF4D1D005BDA008861AF /* PBXTargetDependency */,
 				E898050C1CFF8AC600FDAB9C /* PBXTargetDependency */,
 				E8E8FF121D44104C002663CD /* PBXTargetDependency */,
+				E8F7CD251F1702B600CBE2C5 /* PBXTargetDependency */,
 			);
 			name = Samples;
 			productName = Samples;
@@ -594,6 +595,17 @@
 		E8F668531CFB49CD00A6900B /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E8F668541CFB49D900A6900B /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
 		E8F75D2F1D58EA21001F7559 /* http_parser_settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */; };
+		E8F7CD201F17028200CBE2C5 /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F7CD1D1F17028200CBE2C5 /* colors.swift */; };
+		E8F7CD211F17028200CBE2C5 /* Daemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F7CD1E1F17028200CBE2C5 /* Daemon.swift */; };
+		E8F7CD221F17028200CBE2C5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F7CD1F1F17028200CBE2C5 /* main.swift */; };
+		E8F7CD261F17039900CBE2C5 /* libchild_process.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275F81CF49F29004A6A34 /* libchild_process.dylib */; };
+		E8F7CD271F17039900CBE2C5 /* libconsole.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275EC1CF49F0C004A6A34 /* libconsole.dylib */; };
+		E8F7CD281F17039900CBE2C5 /* libcore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2756D1CF49E3A004A6A34 /* libcore.dylib */; };
+		E8F7CD291F17039900CBE2C5 /* libevents.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275811CF49E5F004A6A34 /* libevents.dylib */; };
+		E8F7CD2A1F17039900CBE2C5 /* libfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275C11CF49EC3004A6A34 /* libfs.dylib */; };
+		E8F7CD2B1F17039900CBE2C5 /* libprocess.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276241CF49F67004A6A34 /* libprocess.dylib */; };
+		E8F7CD2C1F17039900CBE2C5 /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
+		E8F7CD2D1F17039900CBE2C5 /* libxsys.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E275561CF49E06004A6A34 /* libxsys.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1647,9 +1659,25 @@
 			remoteGlobalIDString = E8F25A4E1CF5EA2300355194;
 			remoteInfo = Freddy;
 		};
+		E8F7CD241F1702B600CBE2C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E835BFA81B4D4CFB00288839 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E82E806F1F1701490072D8FC;
+			remoteInfo = swiftmons;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		E82E806E1F1701490072D8FC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		E874EC9C1D119C2B00FA0606 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1819,6 +1847,7 @@
 		E80E8C8F1CDF631A00782E72 /* PipeSourceError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PipeSourceError.swift; path = Sources/streams/PipeSourceError.swift; sourceTree = SOURCE_ROOT; };
 		E80E8C911CDF666200782E72 /* ErrorEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorEmitter.swift; path = Sources/events/ErrorEmitter.swift; sourceTree = SOURCE_ROOT; };
 		E8186B451D12159E0014391E /* CookieParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CookieParser.swift; path = Sources/connect/CookieParser.swift; sourceTree = SOURCE_ROOT; };
+		E82E80701F1701490072D8FC /* swiftmons */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = swiftmons; sourceTree = BUILT_PRODUCTS_DIR; };
 		E835BFBB1B4D4CFB00288839 /* NozeIOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NozeIOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E837E5251CD03F3C00794356 /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = misc.swift; path = Sources/xsys/misc.swift; sourceTree = SOURCE_ROOT; };
 		E837E5271CD0447C00794356 /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Messages.swift; path = Sources/process/Messages.swift; sourceTree = SOURCE_ROOT; };
@@ -2175,6 +2204,10 @@
 		E8F2ACF41CF658A7000B8CD1 /* JSONEncodingDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONEncodingDetector.swift; path = Sources/freddy/JSONEncodingDetector.swift; sourceTree = "<group>"; };
 		E8F398F61E85353700204096 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E8F75D2E1D58EA21001F7559 /* http_parser_settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = http_parser_settings.swift; path = Sources/http_parser/http_parser_settings.swift; sourceTree = SOURCE_ROOT; };
+		E8F7CD1D1F17028200CBE2C5 /* colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = colors.swift; path = Samples/swiftmons/Sources/colors.swift; sourceTree = "<group>"; };
+		E8F7CD1E1F17028200CBE2C5 /* Daemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Daemon.swift; path = Samples/swiftmons/Sources/Daemon.swift; sourceTree = "<group>"; };
+		E8F7CD1F1F17028200CBE2C5 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = Samples/swiftmons/Sources/main.swift; sourceTree = "<group>"; };
+		E8F7CD231F17029000CBE2C5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Samples/swiftmons/README.md; sourceTree = "<group>"; };
 		E8FF78801CDA3657000256E2 /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Sources/http/URL.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -2189,6 +2222,21 @@
 				E80A97F21CF9AF940088F560 /* libevents.dylib in Frameworks */,
 				E80A97F31CF9AF940088F560 /* libstreams.dylib in Frameworks */,
 				E80A97E51CF9ADE10088F560 /* libhttp.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E82E806D1F1701490072D8FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8F7CD261F17039900CBE2C5 /* libchild_process.dylib in Frameworks */,
+				E8F7CD271F17039900CBE2C5 /* libconsole.dylib in Frameworks */,
+				E8F7CD281F17039900CBE2C5 /* libcore.dylib in Frameworks */,
+				E8F7CD291F17039900CBE2C5 /* libevents.dylib in Frameworks */,
+				E8F7CD2A1F17039900CBE2C5 /* libfs.dylib in Frameworks */,
+				E8F7CD2B1F17039900CBE2C5 /* libprocess.dylib in Frameworks */,
+				E8F7CD2C1F17039900CBE2C5 /* libstreams.dylib in Frameworks */,
+				E8F7CD2D1F17039900CBE2C5 /* libxsys.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2941,6 +2989,7 @@
 				E8978F261D8A260D00ED4558 /* NozeCryptoTests.xctest */,
 				E8AF018D1E8003B10074266E /* libdgram.dylib */,
 				E8AF019D1E8004EC0074266E /* udpd */,
+				E82E80701F1701490072D8FC /* swiftmons */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3067,6 +3116,7 @@
 			isa = PBXGroup;
 			children = (
 				E87BE9411CF5104D00C20AE7 /* README.md */,
+				E8F7CD1C1F17026200CBE2C5 /* swiftmon/s */,
 				E87BE8B41CF50C9000C20AE7 /* echod */,
 				E87BE8D11CF50D8700C20AE7 /* echozd */,
 				E87BE8D61CF50DB400C20AE7 /* sleep */,
@@ -3804,6 +3854,17 @@
 			name = freddy;
 			sourceTree = "<group>";
 		};
+		E8F7CD1C1F17026200CBE2C5 /* swiftmon/s */ = {
+			isa = PBXGroup;
+			children = (
+				E8F7CD231F17029000CBE2C5 /* README.md */,
+				E8F7CD1D1F17028200CBE2C5 /* colors.swift */,
+				E8F7CD1E1F17028200CBE2C5 /* Daemon.swift */,
+				E8F7CD1F1F17028200CBE2C5 /* main.swift */,
+			);
+			name = swiftmon/s;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -3995,6 +4056,23 @@
 			productName = NozeHttpTests;
 			productReference = E80A97E01CF9ADE10088F560 /* NozeHttpTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E82E806F1F1701490072D8FC /* swiftmons */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E82E80781F1701490072D8FC /* Build configuration list for PBXNativeTarget "swiftmons" */;
+			buildPhases = (
+				E82E806C1F1701490072D8FC /* Sources */,
+				E82E806D1F1701490072D8FC /* Frameworks */,
+				E82E806E1F1701490072D8FC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = swiftmons;
+			productName = swiftmons;
+			productReference = E82E80701F1701490072D8FC /* swiftmons */;
+			productType = "com.apple.product-type.tool";
 		};
 		E835BFBA1B4D4CFB00288839 /* NozeIOTests */ = {
 			isa = PBXNativeTarget;
@@ -4911,7 +4989,7 @@
 		E835BFA81B4D4CFB00288839 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
@@ -4921,6 +4999,10 @@
 					};
 					E80A97DF1CF9ADE10088F560 = {
 						CreatedOnToolsVersion = 7.3.1;
+					};
+					E82E806F1F1701490072D8FC = {
+						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0830;
 					};
 					E835BFBA1B4D4CFB00288839 = {
 						CreatedOnToolsVersion = 7.0;
@@ -5183,6 +5265,7 @@
 				E89CDF3F1D005B99008861AF /* express-simple */,
 				E898722B1CFF7DB200466E86 /* todo-mvc */,
 				E8E8FF001D440FE4002663CD /* todo-mvc-redis */,
+				E82E806F1F1701490072D8FC /* swiftmons */,
 				E807E3EC1CF671B500AE317B /* NozeIO */,
 				E8B8BB171CFBCCA200BA30D3 /* Samples */,
 			);
@@ -5266,6 +5349,16 @@
 				E80A97EF1CF9AE970088F560 /* NozeIOTestCase.swift in Sources */,
 				E80A97ED1CF9AE0A0088F560 /* HttpClientTests.swift in Sources */,
 				E80A97EE1CF9AE130088F560 /* URLTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E82E806C1F1701490072D8FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8F7CD201F17028200CBE2C5 /* colors.swift in Sources */,
+				E8F7CD211F17028200CBE2C5 /* Daemon.swift in Sources */,
+				E8F7CD221F17028200CBE2C5 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6628,6 +6721,11 @@
 			target = E8F25A4E1CF5EA2300355194 /* Freddy */;
 			targetProxy = E8F25A931CF5ED5E00355194 /* PBXContainerItemProxy */;
 		};
+		E8F7CD251F1702B600CBE2C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E82E806F1F1701490072D8FC /* swiftmons */;
+			targetProxy = E8F7CD241F1702B600CBE2C5 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -6832,6 +6930,39 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.noze.tests.NozeHttpTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+			};
+			name = UIKitRelease;
+		};
+		E82E80741F1701490072D8FC /* AppKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = AppKitDebug;
+		};
+		E82E80751F1701490072D8FC /* UIKitDebug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = UIKitDebug;
+		};
+		E82E80761F1701490072D8FC /* AppKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = AppKitRelease;
+		};
+		E82E80771F1701490072D8FC /* UIKitRelease */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87BE8D81CF50E9D00C20AE7 /* SwiftTool.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = UIKitRelease;
 		};
@@ -9872,6 +10003,17 @@
 				E80A97E91CF9ADE10088F560 /* UIKitDebug */,
 				E80A97EA1CF9ADE10088F560 /* AppKitRelease */,
 				E80A97EB1CF9ADE10088F560 /* UIKitRelease */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AppKitDebug;
+		};
+		E82E80781F1701490072D8FC /* Build configuration list for PBXNativeTarget "swiftmons" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E82E80741F1701490072D8FC /* AppKitDebug */,
+				E82E80751F1701490072D8FC /* UIKitDebug */,
+				E82E80761F1701490072D8FC /* AppKitRelease */,
+				E82E80771F1701490072D8FC /* UIKitRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AppKitDebug;
