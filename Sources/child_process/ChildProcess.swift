@@ -134,10 +134,10 @@ public class ChildProcess : ErrorEmitter {
     }
   }
   
-  
-  public func kill(signal: Int) {
-    _ = xsys.kill(pid, Int32(signal))
-    // TODO: rc
+  @discardableResult
+  public func kill(_ signal: Int32 = xsys.SIGTERM) -> Bool {
+    let rc = xsys.kill(pid, signal)
+    return rc == 0
   }
 
   
@@ -154,10 +154,13 @@ public class ChildProcess : ErrorEmitter {
   
   public var exitListeners = EventListenerSet<(Int?,Int?)>()
   
+  @discardableResult
   public func onExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb)
     return self
   }
+  
+  @discardableResult
   public func onceExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb, once: true)
     return self
