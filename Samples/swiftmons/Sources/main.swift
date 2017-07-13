@@ -10,9 +10,10 @@ import console
 let env = "debug"
 
 let options = Daemon.Options(
-  config: "debug",
-  startScript: path.basename(process.cwd()),
-  sourceDir:   "Sources"
+  config           : "debug",
+  startScript      : path.basename(process.cwd()),
+  sourceDir        : "Sources",
+  restartDelayInMS : 100
 )
 
 let daemon = Daemon(options: options)

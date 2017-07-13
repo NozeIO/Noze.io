@@ -3,6 +3,7 @@
 //  Copyright © 2017 ZeeZide GmbH. All rights reserved.
 //
 
+import xsys
 import fs
 import console
 import process
@@ -17,23 +18,25 @@ enum config {
 final class Daemon {
   
   struct Options {
-    var config      = "debug"
-    var startScript : String
-    var sourceDir   : String
+    var config           = "debug"
+    var startScript      : String
+    var sourceDir        : String
+    var restartDelayInMS = 100
   }
   
-  let options : Options
-  
-  var child   : ChildProcess? = nil
+  let options      : Options
+  var child        : ChildProcess? = nil
+  var needsRestart = false
 
   init(options: Options) {
     self.options = options
   }
   convenience init(config: String = "debug", startScript: String, 
-                   sourceDir: String) 
+                   sourceDir: String, restartDelayInMS: Int = 100)
   {
     self.init(options: Options(config: config, startScript: startScript,
-                               sourceDir: sourceDir))
+                               sourceDir: sourceDir,
+                               restartDelayInMS: restartDelayInMS))
   }
   
   func start() {
@@ -46,17 +49,35 @@ final class Daemon {
       console.log(colors.gray ("\(event.filename ?? "unknown") " +
                                "file has been changed"),
                   colors.green("restarting ..."))
-      self.restartProcess()
+      self.setNeedsRestart()
     }
     
     restartProcess()
   }
   
+  func setNeedsRestart() {
+    guard !needsRestart else { return }
+    
+    needsRestart = true
+    setTimeout(options.restartDelayInMS) {
+      guard self.needsRestart else { return }
+      self.needsRestart = false
+      
+      self.restartProcess()
+    }
+  }
+  
   func killChild() {
-    guard let c = child else { return }
+    guard let c = child
+     else {
+      //console.info("got no child to kill ...") // uh oh
+      return
+     }
     self.child = nil
     
-    try? process.kill(Int(c.pid))
+    if !c.kill(xsys.SIGKILL) { // SIGTERM is not good enough
+      console.error("failed to kill \(c.pid)")
+    }
   }
   
   func restartProcess() {
@@ -77,12 +98,19 @@ final class Daemon {
         return
       }
       
-      console.log(">>>\n")
+      console.log(colors.gray(">>>\n"))
+      
       self.child = spawn(startScript, stdio: [ .Inherit, .Inherit, .Inherit ])
+      
       _ = self.child?.onceExit { code, signal in
         guard let code = code else { return }
-        console.log("\n<<<")
-        console.log("Exited with code: \(code)\n\(sep)")
+        console.log(colors.gray("\n<<<"))
+        if code == 0 {
+          console.log("Exited with code: \(colors.green(code))\n\(sep)")
+        }
+        else {
+          console.error("Exited with code: \(colors.red(code))\n\(sep)")
+        }
       }
     }
   }
