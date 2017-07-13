@@ -154,10 +154,13 @@ public class ChildProcess : ErrorEmitter {
   
   public var exitListeners = EventListenerSet<(Int?,Int?)>()
   
+  @discardableResult
   public func onExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb)
     return self
   }
+  
+  @discardableResult
   public func onceExit(cb: @escaping ExitCB) -> Self {
     exitListeners.add(handler: cb, once: true)
     return self
