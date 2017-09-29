@@ -295,7 +295,7 @@ extension String {
     var start = startIndex
     
     repeat {
-      let subString = self[start..<endIndex]
+      let subString = String(self[start..<endIndex])
       if subString.hasPrefix(other) {
         return start
       }
