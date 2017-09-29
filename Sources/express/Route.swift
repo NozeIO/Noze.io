@@ -72,7 +72,7 @@ public struct Route: MiddlewareObject {
     let oldRoute  = req.route
     req.params = extractPatternVariables(request: req)
     req.route  = self
-    let endNext : Next = { _ in
+    let endNext : Next = { ( args: Any... ) in
       req.params = oldParams
       req.route  = oldRoute
       cb()
@@ -80,11 +80,12 @@ public struct Route: MiddlewareObject {
     
     // loop over route middleware
     let stack = self.middleware
-    var next  : Next? = { _ in } // cannot be let as it's self-referencing
+    var next  : Next? = { ( args: Any... ) in }
+                  // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
-    next = { args in
+    next = { ( args: Any... ) in
       
       // grab next item from middleware array
       let middleware = stack[i]

@@ -9,8 +9,8 @@
 import net
 import http
 
-/// TODO: document, what are the varargs in Next?
-public typealias Next = (Any...) -> Void
+/// TODO: document, what are the varargs in Next? See SR-6030 wrt varargs
+public typealias Next = ( Any... ) -> Void
 
 /// Supposed to call Next() when it is done.
 public typealias Middleware =
@@ -84,7 +84,7 @@ public class Connect {
     // TODO: would be nice to have this as a lazy filter.
     let matchingMiddleware = middlewarez.filter { $0.matches(request: request) }
     
-    let endNext : Next = { _ in
+    let endNext : Next = { ( args: Any... ) in
       // essentially the final handler
       response.writeHead(404)
       response.end()
@@ -92,11 +92,11 @@ public class Connect {
     
     guard !matchingMiddleware.isEmpty else { return endNext() }
     
-    var next : Next? = { _ in } // cannot be let as it's self-referencing
+    var next : Next? = { ( args: Any... ) in }
+          // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
-    next = {
-      args in
+    next = { (args : Any...) in
       
       // grab next item from matching middleware array
       let middleware = matchingMiddleware[i].middleware
