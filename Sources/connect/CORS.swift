@@ -15,7 +15,8 @@ fileprivate let defaultHeaders = [ "Accept", "Content-Type" ]
 
 public func cors(allowOrigin  origin  : String,
                  allowHeaders headers : [ String     ]? = nil,
-                 allowMethods methods : [ HTTPMethod ]? = nil)
+                 allowMethods methods : [ HTTPMethod ]? = nil,
+                 handleOptions        : Bool = false)
             -> Middleware
 {
   return { req, res, next in
@@ -28,10 +29,16 @@ public func cors(allowOrigin  origin  : String,
     res.setHeader("Access-Control-Allow-Methods", sMethods)
     
     if req.method == "OPTIONS" { // we handle the options
-      // FIXME: not sure this is a good idea, should probably bubble up too      
-      res.setHeader("Allow", sMethods)
-      res.writeHead(200)
-      res.end()
+      // Note: This is off by default. OPTIONS is handled differently by the
+      //       Express final handler (it passes with a 200).
+      if handleOptions {
+        res.setHeader("Allow", sMethods)
+        res.writeHead(200)
+        res.end()
+      }
+      else {
+        next() // bubble up, there may be more OPTIONS stuff
+      }
     }
     else {
       next()
