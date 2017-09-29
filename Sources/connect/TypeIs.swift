@@ -40,7 +40,7 @@ private func does(type lcType: String, match matchType: String) -> Bool {
   
   if lcMatch.hasSuffix("*") {
     let idx = lcMatch.index(before: lcMatch.endIndex)
-    #if swift(>=4.0) // HH
+    #if swift(>=4.0)
       let lcPatMatch = String(lcMatch[lcMatch.startIndex..<idx])
     #else
       let lcPatMatch = lcMatch.substring(to: idx)

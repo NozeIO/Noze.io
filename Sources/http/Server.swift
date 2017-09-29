@@ -12,7 +12,7 @@ import events
 import class net.Server
 import class net.Socket
 
-#if swift(>=4.0) // HH
+#if swift(>=4.0)
   public typealias ClientErrorEventCB = ( Error, Socket ) -> Void
   public typealias RequestEventCB = ( IncomingMessage, ServerResponse ) -> Void
 #else
