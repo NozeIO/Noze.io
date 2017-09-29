@@ -480,14 +480,14 @@ public struct JSONParser {
                 parser.parseLeadingZero()
 
             case .PreDecimalDigits:
-                // FIXME(hh): triggers Swift 3.2 warning wrt overlapping access
+                let errorStart = parser.start
                 try parser.parsePreDecimalDigits { c in
                     guard case let (exponent, false) = Int.multiplyWithOverflow(10, value) else {
-                        throw InternalError.NumberOverflow(offset: parser.start)
+                        throw InternalError.NumberOverflow(offset: errorStart)
                     }
                     
                     guard case let (newValue, false) = Int.addWithOverflow(exponent, Int(c - Literal.zero)) else {
-                        throw InternalError.NumberOverflow(offset: parser.start)
+                        throw InternalError.NumberOverflow(offset: errorStart)
                     }
                     
                     value = newValue
