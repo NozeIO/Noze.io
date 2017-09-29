@@ -24,7 +24,7 @@ public typealias xsysOpenType = (UnsafePointer<CChar>, CInt) -> CInt
   public let W_OK      = Glibc.W_OK
   public let X_OK      = Glibc.X_OK
 
-  #if swift(>=4.0) // Swift 4 maps Glibc.stat to the struct
+  #if swift(>=3.2) // Swift 3.2/4 maps Glibc.stat to the struct
     public func stat(_ p: UnsafePointer<Int8>!,
                      _ r: UnsafeMutablePointer<stat>!) -> Int32
     {
