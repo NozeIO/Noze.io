@@ -298,6 +298,7 @@
 		E8B8BB131CFBC6AC00BA30D3 /* libstreams.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E2758F1CF49E74004A6A34 /* libstreams.dylib */; };
 		E8B8BB141CFBC6C500BA30D3 /* libnet.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E276131CF49F52004A6A34 /* libnet.dylib */; };
 		E8B8BB161CFBCA7D00BA30D3 /* libhttp_parser.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8EB49551CF49D0700E7787A /* libhttp_parser.dylib */; };
+		E8BC42EA1F7E980700AFA37C /* QS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BC42E81F7E97B800AFA37C /* QS.swift */; };
 		E8BE121C1D121EC000A3A184 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BE121B1D121EC000A3A184 /* Session.swift */; };
 		E8C15F501CF3382600CA5517 /* JSONModuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F381CF3382600CA5517 /* JSONModuleTests.swift */; };
 		E8C15F511CF3382600CA5517 /* LeftPadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C15F3A1CF3382600CA5517 /* LeftPadTests.swift */; };
@@ -2007,6 +2008,7 @@
 		E8B8BAF81CFBBEF600BA30D3 /* connect-static */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "connect-static"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8B8BB011CFBBF7600BA30D3 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = "Samples/connect-static/Sources/main.swift"; sourceTree = SOURCE_ROOT; };
 		E8B8BB151CFBC8C400BA30D3 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = "Samples/connect-static/public"; sourceTree = SOURCE_ROOT; };
+		E8BC42E81F7E97B800AFA37C /* QS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QS.swift; sourceTree = "<group>"; };
 		E8BC92351CD57CE900853B9C /* Spawn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Spawn.swift; path = Sources/child_process/Spawn.swift; sourceTree = SOURCE_ROOT; };
 		E8BC923A1CD5A15400853B9C /* PipeSourceTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PipeSourceTarget.swift; path = Sources/child_process/PipeSourceTarget.swift; sourceTree = SOURCE_ROOT; };
 		E8BE121B1D121EC000A3A184 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Session.swift; path = Sources/connect/Session.swift; sourceTree = SOURCE_ROOT; };
@@ -3388,6 +3390,7 @@
 				E88CE36B1CD809C6001B0A5A /* Connect.swift */,
 				E8C90BA11CFE28D600F85436 /* Middleware */,
 				E8D4DF9E1CFC63E400921230 /* TypeIs.swift */,
+				E8BC42E81F7E97B800AFA37C /* QS.swift */,
 			);
 			name = connect;
 			path = Sources/connect;
@@ -5870,6 +5873,7 @@
 				E8186B461D12159E0014391E /* CookieParser.swift in Sources */,
 				E869BED41D411761007BFE54 /* Pause.swift in Sources */,
 				E8E2765F1CF49FAF004A6A34 /* ServeStatic.swift in Sources */,
+				E8BC42EA1F7E980700AFA37C /* QS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
