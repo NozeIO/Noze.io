@@ -224,7 +224,11 @@ public extension SessionStore {
 
 public class InMemorySessionStore : SessionStore {
   
-  var store : [ String : Session ] = [:]
+  var store : [ String : Session ]
+  
+  public init() {
+    store = [:]
+  }
   
   public func get(sessionID sid: String, _ cb: ( Error?, Session? ) -> Void ) {
     guard let session = store[sid] else {

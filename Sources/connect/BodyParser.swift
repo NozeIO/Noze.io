@@ -95,6 +95,8 @@ public struct bodyParser {
   public class Options {
     let inflate = false
     let limit   = 100 * 1024
+    
+    public init() {}
   }
   
   fileprivate static let requestKey = "io.noze.connect.body-parser.body"
