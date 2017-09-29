@@ -8,19 +8,20 @@
 
 import http
 
-private let defaultMethods : [ HTTPMethod ] = [
+fileprivate let defaultMethods : [ HTTPMethod ] = [
   .GET, .HEAD, .POST, .DELETE, .OPTIONS, .PUT, .PATCH
 ]
-private let defaultHeaders = [ "Accept", "Content-Type" ]
+fileprivate let defaultHeaders = [ "Accept", "Content-Type" ]
 
 public func cors(allowOrigin  origin  : String,
-                 allowHeaders headers : [ String     ] = defaultHeaders,
-                 allowMethods methods : [ HTTPMethod ] = defaultMethods)
+                 allowHeaders headers : [ String     ]? = nil,
+                 allowMethods methods : [ HTTPMethod ]? = nil)
             -> Middleware
 {
   return { req, res, next in
-    let sHeaders = headers.joined(separator: ", ")
-    let sMethods = methods.map { $0.method }.joined(separator: ",")
+    let sHeaders = (headers ?? defaultHeaders).joined(separator: ", ")
+    let sMethods = (methods ?? defaultMethods).map { $0.method }
+                                              .joined(separator: ",")
     
     res.setHeader("Access-Control-Allow-Origin",  origin)
     res.setHeader("Access-Control-Allow-Headers", sHeaders)
