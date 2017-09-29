@@ -15,12 +15,25 @@ public struct NozeConnect : NozeModule {
 public var module = NozeConnect()
 
 // Note: @escaping for 3.0.0 compat, not intended as per SR-2907
-public func connect(middleware: @escaping Middleware...) -> Connect {
-  let app = Connect()
-  
-  for m in middleware {
-    _ = app.use(m)
+#if swift(>=4.0) // HH
+  public func connect(middleware: Middleware...) -> Connect {
+    let app = Connect()
+    
+    for m in middleware {
+      _ = app.use(m)
+    }
+    
+    return app
   }
+#else
+  public func connect(middleware: @escaping Middleware...) -> Connect {
+    let app = Connect()
   
-  return app
-}
+    for m in middleware {
+      _ = app.use(m)
+    }
+  
+    return app
+  }
+#endif
+
