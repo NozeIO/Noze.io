@@ -217,9 +217,9 @@ class NozeIOFileSystemTests: NozeIOTestCase {
       _ = temp.track() // make sure the tmpfile gets deleted at process exit
       
       temp.open("nozetest-", suffix: ".tmp") { error, info in
-        print("FD: \(info?.fd)")
-        print("  FN: \(info?.path)")
-        print("  ERROR: \(error)")
+        print("FD: \(info?.fd as Optional)")
+        print("  FN: \(info?.path as Optional)")
+        print("  ERROR: \(error as Optional)")
         
         XCTAssertNil(error)
         XCTAssertNotNil(info)
