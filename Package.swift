@@ -138,3 +138,8 @@ let package = Package(
   ],
   dependencies: []
 )
+
+#if swift(>=3.1)
+package.swiftLanguageVersions = [ 3, 4 ]
+#endif
+
