@@ -130,6 +130,8 @@
 		E85EF8AC1D00FAC800BDA997 /* libFreddy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F25A4F1CF5EA2300355194 /* libFreddy.dylib */; };
 		E85EF8AD1D00FACF00BDA997 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D4DFA21CFC67D000921230 /* Foundation.framework */; };
 		E85EF8AF1D00FC2600BDA997 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85EF8AE1D00FC2600BDA997 /* Model.swift */; };
+		E860AB1E1F7E6D1400C06BA5 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E860AB1D1F7E6D1400C06BA5 /* ArrayExtension.swift */; };
+		E860AB201F7E6E4B00C06BA5 /* BatchedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E860AB1F1F7E6E4B00C06BA5 /* BatchedCollection.swift */; };
 		E869BED41D411761007BFE54 /* Pause.swift in Sources */ = {isa = PBXBuildFile; fileRef = E869BED31D411761007BFE54 /* Pause.swift */; };
 		E86BC6F61CF3AEA200A397BE /* DNSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BC6F51CF3AEA200A397BE /* DNSTests.swift */; };
 		E86BC6FA1CF3AEEE00A397BE /* NozeIOTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BC6F91CF3AEEE00A397BE /* NozeIOTestCase.swift */; };
@@ -1901,6 +1903,8 @@
 		E85EF8A41D00E17A00BDA997 /* IncomingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IncomingMessage.swift; path = Sources/express/IncomingMessage.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8A81D00EB5400BDA997 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSON.swift; path = Sources/express/JSON.swift; sourceTree = SOURCE_ROOT; };
 		E85EF8AE1D00FC2600BDA997 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = "Samples/todo-mvc/Model.swift"; sourceTree = "<group>"; };
+		E860AB1D1F7E6D1400C06BA5 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ArrayExtension.swift; path = Sources/CryptoSwift/ArrayExtension.swift; sourceTree = "<group>"; };
+		E860AB1F1F7E6E4B00C06BA5 /* BatchedCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BatchedCollection.swift; path = Sources/CryptoSwift/BatchedCollection.swift; sourceTree = "<group>"; };
 		E8619BC41CF339EE004CCF5A /* Directory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Directory.swift; path = Sources/fs/Directory.swift; sourceTree = SOURCE_ROOT; };
 		E869BED31D411761007BFE54 /* Pause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pause.swift; path = Sources/connect/Pause.swift; sourceTree = SOURCE_ROOT; };
 		E86BC6F51CF3AEA200A397BE /* DNSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DNSTests.swift; path = Tests/dnsTests/DNSTests.swift; sourceTree = SOURCE_ROOT; };
@@ -3230,6 +3234,8 @@
 				E8978EE61D8A196D00ED4558 /* Generics.swift */,
 				E8978EEC1D8A196D00ED4558 /* Operators.swift */,
 				E8978EEE1D8A196D00ED4558 /* Utils.swift */,
+				E860AB1D1F7E6D1400C06BA5 /* ArrayExtension.swift */,
+				E860AB1F1F7E6E4B00C06BA5 /* BatchedCollection.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -5493,6 +5499,7 @@
 				E8978EF21D8A196D00ED4558 /* CSArrayType+Extensions.swift in Sources */,
 				E8978EF91D8A196D00ED4558 /* Updatable.swift in Sources */,
 				E8978EF31D8A196D00ED4558 /* DigestType.swift in Sources */,
+				E860AB201F7E6E4B00C06BA5 /* BatchedCollection.swift in Sources */,
 				E8978EF51D8A196D00ED4558 /* Int+Extension.swift in Sources */,
 				E8978EF41D8A196D00ED4558 /* Generics.swift in Sources */,
 				E8978EF71D8A196D00ED4558 /* MD5.swift in Sources */,
@@ -5500,6 +5507,7 @@
 				E8978EF61D8A196D00ED4558 /* IntegerConvertible.swift in Sources */,
 				E8978EEF1D8A196D00ED4558 /* Bit.swift in Sources */,
 				E8978EFA1D8A196D00ED4558 /* Utils.swift in Sources */,
+				E860AB1E1F7E6D1400C06BA5 /* ArrayExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

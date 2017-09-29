@@ -26,7 +26,11 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
     var bitPattern:T = 0
     for idx in bits.indices {
         if bits[idx] == Bit.one {
-            let bit = T(UIntMax(1) << UIntMax(idx))
+            #if swift(>=4.0)  // HH
+              let bit = T(UInt64(1) << UInt64(idx))
+            #else
+              let bit = T(UIntMax(1) << UIntMax(idx))
+            #endif
             bitPattern = bitPattern | bit
         }
     }
@@ -83,7 +87,11 @@ func csShiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Init
     
     var shiftedValue:T = 0;
     for bitIdx in 0..<bitsCount {
-        let bit = T(IntMax(1 << bitIdx))
+        #if swift(>=4.0)  // HH
+          let bit = T(Int64(1 << bitIdx))
+        #else
+          let bit = T(IntMax(1 << bitIdx))
+        #endif
         if ((value & bit) == bit) {
             shiftedValue = shiftedValue | T(bit << shiftCount)
         }

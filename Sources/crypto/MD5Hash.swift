@@ -38,11 +38,12 @@ class MD5Hash: Hash {
   }
   
   override public func digest(_ digest: String) -> String? {
-    guard digest == "hex" else { return nil }
+    guard digest == "hex"     else { return nil }
+    guard let hasher = hasher else { return nil }
     
     do {
-      let result = try hasher?.update(withBytes: [], isLast: true)
-      return result?.hexString
+      let result = try hasher.update(withBytes: [], isLast: true)
+      return result.hexString
     }
     catch {
       fatalError("MD5 cannot fail?!")
@@ -63,7 +64,12 @@ class MD5Hash: Hash {
     }
     
     do {
-      _ = try hasher.update(withBytes: bucket)
+      #if swift(>=4.0)
+        _ = try hasher.update(withBytes:
+                                bucket[bucket.startIndex..<bucket.endIndex])
+      #else
+        _ = try hasher.update(withBytes: bucket)
+      #endif
       done(nil, nil) // we do not produce anything, only on end
     }
     catch let error {
