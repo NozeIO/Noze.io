@@ -318,24 +318,24 @@ func parse_url(_ us: String) -> URL {
   var ps  = "" // path part
   
   if let idx = s.strstr("://") {
-    url.scheme = s[s.startIndex..<idx]
-    s = s[s.index(idx, offsetBy:3)..<s.endIndex]
+    url.scheme = String(s[s.startIndex..<idx])
+    s = String(s[s.index(idx, offsetBy:3)..<s.endIndex])
     
     // cut off path
     if let idx = index(string: s, c: "/") {
-      ps = s[idx..<s.endIndex] // path part
-      s  = s[s.startIndex..<idx]
+      ps = String(s[idx..<s.endIndex]) // path part
+      s  = String(s[s.startIndex..<idx])
     }
     
     // s: joe:pwd@host:port
     if let idx = index(string: s, c: "@") {
-      url.userInfo = s[s.startIndex..<idx]
-      s = s[s.index(after:idx)..<s.endIndex]
+      url.userInfo = String(s[s.startIndex..<idx])
+      s = String(s[s.index(after:idx)..<s.endIndex])
     }
     
     // s: host:port
     if let idx = index(string: s, c: ":") {
-      url.host = s[s.startIndex..<idx]
+      url.host = String(s[s.startIndex..<idx])
       let portS = s[s.index(after:idx)..<s.endIndex]
       let portO = Int(portS)
       debugPrint("ports \(portS) is \(portO as Optional)")
@@ -354,13 +354,13 @@ func parse_url(_ us: String) -> URL {
   
   if ps != "" {
     if let idx = index(string: ps, c: "?") {
-      url.query = ps[ps.index(after:idx)..<ps.endIndex]
-      ps = ps[ps.startIndex..<idx]
+      url.query = String(ps[ps.index(after:idx)..<ps.endIndex])
+      ps = String(ps[ps.startIndex..<idx])
     }
     
     if let idx = index(string: ps, c: "#") {
-      url.fragment = ps[ps.index(after:idx)..<ps.endIndex]
-      ps = ps[ps.startIndex..<idx]
+      url.fragment = String(ps[ps.index(after:idx)..<ps.endIndex])
+      ps = String(ps[ps.startIndex..<idx])
     }
     
     url.path = ps
