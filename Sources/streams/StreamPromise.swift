@@ -18,7 +18,7 @@ public extension GReadableStreamType {
   
   var promise : Promise<Void> {
     return Promise<Void> { ok, fail in
-      _ = self.onceEnd   { ok() }
+      _ = self.onceEnd   { ok(()) }
       _ = self.onceError { error in fail(error) }
     }
   }
@@ -38,13 +38,13 @@ public extension GWritableStreamType {
   
   var promise : Promise<Void> {
     return Promise<Void> { ok, fail in
-      _ = self.onceFinish { ok() }
+      _ = self.onceFinish { ok(()) }
       _ = self.onceError  { error in fail(error) }
     }
   }
   var unpipePromise : Promise<Void> {
     return Promise<Void> { ok, fail in
-      _ = self.onceUnpipe { _ in ok() }
+      _ = self.onceUnpipe { _ in ok(()) }
       _ = self.onceError  { error in fail(error) }
     }
   }

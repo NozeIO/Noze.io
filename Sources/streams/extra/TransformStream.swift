@@ -156,7 +156,7 @@ open class TransformStream<WriteType, ReadType>
         drainCount = 0
         if doCork { uncork() }
         nextTick { // TBD: else we nest
-          self.writeStream.drainListeners.emit()
+          self.writeStream.drainListeners.emit(())
         }
       }
     }

@@ -274,7 +274,7 @@ open class WritableStream<WriteType>
     // Note: no nextTick necessary, we already called the CB. right?
     log.debug("draining, notifying listeners: #\(drainListeners.count)")
     assert(buffer.availableBufferSpace > 0)
-    drainListeners.emit()
+    drainListeners.emit(())
 
     if didRetainQ {
       core.module.release()
@@ -313,7 +313,7 @@ open class WritableStream<WriteType>
     if !didSendClose {
       didSendClose = true
       nextTick {
-        self.closeListeners.emit()
+        self.closeListeners.emit(())
         self.closeListeners.removeAllListeners()
       }
     }
@@ -330,7 +330,7 @@ open class WritableStream<WriteType>
     
     nextTick {
       log.enter(function: "\(#function):tick"); defer { log.leave() }
-      self.finishListeners.emit()
+      self.finishListeners.emit(())
       self.finishListeners.removeAllListeners()
       
       if self.didRetainQ {

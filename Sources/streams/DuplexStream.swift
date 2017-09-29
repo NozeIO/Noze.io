@@ -78,7 +78,7 @@ open class DuplexStream<ReadType, WriteType>
     if openCount == 0 && !didSendClose {
       didSendClose = true
       nextTick {
-        self.closeListeners.emit()
+        self.closeListeners.emit(())
         self.closeListeners.removeAllListeners()
       }
     }

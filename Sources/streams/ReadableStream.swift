@@ -409,7 +409,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
         log.debug("emitting event ..")
         self.readPending     = true
         self.pendingReadable = 0
-        self.readableListeners.emit()
+        self.readableListeners.emit(())
       }
     }
     
@@ -444,7 +444,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
     
     // TBD: to tick or not to tick
     nextTick {
-      self.endListeners.emit()
+      self.endListeners.emit(())
       self.endListeners.removeAllListeners()
       
       if self.didRetainQ {
@@ -458,7 +458,7 @@ open class ReadableStream<ReadType> : Stream, GReadableStreamType {
     if !didSendClose {
       didSendClose = true
       nextTick {
-        self.closeListeners.emit()
+        self.closeListeners.emit(())
         self.closeListeners.removeAllListeners()
       }
     }
