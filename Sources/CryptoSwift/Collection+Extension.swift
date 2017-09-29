@@ -42,13 +42,9 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
     }
   
     #if swift(>=4.0)  // HH
-      public typealias ThatIntegerThing = BinaryInteger
     #else
-      public typealias ThatIntegerThing = Integer
-    #endif
-
     /// Initialize integer from array of bytes. Caution: may be slow!
-    func toInteger<T:ThatIntegerThing>() -> T where T: ByteConvertible, T: BitshiftOperationsType {
+    func toInteger<T:Integer>() -> T where T: ByteConvertible, T: BitshiftOperationsType {
         if self.count == 0 {
             return 0;
         }
@@ -71,4 +67,5 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         }
         return result
     }
+    #endif // Swift 3
 }
