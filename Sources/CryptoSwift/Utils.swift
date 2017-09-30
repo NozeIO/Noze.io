@@ -2,8 +2,16 @@
 //  Utils.swift
 //  CryptoSwift
 //
-//  Created by Marcin Krzyzanowski on 26/08/14.
-//  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
+//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  This software is provided 'as-is', without any express or implied warranty.
+//
+//  In no event will the authors be held liable for any damages arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//
+//  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+//  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+//  - This notice may not be removed or altered from any source or binary distribution.
 //
 
 func rotateLeft(_ value:UInt8, by:UInt8) -> UInt8 {
@@ -60,6 +68,31 @@ func xor(_ a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
     return xored
 }
 
+#if swift(>=4.0)  // HH
+/**
+ ISO/IEC 9797-1 Padding method 2.
+ Add a single bit with value 1 to the end of the data.
+ If necessary add bits with value 0 to the end of the data until the padded data is a multiple of blockSize.
+ - parameters:
+ - blockSize: Padding size in bytes.
+ - allowance: Excluded trailing number of bytes.
+ */
+@inline(__always)
+func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0) {
+    let msgLength = data.count
+    // Step 1. Append Padding Bits
+    // append one bit (UInt8 with one bit) to message
+    data.append(0x80)
+
+    // Step 2. append "0" bit until message length in bits ≡ 448 (mod 512)
+    let max = blockSize - allowance // 448, 986
+    if msgLength % blockSize < max { // 448
+        data += Array<UInt8>(repeating: 0, count: max - 1 - (msgLength % blockSize))
+    } else {
+        data += Array<UInt8>(repeating: 0, count: blockSize + max - 1 - (msgLength % blockSize))
+    }
+}
+#else // Swift 3
 /**
  ISO/IEC 9797-1 Padding method 2.
  Add a single bit with value 1 to the end of the data.
@@ -86,3 +119,5 @@ func bitPadding(to data: Array<UInt8>, blockSize: Int, allowance: Int = 0) -> Ar
     tmp += Array<UInt8>(repeating: 0, count: counter)
     return tmp
 }
+#endif // Swift 3
+

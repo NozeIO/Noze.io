@@ -15,12 +15,25 @@ public class NozeExpress : NozeModule {
 public var module = NozeExpress()
 
 // Note: @escaping for 3.0.0 compat, not intended as per SR-2907
-public func express(middleware: @escaping Middleware...) -> Express {
-  let app = Express()
-  
-  for m in middleware {
-    _ = app.use(m)
+#if swift(>=4.0)
+  public func express(middleware: Middleware...) -> Express {
+    let app = Express()
+    
+    for m in middleware {
+      _ = app.use(m)
+    }
+    
+    return app
   }
+#else // Swift 3
+  public func express(middleware: @escaping Middleware...) -> Express {
+    let app = Express()
   
-  return app
-}
+    for m in middleware {
+      _ = app.use(m)
+    }
+  
+    return app
+  }
+#endif
+

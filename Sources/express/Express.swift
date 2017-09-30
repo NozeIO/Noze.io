@@ -34,7 +34,7 @@ open class Express: SettingsHolder, MiddlewareObject, RouteKeeper {
     res.extra[appKey] = self
     res.extra[reqKey] = req
     
-    router.handle(request: req, response: res) { _ in
+    router.handle(request: req, response: res) { ( args: Any... ) in
       req.extra[appKey] = oldApp
       res.extra[appKey] = oldApp
       res.extra[reqKey] = oldReq

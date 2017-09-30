@@ -28,6 +28,19 @@ extension Int {
     }
 }
 
+#if swift(>=4.0)  // HH
+
+/* array of bytes */
+extension Int {
+
+    /** Array of bytes with optional padding */
+    func bytes(totalBytes: Int = MemoryLayout<Int>.size) -> Array<UInt8> {
+        return arrayOfBytes(value: self, length: totalBytes)
+    }
+}
+
+#else // Swift 3
+
 /* array of bytes */
 extension Int {
     /** Int with collection of bytes (little-endian) */
@@ -40,8 +53,6 @@ extension Int {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 }
-
-
 
 /** Shift bits */
 extension Int {
@@ -105,3 +116,6 @@ func &>> (lhs: Int, rhs: Int) -> Int {
     l.shiftRight(by: rhs)
     return l
 }
+
+#endif
+

@@ -182,7 +182,8 @@ public func parseZQPValue(string s: String, format: String) -> Any? {
 }
 
 /// %-unescape a string.
-private func _unescape(string: String) -> String {
+public func _unescape(string: String) -> String {
+  // FIXME: Just public because we use it as a default argument
   // FIXME: crappy&slow implementation, do this better.
   // Also: this should be based on bytes, not Strings
   let s = string.characters

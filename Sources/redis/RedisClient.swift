@@ -243,12 +243,12 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
           switch type {
             case "message":
               let payload = values[2]
-              messageListeners.emit(channel, payload)
+              messageListeners.emit((channel, payload))
             
             case "subscribe":
               // TBD: should be coalesce such?
               let channelCount = values[2].intValue ?? subscribedChannels.count
-              subscribeListeners.emit(channel, channelCount)
+              subscribeListeners.emit((channel, channelCount))
             
             case "unsubscribe":
               if let channelCount = values[2].intValue {
@@ -256,7 +256,7 @@ public class RedisClient : ErrorEmitter, RedisCommandTarget {
                   console.info("exiting subscription mode", self)
                   didSubscribe = false
                 }
-                unsubscribeListeners.emit(channel, channelCount)
+                unsubscribeListeners.emit((channel, channelCount))
               }
               else {
                 errorListeners.emit(RedisClientError.UnexpectedReplyType(reply))

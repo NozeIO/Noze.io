@@ -93,8 +93,11 @@ extension BodyParserBody : ExpressibleByStringLiteral {
 public struct bodyParser {
   
   public class Options {
-    let inflate = false
-    let limit   = 100 * 1024
+    let inflate  = false
+    let limit    = 100 * 1024
+    let extended = true
+
+    public init() {}
   }
   
   fileprivate static let requestKey = "io.noze.connect.body-parser.body"
@@ -216,7 +219,8 @@ public extension bodyParser {
       
       // TODO: `extended` option. (maps to our zopeFormats?)
       _ = req | utf8 | concat { chars in
-        let qp = querystring.parse(String(chars))
+        let s = String(chars)
+        let qp = opts.extended ? qs.parse(s) : querystring.parse(s)
         req.body = .URLEncoded(qp)
         next()
       }

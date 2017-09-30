@@ -48,7 +48,7 @@ public extension ServerResponse {
         return
       }
       
-      engine(path, viewOptions) { results in
+      engine(path, viewOptions) { ( results: Any?... ) in
         let rc = results.count
         let v0 = rc > 0 ? results[0] : nil
         let v1 = rc > 1 ? results[1] : nil

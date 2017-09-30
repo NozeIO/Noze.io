@@ -51,12 +51,11 @@ public class NozeIOTestCase : XCTestCase {
     self.wantsRunloop += 1
   }
   
-  static let defaultWaitTimeoutInSecs = 10
-  
-  public func waitForExit(timeoutInMS to: Int =
-                                 defaultWaitTimeoutInSecs * 1000)
-  {
-    let timeout = DispatchTime.now() + DispatchTimeInterval.milliseconds(to)
+  public func waitForExit(timeoutInMS to: Int? = nil) {
+    let defaultWaitTimeoutInSecs = 10
+    let timeout = DispatchTime.now()
+                + DispatchTimeInterval
+                    .milliseconds(to ?? defaultWaitTimeoutInSecs * 1000)
 
     let rc = done.wait(timeout: timeout)
     let didTimeout = rc == .timedOut

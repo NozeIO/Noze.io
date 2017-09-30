@@ -125,7 +125,7 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     }
     
     dns.lookup(host, family: family) { error, address in
-      self.lookupListeners.emit(error, address)
+      self.lookupListeners.emit((error, address))
       
       if let error = error {
         self.connectionState = .Disconnected

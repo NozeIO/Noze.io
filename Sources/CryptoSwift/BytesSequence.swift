@@ -6,6 +6,9 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+#if swift(>=4.0)  // HH
+#else
+  
 struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Element == UInt8, D.IndexDistance == Int, D.SubSequence.IndexDistance == Int, D.Index == Int {
     let chunkSize: D.IndexDistance
     let data: D
@@ -23,3 +26,6 @@ struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Eleme
         }
     }
 }
+
+#endif
+

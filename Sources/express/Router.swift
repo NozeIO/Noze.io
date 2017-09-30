@@ -27,11 +27,12 @@ open class Router: MiddlewareObject {
     guard !self.routes.isEmpty else { return endNext() }
     
     let routes = self.routes // make a copy to protect against modifications
-    var next : Next? = { _ in } // cannot be let as it's self-referencing
+    var next : Next? = { ( args: Any... ) in }
+                 // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
-    next = { args in
+    next = { ( args: Any... ) in
       
       // grab next item from matching middleware array
       let route      = routes[i]

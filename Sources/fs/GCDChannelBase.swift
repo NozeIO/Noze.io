@@ -330,7 +330,12 @@ open class GCDChannelBase: CustomStringConvertible {
       guard !chunk.isEmpty else { continue }
       
       chunk.withUnsafeBufferPointer { bp in
-        let chunkData = DispatchData(bytes: bp)
+        #if swift(>=4.0)
+          let rbp = UnsafeRawBufferPointer(bp)
+          let chunkData = DispatchData(bytes: rbp)
+        #else
+          let chunkData = DispatchData(bytes: bp)
+        #endif
         if data != nil {
           data!.append(chunkData)
         }

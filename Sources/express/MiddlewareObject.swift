@@ -28,7 +28,7 @@ public extension MiddlewareObject {
 
   public var requestHandler: RequestEventCB {
     return { req, res in
-      self.handle(request: req, response: res) { _ in 
+      self.handle(request: req, response: res) { ( args: Any... ) in 
         // essentially the final handler
         console.warn("No middleware called end: " +
                      "\(self) \(req.method) \(req.url)")

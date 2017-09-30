@@ -10,29 +10,30 @@ import fs
 import process
 import http
 
-enum ServeFilePermission {
+public enum ServeFilePermission {
   case Allow, Deny, Ignore
 }
 
-enum IndexBehaviour {
+public enum IndexBehaviour {
   case None
   case IndexFile (String)
   case IndexFiles([String])
   
-  init() {
+  public init() {
     self = .IndexFile("index.html")
   }
 }
 
 public struct ServeStaticOptions {
   
-  let dotfiles     = ServeFilePermission.Allow
-  let etag         = false
-  let extensions   : [ String ]? = nil
-  let index        = IndexBehaviour()
-  let lastModified = true
-  let redirect     = true
-  
+  public let dotfiles     = ServeFilePermission.Allow
+  public let etag         = false
+  public let extensions   : [ String ]? = nil
+  public let index        = IndexBehaviour()
+  public let lastModified = true
+  public let redirect     = true
+ 
+  public init() {} // otherwise init is private
 }
 
 public func serveStatic(path    p : String = process.cwd(),

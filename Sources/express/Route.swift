@@ -72,7 +72,7 @@ public struct Route: MiddlewareObject {
     let oldRoute  = req.route
     req.params = extractPatternVariables(request: req)
     req.route  = self
-    let endNext : Next = { _ in
+    let endNext : Next = { ( args: Any... ) in
       req.params = oldParams
       req.route  = oldRoute
       cb()
@@ -80,11 +80,12 @@ public struct Route: MiddlewareObject {
     
     // loop over route middleware
     let stack = self.middleware
-    var next  : Next? = { _ in } // cannot be let as it's self-referencing
+    var next  : Next? = { ( args: Any... ) in }
+                  // cannot be let as it's self-referencing
     
     var i = 0 // capture position in matching-middleware array (shared)
     
-    next = { args in
+    next = { ( args: Any... ) in
       
       // grab next item from middleware array
       let middleware = stack[i]
@@ -226,7 +227,7 @@ func parseURLPattern(url s: String) -> [ Route.Pattern ]? {
     
     if c.hasPrefix(":") {
       let vIdx = c.index(after: c.startIndex)
-      pattern.append(.Variable(c[vIdx..<c.endIndex]))
+      pattern.append(.Variable(String(c[vIdx..<c.endIndex])))
       continue
     }
     
@@ -237,16 +238,16 @@ func parseURLPattern(url s: String) -> [ Route.Pattern ]? {
       }
       else if c.hasSuffix("*") && c.characters.count > 1 {
         let eIdx = c.index(before: c.endIndex)
-        pattern.append(.Contains(c[vIdx..<eIdx]))
+        pattern.append(.Contains(String(c[vIdx..<eIdx])))
       }
       else {
-        pattern.append(.Prefix(c[vIdx..<c.endIndex]))
+        pattern.append(.Prefix(String(c[vIdx..<c.endIndex])))
       }
       continue
     }
     if c.hasSuffix("*") {
       let eIdx = c.index(before: c.endIndex)
-      pattern.append(.Suffix(c[c.startIndex..<eIdx]))
+      pattern.append(.Suffix(String(c[c.startIndex..<eIdx])))
       continue
     }
 

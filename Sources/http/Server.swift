@@ -12,8 +12,15 @@ import events
 import class net.Server
 import class net.Socket
 
-public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
-public typealias RequestEventCB = (( IncomingMessage, ServerResponse )) -> Void
+#if swift(>=4.0)
+  public typealias ClientErrorEventCB = ( Error, Socket ) -> Void
+  public typealias RequestEventCB = ( IncomingMessage, ServerResponse ) -> Void
+#else
+  // TBD(hh): why was it like this?
+  public typealias ClientErrorEventCB = (( Error, Socket )) -> Void
+  public typealias RequestEventCB =
+                     (( IncomingMessage, ServerResponse )) -> Void
+#endif
 
 /**
  * http.Server

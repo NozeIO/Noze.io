@@ -70,11 +70,11 @@ public class ASyncSinkTarget<S: SinkType> : GWritableTargetType {
   // MARK: - Init from a GeneratorType or a SequenceType
   
   public init(_ target            : S,
-              workerQueue         : DispatchQueue = getDefaultWorkerQueue(),
+              workerQueue         : DispatchQueue? = nil,
               maxCountPerDispatch : Int = 16)
   {
     self.target              = target
-    self.workerQueue         = workerQueue
+    self.workerQueue         = workerQueue ?? getDefaultWorkerQueue()
     self.maxCountPerDispatch = maxCountPerDispatch
   }
   

@@ -106,18 +106,19 @@ public class AsyncIteratorSource<G: IteratorProtocol> : GReadableSourceType {
   // MARK: - Init from a GeneratorType or a SequenceType
   
   public init(_ source            : G,
-              workerQueue         : DispatchQueue = getDefaultWorkerQueue(),
+              workerQueue         : DispatchQueue? = nil,
               maxCountPerDispatch : Int = 16)
   {
     self.source              = source
-    self.workerQueue         = workerQueue
+    self.workerQueue         = workerQueue ?? getDefaultWorkerQueue()
     self.maxCountPerDispatch = maxCountPerDispatch
   }
   public convenience init<S: Sequence>
-    (_ source: S, workerQueue: DispatchQueue = getDefaultWorkerQueue())
+    (_ source: S, workerQueue: DispatchQueue? = nil)
     where S.Iterator == G
   {
-    self.init(source.makeIterator(), workerQueue: workerQueue)
+    self.init(source.makeIterator(),
+              workerQueue: workerQueue ?? getDefaultWorkerQueue())
   }
   
   

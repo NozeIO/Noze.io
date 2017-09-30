@@ -82,7 +82,7 @@ public class UniqStrings: TransformStream<String, String> {
     if self.startIndex > 0 {
       let startIndex = lLine.index(lLine.startIndex, offsetBy:self.startIndex)
       let shortLine  = lLine[startIndex..<lLine.endIndex]
-      searchLine = caseInsensitive ? shortLine.lowercased() : shortLine
+      searchLine = caseInsensitive ? shortLine.lowercased() : String(shortLine)
     }
     else {
       searchLine = caseInsensitive ? lLine.lowercased() : lLine
