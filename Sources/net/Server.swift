@@ -318,10 +318,11 @@ open class Server : ErrorEmitter, LameLogObjectType {
     assert(fd == nil)
     
     let lfd = xsys.socket(d, type, 0)
+    let err = xsys.errno
     log.debug("setup socket: \(lfd)")
     guard lfd != -1 else {
       log.debug("  failed: \(xsys.errno)")
-      return xsys.errno
+      return err
     }
     
     fd = FileDescriptor(lfd)
