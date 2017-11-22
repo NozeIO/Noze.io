@@ -42,7 +42,10 @@ final class Daemon {
   func start() {
     console.log(colors.yellow("\(config.data.title) watching " +
                               "\(options.sourceDir)"))
-        
+
+#if os(Linux)        
+    fatalError("no fs.watch on Linux yet, sorry ...")
+#else
     _ = fs.watch(options.sourceDir, recursive: true) { event in
       // TODO: coalesce
       
@@ -51,8 +54,8 @@ final class Daemon {
                   colors.green("restarting ..."))
       self.setNeedsRestart()
     }
-    
     restartProcess()
+#endif
   }
   
   func setNeedsRestart() {
