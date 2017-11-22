@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Hess on 31/03/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 public typealias DoneCB   = () -> Void
@@ -69,7 +69,7 @@ public protocol WritableStreamType : class, StreamType {
 /// The `finish` event is emitted when the stream received and end() call AND
 /// all the data has actually been processed.
 ///
-public protocol GWritableStreamType : class, WritableStreamType {
+public protocol GWritableStreamType : WritableStreamType {
   
   associatedtype WriteType
   
