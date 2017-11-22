@@ -114,14 +114,22 @@ apidox :
 	jazzy --module connect       --output apidox/connect
 	jazzy --module express       --output apidox/express
 
-docker-build:
-	mkdir -p .docker.build .docker.Packages
+docker-build-3:
+	mkdir -p .docker3.build .docker3.Packages
 	docker run --rm \
 		-v $(PWD):/src \
-		-v $(PWD)/.docker.build:/src/.build	\
-		-v $(PWD)/.docker.Packages:/src/Packages\
-		swift:3.1 \
+		-v $(PWD)/.docker3.build:/src/.build	\
+		-v $(PWD)/.docker3.Packages:/src/Packages \
+		swift:3.1.1 \
+		bash -c "cd /src && swift build"
+
+docker-build-4:
+	mkdir -p .docker4.build
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker4.build:/src/.build	\
+		swift:4.0.2 \
 		bash -c "cd /src && swift build"
 
 docker-clean:
-	rm -rf .build-docker
+	rm -rf .docker3.* .docker4.*
