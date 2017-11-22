@@ -17,4 +17,5 @@ apidox
 .docker*.build
 .docker*.Packages
 Package.pins
+Package.resolved
 
