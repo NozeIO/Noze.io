@@ -3,7 +3,7 @@
 //  SwiftyHTTP
 //
 //  Created by Helge Hess on 7/4/14.
-//  Copyright (c) 2014 Always Right Institute. All rights reserved.
+//  Copyright (c) 2014-2017 Always Right Institute. All rights reserved.
 //
 
 import core
@@ -193,9 +193,15 @@ public extension URL {
     guard uPath != ""      else { return nil }
     
     let isAbsolute = uPath.hasPrefix("/")
-    let pathComps  = uPath.characters.split(separator: "/",
-                                            omittingEmptySubsequences: false)
-                                     .map { String($0) }
+    #if swift(>=3.2)
+      let pathComps  = uPath.split(separator: "/",
+                                   omittingEmptySubsequences: false)
+                            .map { String($0) }
+    #else
+      let pathComps  = uPath.characters.split(separator: "/",
+                                              omittingEmptySubsequences: false)
+                                       .map { String($0) }
+    #endif
     /* Note: we cannot just return a leading slash for absolute pathes as we
      *       wouldn't be able to distinguish between an absolute path and a
      *       relative path starting with an escaped slash.
@@ -312,7 +318,11 @@ extension String {
 }
 
 private func index(string: String, c: Character) -> String.Index? {
-  return string.characters.index(of: c)
+  #if swift(>=3.2)
+    return string.index(of: c)
+  #else
+    return string.characters.index(of: c)
+  #endif
 }
 
 func parse_url(_ us: String) -> URL {

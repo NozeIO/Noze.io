@@ -3,7 +3,7 @@
 //  HTTPParser
 //
 //  Created by Helge Heß on 4/25/16.
-//  Copyright © 2016 Always Right Institute. All rights reserved.
+//  Copyright © 2016-2017 Always Right Institute. All rights reserved.
 //
 /* Copyright Joyent, Inc. and other Node contributors. All rights reserved.
  *
@@ -1668,11 +1668,19 @@ public extension http_parser {
       
       if debugOn {
         let s = String.fromCString(data!, length: p! - data!)!
-        let sq = String(s.characters.map {
-          if $0 == "\r" { return "#" }
-          if $0 == "\n" { return "#" }
-          return $0
-        })
+        #if swift(>=3.2)
+          let sq = String(s.map {
+            if $0 == "\r" { return "#" }
+            if $0 == "\n" { return "#" }
+            return $0
+          })
+        #else
+          let sq = String(s.characters.map {
+            if $0 == "\r" { return "#" }
+            if $0 == "\n" { return "#" }
+            return $0
+          })
+        #endif
         print("\n+  LOOP CHAR \(debugChar(ch)) '\(sq)'"
               + " len=\(p! - data!) \(CURRENT_STATE)")
       }

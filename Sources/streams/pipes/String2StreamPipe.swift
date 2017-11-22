@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 5/1/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 /// Pipe operator for Strings into UTF-8 byte streams
@@ -30,6 +30,8 @@ public func |<TO: GWritableStreamType>
   return left.unicodeScalars.pipe(right)
 }
 
+#if swift(>=3.2) // on Swift 4 the String itself is the char array
+#else
 /// Pipe operator for Strings into Character streams
 ///
 @discardableResult
@@ -39,3 +41,4 @@ public func |<TO: GWritableStreamType>
 {
   return left.characters.pipe(right)
 }
+#endif

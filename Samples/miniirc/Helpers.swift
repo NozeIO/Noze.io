@@ -21,7 +21,11 @@ extension Collection where Iterator.Element : Equatable {
 extension String {
   
   func split(_ c: Character) -> [ String ] {
-    return self.characters.split(separator: c).map { String($0) }
+    #if swift(>=3.2)
+      return self.split(separator: c).map { String($0) }
+    #else
+      return self.characters.split(separator: c).map { String($0) }
+    #endif
   }
   
 }

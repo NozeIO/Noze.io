@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/2/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import http
@@ -21,7 +21,11 @@ public extension IncomingMessage {
     
     // FIXME: naive and incorrect implementation :-)
     // TODO: parse quality, patterns, etc etc
-    let acceptedTypes = acceptHeader.characters.split(separator: ",")
+    #if swift(>=3.2)
+      let acceptedTypes = acceptHeader.split(separator: ",")
+    #else
+      let acceptedTypes = acceptHeader.characters.split(separator: ",")
+    #endif
     for mimeType in acceptedTypes {
       let mimeTypeString = String(mimeType)
       if mimeTypeString.contains(s) { return mimeTypeString }

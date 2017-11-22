@@ -41,7 +41,11 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
       
       // and yet another copy, dbl-sigh ;-)
       if let s = so {
-        push(Array(s.characters))
+        #if swift(>=3.2)
+          push(Array(s))
+        #else
+          push(Array(s.characters))
+        #endif
       }
       else {
         catched(error: EncodingError.CouldNotDecodeCString)
