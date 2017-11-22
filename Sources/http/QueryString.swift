@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 5/17/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import Foundation // for String.hasPrefix/hasSuffix
@@ -45,8 +45,12 @@ private func _parse(string s     : String,
   
   var qp = Dictionary<String, Any>()
   
-  let pairs = s.characters.split(separator: separator,
-                                 omittingEmptySubsequences: true)
+  #if swift(>=3.2)
+    let pairs = s.split(separator: separator, omittingEmptySubsequences: true)
+  #else
+    let pairs = s.characters.split(separator: separator,
+                                   omittingEmptySubsequences: true)
+  #endif
   for pair in pairs {
     let pairParts = pair.split(separator: pairSeparator,
                                maxSplits: 1,
@@ -157,10 +161,18 @@ public func parseZQPValue(string s: String, format: String) -> Any? {
     case "string":      return s
     
     case "text":
-      return String(s.characters.filter({$0 != "\r"}))
+      #if swift(>=3.2)
+        return String(s.filter({$0 != "\r"}))
+      #else
+        return String(s.characters.filter({$0 != "\r"}))
+      #endif
     
     case "lines":
-      let lines = s.characters.filter({$0 != "\r"}).split(separator: "\n")
+      #if swift(>=3.2)
+        let lines = s.filter({$0 != "\r"}).split(separator: "\n")
+      #else
+        let lines = s.characters.filter({$0 != "\r"}).split(separator: "\n")
+      #endif
       return lines.map { String($0) }
     
     case "boolean":
@@ -183,10 +195,14 @@ public func parseZQPValue(string s: String, format: String) -> Any? {
 
 /// %-unescape a string.
 public func _unescape(string: String) -> String {
-  // FIXME: Just public because we use it as a default argument
+  // Note: Only public because we use it as a default argument ...
   // FIXME: crappy&slow implementation, do this better.
   // Also: this should be based on bytes, not Strings
-  let s = string.characters
+  #if swift(>=3.2)
+    let s = string
+  #else
+    let s = string.characters
+  #endif
   
   guard s.index(of: "%") != nil || s.index(of: "+") != nil else {
     return string

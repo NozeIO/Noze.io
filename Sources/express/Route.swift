@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/2/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import http
@@ -233,10 +233,15 @@ func parseURLPattern(url s: String) -> [ Route.Pattern ]? {
     
     if c.hasPrefix("*") {
       let vIdx = c.index(after: c.startIndex)
+      #if swift(>=3.2)
+        let characters = c
+      #else
+        let characters = c.characters
+      #endif
       if c == "**" {
         pattern.append(.Wildcard)
       }
-      else if c.hasSuffix("*") && c.characters.count > 1 {
+      else if c.hasSuffix("*") && characters.count > 1 {
         let eIdx = c.index(before: c.endIndex)
         pattern.append(.Contains(String(c[vIdx..<eIdx])))
       }

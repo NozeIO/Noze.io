@@ -21,8 +21,12 @@ var line2msg : Transform<String, Message> {
     func splitIRCLine(line l: String) -> ( String?, String?, [ String ]?) {
       // there is probably a better way to do this ...
       
-      let chars  = l.characters
-      var idx    = chars.startIndex
+      #if swift(>=3.2)
+        let chars = l
+      #else
+        let chars = l.characters
+      #endif
+      var idx     = chars.startIndex
       
       var source        : String?     = nil
       var commandString : String?     = nil
@@ -32,8 +36,13 @@ var line2msg : Transform<String, Message> {
       if chars[chars.startIndex] == ":" { // has a source
         idx = chars.index(after: idx) // skip colon
         
-        let from : String.CharacterView.Index
-        let to   : String.CharacterView.Index
+        #if swift(>=3.2)
+          let from : String.Index
+          let to   : String.Index
+        #else
+          let from : String.CharacterView.Index
+          let to   : String.CharacterView.Index
+        #endif
         
         if let spaceIdx = chars.index(of: " ", from: idx) {
           from = idx

@@ -10,9 +10,6 @@ import child_process
 // This is a demo on how to transform stuff in a streaming
 // way along the piping queue.
 //
-// In Swift3 2016-05-09 this looks a little more awkward than
-// necessary. Bugz I guess. Including crashers.
-//
 // What it does:
 // - we call `git log` and pipe the stdout
 // - into `readlines`, which transforms the bytes into [String] lines
@@ -31,7 +28,11 @@ struct GitLogEntry {
 
 extension String { // add stuff missing in String w/o Foundation
   func componentsSeparated(by c: Character) -> [ String ] {
-    return characters.split(separator: c).map { String($0) }
+    #if swift(>=3.2)
+      return split(separator: c).map { String($0) }
+    #else
+      return characters.split(separator: c).map { String($0) }
+    #endif
   }
 }
 

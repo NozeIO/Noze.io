@@ -3,7 +3,7 @@
 //  Noze.IO
 //
 //  Created by Helge Hess on 30/06/15.
-//  Copyright © 2015 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2015-2017 ZeeZide GmbH. All rights reserved.
 //
 
 // those need to be global so that we can also use them in GReadableStreamType
@@ -65,7 +65,7 @@ public protocol ReadableStreamType : class, StreamType {
 ///       which then makes the consumer call read(), and only then the EOF
 ///       condition will be evaluated.
 ///
-public protocol GReadableStreamType : class, ReadableStreamType {
+public protocol GReadableStreamType : ReadableStreamType {
   
   associatedtype ReadType
   

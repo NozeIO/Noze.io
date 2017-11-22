@@ -114,14 +114,49 @@ apidox :
 	jazzy --module connect       --output apidox/connect
 	jazzy --module express       --output apidox/express
 
-docker-build:
-	mkdir -p .docker.build .docker.Packages
+docker-build-3:
+	mkdir -p .docker3.build .docker3.Packages
 	docker run --rm \
 		-v $(PWD):/src \
-		-v $(PWD)/.docker.build:/src/.build	\
-		-v $(PWD)/.docker.Packages:/src/Packages\
-		swift:3.1 \
+		-v $(PWD)/.docker3.build:/src/.build	\
+		-v $(PWD)/.docker3.Packages:/src/Packages \
+		swift:3.1.1 \
 		bash -c "cd /src && swift build"
 
+docker-build-4:
+	mkdir -p .docker4.build
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker4.build:/src/.build	\
+		swift:4.0.2 \
+		bash -c "cd /src && swift build"
+
+# Note: this segfaults in QEmu (in Docker on macOS)
+docker-build-3-rpi-samples:
+	mkdir -p .docker3arm.build .docker3arm.Packages
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker3arm.build:/src/.build	\
+		-v $(PWD)/.docker3arm.Packages:/src/Packages \
+		helje5/rpi-swift:3.1.1 \
+		bash -c "cd /src && swift build && git tag --force 0.3.33 && cd Samples && make distclean && make && git tag -d 0.3.33"
+
+docker-build-3-samples:
+	mkdir -p .docker3.build .docker3.Packages
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker3.build:/src/.build	\
+		-v $(PWD)/.docker3.Packages:/src/Packages \
+		swift:3.1.1 \
+		bash -c "cd /src && swift build && git tag --force 0.3.33 && cd Samples && make distclean && make && git tag -d 0.3.33"
+
+docker-build-4-samples:
+	mkdir -p .docker4.build
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker4.build:/src/.build	\
+		swift:4.0.2 \
+		bash -c "cd /src && swift build && git tag --force 0.3.33 && cd Samples && make distclean && make && git tag -d 0.3.33"
+
 docker-clean:
-	rm -rf .build-docker
+	rm -rf .docker3.* .docker4.* .docker3arm.*

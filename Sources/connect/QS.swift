@@ -40,8 +40,13 @@ public enum qs {
 
     let parsedQV = RefStringAnyDictionary()
     var count = 0
-    let pairs = string.characters.split(separator: separator,
-                                        omittingEmptySubsequences: true)
+    #if swift(>=3.2)
+      let pairs = string.split(separator: separator,
+                               omittingEmptySubsequences: true)
+    #else
+      let pairs = string.characters.split(separator: separator,
+                                          omittingEmptySubsequences: true)
+    #endif
     for pair in pairs {
       guard count < parameterLimit else { break }
       count += 1

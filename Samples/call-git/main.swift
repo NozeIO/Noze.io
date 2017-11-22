@@ -15,7 +15,11 @@ struct GitLogEntry {
 
 extension String {
   func componentsSeparated(by c: Character) -> [ String ] {
-    return characters.split(separator: c).map { String($0) }
+    #if swift(>=3.2)
+      return split(separator: c).map { String($0) }
+    #else
+      return characters.split(separator: c).map { String($0) }
+    #endif
   }
 }
 

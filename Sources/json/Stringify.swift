@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Hess on 10/06/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 // TODO: indent, replacer:
@@ -36,7 +36,11 @@ public extension JSON {
 public extension String {
 
   public mutating func appendJSON(string s: String) {
-    let chars = s.characters
+    #if swift(>=3.2)
+      let chars = s
+    #else
+      let chars = s.characters
+    #endif
     reserveCapacity(chars.count + 2)
     
     self += "\""

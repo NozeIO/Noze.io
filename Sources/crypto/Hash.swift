@@ -3,12 +3,12 @@
 //  NozeSandbox
 //
 //  Created by Helge Heß on 9/15/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import streams
 
-public protocol HashStreamType : class, WritableByteStreamType {
+public protocol HashStreamType : WritableByteStreamType {
   // https://nodejs.org/api/crypto.html#crypto_class_hash
   
   // MARK: - Update Mode

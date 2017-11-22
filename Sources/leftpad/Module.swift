@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Hess on 11/04/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import core
@@ -15,7 +15,11 @@ public let module = NozeLeftpad()
 public extension String {
   
   public func leftpad(_ length: Int, c: Character = " ") -> String {
-    let oldLength = self.characters.count
+    #if swift(>=3.2)
+      let oldLength = self.count
+    #else
+      let oldLength = self.characters.count
+    #endif
     guard oldLength < length else { return self }
     
     let prefix = c._repeat(times: (length - oldLength))

@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Hess on 31/05/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import xsys
@@ -157,7 +157,11 @@ private struct LogInfoProvider {
   static var urlPadLen = 28
   var paddedURL : String {
     let url       = req.url
-    let oldLength = url.characters.count
+    #if swift(>=3.2)
+      let oldLength = url.count
+    #else
+      let oldLength = url.characters.count
+    #endif
     if oldLength > LogInfoProvider.urlPadLen {
       LogInfoProvider.urlPadLen = oldLength + ( oldLength % 2)
     }

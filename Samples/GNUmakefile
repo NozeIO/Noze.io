@@ -48,5 +48,4 @@ clean :
 	rm -rf */.build
 
 distclean : clean
-	rm -rf */Packages
-
+	rm -rf */Packages */Package.pins */Package.resolved

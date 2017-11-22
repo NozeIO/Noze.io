@@ -3,7 +3,7 @@
 //  SwiftSockets
 //
 //  Created by Helge Heß on 6/12/14.
-//  Copyright (c) 2014-2015 Always Right Institute. All rights reserved.
+//  Copyright (c) 2014-2017 Always Right Institute. All rights reserved.
 //
 
 #if os(Linux)
@@ -140,8 +140,13 @@ extension sockaddr_in: SocketAddress {
       }
       else {
         // split string at colon
-        let components =
-          s.characters.split(separator: ":", maxSplits: 1).map { String($0) }
+        #if swift(>=3.2)
+          let components =
+                s.split(separator: ":", maxSplits: 1).map { String($0) }
+        #else
+          let components =
+            s.characters.split(separator: ":", maxSplits: 1).map { String($0) }
+        #endif
         if components.count == 2 {
           self.init(address: components[0], port: Int(components[1]))
         }

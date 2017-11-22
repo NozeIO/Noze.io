@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 7/24/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2017 ZeeZide GmbH. All rights reserved.
 //
 
 import console
@@ -44,7 +44,11 @@ class RedisCollectionStore<T: RedisHashObject> : CollectionStore {
     // String(io.noze.todo.v1:1337) => Int(1337)
     
     let id : Int = k.withCString { cs in
-      let csp = cs + prefix.characters.count // skip prefix
+      #if swift(>=3.2)
+        let csp = cs + prefix.count // skip prefix
+      #else
+        let csp = cs + prefix.characters.count // skip prefix
+      #endif
       return strtol(csp, nil, 10)            // parse number
     }
     // This makes use of the fact that id's start at 1
