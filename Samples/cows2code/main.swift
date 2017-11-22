@@ -22,6 +22,11 @@ let cowsTextFile  = CommandLine.arguments[1]
 func escape(cString cs: String) -> String {
   var s = ""
   s.reserveCapacity(cs.characters.count)
+  #if swift(>=3.2)
+    let characters = cs
+  #else
+    let characters = cs.characters
+  #endif
   for c in cs.characters {
     switch c {
       case "\\": s += "\\\\"
