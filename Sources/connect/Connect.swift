@@ -44,7 +44,7 @@ public class Connect {
     
   }
   
-  var middlewarez = [MiddlewareEntry]()
+  var middlewarez = ContiguousArray<MiddlewareEntry>()
   
   
   // MARK: - use()

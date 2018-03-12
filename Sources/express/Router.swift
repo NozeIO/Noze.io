@@ -11,7 +11,7 @@ import connect
 
 open class Router: MiddlewareObject {
   
-  var routes = [Route]()
+  var routes = ContiguousArray<Route>()
   
   func add(route e: Route) {
     routes.append(e)

@@ -36,17 +36,20 @@ public struct Route: MiddlewareObject {
     }
   }
   
-  let middleware : [ Middleware ]
+  let middleware : ContiguousArray<Middleware>
     // TBD: I think in Express.js, even the Route objects are middleware stack,
     //      and they allow you to hook up multiple objects to the same route
   
-  let methods    : [ HTTPMethod ]?
+  let methods    : ContiguousArray<HTTPMethod>?
   
   let urlPattern : [ Pattern ]?
     // FIXME: all this works a little different in Express.js. Exact matches,
     //        non-path-component matches, regex support etc.
   
-  init(pattern: String?, method: HTTPMethod?, middleware: [Middleware]) {
+  init(pattern    : String?,
+       method     : HTTPMethod?,
+       middleware : ContiguousArray<Middleware>)
+  {
     // FIXME: urlPrefix should be url or sth
     
     if let m = method { self.methods = [ m ] }
