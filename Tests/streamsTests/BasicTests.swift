@@ -29,7 +29,7 @@ class NozeIOBasicTests: XCTestCase {
   
   func testSinkTarget() {
     let Q      = core.Q
-    var target = SyncSinkTarget<NumberPrinter>(NumberPrinter())
+    let target = SyncSinkTarget<NumberPrinter>(NumberPrinter())
     
     target.writev(queue: Q, chunks: [ [ 10 ] ] ) { _, writeCount in
       print("   * wrote: \(writeCount)")
