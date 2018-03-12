@@ -13,17 +13,25 @@ import xsys
 
 private let heavyLog = false
 
-class NozeIOTransformTests: NozeIOTestCase {
-  
-  private static func strlen(s: String) -> Int {
+fileprivate func strlen(_ s: String) -> Int {
+  #if swift(>=3.2)
+    return s.count
+  #else
     return s.characters.count
-  }
+  #endif
+}
+
+class NozeIOTransformTests: NozeIOTestCase {
   
   func testSimpleNoopTransformSpecializeByType() throws {
     enableRunLoop() // pipe requires async
     
     let fix = "Hello World"
-    let src = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+      let src = fix.readableSource().readable()
+    #else
+      let src = fix.characters.readableSource().readable()
+    #endif
     
     var collectResult = ""
     
@@ -65,7 +73,11 @@ class NozeIOTransformTests: NozeIOTestCase {
     enableRunLoop() // pipe requires async
     
     let fix = "Hello World"
-    let src = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+      let src = fix.readableSource().readable()
+    #else
+      let src = fix.characters.readableSource().readable()
+    #endif
 
     var collectResult = ""
     
@@ -73,7 +85,11 @@ class NozeIOTransformTests: NozeIOTestCase {
       if heavyLog { print("TTUU: transform got chunk \(chunk)") }
       let upperChunk = String(chunk).uppercased()
       collectResult += upperChunk
-      done(nil, Array<Character>(upperChunk.characters))
+      #if swift(>=3.2)
+        done(nil, Array<Character>(upperChunk))
+      #else
+        done(nil, Array<Character>(upperChunk.characters))
+      #endif
     }
     ts.onFinish { self.exitIfDone() }
     
@@ -89,7 +105,11 @@ class NozeIOTransformTests: NozeIOTestCase {
     enableRunLoop() // pipe requires async
     
     let fix = "Hello World"
-    let src = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+      let src = fix.readableSource().readable()
+    #else
+      let src = fix.characters.readableSource().readable()
+    #endif
    
     // When we don't provide an explicit type:
     //   Error: TReadItem cannot be inferred
@@ -113,14 +133,22 @@ class NozeIOTransformTests: NozeIOTestCase {
     
     waitForExit()
     XCTAssertNotNil(concatData)
-    XCTAssertEqual(concatData!, Array(fix.characters))
+    #if swift(>=3.2)
+      XCTAssertEqual(concatData!, Array(fix))
+    #else
+      XCTAssertEqual(concatData!, Array(fix.characters))
+    #endif
   }
   
   func testSimpleTransformDoubleConcat() {
     enableRunLoop() // pipe requires async
     
     let fix = "Hello World"
-    let src = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+      let src = fix.readableSource().readable()
+    #else
+      let src = fix.characters.readableSource().readable()
+    #endif
     
     var concatData : [ Character ]? = nil
     
@@ -134,9 +162,13 @@ class NozeIOTransformTests: NozeIOTestCase {
     
     waitForExit()
     
-    if heavyLog { print("TT22: got data \(concatData)") }
+    if heavyLog { print("TT22: got data", concatData as Any) }
     XCTAssertNotNil(concatData)
-    XCTAssertEqual(concatData!.count, fix.characters.count * 2)
+    #if swift(>=3.2)
+      XCTAssertEqual(concatData!.count, fix.count * 2)
+    #else
+      XCTAssertEqual(concatData!.count, fix.characters.count * 2)
+    #endif
   }
 
 #if os(Linux)

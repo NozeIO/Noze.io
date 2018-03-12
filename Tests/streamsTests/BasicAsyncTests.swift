@@ -31,7 +31,7 @@ class NozeIOBasicAsyncTests: NozeIOTestCase {
       
       let block : () -> Void  = {
         let bucket = readSize > 0 ? stream.read(count: readSize) : stream.read()
-        print("CCC BUCKET: \(bucket)")
+        print("CCC BUCKET:", bucket as Any)
         
         if (readSize < 1 && bucket == nil) || (bucket == nil && stream.hitEOF) {
           print("Exit, hit EOF")
@@ -122,11 +122,21 @@ class NozeIOBasicAsyncTests: NozeIOTestCase {
     enableRunLoop() // pipe requires async
     
     let fix = "Hello World"
-    let src = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+//      XCTAssertEqual(concatData!.count, fix.count * 2)
+      let src = fix.readableSource().readable()
+    #else
+//      XCTAssertEqual(concatData!.count, fix.characters.count * 2)
+      let src = fix.characters.readableSource().readable()
+    #endif
     
     src | concat { data in
-      print("Got data: \(data)")
-      XCTAssertEqual(data, Array(fix.characters))
+      print("Got data: ", data)
+      #if swift(>=3.2)
+        XCTAssertEqual(data, Array(fix))
+      #else
+        XCTAssertEqual(data, Array(fix.characters))
+      #endif
       self.exitIfDone()
     }
     
