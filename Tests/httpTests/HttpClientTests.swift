@@ -51,8 +51,13 @@ class NozeIOHttpClientTests: NozeIOTestCase {
       XCTAssert(res.statusCode == 200)
       _ = res | utf8 | concat { data in
         result = String(data)
-        print("got data: #\(data.count) " +
-              "chars=#\(result?.characters.count as Optional)")
+        #if swift(>=3.2)
+          print("got data: #\(data.count) " +
+                "chars=#\(result?.count as Optional)")
+        #else
+          print("got data: #\(data.count) " +
+                "chars=#\(result?.characters.count as Optional)")
+        #endif
         self.exitIfDone()
       }
     }
@@ -80,8 +85,13 @@ class NozeIOHttpClientTests: NozeIOTestCase {
       _ = res | utf8 | concat { data in
         result = String(data)
         
-        print("got data: #\(data.count) " +
-              "chars=#\(result?.characters.count as Optional)")
+        #if swift(>=3.2)
+          print("got data: #\(data.count) " +
+                "chars=#\(result?.count as Optional)")
+        #else
+          print("got data: #\(data.count) " +
+                "chars=#\(result?.characters.count as Optional)")
+        #endif
         self.exitIfDone()
       }
     }

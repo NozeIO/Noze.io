@@ -44,7 +44,7 @@ public class Connect {
     
   }
   
-  var middlewarez = [MiddlewareEntry]()
+  var middlewarez = ContiguousArray<MiddlewareEntry>()
   
   
   // MARK: - use()
@@ -79,40 +79,47 @@ public class Connect {
   // MARK: - run middleware
   
   func doRequest(_ request: IncomingMessage, _ response: ServerResponse) {
-    // first lookup all middleware matching the request (i.e. the URL prefix
-    // matches)
-    // TODO: would be nice to have this as a lazy filter.
-    let matchingMiddleware = middlewarez.filter { $0.matches(request: request) }
+    final class State {
+      var stack    : ArraySlice<Middleware>
+      let request  : IncomingMessage
+      let response : ServerResponse
+      var next     : Next?
+      
+      init(_ stack    : ArraySlice<Middleware>,
+           _ request  : IncomingMessage,
+           _ response : ServerResponse,
+           _ next     : @escaping Next)
+      {
+        self.stack    = stack
+        self.request  = request
+        self.response = response
+        self.next     = next
+      }
+      
+      func step(_ args : Any...) {
+        if let middleware = stack.popFirst() {
+          middleware(request, response, self.step)
+        }
+        else {
+          next?(); next = nil
+        }
+      }
+    }
     
-    let endNext : Next = { ( args: Any... ) in
-      // essentially the final handler
+    func finalHandler(_ args: Any...) {
       response.writeHead(404)
       response.end()
     }
     
-    guard !matchingMiddleware.isEmpty else { return endNext() }
+    // first lookup all middleware matching the request (i.e. the URL prefix
+    // matches)
+    // TODO: would be nice to have this as a lazy filter.
     
-    var next : Next? = { ( args: Any... ) in }
-          // cannot be let as it's self-referencing
-    
-    var i = 0 // capture position in matching-middleware array (shared)
-    next = { (args : Any...) in
-      
-      // grab next item from matching middleware array
-      let middleware = matchingMiddleware[i].middleware
-      i += 1 // this is shared between the blocks, move position in array
-      
-      // call the middleware - which gets the handle to go to the 'next'
-      // middleware. the latter can be the 'endNext' which won't do anything.
-      let isLast = i == matchingMiddleware.count
-      middleware(request, response, isLast ? endNext : next!)
-      
-      if isLast {
-        next = nil // break cycle?
-      }
-    }
-    
-    next!()
+    let middleware = middlewarez.filter { $0.matches(request: request) }
+                                .map    { $0.middleware }
+    let state = State(middleware[middleware.indices],
+                      request, response, finalHandler)
+    state.step()
   }
   
 }

@@ -16,7 +16,7 @@ public protocol SinkType { // 2beta4 has no SinkType anymore
   mutating func put(_ x: Self.Element)
 }
 
-public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
+public class SyncSinkTarget<S: SinkType> : GWritableTargetType {
   
   public static var defaultHighWaterMark : Int { return 1 }
   
@@ -28,7 +28,7 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
     self.target = target
   }
 
-  private mutating func _writev(chunks : [ [ S.Element ] ]) -> Int {
+  private func _writev(chunks : [ [ S.Element ] ]) -> Int {
     var count = 0
     
     for bucket in chunks {
@@ -40,9 +40,9 @@ public struct SyncSinkTarget<S: SinkType> : GWritableTargetType {
     return count
   }
   
-  public mutating func writev(queue q : DispatchQueue,
-                              chunks  : [ [ S.Element ] ],
-                              yield   : @escaping ( Error?, Int ) -> Void)
+  public func writev(queue q : DispatchQueue,
+                     chunks  : [ [ S.Element ] ],
+                     yield   : @escaping ( Error?, Int ) -> Void)
   {
     let count = _writev(chunks: chunks)
     yield(nil, count)

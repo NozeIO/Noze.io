@@ -55,7 +55,7 @@ class AsyncNumberGenerator : NumberGenerator, GReadableSourceType {
     log.enter(function: "AsyncNumGen::\(#function)")
     defer { log.leave() }
     
-    let block : (Void) -> Void = {
+    let block : () -> Void = {
       log.enter(function: "AsyncNumGen::\(#function) - delayed CB")
       defer { log.leave() }
       

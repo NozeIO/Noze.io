@@ -21,15 +21,15 @@ class NozeIOBasicTests: XCTestCase {
     let Q      = core.Q
     let writer = NumberPrinter()
     
-    writer.writev(queue: Q, chunks: [ [ 10 ] ] ) { _ in
-      writer.writev(queue: Q, chunks: [ [ 41, 42 ] ] ) { _ in }
+    writer.writev(queue: Q, chunks: [ [ 10 ] ] ) { _, _ in
+      writer.writev(queue: Q, chunks: [ [ 41, 42 ] ] ) { _, _ in }
     }
     print("------")
   }
   
   func testSinkTarget() {
     let Q      = core.Q
-    var target = SyncSinkTarget<NumberPrinter>(NumberPrinter())
+    let target = SyncSinkTarget<NumberPrinter>(NumberPrinter())
     
     target.writev(queue: Q, chunks: [ [ 10 ] ] ) { _, writeCount in
       print("   * wrote: \(writeCount)")
@@ -62,7 +62,11 @@ class NozeIOBasicTests: XCTestCase {
   
   func testStringCharacterGenerator() {
     let fix      = "Hello World"
-    let src      = fix.characters.readableSource().readable()
+    #if swift(>=3.2)
+      let src    = fix.readableSource().readable()
+    #else
+      let src    = fix.characters.readableSource().readable()
+    #endif
     var readData = Array<Character>()
     
     // Note: Not quite sure whether this is supposed to work. It only really
@@ -78,7 +82,11 @@ class NozeIOBasicTests: XCTestCase {
     
     // This has been seen to fail with the ' ' added to the end.
     // Some buffer fill push issue?
-    XCTAssertEqual(readData, Array(fix.characters))
+    #if swift(>=3.2)
+      XCTAssertEqual(readData, Array(fix))
+    #else
+      XCTAssertEqual(readData, Array(fix.characters))
+    #endif
   }
   /* This was for debugging only.
   func testStringCharacterGeneratorRepeat1000() {

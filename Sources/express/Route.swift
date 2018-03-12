@@ -36,17 +36,20 @@ public struct Route: MiddlewareObject {
     }
   }
   
-  let middleware : [ Middleware ]
+  let middleware : ContiguousArray<Middleware>
     // TBD: I think in Express.js, even the Route objects are middleware stack,
     //      and they allow you to hook up multiple objects to the same route
   
-  let methods    : [ HTTPMethod ]?
+  let methods    : ContiguousArray<HTTPMethod>?
   
   let urlPattern : [ Pattern ]?
     // FIXME: all this works a little different in Express.js. Exact matches,
     //        non-path-component matches, regex support etc.
   
-  init(pattern: String?, method: HTTPMethod?, middleware: [Middleware]) {
+  init(pattern    : String?,
+       method     : HTTPMethod?,
+       middleware : ContiguousArray<Middleware>)
+  {
     // FIXME: urlPrefix should be url or sth
     
     if let m = method { self.methods = [ m ] }
@@ -60,46 +63,56 @@ public struct Route: MiddlewareObject {
   
   // MARK: MiddlewareObject
   
-  public func handle(request  req: IncomingMessage,
-                     response res: ServerResponse,
-                     next     cb:  @escaping Next)
+  public func handle(request  req       : IncomingMessage,
+                     response res       : ServerResponse,
+                     next     upperNext : @escaping Next)
   {
-    guard matches(request: req)    else { return cb() }
-    guard !self.middleware.isEmpty else { return cb() }
+    guard matches(request: req)    else { return upperNext() }
+    guard !self.middleware.isEmpty else { return upperNext() }
+    
+    final class State {
+      var stack    : ArraySlice<Middleware>
+      let request  : IncomingMessage
+      let response : ServerResponse
+      var next     : Next?
+      
+      init(_ stack    : ArraySlice<Middleware>,
+           _ request  : IncomingMessage,
+           _ response : ServerResponse,
+           _ next     : @escaping Next)
+      {
+        self.stack    = stack
+        self.request  = request
+        self.response = response
+        self.next     = next
+      }
+      
+      func step(_ args : Any...) {
+        if let middleware = stack.popFirst() {
+          middleware(request, response, self.step)
+        }
+        else {
+          next?(); next = nil
+        }
+      }
+    }
     
     // push route state
     let oldParams = req.params
     let oldRoute  = req.route
     req.params = extractPatternVariables(request: req)
     req.route  = self
-    let endNext : Next = { ( args: Any... ) in
+
+    // restore route state (only if none matched, i.e. did not call next)
+    func endNext(_ args: Any...) {
       req.params = oldParams
       req.route  = oldRoute
-      cb()
+      upperNext(args) // hmm, hmm ... would need to spread
     }
     
-    // loop over route middleware
-    let stack = self.middleware
-    var next  : Next? = { ( args: Any... ) in }
-                  // cannot be let as it's self-referencing
-    
-    var i = 0 // capture position in matching-middleware array (shared)
-    
-    next = { ( args: Any... ) in
-      
-      // grab next item from middleware array
-      let middleware = stack[i]
-      i += 1 // this is shared between the blocks, move position in array
-      
-      // call the middleware - which gets the handle to go to the 'next'
-      // middleware. the latter can be the 'endNext'
-      let isLast = i == stack.count
-      middleware(req, res, isLast ? endNext : next!)
-      if isLast { next = nil }
-    }
-    
-    // inititate the traversal
-    next!()
+    let state = State(middleware[middleware.indices],
+                      req, res, endNext)
+    state.step()
   }
   
   

@@ -18,13 +18,13 @@ class NozeIODNSTests: NozeIOTestCase {
     
     dns.lookup("zeezide.de") { error, address in
       guard let addr = address else {
-        print("DNS ERROR: \(error)")
+        print("DNS ERROR:", error as Any)
         XCTAssertTrue(false)
         self.exitIfDone()
         return
       }
       
-      print("DNS resolved address: \(addr)")
+      print("DNS resolved address:", addr)
       self.exitIfDone()
     }
     

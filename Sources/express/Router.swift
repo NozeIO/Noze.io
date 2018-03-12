@@ -11,7 +11,7 @@ import connect
 
 open class Router: MiddlewareObject {
   
-  var routes = [Route]()
+  var routes = ContiguousArray<Route>()
   
   func add(route e: Route) {
     routes.append(e)
@@ -26,27 +26,36 @@ open class Router: MiddlewareObject {
   {
     guard !self.routes.isEmpty else { return endNext() }
     
-    let routes = self.routes // make a copy to protect against modifications
-    var next : Next? = { ( args: Any... ) in }
-                 // cannot be let as it's self-referencing
-    
-    var i = 0 // capture position in matching-middleware array (shared)
-    
-    next = { ( args: Any... ) in
+    final class State {
+      var stack    : ArraySlice<Route>
+      let request  : IncomingMessage
+      let response : ServerResponse
+      var next     : Next?
       
-      // grab next item from matching middleware array
-      let route      = routes[i]
-      i += 1 // this is shared between the blocks, move position in array
+      init(_ stack    : ArraySlice<Route>,
+           _ request  : IncomingMessage,
+           _ response : ServerResponse,
+           _ next     : @escaping Next)
+      {
+        self.stack    = stack
+        self.request  = request
+        self.response = response
+        self.next     = next
+      }
       
-      // call the middleware - which gets the handle to go to the 'next'
-      // middleware. the latter can be the 'endNext'
-      let isLast = i == routes.count
-      route.handle(request: req, response: res, next: isLast ? endNext : next!)
-      if isLast { next = nil }
+      func step(_ args : Any...) {
+        if let route = stack.popFirst() {
+          route.handle(request: request, response: response, next: self.step)
+        }
+        else {
+          next?(); next = nil
+        }
+      }
     }
     
-    // inititate the traversal
-    next!()
+    let state = State(routes[routes.indices],
+                      req, res, endNext)
+    state.step()
   }
   
 }

@@ -29,12 +29,12 @@ class NozeIOSocketTests: NozeIOTestCase {
     }
     
     sock.onLookup { address, error in
-      print("did lookup: \(address) \(error)")
+      print("did lookup:", address as Any, error as Any)
       didLookup = true
     }
     
     sock.onError { error in
-      print("error on connect: \(error)")
+      print("error on connect:", error)
       XCTAssertTrue(false)
       self.exitIfDone()
     }
