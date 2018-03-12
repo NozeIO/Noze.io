@@ -105,6 +105,7 @@ public final class MD5: DigestType {
             C = B
 
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15 and get M[g] value
+            // TODO: hh, this results in an endless recursion on Swift 4
             let gAdvanced = g << 2
 
             var Mg = UInt32(chunk[chunk.startIndex &+ gAdvanced])
