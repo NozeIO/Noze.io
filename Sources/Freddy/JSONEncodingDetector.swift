@@ -30,9 +30,9 @@ public struct JSONEncodingDetector {
     typealias ByteStreamPrefixInformation = (encoding: Encoding, byteOrderMarkLength: Int)
 
     #if swift(>=4.1)
-      typealias RandomAccessSliceType = Slice
+      typealias BufPtrUInt8Slice = Slice<UnsafeBufferPointer<UInt8>>
     #else
-      typealias RandomAccessSliceType = RandomAccessSlice
+      typealias BufPtrUInt8Slice = RandomAccessSlice<UnsafeBufferPointer<UInt8>>
     #endif
 
     //// Attempts to detect the Unicode encoding used for a given set of data.
@@ -63,7 +63,7 @@ public struct JSONEncodingDetector {
     ////
     //// - parameter header: The front Slice of data being read and evaluated.
     //// - returns: A tuple containing the detected Unicode encoding and the lenght of the byte order mark.
-    static func detectEncoding(_ header: RandomAccessSliceType<UnsafeBufferPointer<UInt8>>) -> ByteStreamPrefixInformation {
+    static func detectEncoding(_ header: BufPtrUInt8Slice) -> ByteStreamPrefixInformation {
 
         guard let prefix = prefixFromHeader(header) else {
             return (.UTF8, 0)
@@ -89,7 +89,7 @@ public struct JSONEncodingDetector {
 
     private typealias EncodingBytePrefix = (UInt8, UInt8, UInt8?, UInt8?)
 
-    private static func prefixFromHeader(_ header: RandomAccessSliceType<UnsafeBufferPointer<UInt8>>) -> EncodingBytePrefix? {
+    private static func prefixFromHeader(_ header: BufPtrUInt8Slice) -> EncodingBytePrefix? {
         if header.count >= 4 {
             return(header[0], header[1], header[2], header[3])
         } else if header.count >= 2 {
