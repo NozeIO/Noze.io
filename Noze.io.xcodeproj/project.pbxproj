@@ -4993,7 +4993,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
 					E807E3EC1CF671B500AE317B = {
@@ -6983,6 +6983,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D261CB19AB7009C7B57 /* AppKitDebug.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 			};
 			name = AppKitDebug;
 		};
@@ -6990,6 +6992,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D271CB19AB7009C7B57 /* AppKitRelease.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = AppKitRelease;
 		};
@@ -8702,6 +8707,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D2C1CB19AB7009C7B57 /* UIKitDebug.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 			};
 			name = UIKitDebug;
 		};
@@ -8721,6 +8728,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8D38D2D1CB19AB7009C7B57 /* UIKitRelease.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = UIKitRelease;
 		};
