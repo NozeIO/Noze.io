@@ -36,7 +36,11 @@ protocol BatchedCollectionType: Collection {
 
 struct BatchedCollection<Base: Collection>: Collection {
     let base: Base
-    let size: Base.IndexDistance
+    #if swift(>=4.1)
+      let size: Int
+    #else
+      let size: Base.IndexDistance
+    #endif
     typealias Index = BatchedCollectionIndex<Base>
     private func nextBreak(after idx: Base.Index) -> Base.Index {
         return base.index(idx, offsetBy: size, limitedBy: base.endIndex)
@@ -61,9 +65,15 @@ struct BatchedCollection<Base: Collection>: Collection {
 }
 
 extension Collection {
+  #if swift(>=4.1)
+    func batched(by size: Int) -> BatchedCollection<Self> {
+      return BatchedCollection(base: self, size: size)
+    }
+  #else
     func batched(by size: IndexDistance) -> BatchedCollection<Self> {
         return BatchedCollection(base: self, size: size)
     }
+  #endif
 }
 
 #endif // Swift 4

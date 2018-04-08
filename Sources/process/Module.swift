@@ -63,7 +63,6 @@ public func kill(_ pid: Int, _ signal: String) throws {
   var sc : Int32 = xsys.SIGTERM
   switch signal {
     case "SIGTERM": sc = xsys.SIGTERM
-    case "SIGTERM": sc = xsys.SIGTERM
     case "SIGHUP":  sc = xsys.SIGHUP
     case "SIGINT":  sc = xsys.SIGINT
     case "SIGQUIT": sc = xsys.SIGQUIT

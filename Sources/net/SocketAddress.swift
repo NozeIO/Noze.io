@@ -27,10 +27,17 @@ public let INADDR_ANY = in_addr(s_addr: 0)
 public extension in_addr {
 
   public init() {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     s_addr = INADDR_ANY.s_addr
   }
   
   public init(string: String?) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
+    
     if let s = string {
       if s.isEmpty {
         s_addr = INADDR_ANY.s_addr
@@ -108,6 +115,9 @@ extension sockaddr_in: SocketAddress {
     // how to refer to self?
   
   public init() {
+    #if swift(>=4.1)
+      self.init()
+    #endif
 #if os(Linux) // no sin_len on Linux
 #else
     sin_len    = sockaddr_in.size
@@ -248,6 +258,10 @@ extension sockaddr_in6: SocketAddress {
   public static var size   = __uint8_t(MemoryLayout<sockaddr_in6>.stride)
   
   public init() {
+    #if swift(>=4.1)
+      self.init()
+    #endif
+    
 #if os(Linux) // no sin_len on Linux
 #else
     sin6_len      = sockaddr_in6.size
@@ -285,6 +299,9 @@ extension sockaddr_un: SocketAddress {
   public static var size = __uint8_t(MemoryLayout<sockaddr_un>.stride) //CAREFUL
   
   public init() {
+    #if swift(>=4.1)
+      self.init()
+    #endif
 #if os(Linux) // no sin_len on Linux
 #else // os(Darwin)
     sun_len    = sockaddr_un.size // CAREFUL - kinda wrong
@@ -328,6 +345,9 @@ extension sockaddr_un: SocketAddress {
 public extension addrinfo {
   
   public init() {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     ai_flags     = 0 // AI_CANONNAME, AI_PASSIVE, AI_NUMERICHOST
     ai_family    = xsys.AF_UNSPEC // AF_INET or AF_INET6 or AF_UNSPEC
     ai_socktype  = xsys.SOCK_STREAM
