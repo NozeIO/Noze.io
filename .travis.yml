@@ -22,7 +22,7 @@ matrix:
         - os:   osx
           osx_image: xcode9.2
         - os:   osx
-          osx_image: xcode9.3beta
+          osx_image: xcode9.3
 
 before_install:
     - ./.travis.d/before-install.sh
