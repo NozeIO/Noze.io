@@ -74,6 +74,9 @@ extension timeval : timeval_any {
   }
 
   public init(_ ts: timespec) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     tv_sec  = ts.seconds
 #if os(Linux)
     tv_usec = ts.tv_nsec / 1000
@@ -83,6 +86,9 @@ extension timeval : timeval_any {
   }
   
   public init(seconds: Int, milliseconds: Int = 0) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     tv_sec  = seconds + (milliseconds / 1000)
 #if os(Linux)
     tv_usec = (milliseconds % 1000) * 1000
@@ -107,11 +113,17 @@ extension timespec : timeval_any {
   public static var now : timespec { return timespec(timeval.now) }
 
   public init(_ tv: timeval) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     tv_sec  = tv.seconds
     tv_nsec = Int(tv.tv_usec) * 1000
   }
   
   public init(seconds: Int, milliseconds: Int = 0) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     tv_sec  = seconds + (milliseconds / 1000)
     tv_nsec = (milliseconds % 1000) * 1000000
   }

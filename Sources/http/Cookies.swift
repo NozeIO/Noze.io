@@ -183,7 +183,11 @@ extension String {
       buf[len] = 0 // zero terminate
       
       let s = String(cString: buf)
-      buf.deallocate(capacity: buflen)
+      #if swift(>=4.1)
+        buf.deallocate()
+      #else
+        buf.deallocate(capacity: buflen)
+      #endif
       return s
     }
   }

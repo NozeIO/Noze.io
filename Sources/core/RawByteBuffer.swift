@@ -29,7 +29,11 @@ public class RawByteBuffer {
   }
   deinit {
     if capacity > 0 {
-      buffer?.deallocate(capacity: capacity + extra)
+      #if swift(>=4.1)
+        buffer?.deallocate()
+      #else
+        buffer?.deallocate(capacity: capacity + extra)
+      #endif
     }
   }
   
@@ -66,7 +70,11 @@ public class RawByteBuffer {
       _ = memcpy(newbuf, buffer, count)
 #endif
     }
-    buffer?.deallocate(capacity: capacity + extra)
+    #if swift(>=4.1)
+      buffer?.deallocate()
+    #else
+      buffer?.deallocate(capacity: capacity + extra)
+    #endif
 
     buffer   = newbuf
     capacity = newsize

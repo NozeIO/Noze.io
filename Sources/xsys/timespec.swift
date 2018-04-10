@@ -31,6 +31,9 @@ public typealias timeval  = Darwin.timeval
 public extension timespec {
   
   public init(_ mts: mach_timespec_t) {
+    #if swift(>=4.1)
+      self.init()
+    #endif
     tv_sec  = __darwin_time_t(mts.tv_sec)
     tv_nsec = Int(mts.tv_nsec)
   }

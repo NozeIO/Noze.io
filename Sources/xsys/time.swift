@@ -125,12 +125,20 @@ public extension xsys.struct_tm {
     var capacity = attempt1Capacity
     
     var buf = UnsafeMutablePointer<CChar>.allocate(capacity: capacity)
-    defer { buf.deallocate(capacity: capacity) }
+    #if swift(>=4.1)
+      defer { buf.deallocate() }
+    #else
+      defer { buf.deallocate(capacity: capacity) }
+    #endif
   
     let rc = xsys.strftime(buf, capacity, sf, &tm)
   
     if rc == 0 {
-      buf.deallocate(capacity: capacity)
+      #if swift(>=4.1)
+        buf.deallocate()
+      #else
+        buf.deallocate(capacity: capacity)
+      #endif
       capacity = attempt2Capacity
       buf = UnsafeMutablePointer<CChar>.allocate(capacity: capacity)
   
