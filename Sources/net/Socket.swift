@@ -188,13 +188,14 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     let lfd = self.io.fd.fd
     
     var addr = a
+    let len  = addr.len
     
     log.debug("connect socket to \(addr) " +
               "\(self.io.fd)  \(self.io.fd.isNonBlocking) ...")
     let rc = withUnsafePointer(to: &addr) { ptr -> Int32 in
       return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
         bptr in
-        return xsys.connect(lfd, bptr, socklen_t(addr.len)) //only returns block
+        return xsys.connect(lfd, bptr, socklen_t(len)) //only returns block
       }
     }
     let perrno = xsys.errno
