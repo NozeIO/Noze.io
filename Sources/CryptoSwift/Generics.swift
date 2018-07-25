@@ -64,6 +64,7 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
 
 // MARK: - shiftLeft
 
+/* HH: fails on 4.2 and apparently not used?
 // helper to be able to make shift operation on T
 //@_specialize(Int)
 func << <T:SignedInteger>(lhs: T, rhs: Int) -> Int {
@@ -78,6 +79,7 @@ func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
     let b = rhs
     return a << b
 }
+ */
 
 // Generic function itself
 // FIXME: this generic function is not as generic as I would. It crashes for smaller types
