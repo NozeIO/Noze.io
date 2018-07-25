@@ -201,8 +201,12 @@ open class Socket : Duplex<SocketSourceTarget, SocketSourceTarget>,
     let perrno = xsys.errno
     
     guard rc == 0 else {
+      let errstr : String = {
+        guard let cstr = strerror(perrno) else { return "?" }
+        return String(cString: cstr)
+      }()
       self.log.debug("Could not connect \(self) to \(addr): " +
-                     "\(perrno) \(strerror(perrno))")
+                     "\(perrno) \(errstr)")
       return perrno
     }
     

@@ -225,7 +225,9 @@ open class DuplexStream<ReadType, WriteType>
   // MARK: - Logging
   
   override open var logStateInfo : String {
-    return super.logStateInfo + " in=\(readStream) out=\(writeStream)"
+    let ri = readStream? .description ?? "-"
+    let wi = writeStream?.description ?? "-"
+    return super.logStateInfo + " in=\(ri) out=\(wi)"
   }
 }
 
