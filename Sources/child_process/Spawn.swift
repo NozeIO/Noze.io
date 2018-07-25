@@ -112,9 +112,14 @@ public func spawn(_ command: String, _ args: [ String ],
       
       case .Pipe:
         var pipeFds : [ Int32 ] = [ -1, -1 ] // read-fd, write-fd
-        let rc = pipe(&pipeFds)
-        assert(rc == 0, "pipe failed \(strerror(xsys.errno))")
-          // TBD: how to deal with this
+        let rc      = pipe(&pipeFds)
+        let perrno  = xsys.errno
+        let errstr  : String = {
+          guard let cstr = strerror(perrno) else { return "?" }
+          return String(cString: cstr)
+        }()
+        assert(rc == 0, "pipe failed \(errstr)")
+          // TBD: how to deal with this?!
         
         // this is a little weird, should there be pipein&pipeout?
         if fd == xsys.STDIN_FILENO {
@@ -157,8 +162,13 @@ public func spawn(_ command: String, _ args: [ String ],
   // the word Zombie. Maybe we should keep a set of children as Zombies? TBD
   
   var controlPipeFds : [ Int32 ] = [ -1, -1 ] // read/write
-  let prc = pipe(&controlPipeFds)
-  assert(prc == 0, "pipe failed \(strerror(xsys.errno))")
+  let prc     = pipe(&controlPipeFds)
+  let perrno  = xsys.errno
+  let errstr  : String = {
+    guard let cstr = strerror(perrno) else { return "?" }
+    return String(cString: cstr)
+  }()
+  assert(prc == 0, "pipe failed \(errstr)")
     // TBD: how to deal with this
 #if os(Linux) // FIXME
   // Linux Swift 2.2.1 doesn't have that. Maybe it is not actually
