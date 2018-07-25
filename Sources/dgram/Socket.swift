@@ -181,10 +181,11 @@ open class Socket : ErrorEmitter, LameLogObjectType {
 
   public func _bind<AT: SocketAddress>(address: AT) -> Int32 { // #linux-public
     var address = address
+    let len     = address.len
     return withUnsafePointer(to: &address) { ptr -> Int32 in
       return ptr.withMemoryRebound(to: xsys_sockaddr.self, capacity: 1) {
         bptr in
-        return xsys.bind(fd!.fd, bptr, socklen_t(address.len))
+        return xsys.bind(fd!.fd, bptr, socklen_t(len))
       }
     }
   }

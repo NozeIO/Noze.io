@@ -26,11 +26,14 @@ public let INADDR_ANY = in_addr(s_addr: 0)
  */
 public extension in_addr {
 
-  public init() {
-    #if swift(>=4.1)
-      self.init()
-    #endif
-    s_addr = INADDR_ANY.s_addr
+  public static func make() -> in_addr {
+    /* Disable the `init` API to please the 4.2 compiler in 4.0 mode. Was
+     * ambiguous anyways. The default `in_addr.init` setting everything to 0
+     * should match INADDR_ANY.s_addr (AFAIK all zeros).
+     */
+    var addr = in_addr()
+    addr.s_addr = INADDR_ANY.s_addr
+    return addr
   }
   
   public init(string: String?) {
@@ -114,23 +117,34 @@ extension sockaddr_in: SocketAddress {
   public static var size   = __uint8_t(MemoryLayout<sockaddr_in>.stride)
     // how to refer to self?
   
-  public init() {
-    #if swift(>=4.1)
-      self.init()
+  public static func make() -> sockaddr_in {
+    /* Disable this API to please the 4.2 compiler in 4.0 mode. Was ambiguous
+     anyways. The default `sockaddr_ini.init` setting everything to 0 is not
+     what we want here though!
+     Copied the imp to the other ctors.
+     */
+    var addr = sockaddr_in()
+    #if os(Linux) // no sin_len on Linux
+    #else
+      addr.sin_len    = sockaddr_in.size
     #endif
-#if os(Linux) // no sin_len on Linux
-#else
-    sin_len    = sockaddr_in.size
-#endif
-    sin_family = sa_family_t(sockaddr_in.domain)
-    sin_port   = 0
-    sin_addr   = INADDR_ANY
-    sin_zero   = (0,0,0,0,0,0,0,0)
+    addr.sin_family = sa_family_t(sockaddr_in.domain)
+    addr.sin_port   = 0
+    addr.sin_addr   = INADDR_ANY
+    addr.sin_zero   = (0,0,0,0,0,0,0,0)
+    return addr
   }
   
   public init(address: in_addr = INADDR_ANY, port: Int?) {
     self.init()
     
+    #if os(Linux) // no sin_len on Linux
+    #else
+      sin_len    = sockaddr_in.size
+    #endif
+    sin_family = sa_family_t(sockaddr_in.domain)
+    sin_zero   = (0,0,0,0,0,0,0,0)
+
     sin_port = port != nil ? in_port_t(htons(CUnsignedShort(port!))) : 0
     sin_addr = address
   }
@@ -257,20 +271,19 @@ extension sockaddr_in6: SocketAddress {
   public static var domain = xsys.AF_INET6
   public static var size   = __uint8_t(MemoryLayout<sockaddr_in6>.stride)
   
-  public init() {
-    #if swift(>=4.1)
-      self.init()
-    #endif
-    
+  public static func make() -> sockaddr_in6 {
+    // CAREFUL: was `init` before, but that can't be overridden anymore (4.2)
+    var addr = sockaddr_in6()
 #if os(Linux) // no sin_len on Linux
 #else
-    sin6_len      = sockaddr_in6.size
+    addr.sin6_len      = sockaddr_in6.size
 #endif
-    sin6_family   = sa_family_t(sockaddr_in6.domain)
-    sin6_port     = 0
-    sin6_flowinfo = 0
-    sin6_addr     = in6addr_any
-    sin6_scope_id = 0
+    addr.sin6_family   = sa_family_t(sockaddr_in6.domain)
+    addr.sin6_port     = 0
+    addr.sin6_flowinfo = 0
+    addr.sin6_addr     = in6addr_any
+    addr.sin6_scope_id = 0
+    return addr
   }
   
   public var port: Int {
@@ -298,19 +311,19 @@ extension sockaddr_un: SocketAddress {
   public static var domain = AF_UNIX
   public static var size = __uint8_t(MemoryLayout<sockaddr_un>.stride) //CAREFUL
   
-  public init() {
-    #if swift(>=4.1)
-      self.init()
-    #endif
+  // DO NOT USE, this is actually non-sense
+  public static func make() -> sockaddr_un {
+    // CAREFUL: was `init` before, but that can't be overridden anymore (4.2)
+    var addr = sockaddr_un()
 #if os(Linux) // no sin_len on Linux
 #else // os(Darwin)
-    sun_len    = sockaddr_un.size // CAREFUL - kinda wrong
+    addr.sun_len    = sockaddr_un.size // CAREFUL - kinda wrong
 #endif // os(Darwin)
-    sun_family = sa_family_t(sockaddr_un.domain)
+    addr.sun_family = sa_family_t(sockaddr_un.domain)
     
     // Autsch!
 #if os(Linux)
-    sun_path   = ( // 16 per block, 108 total
+    addr.sun_path   = ( // 16 per block, 108 total
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -320,7 +333,7 @@ extension sockaddr_un: SocketAddress {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     );
 #else // os(Darwin)
-    sun_path   = ( // 16 per block, 104 total
+    addr.sun_path   = ( // 16 per block, 104 total
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -330,6 +343,7 @@ extension sockaddr_un: SocketAddress {
       0, 0, 0, 0, 0, 0, 0, 0
     );
 #endif
+    return addr
   }
   
   public var len: __uint8_t {
@@ -344,24 +358,32 @@ extension sockaddr_un: SocketAddress {
 
 public extension addrinfo {
   
-  public init() {
-    #if swift(>=4.1)
+  public static func make() -> addrinfo {
+    var info = addrinfo()
+    // This was plain `init` before. Careful w/ the default ctor!
+    info.ai_flags     = 0 // AI_CANONNAME, AI_PASSIVE, AI_NUMERICHOST
+    info.ai_family    = xsys.AF_UNSPEC // AF_INET or AF_INET6 or AF_UNSPEC
+    info.ai_socktype  = xsys.SOCK_STREAM
+    info.ai_protocol  = 0   // or IPPROTO_xxx for IPv4
+    info.ai_addrlen   = 0   // length of ai_addr below
+    info.ai_canonname = nil // UnsafePointer<Int8>
+    info.ai_addr      = nil // UnsafePointer<sockaddr>
+    info.ai_next      = nil // UnsafePointer<addrinfo>
+    return info
+  }
+  
+  public init(flags: Int32, family: Int32 = xsys.AF_UNSPEC) {
+    #if swift(>=4.1) // else: "Must use self.init because imported from C"
       self.init()
     #endif
-    ai_flags     = 0 // AI_CANONNAME, AI_PASSIVE, AI_NUMERICHOST
-    ai_family    = xsys.AF_UNSPEC // AF_INET or AF_INET6 or AF_UNSPEC
     ai_socktype  = xsys.SOCK_STREAM
     ai_protocol  = 0   // or IPPROTO_xxx for IPv4
     ai_addrlen   = 0   // length of ai_addr below
     ai_canonname = nil // UnsafePointer<Int8>
     ai_addr      = nil // UnsafePointer<sockaddr>
     ai_next      = nil // UnsafePointer<addrinfo>
-  }
-  
-  public init(flags: Int32, family: Int32) {
-    self.init()
-    ai_flags  = flags
-    ai_family = family
+    ai_flags     = flags
+    ai_family    = family // AF_INET or AF_INET6 or AF_UNSPEC
   }
   
   public var hasNext : Bool {

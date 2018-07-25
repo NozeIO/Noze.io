@@ -2155,6 +2155,8 @@
 		E8E2764C1CF49F91004A6A34 /* libleftpad.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libleftpad.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E276571CF49FA4004A6A34 /* libconnect.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libconnect.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E276641CF49FB9004A6A34 /* libexpress.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libexpress.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8E8A1F92108AEE200A1A2D6 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		E8E8A1FA2108AEE200A1A2D6 /* Package@swift-4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@swift-4.swift"; sourceTree = "<group>"; };
 		E8E8FF011D440FE4002663CD /* todo-mvc-redis */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "todo-mvc-redis"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E8FF0B1D441037002663CD /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = "Samples/todo-mvc-redis/main.swift"; sourceTree = "<group>"; };
 		E8E8FF0C1D441037002663CD /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = "Samples/todo-mvc-redis/Model.swift"; sourceTree = "<group>"; };
@@ -2928,6 +2930,8 @@
 			isa = PBXGroup;
 			children = (
 				E8088FC31CAB418B003CD020 /* README.md */,
+				E8E8A1F92108AEE200A1A2D6 /* Package.swift */,
+				E8E8A1FA2108AEE200A1A2D6 /* Package@swift-4.swift */,
 				E80448B11CD11B5C00447204 /* Modules */,
 				E8978EE01D8A193500ED4558 /* ThirdParty */,
 				E835BFBF1B4D4CFB00288839 /* Tests */,
@@ -4993,7 +4997,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
 					E807E3EC1CF671B500AE317B = {
