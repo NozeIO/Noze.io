@@ -242,7 +242,13 @@ private func pollMaskToString(mask mask16: Int16) -> String {
 
 extension FileDescriptor: Equatable, Hashable {
 
-  public var hashValue: Int { return fd.hashValue }
+  #if swift(>=5)
+    public func hash(into hasher: inout Hasher) {
+      fd.hash(into: &hasher)
+    }
+  #else
+    public var hashValue: Int { return fd.hashValue }
+  #endif
   
 }
 

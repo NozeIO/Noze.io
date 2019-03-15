@@ -79,10 +79,17 @@ public func ==(lhs: in_addr, rhs: in_addr) -> Bool {
 
 extension in_addr : Equatable, Hashable {
   
-  public var hashValue: Int {
-    // Knuth?
-    return Int(UInt32(s_addr) * 2654435761 % (2^32))
-  }
+  #if swift(>=5)
+    public func hash(into hasher: inout Hasher) {
+      // Knuth?
+      Int(UInt32(s_addr) * 2654435761 % (2^32)).hash(into: &hasher)
+    }
+  #else
+    public var hashValue: Int {
+      // Knuth?
+      return Int(UInt32(s_addr) * 2654435761 % (2^32))
+    }
+  #endif
   
 }
 
@@ -226,9 +233,15 @@ public func == (lhs: sockaddr_in, rhs: sockaddr_in) -> Bool {
 
 extension sockaddr_in: Equatable, Hashable {
   
-  public var hashValue: Int {
-    return sin_addr.hashValue + sin_port.hashValue
-  }
+  #if swift(>=5)
+    public func hash(into hasher: inout Hasher) {
+      (sin_addr.hashValue + sin_port.hashValue).hash(into: &hasher)
+    }
+  #else
+    public var hashValue: Int {
+      return sin_addr.hashValue + sin_port.hashValue
+    }
+  #endif
   
 }
 
