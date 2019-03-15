@@ -48,7 +48,11 @@ class Channel {
   }
   
   func part(session s: Session) {
-    let idxO = sessions.index(where: { $0 === s })
+    #if swift(>=5)
+      let idxO = sessions.firstIndex(where: { $0 === s })
+    #else
+      let idxO = sessions.index(where: { $0 === s })
+    #endif
     if let idx = idxO {
       print("leaving channel \(name): \(s)")
       sessions.remove(at: idx)
