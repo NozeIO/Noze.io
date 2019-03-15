@@ -156,12 +156,12 @@ public protocol LameLogObjectType : CustomStringConvertible {
 
 public extension LameLogObjectType {
   
-  public func logState() {
+  func logState() {
     guard log.enabled else { return }
     log.debug("[\(logStateInfo)]")
   }
   
-  public var description : String {
+  var description : String {
     let t = type(of: self)
     return "<\(t):\(logStateInfo)>"
   }

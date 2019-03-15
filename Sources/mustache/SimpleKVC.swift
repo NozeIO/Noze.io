@@ -90,8 +90,8 @@ public struct KeyValueCoding {
 
 public extension KeyValueCoding {
   
-  public static func defaultValue(forKey k: String, inDictionary o: Any,
-                                  mirror: Mirror) -> Any?
+  static func defaultValue(forKey k: String, inDictionary o: Any,
+                           mirror: Mirror) -> Any?
   {
     for ( _, pair ) in mirror.children {
       let pairMirror = Mirror(reflecting: pair)

@@ -131,7 +131,7 @@ public enum HTTPMethod : Int8 {
 
 public extension HTTPMethod {
 
-  public var method: String {
+  var method: String {
     switch self {
       case .GET:        return "GET"
       case .HEAD:       return "HEAD"
@@ -180,7 +180,7 @@ public extension HTTPMethod {
     }
   }
   
-  public var isSafe: Bool? { // can't say for extension methods
+  var isSafe: Bool? { // can't say for extension methods
     switch self {
       case .GET, .HEAD, .OPTIONS:
         return true
@@ -191,7 +191,7 @@ public extension HTTPMethod {
     }
   }
   
-  public var isIdempotent: Bool? { // can't say for extension methods
+  var isIdempotent: Bool? { // can't say for extension methods
     switch self {
       case .GET, .HEAD, .PUT, .DELETE, .OPTIONS:
         return true
@@ -262,7 +262,7 @@ public extension HTTPMethod {
   static let csLINK        = "LINK".makeCString()
   static let csUNLINK      = "UNLINK".makeCString()
   
-  public var csMethod: UnsafePointer<CChar> {
+  var csMethod: UnsafePointer<CChar> {
     switch self {
       case .GET:         return HTTPMethod.csGET
       case .HEAD:        return HTTPMethod.csHEAD

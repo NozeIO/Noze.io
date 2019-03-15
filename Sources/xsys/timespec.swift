@@ -30,7 +30,7 @@ public typealias timeval  = Darwin.timeval
 
 public extension timespec {
   
-  public init(_ mts: mach_timespec_t) {
+  init(_ mts: mach_timespec_t) {
     #if swift(>=4.1)
       self.init()
     #endif
@@ -38,7 +38,7 @@ public extension timespec {
     tv_nsec = Int(mts.tv_nsec)
   }
   
-  public static func monotonic() -> timespec {
+  static func monotonic() -> timespec {
     var cclock = clock_serv_t()
     var mts    = mach_timespec_t()
     
