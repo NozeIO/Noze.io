@@ -318,7 +318,9 @@ extension String {
 }
 
 private func index(string: String, c: Character) -> String.Index? {
-  #if swift(>=3.2)
+  #if swift(>=5)
+    return string.firstIndex(of: c)
+  #elseif swift(>=3.2)
     return string.index(of: c)
   #else
     return string.characters.index(of: c)
