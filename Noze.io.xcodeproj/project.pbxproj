@@ -5220,7 +5220,7 @@
 			};
 			buildConfigurationList = E835BFAB1B4D4CFB00288839 /* Build configuration list for PBXProject "Noze.io" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
