@@ -137,9 +137,7 @@ public class SourceStream<G : GReadableSourceType>
 
 public extension GReadableSourceType {
 
-  public func readable(hwm: Int = Self.defaultHighWaterMark)
-              -> SourceStream<Self>
-  {
+  func readable(hwm: Int = Self.defaultHighWaterMark) -> SourceStream<Self> {
     return SourceStream(source: self, highWaterMark: hwm)
   }
 

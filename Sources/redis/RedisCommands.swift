@@ -21,14 +21,14 @@ public protocol RedisCommandTarget {
 // MARK: - Regular Keys GET, SET, KEYS etc
 public extension RedisCommandTarget {
   
-  public func get(_ key: String, _ cb: @escaping RedisReplyCB) {
+  func get(_ key: String, _ cb: @escaping RedisReplyCB) {
     let cmd = RedisCommand(command: "GET", RedisValue(bulkString: key),
                            callback: cb)
     enqueue(command: cmd)
   }
   
   
-  public func keys(_ pattern: String = "*", _ cb: @escaping RedisArrayReplyCB) {
+  func keys(_ pattern: String = "*", _ cb: @escaping RedisArrayReplyCB) {
     // TBD: should this return `[String]?`?
     //      and for people not using String keys, add a `rawKeys`?
     // Workaround: `keys.map { $0.stringValue! }`
@@ -38,15 +38,13 @@ public extension RedisCommandTarget {
     enqueue(command: cmd)
   }
   
-  public func set(_ key: String, _ value: RedisValue,
-                  _ cb: @escaping RedisReplyCB)
-  {
+  func set(_ key: String, _ value: RedisValue, _ cb: @escaping RedisReplyCB) {
     let cmd = RedisCommand(command: "SET",
                            RedisValue(bulkString: key),
                            value, callback: cb)
     enqueue(command: cmd)
   }
-  public func set(_ key: String, _ value: RedisValue) {
+  func set(_ key: String, _ value: RedisValue) {
     set(key, value) { err, value in
       if let err = err {
         console.error("could not set key", key, value, err)
@@ -54,21 +52,21 @@ public extension RedisCommandTarget {
     }
   }
   
-  public func set(_ key: String, _ value: String, _ cb: @escaping RedisReplyCB) {
+  func set(_ key: String, _ value: String, _ cb: @escaping RedisReplyCB) {
     set(key, RedisValue(bulkString: value), cb)
   }
-  public func set(_ key: String, _ value: String) {
+  func set(_ key: String, _ value: String) {
     set(key, RedisValue(bulkString: value))
   }
   
-  public func set(_ key: String, _ value: Int, _ cb: @escaping RedisReplyCB) {
+  func set(_ key: String, _ value: Int, _ cb: @escaping RedisReplyCB) {
     set(key, RedisValue(value), cb)
   }
-  public func set(_ key: String, _ value: Int) {
+  func set(_ key: String, _ value: Int) {
     set(key, RedisValue(value))
   }
   
-  public func del(keys ks: [String], _ cb: @escaping RedisReplyCB) {
+  func del(keys ks: [String], _ cb: @escaping RedisReplyCB) {
     var values : [ RedisValue ] = []
     values.append(RedisValue(bulkString: "DEL"))
     for key in ks { values.append(RedisValue(bulkString: key)) }
@@ -76,17 +74,17 @@ public extension RedisCommandTarget {
     let cmd = RedisCommand(command: values, callback: cb)
     enqueue(command: cmd)
   }
-  public func del(keys ks: [String]) {
+  func del(keys ks: [String]) {
     del(keys: ks) { err, _ in
       if let err = err {
         console.error("could not delete keys", ks, err)
       }
     }
   }
-  public func del(_ keys: String..., cb: @escaping RedisReplyCB) {
+  func del(_ keys: String..., cb: @escaping RedisReplyCB) {
     del(keys: keys, cb)
   }
-  public func del(_ keys: String...) {
+  func del(_ keys: String...) {
     del(keys: keys)
   }
 }
@@ -95,8 +93,8 @@ public extension RedisCommandTarget {
 // MARK: - Hashes HSET, HKEYS, etc
 public extension RedisCommandTarget {
   
-  public func hset(_ hashKey: String, _ key: String, _ value: RedisValue,
-                   _ cb: @escaping RedisReplyCB)
+  func hset(_ hashKey: String, _ key: String, _ value: RedisValue,
+            _ cb: @escaping RedisReplyCB)
   {
     let cmd = RedisCommand(command: "HSET",
                            RedisValue(bulkString: hashKey),
@@ -104,7 +102,7 @@ public extension RedisCommandTarget {
                            value, callback: cb)
     enqueue(command: cmd)
   }
-  public func hset(_ hashKey: String, _ key: String, _ value: RedisValue) {
+  func hset(_ hashKey: String, _ key: String, _ value: RedisValue) {
     hset(hashKey, key, value) { err, _ in
       if let err = err {
         console.error("could not hset key", hashKey, key, value, err)
@@ -112,23 +110,23 @@ public extension RedisCommandTarget {
     }
   }
   
-  public func hset(_ hashKey: String, _ key: String, _ value: String,
-                   _ cb: @escaping RedisReplyCB)
+  func hset(_ hashKey: String, _ key: String, _ value: String,
+            _ cb: @escaping RedisReplyCB)
   {
     hset(hashKey, key, RedisValue(bulkString: value), cb)
   }
-  public func hset(_ hashKey: String, _ key: String, _ value: String) {
+  func hset(_ hashKey: String, _ key: String, _ value: String) {
     hset(hashKey, key, RedisValue(bulkString: value))
   }
   
-  public func hkeys(_ hashKey: String, _ cb: @escaping RedisArrayReplyCB) {
+  func hkeys(_ hashKey: String, _ cb: @escaping RedisArrayReplyCB) {
     let cmd = RedisCommand(command: "HKEYS",
                            RedisValue(bulkString: hashKey),
                            callback: makeArrayReplyHelper(callback: cb))
     enqueue(command: cmd)
   }
   
-  public func hgetall(_ hashKey: String, _ cb: @escaping RedisHashReplyCB) {
+  func hgetall(_ hashKey: String, _ cb: @escaping RedisHashReplyCB) {
     let cmd = RedisCommand(command: "HGETALL",
                            RedisValue(bulkString: hashKey),
                            callback: makeHashReplyHelper(callback: cb))
@@ -148,14 +146,14 @@ public extension RedisCommandTarget {
                              makeOHashReplyHelper(keys: keys, callback: cb))
     enqueue(command: cmd)
   }
-  public func hmget(_ hashKey: String, _ k: String...,
-                    cb: @escaping RedisOHashReplyCB)
+  func hmget(_ hashKey: String, _ k: String...,
+             cb: @escaping RedisOHashReplyCB)
   {
     _hmget(hashKey: hashKey, keys: k, cb)
   }
   
-  public func hmset(_ hashKey: String, _ hash: [ String : String ],
-                    _ cb: @escaping RedisReplyCB)
+  func hmset(_ hashKey: String, _ hash: [ String : String ],
+             _ cb: @escaping RedisReplyCB)
   {
     // TODO: hmset which takes an array of key/value pairs instead of a dict
     var values : [ RedisValue ] = []
@@ -170,7 +168,7 @@ public extension RedisCommandTarget {
     let cmd = RedisCommand(command: values, callback:cb)
     enqueue(command: cmd)
   }
-  public func hmset(_ hashKey: String, _ hash: [ String : String ]) {
+  func hmset(_ hashKey: String, _ hash: [ String : String ]) {
     hmset(hashKey, hash) { err, _ in
       if let err = err {
         console.error("could not hmset", hashKey, hash, err)
@@ -199,10 +197,10 @@ public extension RedisCommandTarget {
     enqueue(command: cmd)
   }
   
-  public func incr(_ key: String, by: Int = 1, _ cb: @escaping RedisIntReplyCB){
+  func incr(_ key: String, by: Int = 1, _ cb: @escaping RedisIntReplyCB){
     _enqueue(intByCommand: "INCR", key: key, by: by, cb)
   }
-  public func decr(_ key: String, by: Int = 1, _ cb: @escaping RedisIntReplyCB){
+  func decr(_ key: String, by: Int = 1, _ cb: @escaping RedisIntReplyCB){
     _enqueue(intByCommand: "DECR", key: key, by: by, cb)
   }
 
@@ -212,7 +210,7 @@ public extension RedisCommandTarget {
 // MARK: - PubSub
 public extension RedisCommandTarget {
   
-  public func publish(_ channel: String, _ message: String) {
+  func publish(_ channel: String, _ message: String) {
     let cmd = RedisCommand(command: "PUBLISH",
                            RedisValue(bulkString: channel),
                            RedisValue(bulkString: message)) {

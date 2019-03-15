@@ -94,11 +94,11 @@ public protocol PipeEmitTarget {
 public extension GWritableStreamType {
 
   @discardableResult
-  public func write(_ chunk: [ WriteType ], done: DoneCB? = nil) -> Bool {
+  func write(_ chunk: [ WriteType ], done: DoneCB? = nil) -> Bool {
     return writev(buckets: [ chunk ], done: done )
   }
   
-  public func end(_ chunk: [ WriteType ]? = nil, doneWriting: DoneCB? = nil) {
+  func end(_ chunk: [ WriteType ]? = nil, doneWriting: DoneCB? = nil) {
     if let chunk = chunk {
       _ = writev(buckets: [ chunk ]) {
         if let cb = doneWriting { cb() }

@@ -26,7 +26,7 @@ private struct brigades {
 public extension GWritableStreamType where WriteType == UInt8 {
   // MARK: - JSON generator
 
-  public func writeJSON(string s: String) {
+  func writeJSON(string s: String) {
     let utf8 = s.utf8
     
     // Well, in theory we could directly escape into the target buffer? No
@@ -59,7 +59,7 @@ public extension GWritableStreamType where WriteType == UInt8 {
     _ = writev(buckets: [ buckets.quote, bucket, buckets.quote ], done: nil)
   }
   
-  public func writeJSON(object o: JSON) {
+  func writeJSON(object o: JSON) {
     // FIXME: This should be an on-demand stream
     
     switch o {
