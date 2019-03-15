@@ -279,7 +279,7 @@ private let routeKey = "io.noze.express.route"
 
 public extension IncomingMessage {
   
-  public var route : Route? {
+  var route : Route? {
     set { extra[routeKey] = newValue }
     get { return extra[routeKey] as? Route }
   }

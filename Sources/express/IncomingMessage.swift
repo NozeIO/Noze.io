@@ -13,7 +13,7 @@ public extension IncomingMessage {
   // TODO: baseUrl, originalUrl, path
   // TODO: hostname, ip, ips, protocol
   
-  public func accepts(_ s: String) -> String? {
+  func accepts(_ s: String) -> String? {
     // TODO: allow array values
     guard let acceptHeader = (self.headers[ci: "accept"] as? String) else {
       return nil
@@ -34,7 +34,7 @@ public extension IncomingMessage {
   }
  
   
-  public var xhr : Bool {
+  var xhr : Bool {
     guard let h = (headers[ci: "X-Requested-With"] as? String) else {
       return false
     }

@@ -88,9 +88,9 @@ public typealias ExpressEngine = (
 
 public extension IncomingMessage {
   
-  public var app : Express? { return extra[appKey] as? Express }
+  var app : Express? { return extra[appKey] as? Express }
   
-  public var params : [ String : String ] {
+  var params : [ String : String ] {
     set {
       extra[paramsKey] = newValue
     }
@@ -103,16 +103,16 @@ public extension IncomingMessage {
 }
 public extension ServerResponse {
   
-  public var app : Express? { return extra[appKey] as? Express }
+  var app : Express? { return extra[appKey] as? Express }
   
-  public var request : IncomingMessage? {
+  var request : IncomingMessage? {
     return extra[reqKey] as? IncomingMessage
   }
   
 }
 
 public extension Dictionary where Key : ExpressibleByStringLiteral {
-  public subscript(int key : Key) -> Int? {
+  subscript(int key : Key) -> Int? {
     guard let v = self[key] else { return nil }
     if let i = (v as? Int) { return i }
     return Int("\(v)")
@@ -125,8 +125,8 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
 public extension Express {
   
   @discardableResult
-  public func listen(_ port: Int? = nil, backlog: Int = 512,
-                     onListening cb : (( net.Server ) -> Void)? = nil) -> Self
+  func listen(_ port: Int? = nil, backlog: Int = 512,
+              onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
 #if swift(>=3.1)
     let mo     = self

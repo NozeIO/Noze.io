@@ -22,14 +22,14 @@ public extension ServerResponse {
   ///     res.status(404).send("didn't find it")
   ///
   @discardableResult
-  public func status(_ code: Int) -> Self {
+  func status(_ code: Int) -> Self {
     statusCode = code
     return self
   }
   
   /// Set the HTTP status code and send the status description as the body.
   ///
-  public func sendStatus(_ code: Int) {
+  func sendStatus(_ code: Int) {
     let status = HTTPStatus(code)
     statusCode = code
     send(status.statusText)
@@ -38,7 +38,7 @@ public extension ServerResponse {
   
   // MARK: - Sending Content
  
-  public func send(_ string: String) {
+  func send(_ string: String) {
     if canAssignContentType {
       var ctype = string.hasPrefix("<html") ? "text/html" : "text/plain"
       ctype += "; charset=utf-8"
@@ -48,7 +48,7 @@ public extension ServerResponse {
     self.end(string)
   }
   
-  public func send(_ data: [UInt8]) {
+  func send(_ data: [UInt8]) {
     if canAssignContentType {
       setHeader("Content-Type", "application/octet-stream")
     }
@@ -56,14 +56,14 @@ public extension ServerResponse {
     self.end(data)
   }
   
-  public func send(_ object: JSON)          { json(object) }
-  public func send(_ object: JSONEncodable) { json(object) }
+  func send(_ object: JSON)          { json(object) }
+  func send(_ object: JSONEncodable) { json(object) }
   
   var canAssignContentType : Bool {
     return !headersSent && getHeader("Content-Type") == nil
   }
   
-  public func format(handlers: [ String : () -> () ]) {
+  func format(handlers: [ String : () -> () ]) {
     var defaultHandler : (() -> ())? = nil
     
     guard let rq = request else {
@@ -88,10 +88,10 @@ public extension ServerResponse {
   
   // MARK: - Header Accessor Renames
   
-  public func get(_ header: String) -> Any? {
+  func get(_ header: String) -> Any? {
     return getHeader(header)
   }
-  public func set(_ header: String, _ value: Any?) {
+  func set(_ header: String, _ value: Any?) {
     if let v = value {
       setHeader(header, v)
     }

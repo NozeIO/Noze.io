@@ -20,13 +20,13 @@ public protocol MiddlewareObject {
 
 public extension MiddlewareObject {
   
-  public var middleware: Middleware {
+  var middleware: Middleware {
     return { req, res, cb in
       self.handle(request: req, response: res, next: cb)
     }
   }
 
-  public var requestHandler: RequestEventCB {
+  var requestHandler: RequestEventCB {
     return { req, res in
       self.handle(request: req, response: res) { ( args: Any... ) in 
         // essentially the final handler

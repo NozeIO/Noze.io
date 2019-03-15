@@ -17,7 +17,7 @@ public extension ServerResponse {
   // TODO: Maybe we don't want to convert to a `JSON`, but rather stream real
   //       object.
   
-  public func json(_ object: JSON) {
+  func json(_ object: JSON) {
     if canAssignContentType {
       setHeader("Content-Type", "application/json; charset=utf-8")
     }
@@ -31,11 +31,11 @@ public extension ServerResponse {
 
 public extension ServerResponse {
 
-  public func json(_ object: JSONEncodable) {
+  func json(_ object: JSONEncodable) {
     json(object.toJSON())
   }
   
-  public func json(_ object: Any?) {
+  func json(_ object: Any?) {
     if let o = object {
       if let jsonEncodable = (o as? JSONEncodable) {
         json(jsonEncodable)

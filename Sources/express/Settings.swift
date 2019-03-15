@@ -15,14 +15,14 @@ public protocol SettingsHolder {
 
 public extension SettingsHolder {
   
-  public func enable(_ key: String) {
+  func enable(_ key: String) {
     set(key, true)
   }
-  public func disable(_ key: String) {
+  func disable(_ key: String) {
     set(key, false)
   }
   
-  public subscript(setting key : String) -> Any? {
+  subscript(setting key : String) -> Any? {
     get { return get(key)    }
     set { set(key, newValue) }
   }

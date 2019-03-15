@@ -48,7 +48,7 @@ public enum BodyParserBody {
 
 public extension BodyParserBody {
   
-  public subscript(key : String) -> Any? {
+  subscript(key : String) -> Any? {
     get {
       switch self {
         case .URLEncoded(let dict): return dict[key]
@@ -57,7 +57,7 @@ public extension BodyParserBody {
       }
     }
   }
-  public subscript(string key : String) -> String {
+  subscript(string key : String) -> String {
     get {
       switch self {
         case .URLEncoded(let dict):
@@ -115,7 +115,7 @@ public enum BodyParserError : Error {
 
 public extension IncomingMessage {
   
-  public var body : BodyParserBody {
+  var body : BodyParserBody {
     set {
       extra[bodyParser.requestKey] = newValue
     }
@@ -154,7 +154,7 @@ public extension bodyParser {
   ///       next()
   ///     }
   ///
-  public static func json(options opts: Options = Options()) -> Middleware {
+  static func json(options opts: Options = Options()) -> Middleware {
     
     return { req, res, next in
       guard typeIs(req, [ "json" ]) != nil else { next(); return }
@@ -177,7 +177,7 @@ public extension bodyParser {
 
 public extension bodyParser {
 
-  public static func raw(options opts: Options = Options()) -> Middleware {
+  static func raw(options opts: Options = Options()) -> Middleware {
     return { req, res, next in
       // lame, should be streaming
       _ = req | concat { bytes in
@@ -187,7 +187,7 @@ public extension bodyParser {
     }
   }
   
-  public static func text(options opts: Options = Options()) -> Middleware {
+  static func text(options opts: Options = Options()) -> Middleware {
     return { req, res, next in
       // text/plain, text/html etc
       // TODO: properly process charset parameter, this assumes UTF-8
@@ -208,9 +208,7 @@ public extension bodyParser {
 
 public extension bodyParser {
   
-  public static func urlencoded(options opts: Options = Options())
-                     -> Middleware
-  {
+  static func urlencoded(options opts: Options = Options()) -> Middleware {
     return { req, res, next in
       guard typeIs(req, [ "application/x-www-form-urlencoded" ]) != nil else {
         next()

@@ -130,8 +130,8 @@ public class Connect {
 public extension Connect {
   
   @discardableResult
-  public func listen(_ port: Int?, backlog: Int = 512,
-                     onListening cb : (( net.Server ) -> Void)? = nil) -> Self
+  func listen(_ port: Int?, backlog: Int = 512,
+              onListening cb : (( net.Server ) -> Void)? = nil) -> Self
   {
     let server = http.createServer(onRequest: self.handle)
     _ = server.listen(port, backlog: backlog, onListening: cb)
