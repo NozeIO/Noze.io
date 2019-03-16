@@ -221,7 +221,7 @@ open class Server : ErrorEmitter, LameLogObjectType {
   
   open func accept(socket s: Socket) {
     log.enter(); defer { log.leave() }
-    log.log("socket: \(socket)")
+    log.log("socket: \(s)")
     
     nextTick {
       // TODO: track connections in server

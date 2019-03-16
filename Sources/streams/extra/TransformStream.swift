@@ -134,7 +134,7 @@ open class TransformStream<WriteType, ReadType>
   // MARK: - Readable (the OUTPUT!)
 
   override open func _primaryRead(count howMuchToRead: Int) { // #linux-public
-    log.enter(); defer { log.leave() }
+    log.enter()
     
     //fatalError("should not be called in transform streams")
     // => but it is called.
@@ -145,6 +145,8 @@ open class TransformStream<WriteType, ReadType>
     // is no 'on-demand' pulling of data (possible, because the write
     // part is push based too - if no one is writing to us, we can't
     // push to the readable).
+    
+    log.leave()
   }
   
   override open func read(count c: Int?) -> [ ReadType ]? {

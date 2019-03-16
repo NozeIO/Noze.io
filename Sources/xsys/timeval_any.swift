@@ -44,10 +44,10 @@ public protocol timeval_any {
 
 public extension timeval_any {
 
-  public var componentsInUTC : xsys.struct_tm {
+  var componentsInUTC : xsys.struct_tm {
     return time_t(seconds).componentsInUTC
   }
-  public var componentsInLocalTime : xsys.struct_tm {
+  var componentsInLocalTime : xsys.struct_tm {
     return time_t(seconds).componentsInLocalTime
   }
 }

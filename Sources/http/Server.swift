@@ -86,7 +86,12 @@ open class Server: net.Server {
   func _connectionIsDone(c con: HTTPConnection) {
     log.enter(); defer { log.leave() }
     
-    let idx = httpConnections.index(where: { $0 === con }) // not Equatable
+    #if swift(>=5)
+      // not Equatable
+      let idx = httpConnections.firstIndex(where: { $0 === con })
+    #else
+      let idx = httpConnections.index(where: { $0 === con }) // not Equatable
+    #endif
     assert(idx != nil)
     if let idx = idx {
       httpConnections.remove(at: idx)

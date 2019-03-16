@@ -26,7 +26,7 @@ public let INADDR_ANY = in_addr(s_addr: 0)
  */
 public extension in_addr {
 
-  public static func make() -> in_addr {
+  static func make() -> in_addr {
     /* Disable the `init` API to please the 4.2 compiler in 4.0 mode. Was
      * ambiguous anyways. The default `in_addr.init` setting everything to 0
      * should match INADDR_ANY.s_addr (AFAIK all zeros).
@@ -36,7 +36,7 @@ public extension in_addr {
     return addr
   }
   
-  public init(string: String?) {
+  init(string: String?) {
     #if swift(>=4.1)
       self.init()
     #endif
@@ -57,7 +57,7 @@ public extension in_addr {
     }
   }
   
-  public var asString: String {
+  var asString: String {
     if self == INADDR_ANY {
       return "*.*.*.*"
     }
@@ -79,10 +79,17 @@ public func ==(lhs: in_addr, rhs: in_addr) -> Bool {
 
 extension in_addr : Equatable, Hashable {
   
-  public var hashValue: Int {
-    // Knuth?
-    return Int(UInt32(s_addr) * 2654435761 % (2^32))
-  }
+  #if swift(>=5)
+    public func hash(into hasher: inout Hasher) {
+      // Knuth?
+      Int(UInt32(s_addr) * 2654435761 % (2^32)).hash(into: &hasher)
+    }
+  #else
+    public var hashValue: Int {
+      // Knuth?
+      return Int(UInt32(s_addr) * 2654435761 % (2^32))
+    }
+  #endif
   
 }
 
@@ -226,9 +233,15 @@ public func == (lhs: sockaddr_in, rhs: sockaddr_in) -> Bool {
 
 extension sockaddr_in: Equatable, Hashable {
   
-  public var hashValue: Int {
-    return sin_addr.hashValue + sin_port.hashValue
-  }
+  #if swift(>=5)
+    public func hash(into hasher: inout Hasher) {
+      (sin_addr.hashValue + sin_port.hashValue).hash(into: &hasher)
+    }
+  #else
+    public var hashValue: Int {
+      return sin_addr.hashValue + sin_port.hashValue
+    }
+  #endif
   
 }
 
@@ -358,7 +371,7 @@ extension sockaddr_un: SocketAddress {
 
 public extension addrinfo {
   
-  public static func make() -> addrinfo {
+  static func make() -> addrinfo {
     var info = addrinfo()
     // This was plain `init` before. Careful w/ the default ctor!
     info.ai_flags     = 0 // AI_CANONNAME, AI_PASSIVE, AI_NUMERICHOST
@@ -372,7 +385,7 @@ public extension addrinfo {
     return info
   }
   
-  public init(flags: Int32, family: Int32 = xsys.AF_UNSPEC) {
+  init(flags: Int32, family: Int32 = xsys.AF_UNSPEC) {
     #if swift(>=4.1) // else: "Must use self.init because imported from C"
       self.init()
     #endif
@@ -386,34 +399,34 @@ public extension addrinfo {
     ai_family    = family // AF_INET or AF_INET6 or AF_UNSPEC
   }
   
-  public var hasNext : Bool {
+  var hasNext : Bool {
     return ai_next != nil
   }
-  public var next : addrinfo? {
+  var next : addrinfo? {
     return hasNext ? ai_next.pointee : nil
   }
   
-  public var canonicalName : String? {
+  var canonicalName : String? {
     guard ai_canonname != nil && ai_canonname[0] != 0 else { return nil }
     
     return String(validatingUTF8: ai_canonname)
   }
   
-  public var hasAddress : Bool {
+  var hasAddress : Bool {
     return ai_addr != nil
   }
   
-  public var isIPv4 : Bool {
+  var isIPv4 : Bool {
     return hasAddress &&
            (ai_addr.pointee.sa_family == sa_family_t(sockaddr_in.domain))
   }
   
-  public var addressIPv4 : sockaddr_in?  { return address() }
+  var addressIPv4 : sockaddr_in?  { return address() }
   /* Not working anymore in b4
   public var addressIPv6 : sockaddr_in6? { return address() }
    */
   
-  public func address<T: SocketAddress>() -> T? {
+  func address<T: SocketAddress>() -> T? {
     guard ai_addr != nil else { return nil }
     guard ai_addr.pointee.sa_family == sa_family_t(T.domain) else { return nil }
     
@@ -422,7 +435,7 @@ public extension addrinfo {
     return aiptr?.pointee // copies the address to the return value
   }
   
-  public var dynamicAddress : SocketAddress? {
+  var dynamicAddress : SocketAddress? {
     guard hasAddress else { return nil }
 
     let airptr = UnsafeRawPointer(ai_addr)
@@ -518,7 +531,7 @@ public extension sa_family_t {
   // Swift 2 : CustomStringConvertible, already imp?!
   
   // TBD: does Swift 2 still pick this up?
-  public var description : String {
+  var description : String {
     switch Int32(self) {
       case xsys.AF_UNSPEC: return ""
       case xsys.AF_INET:   return "IPv4"

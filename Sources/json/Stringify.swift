@@ -11,7 +11,7 @@
 
 public extension JSON {
   
-  public static func stringify(_ object: Any?) -> Swift.String {
+  static func stringify(_ object: Any?) -> Swift.String {
     guard let o = object else { return "null" }
     
     if let json = object as? JSON {
@@ -25,7 +25,7 @@ public extension JSON {
     return JSON.String("\(o)").toString()
   }
   
-  public func toString() -> Swift.String {
+  func toString() -> Swift.String {
     var jsonString = ""
     jsonString.appendJSON(object: self)
     return jsonString
@@ -35,7 +35,7 @@ public extension JSON {
 
 public extension String {
 
-  public mutating func appendJSON(string s: String) {
+  mutating func appendJSON(string s: String) {
     #if swift(>=3.2)
       let chars = s
     #else
@@ -70,7 +70,7 @@ public extension String {
     self += "\""
   }
   
-  public mutating func appendJSON(object o: JSON) {
+  mutating func appendJSON(object o: JSON) {
     switch o {
       case .Int   (let v): self += "\(v)"
       case .String(let v): appendJSON(string: v)

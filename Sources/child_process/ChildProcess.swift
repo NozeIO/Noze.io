@@ -124,7 +124,11 @@ public class ChildProcess : ErrorEmitter {
     
     if didRetainCore { core.module.release(); didRetainCore = false }
     
-    let myIdx = activeChildProcesses.index(where: { $0 === self })
+    #if swift(>=5)
+      let myIdx = activeChildProcesses.firstIndex(where: { $0 === self })
+    #else
+      let myIdx = activeChildProcesses.index(where: { $0 === self })
+    #endif
     if let idx = myIdx {
       activeChildProcesses.remove(at: idx)
     }

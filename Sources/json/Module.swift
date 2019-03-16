@@ -22,7 +22,7 @@ public typealias JSON = Freddy.JSON
 
 public extension JSON {
   
-  public static func parse(_ string: Swift.String) -> JSON? {
+  static func parse(_ string: Swift.String) -> JSON? {
     guard !string.isEmpty else { return nil }
     
     do {
@@ -35,7 +35,7 @@ public extension JSON {
     }
   }
   
-  public static func parse(_ utf8: [ UInt8 ]) -> JSON? {
+  static func parse(_ utf8: [ UInt8 ]) -> JSON? {
     // this is a little weird, but yes, some people send GET requests with a
     // content-type: application/json ...
     guard !utf8.isEmpty else { return nil }

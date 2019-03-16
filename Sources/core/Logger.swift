@@ -68,9 +68,9 @@ public class Logger : LoggerType {
     }
   }
 
-  public func log<T>(message: @autoclosure () -> T,
-                     filename: String? = #file, line: Int? = #line,
-                     function: String? = #function)
+  private func _log<T>(message: () -> T,
+                       filename: String? = #file, line: Int? = #line,
+                       function: String? = #function)
   {
     guard enabled else { return }
     
@@ -85,12 +85,17 @@ public class Logger : LoggerType {
 
     if let cb = onAfterLog { cb(self) }
   }
-  
-  public func debug<T>(message: @autoclosure () -> T,
+  public func log<T>(message: () -> T,
+                     filename: String? = #file, line: Int? = #line,
+                     function: String? = #function)
+  {
+    _log(message: message, filename: filename, line: line, function: function)
+  }
+  public func debug<T>(message: () -> T,
                        filename: String? = #file, line: Int? = #line,
                        function: String? = #function)
   {
-    log(message, filename: filename, line: line, function: function)
+    _log(message: message, filename: filename, line: line, function: function)
   }
 }
 
@@ -112,9 +117,9 @@ public protocol LoggerType {
   func enter(filename: String?, line: Int?, function: String?)
   func leave(filename: String?, line: Int?, function: String?)
   
-  func log  <T>(message: @autoclosure () -> T,
+  func log  <T>(message: () -> T,
                 filename: String?, line: Int?, function: String?)
-  func debug<T>(message: @autoclosure () -> T,
+  func debug<T>(message: () -> T,
                 filename: String?, line: Int?, function: String?)
 }
 
@@ -156,12 +161,12 @@ public protocol LameLogObjectType : CustomStringConvertible {
 
 public extension LameLogObjectType {
   
-  public func logState() {
+  func logState() {
     guard log.enabled else { return }
     log.debug("[\(logStateInfo)]")
   }
   
-  public var description : String {
+  var description : String {
     let t = type(of: self)
     return "<\(t):\(logStateInfo)>"
   }

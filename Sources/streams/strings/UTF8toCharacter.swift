@@ -62,7 +62,11 @@ public class UTF8ToCharacter: TransformStream<UInt8, Character> {
   {
     // This is still lame, but at least we don't spool up for plain ASCII
     if allData.isEmpty {
-      let idxOrNot = b.index(where: { ((highBit & $0) == highBit) })
+      #if swift(>=5)
+        let idxOrNot = b.firstIndex(where: { ((highBit & $0) == highBit) })
+      #else
+        let idxOrNot = b.index(where: { ((highBit & $0) == highBit) })
+      #endif
       if let idx = idxOrNot {
         // found a high byte
         if idx > 0 {

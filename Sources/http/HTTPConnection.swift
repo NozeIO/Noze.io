@@ -193,7 +193,7 @@ class HTTPConnection {
   }
   
   func onTimeout(socket: Socket) { // read OR write!
-    log.log(message: "socket did timeout \(socket)")
+    log.log("socket did timeout: \(socket)")
     emitDone() // what else? Do we have such on IncomingMessage/ServerResponse?
   }
 }

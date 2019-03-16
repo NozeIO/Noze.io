@@ -56,7 +56,7 @@ public extension GReadableStreamType {
   /// - if the output stream is busy/full, the input stream is suspended
   ///
   @discardableResult
-  public func pipe<TO: GWritableStreamType>
+  func pipe<TO: GWritableStreamType>
                 (_ outStream: TO,
                  endOnFinish: Bool = true, passErrors: Bool = true)
               -> TO

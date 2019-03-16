@@ -115,9 +115,16 @@ class Session {
         for channelName in channels {
           if let channel = nameToChannel[channelName] {
             channel.part(session: self)
-            if let idx = channelsJoined.index(where: { $0 === channel }) {
-              channelsJoined.remove(at: idx)
-            }
+            #if swift(>=5)
+              if let idx = channelsJoined.firstIndex(where: { $0 === channel })
+              {
+                channelsJoined.remove(at: idx)
+              }
+            #else
+              if let idx = channelsJoined.index(where: { $0 === channel }) {
+                channelsJoined.remove(at: idx)
+              }
+            #endif
           }
         }
       

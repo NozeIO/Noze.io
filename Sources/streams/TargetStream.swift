@@ -70,9 +70,7 @@ open class TargetStream<T : GWritableTargetType>
 
 public extension GWritableTargetType {
   
-  public func writable(hwm v: Int = Self.defaultHighWaterMark)
-              -> TargetStream<Self>
-  {
+  func writable(hwm v: Int = Self.defaultHighWaterMark) -> TargetStream<Self> {
     return TargetStream(target: self, highWaterMark: v)
   }
   

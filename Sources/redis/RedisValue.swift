@@ -26,11 +26,11 @@ public enum RedisValue {
 
 public extension RedisValue {
   
-  public init(_ v: Int) {
+  init(_ v: Int) {
     self = .Integer(v)
   }
   
-  public init(bulkString s: String?) {
+  init(bulkString s: String?) {
     if let s = s {
       self = .BulkString(Swift.Array<UInt8>(s.utf8))
     }
@@ -39,11 +39,11 @@ public extension RedisValue {
     }
   }
   
-  public init(simpleString s: String) {
+  init(simpleString s: String) {
     self = .SimpleString(Swift.Array<UInt8>(s.utf8))
   }
   
-  public var stringValue : String? {
+  var stringValue : String? {
     switch self {
       case .SimpleString(let cs):
         guard let s = String.decode(utf8: cs) else { return nil }
@@ -61,7 +61,7 @@ public extension RedisValue {
     }
   }
   
-  public var intValue : Int? {
+  var intValue : Int? {
     switch self {
       // TBD: convert strings?
       case .Integer(let i): return i

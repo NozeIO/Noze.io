@@ -38,11 +38,11 @@ public protocol MustacheRenderingContext {
 
 public extension MustacheRenderingContext {
 
-  public func value(forTag tag: String) -> Any? {
+  func value(forTag tag: String) -> Any? {
     return KeyValueCoding.value(forKeyPath: tag, inObject: cursor)
   }
   
-  public func retrievePartial(name n: String) -> MustacheNode? {
+  func retrievePartial(name n: String) -> MustacheNode? {
     return nil
   }
 }

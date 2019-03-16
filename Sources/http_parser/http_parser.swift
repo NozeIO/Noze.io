@@ -375,9 +375,9 @@ public extension http_parser {
   
   /// Executes the parser. Returns number of parsed bytes. Sets
   /// `error` on error.
-  public mutating func execute(_ settings : http_parser_settings,
-                               _ data: UnsafePointer<CChar>?, _ len: size_t)
-                       -> size_t
+  mutating func execute(_ settings : http_parser_settings,
+                        _ data: UnsafePointer<CChar>?, _ len: size_t)
+                -> size_t
   {
     /* We're in an error state. Don't bother doing anything. */
     guard error == .OK else { return 0 }

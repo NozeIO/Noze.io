@@ -16,7 +16,7 @@ public extension ServerResponse {
   // TODO: How do we get access to the application?? Need to attach to the
   //       request? We need to retrieve values.
   
-  public func render(_ template: String, _ options : Any? = nil) {
+  func render(_ template: String, _ options : Any? = nil) {
     let res = self
     
     guard let app = self.app else {

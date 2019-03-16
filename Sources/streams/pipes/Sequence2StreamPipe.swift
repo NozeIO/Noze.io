@@ -39,7 +39,7 @@ public extension Sequence {
   // TODO: We could support an async mode for blocking Sequences similar to
   //       the GeneratorSource.
   
-  public func pipe<TO: GWritableStreamType>
+  func pipe<TO: GWritableStreamType>
               (_ outStream: TO, batchSize: Int = 10, endOnFinish: Bool = true)
               -> TO
               where Self.Iterator.Element == TO.WriteType

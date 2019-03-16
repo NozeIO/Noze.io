@@ -35,12 +35,12 @@ public extension GWritableStreamType where WriteType == UInt8 {
   // TODO: UTF8View should be a BucketType ...
   
   @discardableResult
-  public func write(_ chunk: String, done: DoneCB? = nil) -> Bool {
+  func write(_ chunk: String, done: DoneCB? = nil) -> Bool {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
     return writev(buckets: [ bucket ], done: done)
   }
   
-  public func end(_ chunk: String, doneWriting: DoneCB? = nil) {
+  func end(_ chunk: String, doneWriting: DoneCB? = nil) {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
     _ = writev(buckets: [ bucket ]) {
       if let cb = doneWriting { cb() }

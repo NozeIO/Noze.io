@@ -42,11 +42,11 @@ public protocol ReadableByteStreamType : ReadableStreamType
 public extension GReadableStreamType where ReadType == UInt8 {
   // TODO: UTF8View should be a BucketType ...
   
-  public func push(_ chunk: String, done: DoneCB? = nil) {
+  func push(_ chunk: String, done: DoneCB? = nil) {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
     push(bucket)
   }
-  public func unshift(_ chunk: String, done: DoneCB? = nil) {
+  func unshift(_ chunk: String, done: DoneCB? = nil) {
     let bucket = Array<UInt8>(chunk.utf8) // aaargh
     unshift(bucket)
   }

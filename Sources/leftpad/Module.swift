@@ -14,7 +14,7 @@ public let module = NozeLeftpad()
 
 public extension String {
   
-  public func leftpad(_ length: Int, c: Character = " ") -> String {
+  func leftpad(_ length: Int, c: Character = " ") -> String {
     #if swift(>=3.2)
       let oldLength = self.count
     #else

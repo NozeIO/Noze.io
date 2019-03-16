@@ -96,12 +96,12 @@ public enum MustacheNode {
 
 public extension MustacheNode {
   
-  public func render(object o: Any?, cb: ( String ) -> Void) {
+  func render(object o: Any?, cb: ( String ) -> Void) {
     let ctx = MustacheDefaultRenderingContext(o)
     render(inContext: ctx, cb: cb)
   }
   
-  public func render(object o: Any?) -> String {
+  func render(object o: Any?) -> String {
     let ctx = MustacheDefaultRenderingContext(o)
     render(inContext: ctx)
     return ctx.string
@@ -113,14 +113,14 @@ public extension MustacheNode {
     nl.forEach { node in node.render(inContext: ctx) }
   }
   
-  public func render(inContext ctx: MustacheRenderingContext,
+  func render(inContext ctx: MustacheRenderingContext,
                      cb: ( String ) -> Void)
   {
     render(inContext: ctx) // TODO: make async for partials
     cb(ctx.string)
   }
   
-  public func render(inContext ctx: MustacheRenderingContext) {
+  func render(inContext ctx: MustacheRenderingContext) {
     
     switch self {
       case .Empty: return
@@ -165,7 +165,7 @@ public extension MustacheNode {
     }
   }
   
-  public func render(lambda    cb  : MustacheRenderingFunction,
+  func render(lambda    cb  : MustacheRenderingFunction,
                      nodes     nl  : [ MustacheNode ],
                      inContext ctx : MustacheRenderingContext)
   {
@@ -196,7 +196,7 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
-  public var asMustacheString : String {
+  var asMustacheString : String {
     var s = String()
     self.append(toString: &s)
     return s
@@ -205,8 +205,8 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
-  public func render(section tag: String, nodes : [ MustacheNode ],
-                     inContext ctx: MustacheRenderingContext)
+  func render(section tag: String, nodes : [ MustacheNode ],
+              inContext ctx: MustacheRenderingContext)
   {
     let v = ctx.value(forTag: tag)
     guard let vv = v else { return } // nil
@@ -267,7 +267,7 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
-  public func append(toString s : inout String) {
+  func append(toString s : inout String) {
     switch self {
       case .Empty: return
       
@@ -303,7 +303,7 @@ public extension MustacheNode {
 
 public extension Sequence where Iterator.Element == MustacheNode {
 
-  public var asMustacheString : String {
+  var asMustacheString : String {
     var s = String()
     forEach { $0.append(toString: &s) }
     return s

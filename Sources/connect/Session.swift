@@ -168,7 +168,7 @@ public extension IncomingMessage {
     return newSession
   }
   
-  public var session : Session {
+  var session : Session {
     guard let rawSN = extra[requestKey] else { return registerNewSession() }
     
     guard let session = rawSN as? Session else {

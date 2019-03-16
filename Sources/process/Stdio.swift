@@ -34,7 +34,7 @@ private func createStdoutOrErr(fd lfd: Int32 = xsys.STDOUT_FILENO)
 
 public extension SourceStream where G: StdInSource {
   
-  public var isTTY : Bool {
+  var isTTY : Bool {
     return source.fd.isTTY
   }
   
@@ -42,7 +42,7 @@ public extension SourceStream where G: StdInSource {
 
 public extension TargetStream where T: StdOutTarget {
 
-  public var isTTY : Bool {
+  var isTTY : Bool {
     return target.fd.isTTY
   }
   

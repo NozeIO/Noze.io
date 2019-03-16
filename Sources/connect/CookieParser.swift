@@ -38,7 +38,7 @@ public extension IncomingMessage {
   /// Returns the cookies embedded in the request. Note: Make sure to invoke
   /// the `cookieParser` middleware first, so that this property is actually
   /// filled.
-  public var cookies : [ String : String ] {
+  var cookies : [ String : String ] {
     get {
       // This concept is a little weird as so many thinks in Node. Why not just
       // parse the cookies on-demand?

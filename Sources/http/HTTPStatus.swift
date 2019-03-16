@@ -54,7 +54,7 @@ extension HTTPStatus : RawRepresentable {
 
 public extension HTTPStatus {
   
-  public init(_ status: Int, _ text: String? = nil) {
+  init(_ status: Int, _ text: String? = nil) {
     switch status {
       case 200: self = .OK
       case 201: self = .Created
@@ -121,7 +121,7 @@ public extension HTTPStatus {
     }
   }
   
-  public var status : Int {
+  var status : Int {
     // You ask: How to maintain the reverse list of the above? Emacs macro!
   
     switch self {
@@ -186,7 +186,7 @@ public extension HTTPStatus {
     }
   }
   
-  public var statusText : String {
+  var statusText : String {
     switch self {
       case .Extension(_, let text):
         return text
@@ -195,7 +195,7 @@ public extension HTTPStatus {
     }
   }
   
-  public static func text(forStatus status: Int) -> String {
+  static func text(forStatus status: Int) -> String {
     // FIXME: complete me for type safety ;-)
     
     switch status {

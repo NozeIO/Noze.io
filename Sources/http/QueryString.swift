@@ -60,7 +60,11 @@ private func _parse(string s     : String,
     // check key and whether it contains Zope style formats
     
     let keyPart = pairParts[0]
-    let fmtIdx  = keyPart.index(of: ":")
+    #if swift(>=5)
+      let fmtIdx  = keyPart.firstIndex(of: ":")
+    #else
+      let fmtIdx  = keyPart.index(of: ":")
+    #endif
     let key     : String
     let formats : String?
     
@@ -204,9 +208,15 @@ public func _unescape(string: String) -> String {
     let s = string.characters
   #endif
   
-  guard s.index(of: "%") != nil || s.index(of: "+") != nil else {
-    return string
-  }
+  #if swift(>=5)
+    guard s.firstIndex(of: "%") != nil || s.firstIndex(of: "+") != nil else {
+      return string
+    }
+  #else
+    guard s.index(of: "%") != nil || s.index(of: "+") != nil else {
+      return string
+    }
+  #endif
   
   var newString = [ UInt8 ]()
   

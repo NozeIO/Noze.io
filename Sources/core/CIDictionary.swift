@@ -18,7 +18,7 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
     return nil
   }
 
-  public mutating func removeValue(forCIKey key: Key) -> Value? {
+  mutating func removeValue(forCIKey key: Key) -> Value? {
     if let realKey = self.lookupStoredKey(forCaseInsensitiveKey: key) {
       return self.removeValue(forKey: realKey)
     }
@@ -27,7 +27,7 @@ public extension Dictionary where Key : ExpressibleByStringLiteral {
     }
   }
   
-  public subscript(ci key : Key) -> Value? {
+  subscript(ci key : Key) -> Value? {
     get {
       let realKey = self.lookupStoredKey(forCaseInsensitiveKey: key)
       return realKey != nil ? self[realKey!] : nil
