@@ -1,9 +1,17 @@
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
-  name: "express-simple",
+  name:     "express-simple",
+  products: [
+    .executable(name: "express-simple", targets: [ "express-simple" ]),
+  ],
   dependencies: [
-    .Package(url: "../..",
-             majorVersion: 0, minor: 3)
+    .package(url: "../..", from: "0.6.5")
+  ],
+  targets: [
+    .target(name: "express-simple", 
+            dependencies: [ "streams", "express", "cows" ],
+            path: "Sources")
   ]
 )
