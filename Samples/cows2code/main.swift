@@ -1,5 +1,5 @@
 // Noze.io cows2code example
-// - to compile in Swift 3 invoke: swift build
+// - to compile in Swift 3+ invoke: swift build
 // - to run result: .build/debug/cows2code cows.txt cows.swift
 
 import xsys
@@ -21,20 +21,32 @@ let cowsTextFile  = CommandLine.arguments[1]
 
 func escape(cString cs: String) -> String {
   var s = ""
-  s.reserveCapacity(cs.characters.count)
-  #if swift(>=3.2)
-    let characters = cs
-  #else
-    let characters = cs.characters
-  #endif
-  for c in cs.characters {
-    switch c {
-      case "\\": s += "\\\\"
-      case "\"": s += "\\\""
-      case "\n": s += "\\n"
-      default:   s += String(c) // hm
+  #if compiler(>=4.2)
+    s.reserveCapacity(cs.count)
+    for c in cs {
+      switch c {
+        case "\\": s += "\\\\"
+        case "\"": s += "\\\""
+        case "\n": s += "\\n"
+        default:   s += String(c) // hm
+      }
     }
-  }
+  #else
+    s.reserveCapacity(cs.characters.count)
+    #if swift(>=3.2)
+      let characters = cs
+    #else
+      let characters = cs.characters
+    #endif
+    for c in cs.characters {
+      switch c {
+        case "\\": s += "\\\\"
+        case "\"": s += "\\\""
+        case "\n": s += "\\n"
+        default:   s += String(c) // hm
+      }
+    }
+  #endif
   return s
 }
 

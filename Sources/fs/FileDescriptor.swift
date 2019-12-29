@@ -3,7 +3,7 @@
 //  SwiftSockets
 //
 //  Created by Helge Hess on 13/07/15.
-//  Copyright (c) 2014-2015 Always Right Institute. All rights reserved.
+//  Copyright (c) 2014-2019 Always Right Institute. All rights reserved.
 //
 
 #if os(Linux)
@@ -242,7 +242,7 @@ private func pollMaskToString(mask mask16: Int16) -> String {
 
 extension FileDescriptor: Equatable, Hashable {
 
-  #if swift(>=5)
+  #if swift(>=5) || compiler(>=5.1)
     public func hash(into hasher: inout Hasher) {
       fd.hash(into: &hasher)
     }

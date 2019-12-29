@@ -1,5 +1,5 @@
 // Noze.io UDP server
-// - to compile in Swift 3 invoke: swift build
+// - to compile in Swift 3+ invoke: swift build
 // - to run result: .build/debug/udpd
 // - to try it:
 //   - Linux: nc.openbsd -u <interface> 10000

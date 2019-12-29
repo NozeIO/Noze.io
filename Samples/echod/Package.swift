@@ -1,9 +1,17 @@
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
-  name: "echod",
+  name:     "echod",
+  products: [
+    .executable(name: "echod", targets: [ "echod" ]),
+  ],
   dependencies: [
-    .Package(url: "../..",
-             majorVersion: 0, minor: 5)
+    .package(url: "../..", from: "0.6.5")
+  ],
+  targets: [
+    .target(name: "echod", 
+            dependencies: [ "net" ],
+            path: ".")
   ]
 )

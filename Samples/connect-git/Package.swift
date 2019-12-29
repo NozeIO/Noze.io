@@ -1,9 +1,17 @@
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
-  name: "connect-git",
+  name:     "connect-git",
+  products: [
+    .executable(name: "connect-git", targets: [ "connect-git" ]),
+  ],
   dependencies: [
-    .Package(url: "../..",
-             majorVersion: 0, minor: 5)
+    .package(url: "../..", from: "0.6.5")
+  ],
+  targets: [
+    .target(name: "connect-git", 
+            dependencies: [ "streams", "child_process", "process", "connect" ],
+            path: ".")
   ]
 )

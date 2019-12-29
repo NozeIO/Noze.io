@@ -1,9 +1,17 @@
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
-  name: "todo-mvc",
+  name:     "todo-mvc",
+  products: [
+    .executable(name: "todo-mvc", targets: [ "todo-mvc" ]),
+  ],
   dependencies: [
-    .Package(url: "../..",
-             majorVersion: 0, minor: 5)
+    .package(url: "../..", from: "0.6.5")
+  ],
+  targets: [
+    .target(name: "todo-mvc", 
+            dependencies: [ "Freddy", "express" ],
+            path: ".")
   ]
 )

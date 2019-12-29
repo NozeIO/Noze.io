@@ -1,9 +1,17 @@
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
-  name: "httpd-cookies",
+  name:     "httpd-cookies",
+  products: [
+    .executable(name: "httpd-cookies", targets: [ "httpd-cookies" ]),
+  ],
   dependencies: [
-    .Package(url: "../..",
-             majorVersion: 0, minor: 5)
+    .package(url: "../..", from: "0.6.5")
+  ],
+  targets: [
+    .target(name: "httpd-cookies", 
+            dependencies: [ "xsys", "http" ],
+            path: ".")
   ]
 )
