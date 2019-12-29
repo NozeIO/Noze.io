@@ -4997,7 +4997,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
 					E807E3EC1CF671B500AE317B = {
@@ -5010,7 +5010,7 @@
 					};
 					E82E806F1F1701490072D8FC = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E835BFBA1B4D4CFB00288839 = {
 						CreatedOnToolsVersion = 7.0;
@@ -5018,7 +5018,7 @@
 					};
 					E85EB6A71D43817B0012FE11 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E85EB6E31D43C2080012FE11 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -5026,44 +5026,44 @@
 					};
 					E874EC9D1D119C2B00FA0606 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE8B21CF50C9000C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE8DC1CF50F7700C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE8E91CF50F8900C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE8F61CF50F9900C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE9031CF50FA900C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE9101CF50FB700C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E87BE91D1CF50FC700C20AE7 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8978ED81D8A18DE00ED4558 = {
 						CreatedOnToolsVersion = 8.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8978F031D8A1F8700ED4558 = {
 						CreatedOnToolsVersion = 8.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8978F251D8A260D00ED4558 = {
@@ -5073,20 +5073,20 @@
 					};
 					E898722B1CFF7DB200466E86 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E89CDF3F1D005B99008861AF = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8AF018C1E8003B10074266E = {
 						CreatedOnToolsVersion = 8.2.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8AF019C1E8004EC0074266E = {
 						CreatedOnToolsVersion = 8.2.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8B33EDE1CFB487400091806 = {
@@ -5099,11 +5099,11 @@
 					};
 					E8B3724E1CFB3ACF005E09DD = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8B8BAF71CFBBEF600BA30D3 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8B8BB171CFBCCA200BA30D3 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -5111,7 +5111,7 @@
 					};
 					E8C90BE31CFE6FFE00F85436 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8C90BF91CFE71B800F85436 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -5122,84 +5122,84 @@
 					};
 					E8E275551CF49E06004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E2756C1CF49E3A004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E275801CF49E5F004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E2758E1CF49E74004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E275C01CF49EC3004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E275DF1CF49EF1004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E275EB1CF49F0C004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E275F71CF49F29004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276061CF49F3B004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276121CF49F52004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276231CF49F67004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276331CF49F7D004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E2764B1CF49F91004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276561CF49FA4004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E276631CF49FB9004A6A34 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8E8FF001D440FE4002663CD = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4GXF3JAMM4;
 						DevelopmentTeamName = "ZeeZide GmbH";
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8EA87BE1CF733F900406C27 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8EB49541CF49D0700E7787A = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8EED0F01D206738007BE73B = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4GXF3JAMM4;
 						DevelopmentTeamName = "ZeeZide GmbH";
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					E8EED1061D207246007BE73B = {
@@ -5211,7 +5211,7 @@
 					};
 					E8F25A4E1CF5EA2300355194 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 					};
 					E8F25A8C1CF5ED5E00355194 = {
 						CreatedOnToolsVersion = 7.3.1;
