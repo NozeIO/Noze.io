@@ -56,7 +56,7 @@ let package = Package(
            dependencies: [ "core", "xsys", "events", "streams", "process" ]),
     .target(name: "http",
            dependencies: [ "http_parser", "core", "events", "streams", "net",
-                           "console" ]),
+                           "console", "base64" ]),
     .target(name: "child_process",
            dependencies: [ "core", "xsys", "streams", "process", "fs" ]),
     .target(name: "connect",
