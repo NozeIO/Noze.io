@@ -3,7 +3,7 @@
 //  SwiftSockets
 //
 //  Created by Helge Heß on 6/12/14.
-//  Copyright (c) 2014-2017 Always Right Institute. All rights reserved.
+//  Copyright (c) 2014-2019 Always Right Institute. All rights reserved.
 //
 
 #if os(Linux)
@@ -79,7 +79,7 @@ public func ==(lhs: in_addr, rhs: in_addr) -> Bool {
 
 extension in_addr : Equatable, Hashable {
   
-  #if swift(>=5)
+  #if swift(>=5) || compiler(>=5.1)
     public func hash(into hasher: inout Hasher) {
       // Knuth?
       Int(UInt32(s_addr) * 2654435761 % (2^32)).hash(into: &hasher)
@@ -233,7 +233,7 @@ public func == (lhs: sockaddr_in, rhs: sockaddr_in) -> Bool {
 
 extension sockaddr_in: Equatable, Hashable {
   
-  #if swift(>=5)
+  #if swift(>=5) || compiler(>=5.1)
     public func hash(into hasher: inout Hasher) {
       (sin_addr.hashValue + sin_port.hashValue).hash(into: &hasher)
     }
