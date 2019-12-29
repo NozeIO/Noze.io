@@ -1,145 +1,74 @@
+// swift-tools-version:5.0
 import PackageDescription
 
 let package = Package(
-  name:         "NozeIO",
-  targets:      [
-    Target(name: "Freddy"),
-    Target(name: "CryptoSwift"),
-    Target(name: "http_parser"),
-    Target(name: "base64"),
-    Target(name: "mustache"),
-    
-    Target(name: "xsys"),
-    Target(name: "core",
-           dependencies: [
-	     .Target(name: "xsys")
-	   ]),
-    Target(name: "leftpad",
-           dependencies: [
-	     .Target(name: "core")
-	   ]),
-    Target(name: "events",
-           dependencies: [
-	     .Target(name: "core")
-	   ]),
-    Target(name: "streams",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "events")
-	   ]),
-    Target(name: "json",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "streams"),
-	     .Target(name: "Freddy"),
-             .Target(name: "fs")
-	   ]),
-    Target(name: "fs",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams")
-	   ]),
-    Target(name: "crypto",
-           dependencies: [
-             .Target(name: "core"),
-             .Target(name: "xsys"),
-             .Target(name: "events"),
-             .Target(name: "streams"),
-             .Target(name: "CryptoSwift")
-           ]),
-    Target(name: "dns",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys")
-	   ]),
-    Target(name: "net",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "fs"),
-             .Target(name: "dns")
-	   ]),
-    Target(name: "dgram",
-           dependencies: [
-	     .Target(name: "net"),
-	   ]),
-    Target(name: "process",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "streams"),
-	     .Target(name: "fs")
-	   ]),
-    Target(name: "console",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "process")
-	   ]),
-    Target(name: "http",
-           dependencies: [
-	     .Target(name: "http_parser"),
-	     .Target(name: "core"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "net"),
-	     .Target(name: "console")
-	   ]),
-    Target(name: "child_process",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "streams"),
-	     .Target(name: "process"),
-	     .Target(name: "fs")
-	   ]),
-    Target(name: "connect",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "http"),	
-	     .Target(name: "console"),
-	     .Target(name: "Freddy"),
-	     .Target(name: "json"),
-	     .Target(name: "leftpad")
-           ]),
-    Target(name: "express",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "http"),
-	     .Target(name: "connect"),
-             .Target(name: "mustache")
-	   ]),
-    Target(name: "redis",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys"),
-	     .Target(name: "events"),
-	     .Target(name: "streams"),
-	     .Target(name: "net"),
-	     .Target(name: "console")
-	   ]),
-    Target(name: "cows",
-           dependencies: [
-	     .Target(name: "core"),
-	     .Target(name: "xsys")
-	   ])
+  name:     "NozeIO",
+  products: [
+    .library(name: "Freddy",        targets: ["Freddy"]),
+    .library(name: "CryptoSwift",   targets: ["CryptoSwift"]),
+    .library(name: "http_parser",   targets: ["http_parser"]),
+    .library(name: "base64",        targets: ["base64"]),
+    .library(name: "mustache",      targets: ["mustache"]),
+    .library(name: "xsys",          targets: ["xsys"]),
+    .library(name: "core",          targets: ["core"]),
+    .library(name: "leftpad",       targets: ["leftpad"]),
+    .library(name: "events",        targets: ["events"]),
+    .library(name: "streams",       targets: ["streams"]),
+    .library(name: "json",          targets: ["json"]),
+    .library(name: "fs",            targets: ["fs"]),
+    .library(name: "crypto",        targets: ["crypto"]),
+    .library(name: "dns",           targets: ["dns"]),
+    .library(name: "net",           targets: ["net"]),
+    .library(name: "dgram",         targets: ["dgram"]),
+    .library(name: "process",       targets: ["process"]),
+    .library(name: "console",       targets: ["console"]),
+    .library(name: "http",          targets: ["http"]),
+    .library(name: "child_process", targets: ["child_process"]),
+    .library(name: "connect",       targets: ["connect"]),
+    .library(name: "express",       targets: ["express"]),
+    .library(name: "redis",         targets: ["redis"]),
+    .library(name: "cows",          targets: ["cows"]),
   ],
-  dependencies: []
+  dependencies: [],
+  targets: [
+    .target(name:"Freddy"),
+    .target(name:"CryptoSwift"),
+    .target(name:"http_parser"),
+    .target(name:"base64"),
+    .target(name:"mustache"),
+    
+    .target(name:"xsys"),
+    .target(name:"core",    dependencies: [ "xsys" ]),
+    .target(name:"leftpad", dependencies: [ "core" ]),
+    .target(name:"events",  dependencies: [ "core" ]),
+    .target(name:"streams", dependencies: [ "core", "events" ]),
+    .target(name:"json",    dependencies: [ "core", "streams", "Freddy","fs" ]),
+    .target(name:"fs", dependencies: [ "core", "xsys", "events", "streams" ]),
+    .target(name:"crypto",
+           dependencies: [ "core", "xsys", "events", "streams", "CryptoSwift"]),
+    .target(name:"dns",     dependencies: [ "core", "xsys" ]),
+    .target(name:"net",
+           dependencies: [ "core", "xsys", "events", "streams", "fs", "dns" ]),
+    .target(name: "dgram",  dependencies: [ "net" ]),
+    .target(name: "process",
+           dependencies: [ "core", "xsys", "streams", "fs" ]),
+    .target(name: "console",
+           dependencies: [ "core", "xsys", "events", "streams", "process" ]),
+    .target(name: "http",
+           dependencies: [ "http_parser", "core", "events", "streams", "net",
+                           "console" ]),
+    .target(name: "child_process",
+           dependencies: [ "core", "xsys", "streams", "process", "fs" ]),
+    .target(name: "connect",
+           dependencies: [ "core", "xsys", "events", "streams", "http",
+                           "console", "Freddy", "json", "leftpad" ]),
+    .target(name: "express",
+            dependencies: [ "core", "xsys", "events", "streams", "http",
+                            "connect", "mustache" ]),
+    .target(name: "redis",
+           dependencies: [ "core", "xsys", "events", "streams", "net",
+                           "console" ]),
+    .target(name: "cows",  dependencies: [ "core", "xsys" ])
+  ]
 )
-
-#if swift(>=3.1)
-package.swiftLanguageVersions = [ 3, 4 ]
-#endif
 
