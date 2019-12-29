@@ -14,7 +14,7 @@ public typealias timeval  = Glibc.timeval
 
 public extension timespec {
   
-  public static func monotonic() -> timespec {
+  static func monotonic() -> timespec {
     var ts = timespec()
     clock_gettime(CLOCK_MONOTONIC, &ts)
     return ts
