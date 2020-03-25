@@ -18,4 +18,5 @@ apidox
 .docker*.Packages
 Package.pins
 Package.resolved
+.swiftpm
 
