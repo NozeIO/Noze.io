@@ -9,6 +9,7 @@
 import Dispatch
 import xsys
 import core
+import Foundation // this is for POSIXError : Error
 
 public typealias LookupCB = ( Error?, sockaddr_any? ) -> Void
 
