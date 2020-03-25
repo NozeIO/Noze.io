@@ -317,7 +317,7 @@ open class GCDChannelBase: CustomStringConvertible {
     // DEBUG
     if logTraffic || log.enabled {
       for bucket in chunks {
-        var s = debugBucketAsString(bucket: bucket)
+        let s = debugBucketAsString(bucket: bucket)
         print("  BUCKET:\(s) #\(bucket.count)")
       }
     }
