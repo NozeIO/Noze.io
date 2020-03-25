@@ -74,7 +74,7 @@ public func spawn(_ command: String, _ args: [ String ],
   defer { for case let arg in environ { free(arg) } }
   
   /* setup arguments */
-  var argsWithCmd = [ command ] + args
+  let argsWithCmd = [ command ] + args
   var argv : MutableCCharPtrArray = argsWithCmd.map { argument in
     argument.withCString(strdup)
   }

@@ -114,6 +114,15 @@ apidox :
 	jazzy --module connect       --output apidox/connect
 	jazzy --module express       --output apidox/express
 
+docker-build-52:
+	mkdir -p .docker52.build .docker52.Packages
+	docker run --rm \
+		-v $(PWD):/src \
+		-v $(PWD)/.docker52.build:/src/.build	\
+		-v $(PWD)/.docker52.Packages:/src/Packages \
+		helje5/swift-dev:5.2.0 \
+		bash -c "cd /src && swift build"
+
 docker-build-3:
 	mkdir -p .docker3.build .docker3.Packages
 	docker run --rm \
