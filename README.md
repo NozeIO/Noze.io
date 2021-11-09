@@ -24,6 +24,11 @@ operate on batches of Unicode lines or database records or HTML
 responses or - you get the idea.
 Be efficient: Stream everything and ßatch.
 
+**Note** (2021-11-09): It is not recommended to use this for production,
+though it still makes a nice demo. The more modern, and quite recommendable,
+version of this is [Macro.swift](https://github.com/Macro-swift/Macro),
+which is based on SwiftNIO (instead of GCD like Noze.io).
+
 A focus is to keep the API similar to Node. Not always possible -
 Swift is not JavaScript - but pretty close.
 It comes with rechargeables included, **Noze.io** is self-contained and
